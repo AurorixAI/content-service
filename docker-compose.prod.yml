@@ -1,0 +1,140 @@
+# ==============================================================================
+# ALGO Content Service — Production Docker Compose
+# Differences from docker-compose.yml:
+#   - No default values for secrets
+#   - Postgres/Redis ports NOT exposed to host
+#   - Healthcheck uses /api/v1/health/live
+#   - GCP credentials mounted from explicit path (set GOOGLE_CREDENTIALS_PATH)
+# ==============================================================================
+
+version: "3.9"
+
+services:
+  content-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: algo-content:latest
+    container_name: content-api
+    ports:
+      - "8004:8004"
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      MATHPIX_APP_ID: ${MATHPIX_APP_ID}
+      MATHPIX_APP_KEY: ${MATHPIX_APP_KEY}
+      APP_ENV: production
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/gcp-credentials.json
+    volumes:
+      - ${TEXTBOOKS_DIR:/textbooks}:/textbooks:ro
+      - ${GOOGLE_CREDENTIALS_PATH}:/run/secrets/gcp-credentials.json:ro
+    depends_on:
+      content-postgres:
+        condition: service_healthy
+      content-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - algo-network
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/api/v1/health/live')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  content-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: algo-content:latest
+    container_name: content-worker
+    command: ["arq", "src.worker.tasks.WorkerSettings"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      MATHPIX_APP_ID: ${MATHPIX_APP_ID}
+      MATHPIX_APP_KEY: ${MATHPIX_APP_KEY}
+      APP_ENV: production
+      PIPELINE_CACHE_DIR: /app/data/pipeline_cache
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/gcp-credentials.json
+    volumes:
+      - ${TEXTBOOKS_DIR:/textbooks}:/textbooks:ro
+      - ${GOOGLE_CREDENTIALS_PATH}:/run/secrets/gcp-credentials.json:ro
+      - ./data:/app/data
+    depends_on:
+      content-postgres:
+        condition: service_healthy
+      content-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - algo-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  content-postgres:
+    image: postgres:15-alpine
+    container_name: content-postgres
+    # NOTE: port NOT exposed in production
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-algo_content}
+    volumes:
+      - content_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB:-algo_content}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - algo-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  content-redis:
+    image: redis:7-alpine
+    container_name: content-redis
+    # NOTE: port NOT exposed in production
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - content_redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - algo-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  content_postgres_data:
+    driver: local
+  content_redis_data:
+    driver: local
+
+networks:
+  algo-network:
+    external: true
+    name: algo-network

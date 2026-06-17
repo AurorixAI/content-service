@@ -1,0 +1,259 @@
+{
+  "class_level": 8,
+  "total_edges": 28,
+  "errors": [],
+  "edges": [
+    {
+      "skill_id": "G8_P02",
+      "prerequisite_id": "G8_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Алгебраическая дробь по определению является отношением двух алгебраических выражений (многочленов). Без понимания структуры выражения невозможно работать с дробью."
+    },
+    {
+      "skill_id": "G8_P02",
+      "prerequisite_id": "G7_P15",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Сокращение алгебраических дробей требует разложения числителя и знаменателя на множители для нахождения и сокращения общих множителей. Это ключевой навык."
+    },
+    {
+      "skill_id": "G8_P03",
+      "prerequisite_id": "G8_P02",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Приведение к общему знаменателю требует умения работать со структурой алгебраической дроби и находить наименьшее общее кратное знаменателей, что основано на их разложении на множители."
+    },
+    {
+      "skill_id": "G8_P04",
+      "prerequisite_id": "G8_P03",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение и вычитание алгебраических дробей невозможно без предварительного приведения их к общему знаменателю. Это прямой алгоритмический шаг."
+    },
+    {
+      "skill_id": "G8_P05",
+      "prerequisite_id": "G8_P02",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение и деление дробей основано на перемножении числителей/знаменателей с последующим сокращением, что является основной операцией в теме 'Сокращение дробей'."
+    },
+    {
+      "skill_id": "G8_P06",
+      "prerequisite_id": "G8_P04",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Преобразование дробно-рациональных выражений — это комплексная тема, включающая все действия с дробями, в том числе сложение и вычитание."
+    },
+    {
+      "skill_id": "G8_P06",
+      "prerequisite_id": "G8_P05",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Преобразование дробно-рациональных выражений — это комплексная тема, включающая все действия с дробями, в том числе умножение и деление."
+    },
+    {
+      "skill_id": "G8_P07",
+      "prerequisite_id": "G7_P31",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Невозможно изучать свойства и график конкретной функции y=k/x, не владея общим понятием функции, её области определения, области значений и графика."
+    },
+    {
+      "skill_id": "G8_P08",
+      "prerequisite_id": "G7_P06",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Арифметический корень n-й степени определяется как операция, обратная возведению в n-ю степень. Без понимания степени понятие корня бессмысленно."
+    },
+    {
+      "skill_id": "G8_P09",
+      "prerequisite_id": "G8_P08",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Степень с рациональным показателем (например, a^(m/n)) определяется через арифметический корень. Без понятия корня невозможно ввести это определение."
+    },
+    {
+      "skill_id": "G8_P09",
+      "prerequisite_id": "G7_P07",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Свойства степени с рациональным показателем являются прямым обобщением и расширением свойств степени с натуральным показателем."
+    },
+    {
+      "skill_id": "G8_P10",
+      "prerequisite_id": "G8_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Упрощение выражений со степенями с рациональным показателем — это прямое применение свойств, изученных в предыдущей подтеме."
+    },
+    {
+      "skill_id": "G8_P12",
+      "prerequisite_id": "G8_P11",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Невозможно изучать свойства числовых неравенств, не понимая, что такое числовое неравенство и как сравниваются числа."
+    },
+    {
+      "skill_id": "G8_P13",
+      "prerequisite_id": "G8_P12",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Правила сложения и умножения неравенств являются следствием и частным случаем основных свойств числовых неравенств."
+    },
+    {
+      "skill_id": "G8_P15",
+      "prerequisite_id": "G8_P12",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Решение неравенств с одним неизвестным полностью основано на применении свойств числовых неравенств (например, смена знака при умножении на отрицательное число)."
+    },
+    {
+      "skill_id": "G8_P15",
+      "prerequisite_id": "G7_P27",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Техника решения линейных неравенств (перенос слагаемых, деление на коэффициент) практически идентична технике решения линейных уравнений."
+    },
+    {
+      "skill_id": "G8_P16",
+      "prerequisite_id": "G8_P15",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Система неравенств состоит из нескольких отдельных неравенств. Чтобы решить систему, нужно сначала уметь решать каждое неравенство в отдельности."
+    },
+    {
+      "skill_id": "G8_P17",
+      "prerequisite_id": "G8_P15",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Решение неравенств с модулем (например, |x| < a) раскрывается в систему или совокупность обычных линейных неравенств, которые нужно уметь решать."
+    },
+    {
+      "skill_id": "G8_P19",
+      "prerequisite_id": "G8_P18",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Оценка погрешностей (сложения, вычитания и т.д.) невозможна без понимания, что такое абсолютная погрешность и как она определяется."
+    },
+    {
+      "skill_id": "G8_P20",
+      "prerequisite_id": "G8_P18",
+      "dependency_type": "soft",
+      "weight": 0.6,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Округление является методом получения приближенного значения, а погрешность — мерой точности этого приближения. Темы тесно связаны."
+    },
+    {
+      "skill_id": "G8_P21",
+      "prerequisite_id": "G8_P18",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Относительная погрешность по определению вычисляется через абсолютную погрешность. Без знания абсолютной погрешности вычисление относительной невозможно."
+    },
+    {
+      "skill_id": "G8_P23",
+      "prerequisite_id": "G8_P22",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Неполные квадратные уравнения являются частным случаем общих квадратных уравнений. Необходимо понимать общую структуру уравнения, чтобы выделить частные случаи."
+    },
+    {
+      "skill_id": "G8_P24",
+      "prerequisite_id": "G8_P22",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Формулы корней и дискриминант — это основной инструмент для решения квадратных уравнений общего вида, представленных в предыдущей теме."
+    },
+    {
+      "skill_id": "G8_P25",
+      "prerequisite_id": "G8_P24",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Теорема Виета связывает коэффициенты уравнения с его корнями. Чтобы её применять, необходимо уметь находить эти корни, как правило, с помощью формул."
+    },
+    {
+      "skill_id": "G8_P26",
+      "prerequisite_id": "G8_P24",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Биквадратные и другие уравнения решаются методом замены переменной, который сводит их к обычному квадратному уравнению, решаемому через дискриминант."
+    },
+    {
+      "skill_id": "G8_P27",
+      "prerequisite_id": "G8_P24",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Решение текстовых задач с помощью квадратных уравнений требует составления математической модели (уравнения) и последующего его решения, как правило, через формулы корней."
+    },
+    {
+      "skill_id": "G8_P29",
+      "prerequisite_id": "G8_P28",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Чтобы вычислять статистические показатели (среднее, мода, медиана), необходимо сначала иметь данные и уметь их представлять и анализировать."
+    },
+    {
+      "skill_id": "G8_P31",
+      "prerequisite_id": "G8_P30",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Основной закон комбинаторики (правило умножения) является обобщением и формализацией метода перебора вариантов, позволяя решать более сложные задачи."
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+version: "3.9"
+
+services:
+
+  content-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: content-api
+    ports:
+      - "8004:8004"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://algo:algo_password@content-postgres:5432/algo_content}
+      REDIS_URL: ${REDIS_URL:-redis://content-redis:6379}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      MATHPIX_APP_ID: ${MATHPIX_APP_ID:-}
+      MATHPIX_APP_KEY: ${MATHPIX_APP_KEY:-}
+      APP_ENV: ${APP_ENV:-production}
+      VERTEX_PROJECT_ID: ${VERTEX_PROJECT_ID:-}
+      VERTEX_LOCATION: ${VERTEX_LOCATION:-global}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/.gcloud/application_default_credentials.json
+    volumes:
+      # Mount textbook files from host so the pipeline can read them
+      - ${TEXTBOOKS_DIR:-./textbooks}:/textbooks:ro
+      - ${GOOGLE_CREDENTIALS_PATH}:/app/.gcloud/application_default_credentials.json:ro
+      - content_figures:/data/figures
+    depends_on:
+      content-postgres:
+        condition: service_healthy
+      content-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/api/v1/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - algo-network
+
+  content-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: content-worker
+    # ARQ worker process — separate from the API
+    command: ["arq", "src.worker.tasks.WorkerSettings"]
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://algo:algo_password@content-postgres:5432/algo_content}
+      REDIS_URL: ${REDIS_URL:-redis://content-redis:6379}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      MATHPIX_APP_ID: ${MATHPIX_APP_ID:-}
+      MATHPIX_APP_KEY: ${MATHPIX_APP_KEY:-}
+      APP_ENV: ${APP_ENV:-production}
+      PIPELINE_CACHE_DIR: /app/data/pipeline_cache
+      ENRICH_CHUNK_SIZE: ${ENRICH_CHUNK_SIZE:-8}
+      RESUME_FROM_PARAGRAPH: ${RESUME_FROM_PARAGRAPH:-0}
+      VERTEX_PROJECT_ID: ${VERTEX_PROJECT_ID:-}
+      VERTEX_LOCATION: ${VERTEX_LOCATION:-global}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/.gcloud/application_default_credentials.json
+    volumes:
+      - ${TEXTBOOKS_DIR:-./textbooks}:/textbooks:ro
+      - ${GOOGLE_CREDENTIALS_PATH}:/app/.gcloud/application_default_credentials.json:ro
+      - content_figures:/data/figures
+      - ./data:/app/data
+    depends_on:
+      content-postgres:
+        condition: service_healthy
+      content-redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - algo-network
+
+  content-postgres:
+    image: postgres:15-alpine
+    container_name: content-postgres
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: algo
+      POSTGRES_PASSWORD: algo_password
+      POSTGRES_DB: algo_content
+    volumes:
+      - content_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U algo -d algo_content"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - algo-network
+
+  content-redis:
+    image: redis:7-alpine
+    container_name: content-redis
+    ports:
+      - "6381:6379"
+    volumes:
+      - content_redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - algo-network
+
+volumes:
+  content_postgres_data:
+  content_redis_data:
+  content_figures:
+
+networks:
+  algo-network:
+    external: true
+    name: algo-network

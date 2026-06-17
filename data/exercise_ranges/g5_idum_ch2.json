@@ -1,0 +1,307 @@
+{
+  "textbook_id": "47167115-5961-4405-bb55-1bda8ce1b687",
+  "key": "g5_idum_ch2",
+  "numbering": "scan",
+  "ranges": {
+    "37": [
+      640,
+      652
+    ],
+    "38": [
+      653,
+      676
+    ],
+    "39": [
+      677,
+      681
+    ],
+    "40": [
+      682,
+      699
+    ],
+    "41": [
+      700,
+      737
+    ],
+    "42": [
+      738,
+      750
+    ],
+    "43": [
+      751,
+      831
+    ],
+    "44": [
+      832,
+      858
+    ],
+    "45": [
+      859,
+      986
+    ],
+    "46": [
+      987,
+      995
+    ],
+    "47": [
+      996,
+      1153
+    ],
+    "48": [
+      1154,
+      1192
+    ],
+    "49": [
+      1193,
+      1204
+    ],
+    "50": [
+      1205,
+      1220
+    ],
+    "51": [
+      1221,
+      1234
+    ],
+    "52": [
+      1235,
+      1256
+    ],
+    "53": [
+      1257,
+      1263
+    ],
+    "54": [
+      1264,
+      1287
+    ],
+    "55": [
+      1288,
+      1312
+    ],
+    "56": [
+      1313,
+      1333
+    ],
+    "57": [
+      1334,
+      1359
+    ],
+    "58": [
+      1360,
+      1387
+    ],
+    "59": [
+      1388,
+      1412
+    ],
+    "60": [
+      1413,
+      1428
+    ],
+    "61": [
+      1429,
+      1452
+    ],
+    "62": [
+      1453,
+      1484
+    ],
+    "63": [
+      1485,
+      1518
+    ],
+    "64": [
+      1519,
+      1568
+    ],
+    "66": [
+      1569,
+      1603
+    ],
+    "67": [
+      1604,
+      1650
+    ],
+    "68": [
+      1651,
+      1679
+    ],
+    "69": [
+      1680,
+      1696
+    ],
+    "70": [
+      1697,
+      1752
+    ]
+  },
+  "page_end_override": {},
+  "meta": {
+    "37": {
+      "count": 13,
+      "method": "global_first",
+      "confidence": 0.9
+    },
+    "38": {
+      "count": 24,
+      "method": "global_section",
+      "confidence": 0.95
+    },
+    "39": {
+      "count": 5,
+      "method": "global_section",
+      "confidence": 0.95
+    },
+    "40": {
+      "count": 18,
+      "method": "global_section",
+      "confidence": 0.95
+    },
+    "41": {
+      "count": 38,
+      "method": "local_section",
+      "confidence": 0.88
+    },
+    "42": {
+      "count": 13,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "43": {
+      "count": 81,
+      "method": "local_section",
+      "confidence": 0.88
+    },
+    "44": {
+      "count": 27,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "45": {
+      "count": 128,
+      "method": "local_full",
+      "confidence": 0.75
+    },
+    "46": {
+      "count": 9,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "47": {
+      "count": 158,
+      "method": "local_section",
+      "confidence": 0.88
+    },
+    "48": {
+      "count": 39,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "49": {
+      "count": 12,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "50": {
+      "count": 16,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "51": {
+      "count": 14,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "52": {
+      "count": 22,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "53": {
+      "count": 7,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "54": {
+      "count": 24,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "55": {
+      "count": 25,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "56": {
+      "count": 21,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "57": {
+      "count": 26,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "58": {
+      "count": 28,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "59": {
+      "count": 25,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "60": {
+      "count": 16,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "61": {
+      "count": 24,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "62": {
+      "count": 32,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "63": {
+      "count": 34,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "64": {
+      "count": 50,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "66": {
+      "count": 35,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "67": {
+      "count": 47,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "68": {
+      "count": 29,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "69": {
+      "count": 17,
+      "method": "count_section",
+      "confidence": 0.55
+    },
+    "70": {
+      "count": 56,
+      "method": "count_section",
+      "confidence": 0.55
+    }
+  }
+}

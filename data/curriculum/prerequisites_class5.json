@@ -1,0 +1,484 @@
+{
+  "class_level": 5,
+  "total_edges": 53,
+  "errors": [],
+  "edges": [
+    {
+      "skill_id": "G5_P03",
+      "prerequisite_id": "G5_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Невозможно построить числовую ось и расставить на ней метки, не понимая концепции натуральных чисел и их последовательности."
+    },
+    {
+      "skill_id": "G5_P04",
+      "prerequisite_id": "G5_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сравнение натуральных чисел требует понимания их порядка и значения, что является основой подтемы 'Натуральные числа'."
+    },
+    {
+      "skill_id": "G5_P05",
+      "prerequisite_id": "G5_P04",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Процедура округления напрямую основана на умении сравнивать числа (в частности, цифру в округляемом разряде со следующей)."
+    },
+    {
+      "skill_id": "G5_P06",
+      "prerequisite_id": "G5_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Выполнение арифметических действий (сложение и вычитание) невозможно без знания объектов этих действий — натуральных чисел."
+    },
+    {
+      "skill_id": "G5_P07",
+      "prerequisite_id": "G5_P06",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 7,
+      "is_cross_grade": false,
+      "relationship_description": "Составление и вычисление значений выражений требует владения базовыми арифметическими операциями сложения и вычитания."
+    },
+    {
+      "skill_id": "G5_P08",
+      "prerequisite_id": "G5_P07",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие уравнения вводится через буквенные выражения; его решение основано на нахождении значения переменной, при котором выражение становится верным равенством."
+    },
+    {
+      "skill_id": "G5_P09",
+      "prerequisite_id": "G5_P06",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение как многократное сложение концептуально связано со сложением. Многие алгоритмы (умножение в столбик) включают в себя сложение."
+    },
+    {
+      "skill_id": "G5_P10",
+      "prerequisite_id": "G5_P09",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Деление является обратной операцией к умножению, и его проверка, а также сам алгоритм деления столбиком, неразрывно связаны с умножением."
+    },
+    {
+      "skill_id": "G5_P11",
+      "prerequisite_id": "G5_P10",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Деление с остатком является расширением и усложнением операции деления нацело. Без базового навыка деления освоить его невозможно."
+    },
+    {
+      "skill_id": "G5_P12",
+      "prerequisite_id": "G5_P09",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Упрощение выражений (например, раскрытие скобок) основано на свойствах умножения (распределительном, сочетательном), которые изучаются в рамках этой темы."
+    },
+    {
+      "skill_id": "G5_P13",
+      "prerequisite_id": "G5_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Правила порядка действий определяют иерархию всех арифметических операций, включая умножение и деление, которые имеют более высокий приоритет, чем сложение и вычитание."
+    },
+    {
+      "skill_id": "G5_P14",
+      "prerequisite_id": "G5_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Квадрат и куб числа по определению являются частными случаями умножения числа на само себя."
+    },
+    {
+      "skill_id": "G5_P15",
+      "prerequisite_id": "G5_P10",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Нахождение НОД (наибольшего общего делителя) и НОК (наименьшего общего кратного) требует умения находить делители и кратные числа, что напрямую связано с операцией деления."
+    },
+    {
+      "skill_id": "G5_P16",
+      "prerequisite_id": "G5_P02",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие угла определяется как фигура, образованная двумя лучами, выходящими из одной точки. Без знания о луче и точке определение угла невозможно."
+    },
+    {
+      "skill_id": "G5_P17",
+      "prerequisite_id": "G5_P16",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Определение перпендикулярных прямых напрямую использует понятие прямого угла (90 градусов), которое изучается в теме 'Углы'."
+    },
+    {
+      "skill_id": "G5_P18",
+      "prerequisite_id": "G5_P06",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Длина ломаной вычисляется как сумма длин составляющих ее отрезков, что требует уверенного владения операцией сложения натуральных чисел."
+    },
+    {
+      "skill_id": "G5_P19",
+      "prerequisite_id": "G5_P18",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Многоугольник является замкнутой ломаной линией, а его периметр — это длина этой ломаной. Понятие периметра является прямым следствием понятия длины ломаной."
+    },
+    {
+      "skill_id": "G5_P20",
+      "prerequisite_id": "G5_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Формула площади прямоугольника (S = a * b) напрямую использует операцию умножения. Без умения умножать вычислить площадь невозможно."
+    },
+    {
+      "skill_id": "G5_P21",
+      "prerequisite_id": "G5_P20",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Площадь составных фигур находится путем их разбиения на прямоугольники и последующего сложения/вычитания их площадей. Это требует умения вычислять площадь простого прямоугольника."
+    },
+    {
+      "skill_id": "G5_P24",
+      "prerequisite_id": "G5_P14",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Формула объема куба (V = a³) является прямым применением операции возведения в куб. Объем параллелепипеда требует многократного умножения."
+    },
+    {
+      "skill_id": "G5_P25",
+      "prerequisite_id": "G5_P10",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 7,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие дроби тесно связано с операцией деления. Дробная черта является, по сути, знаком деления. Понимание деления помогает осмыслить дроби."
+    },
+    {
+      "skill_id": "G5_P26",
+      "prerequisite_id": "G5_P25",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Невозможно сравнивать дроби, не понимая, что такое дробь, что означают ее числитель и знаменатель."
+    },
+    {
+      "skill_id": "G5_P27",
+      "prerequisite_id": "G5_P26",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Классификация дробей на правильные и неправильные основана на сравнении числителя и знаменателя, а также на сравнении дроби с единицей."
+    },
+    {
+      "skill_id": "G5_P28",
+      "prerequisite_id": "G5_P15",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение и вычитание дробей с разными знаменателями требует нахождения общего знаменателя, что часто делается через нахождение НОК (наименьшего общего кратного)."
+    },
+    {
+      "skill_id": "G5_P30",
+      "prerequisite_id": "G5_P27",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Смешанное число — это форма записи неправильной дроби. Перевод между этими формами невозможен без понимания, что такое правильные и неправильные дроби."
+    },
+    {
+      "skill_id": "G5_P31",
+      "prerequisite_id": "G5_P30",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Для выполнения действий со смешанными числами необходимо уметь работать с ними: выделять целую часть, представлять в виде неправильной дроби."
+    },
+    {
+      "skill_id": "G5_P32",
+      "prerequisite_id": "G5_P25",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Десятичная дробь является частным случаем обыкновенной дроби, у которой знаменатель — степень десяти. Понимание обыкновенных дробей является фундаментом."
+    },
+    {
+      "skill_id": "G5_P33",
+      "prerequisite_id": "G5_P32",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сравнение десятичных дробей (поразрядное) невозможно без понимания структуры десятичной дроби и значения каждого разряда."
+    },
+    {
+      "skill_id": "G5_P34",
+      "prerequisite_id": "G5_P33",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Правило сложения/вычитания 'запятая под запятой' требует умения правильно записывать числа, что основано на их сравнении и понимании разрядов."
+    },
+    {
+      "skill_id": "G5_P35",
+      "prerequisite_id": "G5_P33",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Процедура округления десятичных дробей аналогична округлению натуральных чисел и требует умения определять и сравнивать цифры в разрядах."
+    },
+    {
+      "skill_id": "G5_P36",
+      "prerequisite_id": "G5_P32",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Алгоритм умножения десятичной дроби на натуральное число требует понимания, как работать с десятичной запятой, что является основой темы 'Десятичные дроби'."
+    },
+    {
+      "skill_id": "G5_P37",
+      "prerequisite_id": "G5_P32",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Алгоритм деления десятичной дроби на натуральное число требует понимания, как работать с десятичной запятой в делимом, что является основой темы 'Десятичные дроби'."
+    },
+    {
+      "skill_id": "G5_P38",
+      "prerequisite_id": "G5_P36",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение десятичных дробей является логическим развитием умножения десятичной дроби на натуральное число, обобщая правило постановки запятой."
+    },
+    {
+      "skill_id": "G5_P39",
+      "prerequisite_id": "G5_P37",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Правило деления на десятичную дробь заключается в сведении задачи к делению на натуральное число, что делает освоение G5_P37 абсолютно необходимым."
+    },
+    {
+      "skill_id": "G5_P40",
+      "prerequisite_id": "G5_P39",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Решение основных задач на проценты (нахождение процента от числа, числа по его проценту) требует выполнения умножения и деления, в том числе с десятичными дробями."
+    },
+    {
+      "skill_id": "G5_P41",
+      "prerequisite_id": "G5_P10",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Вычисление среднего арифметического по определению требует сложить все числа ряда и разделить полученную сумму на их количество. Без навыка деления это невозможно."
+    },
+    {
+      "skill_id": "G5_P43",
+      "prerequisite_id": "G5_P31",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Решение текстовых задач на дроби требует уверенного владения всеми арифметическими операциями с обыкновенными и смешанными числами."
+    },
+    {
+      "skill_id": "G5_P45",
+      "prerequisite_id": "G5_P44",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Задачи на движение двух тел (навстречу, вдогонку) являются усложнением базовых задач на движение и используют понятия скорости сближения/удаления, которые на них основаны."
+    },
+    {
+      "skill_id": "G5_P46",
+      "prerequisite_id": "G5_P40",
+      "dependency_type": "soft",
+      "weight": 0.7,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Многие задачи с экономическим содержанием (скидки, наценки, простые проценты по вкладам) напрямую используют понятие процента и вычисления с ним."
+    },
+    {
+      "skill_id": "G5_P12",
+      "prerequisite_id": "G5_P07",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Упрощение выражений невозможно без понимания что такое буквенное выражение."
+    },
+    {
+      "skill_id": "G5_P21",
+      "prerequisite_id": "G5_P06",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Площадь составных фигур требует сложения и вычитания площадей частей."
+    },
+    {
+      "skill_id": "G5_P28",
+      "prerequisite_id": "G5_P26",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение дробей с разными знаменателями требует умения приводить к общему знаменателю."
+    },
+    {
+      "skill_id": "G5_P34",
+      "prerequisite_id": "G5_P06",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Алгоритм сложения/вычитания десятичных дробей использует поразрядное сложение натуральных чисел."
+    },
+    {
+      "skill_id": "G5_P36",
+      "prerequisite_id": "G5_P09",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение десятичной дроби на натуральное число — расширение алгоритма умножения натуральных чисел."
+    },
+    {
+      "skill_id": "G5_P37",
+      "prerequisite_id": "G5_P11",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Деление десятичной дроби на натуральное число — расширение алгоритма деления натуральных чисел."
+    },
+    {
+      "skill_id": "G5_P44",
+      "prerequisite_id": "G5_P39",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Задачи на движение часто включают данные в виде десятичных дробей, требуя их сложения/вычитания."
+    },
+    {
+      "skill_id": "G5_P08",
+      "prerequisite_id": "G5_P06",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Решение уравнений x+a=b требует знания правил вычитания натуральных чисел."
+    },
+    {
+      "skill_id": "G5_P15",
+      "prerequisite_id": "G5_P11",
+      "dependency_type": "soft",
+      "weight": 0.6,
+      "criticality": 7,
+      "is_cross_grade": false,
+      "relationship_description": "Алгоритм Евклида для НОД основан на операции деления с остатком."
+    },
+    {
+      "skill_id": "G5_P28",
+      "prerequisite_id": "G5_P25",
+      "dependency_type": "hard",
+      "weight": 0.95,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Невозможно складывать дроби, не зная что такое дробь и её числитель/знаменатель."
+    },
+    {
+      "skill_id": "G5_P29",
+      "prerequisite_id": "G5_P25",
+      "dependency_type": "hard",
+      "weight": 0.95,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение и деление дробей требует базового понимания понятия дроби."
+    },
+    {
+      "skill_id": "G5_P31",
+      "prerequisite_id": "G5_P28",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Смешанные числа — частный случай дробей; их сложение/вычитание строится на операциях с дробями."
+    },
+    {
+      "skill_id": "G5_P42",
+      "prerequisite_id": "G5_P19",
+      "dependency_type": "soft",
+      "weight": 0.6,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Задачи на периметр и площадь часто связаны с измерением прямоугольников."
+    },
+    {
+      "skill_id": "G5_P47",
+      "prerequisite_id": "G5_P41",
+      "dependency_type": "soft",
+      "weight": 0.6,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Диаграммы и таблицы часто используются для представления статистических данных."
+    }
+  ]
+}

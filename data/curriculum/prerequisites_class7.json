@@ -1,0 +1,331 @@
+{
+  "class_level": 7,
+  "total_edges": 36,
+  "errors": [],
+  "edges": [
+    {
+      "skill_id": "G7_P01",
+      "prerequisite_id": "G6_P38",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Вычисление числовых выражений невозможно без владения свойствами и правилами действий с рациональными числами, которые являются основой арифметических операций."
+    },
+    {
+      "skill_id": "G7_P02",
+      "prerequisite_id": "G7_P01",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие алгебраического выражения является обобщением числового выражения, где числа заменяются переменными. Без понимания структуры числового выражения невозможно освоить алгебраическое."
+    },
+    {
+      "skill_id": "G7_P03",
+      "prerequisite_id": "G7_P02",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Алгебраическое равенство или формула по определению связывает два алгебраических выражения. Невозможно понять суть формулы, не зная, что такое алгебраическое выражение."
+    },
+    {
+      "skill_id": "G7_P04",
+      "prerequisite_id": "G6_P39",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Правила раскрытия скобок в 7 классе являются прямым применением и обобщением правил, изученных в 6 классе для рациональных чисел, на алгебраические выражения."
+    },
+    {
+      "skill_id": "G7_P05",
+      "prerequisite_id": "G6_P38",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Свойства арифметических действий (коммутативность, ассоциативность, дистрибутивность) в алгебре являются формализацией тех же свойств для рациональных чисел."
+    },
+    {
+      "skill_id": "G7_P07",
+      "prerequisite_id": "G7_P06",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Свойства степени (умножение, деление, возведение в степень) выводятся непосредственно из определения степени с натуральным показателем. Без определения свойства теряют смысл."
+    },
+    {
+      "skill_id": "G7_P08",
+      "prerequisite_id": "G7_P06",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Одночлен по определению является произведением чисел, переменных и их степеней. Понятие степени является неотъемлемой частью определения одночлена."
+    },
+    {
+      "skill_id": "G7_P09",
+      "prerequisite_id": "G7_P07",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Правила умножения и деления одночленов полностью основаны на применении свойств степени с натуральным показателем."
+    },
+    {
+      "skill_id": "G7_P09",
+      "prerequisite_id": "G7_P08",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Невозможно выполнять операции с одночленами, не зная их определения и как приводить их к стандартному виду."
+    },
+    {
+      "skill_id": "G7_P10",
+      "prerequisite_id": "G7_P08",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Многочлен по определению является алгебраической суммой одночленов. Без понятия 'одночлен' определение многочлена невозможно."
+    },
+    {
+      "skill_id": "G7_P11",
+      "prerequisite_id": "G6_P41",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Приведение подобных членов многочлена — это прямое применение навыка приведения подобных слагаемых, изученного в 6 классе, но с более сложными членами (одночленами)."
+    },
+    {
+      "skill_id": "G7_P11",
+      "prerequisite_id": "G7_P10",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Подобные члены существуют внутри многочлена. Необходимо понимать структуру многочлена, чтобы идентифицировать и приводить подобные члены."
+    },
+    {
+      "skill_id": "G7_P12",
+      "prerequisite_id": "G7_P11",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение и вычитание многочленов по своей сути сводится к раскрытию скобок и последующему приведению подобных членов."
+    },
+    {
+      "skill_id": "G7_P13",
+      "prerequisite_id": "G7_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение многочленов (например, многочлена на многочлен) состоит из серии умножений одночленов друг на друга."
+    },
+    {
+      "skill_id": "G7_P15",
+      "prerequisite_id": "G7_P05",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Основной метод разложения на множители — вынесение общего множителя за скобки — является обратным применением распределительного свойства умножения."
+    },
+    {
+      "skill_id": "G7_P16",
+      "prerequisite_id": "G7_P13",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Формула квадрата суммы/разности является частным случаем умножения многочленов. Понимание общего принципа умножения необходимо для осознания и вывода формулы."
+    },
+    {
+      "skill_id": "G7_P17",
+      "prerequisite_id": "G7_P13",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Формула разности квадратов является частным случаем умножения многочленов (a-b)(a+b). Понимание общего принципа умножения необходимо для осознания и вывода формулы."
+    },
+    {
+      "skill_id": "G7_P20",
+      "prerequisite_id": "G7_P15",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Тема 'Способы разложения на множители' является развитием и систематизацией базовых методов, представленных в теме 'Разложение многочленов на множители'."
+    },
+    {
+      "skill_id": "G7_P20",
+      "prerequisite_id": "G7_P17",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Применение формулы разности квадратов — один из ключевых и наиболее часто используемых способов разложения на множители."
+    },
+    {
+      "skill_id": "G7_P21",
+      "prerequisite_id": "G7_P20",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Применение формул сокращенного умножения в сложных задачах часто требует их использования для разложения на множители, что является основной идеей темы 'Способы разложения на множители'."
+    },
+    {
+      "skill_id": "G7_P22",
+      "prerequisite_id": "G6_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Сокращение алгебраических дробей идеологически полностью повторяет сокращение обыкновенных дробей: необходимо разложить числитель и знаменатель на множители и сократить общие."
+    },
+    {
+      "skill_id": "G7_P22",
+      "prerequisite_id": "G7_P20",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Для сокращения алгебраической дроби необходимо разложить ее числитель и знаменатель (многочлены) на множители. Без владения способами разложения это невозможно."
+    },
+    {
+      "skill_id": "G7_P23",
+      "prerequisite_id": "G6_P10",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Алгоритм приведения алгебраических дробей к общему знаменателю (нахождение НОК знаменателей и домножение) полностью аналогичен алгоритму для обыкновенных дробей."
+    },
+    {
+      "skill_id": "G7_P23",
+      "prerequisite_id": "G7_P22",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Нахождение общего знаменателя для алгебраических дробей требует умения раскладывать знаменатели на множители, что является ключевым навыком из темы сокращения дробей."
+    },
+    {
+      "skill_id": "G7_P24",
+      "prerequisite_id": "G7_P23",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение и вычитание алгебраических дробей невозможно выполнить без предварительного приведения их к общему знаменателю."
+    },
+    {
+      "skill_id": "G7_P25",
+      "prerequisite_id": "G7_P22",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Умножение и деление алгебраических дробей требует последующего сокращения результата, для чего необходимо умение раскладывать многочлены на множители и сокращать."
+    },
+    {
+      "skill_id": "G7_P26",
+      "prerequisite_id": "G7_P03",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Уравнение — это частный случай алгебраического равенства, содержащего неизвестную. Понимание концепции равенства и формулы является обязательным."
+    },
+    {
+      "skill_id": "G7_P27",
+      "prerequisite_id": "G6_P42",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Решение линейных уравнений в 7 классе является прямым продолжением и усложнением темы решения уравнений из 6 класса, используя те же принципы переноса слагаемых и деления на коэффициент."
+    },
+    {
+      "skill_id": "G7_P27",
+      "prerequisite_id": "G7_P12",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Преобразование уравнений к стандартному виду ax=b требует навыков работы с многочленами: раскрытия скобок, сложения и вычитания, приведения подобных членов."
+    },
+    {
+      "skill_id": "G7_P29",
+      "prerequisite_id": "G7_P27",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Решение текстовых задач с помощью уравнений включает этап составления математической модели (уравнения) и последующий этап его решения. Без умения решать уравнения задача не может быть завершена."
+    },
+    {
+      "skill_id": "G7_P30",
+      "prerequisite_id": "G6_P45",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Декартова система координат в 7 классе — это та же самая координатная плоскость, которая была введена в 6 классе. Это полное повторение и закрепление базового понятия."
+    },
+    {
+      "skill_id": "G7_P31",
+      "prerequisite_id": "G7_P30",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Изучение функции, ее графика и свойств невозможно без умения работать в декартовой системе координат, строить и читать точки по координатам."
+    },
+    {
+      "skill_id": "G7_P32",
+      "prerequisite_id": "G7_P31",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Линейная функция является первым и основным примером функции, изучаемым в 7 классе. Ее изучение невозможно без понимания общего определения функции как зависимости одной переменной от другой."
+    },
+    {
+      "skill_id": "G7_P33",
+      "prerequisite_id": "G7_P27",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Система линейных уравнений состоит из двух или более линейных уравнений. Понимание того, что такое линейное уравнение и его решение, является обязательным."
+    },
+    {
+      "skill_id": "G7_P34",
+      "prerequisite_id": "G7_P33",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Невозможно изучать способы решения систем, не понимая, что такое система уравнений и что является ее решением."
+    },
+    {
+      "skill_id": "G7_P35",
+      "prerequisite_id": "G7_P34",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Решение текстовых задач с помощью систем уравнений включает этап составления системы и последующий этап ее решения одним из способов. Без умения решать системы задача не может быть завершена."
+    }
+  ]
+}

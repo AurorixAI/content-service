@@ -1,0 +1,502 @@
+{
+  "class_level": 6,
+  "total_edges": 55,
+  "errors": [],
+  "edges": [
+    {
+      "skill_id": "G6_P01",
+      "prerequisite_id": "G5_P10",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Понятия 'делитель' и 'кратное' напрямую основаны на операции деления натуральных чисел. Без умения делить невозможно определить, является ли одно число делителем другого."
+    },
+    {
+      "skill_id": "G6_P02",
+      "prerequisite_id": "G6_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Признаки делимости - это правила для определения, является ли число делителем. Без понимания самого понятия 'делитель' изучение признаков бессмысленно."
+    },
+    {
+      "skill_id": "G6_P03",
+      "prerequisite_id": "G6_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Аналогично признакам делимости на 2, 5, 10, для понимания признаков делимости на 3 и 9 необходимо сначала освоить понятие 'делитель'."
+    },
+    {
+      "skill_id": "G6_P04",
+      "prerequisite_id": "G6_P01",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Определение простого и составного числа основано на количестве его делителей. Невозможно классифицировать числа, не понимая, что такое 'делитель'."
+    },
+    {
+      "skill_id": "G6_P05",
+      "prerequisite_id": "G6_P04",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Разложение на простые множители - это представление числа в виде произведения простых чисел. Это требует понимания, какие числа являются простыми."
+    },
+    {
+      "skill_id": "G6_P06",
+      "prerequisite_id": "G6_P05",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Алгоритм нахождения НОД через разложение на простые множители является основным методом. Без этого навыка нахождение НОД больших чисел практически невозможно."
+    },
+    {
+      "skill_id": "G6_P07",
+      "prerequisite_id": "G6_P05",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Как и НОД, НОК чаще всего находится через разложение на простые множители, что делает этот навык критически важным."
+    },
+    {
+      "skill_id": "G6_P08",
+      "prerequisite_id": "G5_P25",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Основное свойство дроби оперирует с числителем и знаменателем. Без базового понимания, что такое дробь, освоение свойства невозможно."
+    },
+    {
+      "skill_id": "G6_P09",
+      "prerequisite_id": "G6_P08",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сокращение дробей является прямым применением основного свойства дроби (деление числителя и знаменателя на одно и то же число)."
+    },
+    {
+      "skill_id": "G6_P09",
+      "prerequisite_id": "G6_P06",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Для полного сокращения дроби необходимо разделить числитель и знаменатель на их наибольший общий делитель (НОД)."
+    },
+    {
+      "skill_id": "G6_P10",
+      "prerequisite_id": "G6_P08",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Приведение к общему знаменателю использует основное свойство дроби для умножения числителя и знаменателя на дополнительный множитель."
+    },
+    {
+      "skill_id": "G6_P10",
+      "prerequisite_id": "G6_P07",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Наименьший общий знаменатель - это наименьшее общее кратное (НОК) знаменателей. Умение находить НОК необходимо для эффективного приведения дробей к общему знаменателю."
+    },
+    {
+      "skill_id": "G6_P11",
+      "prerequisite_id": "G6_P10",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Все операции с дробями с разными знаменателями (сравнение, сложение, вычитание) требуют предварительного приведения их к общему знаменателю."
+    },
+    {
+      "skill_id": "G6_P11",
+      "prerequisite_id": "G5_P28",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "После приведения дробей к общему знаменателю, следующим шагом является сложение или вычитание дробей с одинаковыми знаменателями, что является базовым навыком из 5 класса."
+    },
+    {
+      "skill_id": "G6_P12",
+      "prerequisite_id": "G6_P11",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение и вычитание смешанных чисел включает в себя операции с их дробными частями, которые могут иметь разные знаменатели."
+    },
+    {
+      "skill_id": "G6_P12",
+      "prerequisite_id": "G5_P31",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Базовые принципы работы со смешанными числами (операции с целой и дробной частью) закладываются в 5 классе и являются обязательными."
+    },
+    {
+      "skill_id": "G6_P13",
+      "prerequisite_id": "G5_P25",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Невозможно научиться умножать дроби, не понимая, что такое обыкновенная дробь, ее числитель и знаменатель."
+    },
+    {
+      "skill_id": "G6_P14",
+      "prerequisite_id": "G6_P13",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Нахождение дроби от числа по определению является операцией умножения числа на эту дробь."
+    },
+    {
+      "skill_id": "G6_P16",
+      "prerequisite_id": "G6_P13",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Определение взаимно обратных чисел основано на их произведении, которое должно равняться 1. Это требует умения умножать дроби."
+    },
+    {
+      "skill_id": "G6_P17",
+      "prerequisite_id": "G6_P16",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Правило деления дробей заключается в умножении делимого на число, обратное делителю. Без понятия 'взаимно обратное число' это правило невозможно применить."
+    },
+    {
+      "skill_id": "G6_P18",
+      "prerequisite_id": "G6_P17",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Нахождение числа по его дроби по определению является операцией деления известной части числа на соответствующую ей дробь."
+    },
+    {
+      "skill_id": "G6_P19",
+      "prerequisite_id": "G6_P17",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Дробные выражения могут содержать все арифметические действия с дробями, но деление является наиболее сложным и последним изучаемым действием, включающим в себя умножение."
+    },
+    {
+      "skill_id": "G6_P19",
+      "prerequisite_id": "G6_P11",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Вычисление дробных выражений требует умения выполнять сложение и вычитание дробей с разными знаменателями."
+    },
+    {
+      "skill_id": "G6_P21",
+      "prerequisite_id": "G6_P20",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Пропорция определяется как равенство двух отношений. Без понимания, что такое отношение, невозможно понять суть пропорции."
+    },
+    {
+      "skill_id": "G6_P22",
+      "prerequisite_id": "G6_P21",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Задачи на прямую и обратную пропорциональность решаются с помощью составления и решения пропорций."
+    },
+    {
+      "skill_id": "G6_P23",
+      "prerequisite_id": "G6_P21",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Масштаб является частным случаем отношения, а задачи с масштабом решаются через пропорции."
+    },
+    {
+      "skill_id": "G6_P24",
+      "prerequisite_id": "G5_P38",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 8,
+      "is_cross_grade": true,
+      "relationship_description": "Формулы длины окружности и площади круга содержат число π, что требует умения умножать на десятичную дробь."
+    },
+    {
+      "skill_id": "G6_P26",
+      "prerequisite_id": "G5_P03",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Тема 'Координаты на прямой' является расширением темы 'Числовая ось' из 5 класса, добавляя отрицательные числа. Базовое понимание числовой оси необходимо."
+    },
+    {
+      "skill_id": "G6_P27",
+      "prerequisite_id": "G6_P26",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие противоположных чисел вводится через их симметричное расположение на координатной прямой относительно нуля."
+    },
+    {
+      "skill_id": "G6_P28",
+      "prerequisite_id": "G6_P26",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Геометрический смысл модуля числа — это расстояние от точки, изображающей число на координатной прямой, до начала отсчета."
+    },
+    {
+      "skill_id": "G6_P29",
+      "prerequisite_id": "G6_P26",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Правило сравнения положительных и отрицательных чисел основано на их расположении на координатной прямой: больше то число, которое правее."
+    },
+    {
+      "skill_id": "G6_P31",
+      "prerequisite_id": "G6_P26",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Сложение чисел с помощью координатной прямой — это визуальный метод, который полностью основан на умении работать с координатной прямой."
+    },
+    {
+      "skill_id": "G6_P32",
+      "prerequisite_id": "G6_P28",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Правило сложения отрицательных чисел формулируется через сложение их модулей. Без понятия 'модуль' правило невозможно понять и применить."
+    },
+    {
+      "skill_id": "G6_P33",
+      "prerequisite_id": "G6_P28",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Правило сложения чисел с разными знаками требует сравнения их модулей и вычитания меньшего модуля из большего."
+    },
+    {
+      "skill_id": "G6_P34",
+      "prerequisite_id": "G6_P33",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Вычитание определяется как операция сложения с числом, противоположным вычитаемому, что напрямую сводит задачу к сложению чисел с разными знаками."
+    },
+    {
+      "skill_id": "G6_P35",
+      "prerequisite_id": "G6_P28",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Правило умножения положительных и отрицательных чисел требует перемножения их модулей, а знак результата определяется по правилу знаков."
+    },
+    {
+      "skill_id": "G6_P36",
+      "prerequisite_id": "G6_P35",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Правило знаков при делении аналогично правилу знаков при умножении, а сама операция с модулями является обратной. Понимание умножения является обязательным."
+    },
+    {
+      "skill_id": "G6_P37",
+      "prerequisite_id": "G6_P36",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие рационального числа как числа, представимого в виде дроби m/n, где m - целое, а n - натуральное, обобщает все предыдущие операции с положительными и отрицательными числами, включая деление."
+    },
+    {
+      "skill_id": "G6_P38",
+      "prerequisite_id": "G6_P37",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Свойства действий (переместительное, сочетательное, распределительное) рассматриваются для множества рациональных чисел, что требует понимания, что такое рациональное число."
+    },
+    {
+      "skill_id": "G6_P39",
+      "prerequisite_id": "G6_P38",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Раскрытие скобок напрямую основано на распределительном свойстве умножения относительно сложения, которое является одним из ключевых свойств действий с рациональными числами."
+    },
+    {
+      "skill_id": "G6_P41",
+      "prerequisite_id": "G6_P40",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Приведение подобных слагаемых — это сложение их коэффициентов. Без понимания, что такое коэффициент, выполнить эту операцию невозможно."
+    },
+    {
+      "skill_id": "G6_P42",
+      "prerequisite_id": "G6_P41",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Приведение подобных слагаемых является ключевым шагом при упрощении и решении линейных уравнений."
+    },
+    {
+      "skill_id": "G6_P42",
+      "prerequisite_id": "G6_P39",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Многие уравнения содержат скобки, и их раскрытие является первым шагом решения."
+    },
+    {
+      "skill_id": "G6_P42",
+      "prerequisite_id": "G5_P08",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Базовые принципы решения уравнений (перенос слагаемых, нахождение неизвестного компонента) закладываются в 5 классе и являются основой для решения более сложных уравнений."
+    },
+    {
+      "skill_id": "G6_P43",
+      "prerequisite_id": "G5_P17",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Понятие перпендикулярных прямых вводится в 5 классе. В 6 классе оно углубляется и используется для построения координатной плоскости."
+    },
+    {
+      "skill_id": "G6_P44",
+      "prerequisite_id": "G5_P17",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Понятие параллельных прямых вводится в 5 классе и является базовым для изучения их свойств в 6 классе и далее."
+    },
+    {
+      "skill_id": "G6_P45",
+      "prerequisite_id": "G6_P43",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Координатная плоскость строится на двух взаимно перпендикулярных координатных прямых (осях)."
+    },
+    {
+      "skill_id": "G6_P45",
+      "prerequisite_id": "G6_P26",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Каждая ось в координатной плоскости является координатной прямой. Умение работать с ней (находить точки по координатам и наоборот) является обязательным."
+    },
+    {
+      "skill_id": "G6_P47",
+      "prerequisite_id": "G6_P45",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Графики строятся в координатной плоскости. Без умения отмечать точки по координатам и соединять их невозможно построить ни один график."
+    },
+    {
+      "skill_id": "G6_P03",
+      "prerequisite_id": "G6_P02",
+      "dependency_type": "soft",
+      "weight": 0.6,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Признаки делимости на 3 и 9 изучаются после признаков на 2, 5, 10."
+    },
+    {
+      "skill_id": "G6_P20",
+      "prerequisite_id": "G6_P17",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Отношение a/b по сути является делением; без умения делить дроби нельзя находить отношения."
+    },
+    {
+      "skill_id": "G6_P24",
+      "prerequisite_id": "G6_P20",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Число π — отношение длины окружности к диаметру; без понимания отношений невозможно."
+    },
+    {
+      "skill_id": "G6_P34",
+      "prerequisite_id": "G6_P27",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Правило вычитания a-b=a+(-b) напрямую использует понятие противоположного числа."
+    },
+    {
+      "skill_id": "G6_P40",
+      "prerequisite_id": "G6_P38",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Коэффициент как числовой множитель при буквенной части — прямое расширение понятия умножения."
+    },
+    {
+      "skill_id": "G6_P46",
+      "prerequisite_id": "G6_P45",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Диаграммы строятся на основе пропорций и процентов; без этих знаний невозможно их корректно построить."
+    }
+  ]
+}

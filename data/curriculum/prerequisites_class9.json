@@ -1,0 +1,322 @@
+{
+  "class_level": 9,
+  "total_edges": 35,
+  "errors": [],
+  "edges": [
+    {
+      "skill_id": "G9_P03",
+      "prerequisite_id": "G9_P02",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Понимание функции y = ax² невозможно без предварительного освоения базового случая y = x², так как коэффициент 'a' вводится как масштабирующий множитель для уже известного графика."
+    },
+    {
+      "skill_id": "G9_P04",
+      "prerequisite_id": "G9_P03",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Полная форма квадратичной функции y = ax² + bx + c строится на основе y = ax², добавляя линейные и свободные члены, которые отвечают за сдвиг графика."
+    },
+    {
+      "skill_id": "G9_P05",
+      "prerequisite_id": "G9_P04",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Построение графика квадратичной функции требует умения анализировать её полную форму: находить вершину, ось симметрии и направление ветвей, что определяется коэффициентами из y = ax² + bx + c."
+    },
+    {
+      "skill_id": "G9_P05",
+      "prerequisite_id": "G8_P24",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Для нахождения точек пересечения графика с осью абсцисс (корней) необходимо приравнять квадратичную функцию к нулю и решить полученное квадратное уравнение, используя формулы корней."
+    },
+    {
+      "skill_id": "G9_P06",
+      "prerequisite_id": "G8_P24",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Решение квадратного неравенства начинается с нахождения корней соответствующего квадратного уравнения, которые являются граничными точками для интервалов."
+    },
+    {
+      "skill_id": "G9_P07",
+      "prerequisite_id": "G9_P05",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Данный метод решения неравенства полностью основан на визуальном анализе графика квадратичной функции, без умения строить который метод неприменим."
+    },
+    {
+      "skill_id": "G9_P08",
+      "prerequisite_id": "G9_P06",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Метод интервалов является обобщенным подходом к решению неравенств, включая квадратные. Понимание структуры квадратного неравенства и его нулей является обязательным первым шагом."
+    },
+    {
+      "skill_id": "G9_P09",
+      "prerequisite_id": "G8_P02",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": true,
+      "relationship_description": "Нахождение области определения для дробно-рациональных функций требует знания того, что знаменатель алгебраической дроби не может быть равен нулю."
+    },
+    {
+      "skill_id": "G9_P09",
+      "prerequisite_id": "G8_P08",
+      "dependency_type": "hard",
+      "weight": 0.8,
+      "criticality": 8,
+      "is_cross_grade": true,
+      "relationship_description": "Нахождение области определения для иррациональных функций требует знания того, что выражение под корнем четной степени должно быть неотрицательным."
+    },
+    {
+      "skill_id": "G9_P10",
+      "prerequisite_id": "G9_P05",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Анализ промежутков возрастания и убывания квадратичной функции проводится по её графику, в частности, относительно абсциссы вершины параболы."
+    },
+    {
+      "skill_id": "G9_P12",
+      "prerequisite_id": "G8_P09",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Решение уравнений и неравенств со степенями невозможно без владения свойствами степени с рациональным показателем."
+    },
+    {
+      "skill_id": "G9_P13",
+      "prerequisite_id": "G8_P24",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": true,
+      "relationship_description": "Решение систем, содержащих уравнение второй степени, на этапе подстановки или исключения переменной сводится к решению квадратного уравнения."
+    },
+    {
+      "skill_id": "G9_P14",
+      "prerequisite_id": "G9_P13",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Более сложные методы решения систем (например, введение новых переменных) являются развитием и усложнением базовых методов, освоенных на простейших системах."
+    },
+    {
+      "skill_id": "G9_P15",
+      "prerequisite_id": "G9_P06",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Решение системы неравенств второй степени требует умения решать каждое такое неравенство в отдельности, чтобы затем найти пересечение их решений."
+    },
+    {
+      "skill_id": "G9_P15",
+      "prerequisite_id": "G8_P16",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Ключевой идеей решения системы неравенств является нахождение пересечения числовых промежутков, что является базовым навыком из темы систем линейных неравенств."
+    },
+    {
+      "skill_id": "G9_P18",
+      "prerequisite_id": "G9_P17",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Поворот точки на угол определяется величиной этого угла, которая в тригонометрии часто измеряется в радианах. Без понимания радианной меры невозможно корректно выполнять операции."
+    },
+    {
+      "skill_id": "G9_P19",
+      "prerequisite_id": "G9_P18",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Определения тригонометрических функций через единичную окружность напрямую используют координаты точки, полученной в результате поворота на заданный угол."
+    },
+    {
+      "skill_id": "G9_P20",
+      "prerequisite_id": "G9_P19",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Знаки тригонометрических функций в координатных четвертях являются прямым следствием их определений через координаты x и y точки на единичной окружности."
+    },
+    {
+      "skill_id": "G9_P21",
+      "prerequisite_id": "G9_P19",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Основное тригонометрическое тождество и определения тангенса/котангенса выводятся непосредственно из определений синуса и косинуса через единичную окружность."
+    },
+    {
+      "skill_id": "G9_P22",
+      "prerequisite_id": "G9_P21",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Доказательство и упрощение тригонометрических тождеств требует свободного владения базовыми связями между функциями, в первую очередь основным тригонометрическим тождеством."
+    },
+    {
+      "skill_id": "G9_P25",
+      "prerequisite_id": "G9_P24",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Формулы двойного угла (sin(2α), cos(2α)) являются частным случаем формул сложения (sin(α+β), cos(α+β)) при β = α и выводятся напрямую из них."
+    },
+    {
+      "skill_id": "G9_P29",
+      "prerequisite_id": "G9_P28",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Арифметическая прогрессия — это частный случай числовой последовательности, поэтому её изучение невозможно без понимания общих понятий: член последовательности, номер, рекуррентная формула."
+    },
+    {
+      "skill_id": "G9_P30",
+      "prerequisite_id": "G9_P29",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Формула суммы n первых членов выводится из определения и свойств арифметической прогрессии (например, свойства равноудаленных членов)."
+    },
+    {
+      "skill_id": "G9_P31",
+      "prerequisite_id": "G9_P28",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Геометрическая прогрессия — это частный случай числовой последовательности. Необходимо владеть базовой терминологией последовательностей для её изучения."
+    },
+    {
+      "skill_id": "G9_P32",
+      "prerequisite_id": "G9_P31",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Формула суммы n первых членов выводится с использованием определения и знаменателя геометрической прогрессии."
+    },
+    {
+      "skill_id": "G9_P33",
+      "prerequisite_id": "G9_P32",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Понятие суммы бесконечно убывающей геометрической прогрессии вводится как предел суммы n первых членов при n→∞. Без формулы конечной суммы невозможно вывести формулу для бесконечной."
+    },
+    {
+      "skill_id": "G9_P35",
+      "prerequisite_id": "G9_P34",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Вероятность является числовой характеристикой события. Невозможно вычислить вероятность, не понимая, что такое элементарное событие, благоприятствующее событие и пространство всех событий."
+    },
+    {
+      "skill_id": "G9_P35",
+      "prerequisite_id": "G8_P31",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": true,
+      "relationship_description": "Для вычисления вероятности по классической формуле необходимо подсчитывать число исходов. В сложных случаях это невозможно сделать без применения комбинаторных правил (например, правила умножения)."
+    },
+    {
+      "skill_id": "G9_P37",
+      "prerequisite_id": "G9_P34",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Случайная величина — это функция, ставящая в соответствие каждому элементарному событию число. Без понятия события невозможно определить случайную величину."
+    },
+    {
+      "skill_id": "G9_P38",
+      "prerequisite_id": "G9_P37",
+      "dependency_type": "hard",
+      "weight": 1.0,
+      "criticality": 10,
+      "is_cross_grade": false,
+      "relationship_description": "Числовые характеристики (математическое ожидание, дисперсия) вычисляются для конкретной случайной величины и её распределения. Без понимания, что такое случайная величина, эти понятия бессмысленны."
+    },
+    {
+      "skill_id": "G9_P08",
+      "prerequisite_id": "G9_P07",
+      "dependency_type": "soft",
+      "weight": 0.6,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Метод интервалов — алгебраическое обобщение графического метода решения неравенств."
+    },
+    {
+      "skill_id": "G9_P24",
+      "prerequisite_id": "G9_P21",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": false,
+      "relationship_description": "Формулы сложения тригонометрических функций требуют знания базовых тождеств."
+    },
+    {
+      "skill_id": "G9_P31",
+      "prerequisite_id": "G9_P29",
+      "dependency_type": "soft",
+      "weight": 0.65,
+      "criticality": 6,
+      "is_cross_grade": false,
+      "relationship_description": "Геометрическая прогрессия изучается после арифметической, используя аналогичные определения."
+    },
+    {
+      "skill_id": "G9_P16",
+      "prerequisite_id": "G9_P08",
+      "dependency_type": "hard",
+      "weight": 0.9,
+      "criticality": 9,
+      "is_cross_grade": false,
+      "relationship_description": "Решение рациональных неравенств требует метода интервалов."
+    },
+    {
+      "skill_id": "G9_P02",
+      "prerequisite_id": "G8_P20",
+      "dependency_type": "hard",
+      "weight": 0.85,
+      "criticality": 8,
+      "is_cross_grade": true,
+      "relationship_description": "Построение графика квадратичной функции требует понимания координатной плоскости."
+    }
+  ]
+}
