@@ -36,10 +36,10 @@ def step1_direct_fixes():
     log.info("=== Step 1: Direct answer fixes ===")
     fixes = [
         # (task_id, correct_answer, answer_type_override_or_None)
-        ("G7_TB_39_8.1", "3a - 4b",  "expression"),   # "Покажите выражение 3a-4b"
-        ("G7_TB_39_8.2", "23",        None),            # 6*3+1*5 = 18+5 = 23
-        ("G7_TB_39_8.3", "16384",     None),            # 2^14
-        ("G7_TB_39_8.4", "-225",      None),            # (-12-3)*(6*2+3)=-15*15
+        ("G7_ALG_39_8.1", "3a - 4b",  "expression"),   # "Покажите выражение 3a-4b"
+        ("G7_ALG_39_8.2", "23",        None),            # 6*3+1*5 = 18+5 = 23
+        ("G7_ALG_39_8.3", "16384",     None),            # 2^14
+        ("G7_ALG_39_8.4", "-225",      None),            # (-12-3)*(6*2+3)=-15*15
     ]
     updated = 0
     for task_id, answer, atype in fixes:

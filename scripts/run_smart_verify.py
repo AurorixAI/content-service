@@ -7,6 +7,7 @@ Usage:
   python scripts/run_smart_verify.py --class-level 8 --limit 50
   python scripts/run_smart_verify.py --task-id G8_TB_3_59.3
   python scripts/run_smart_verify.py --grades 5-8 --loop
+  python scripts/run_smart_verify.py --grades 5-8 --answer-type equation_solution --loop
 """
 from __future__ import annotations
 
@@ -28,6 +29,13 @@ log = logging.getLogger("run_smart_verify")
 from sqlalchemy import create_engine, text
 
 from src.core.config import get_settings
+from src.pipeline.smart_verify_common import (
+    QUEUE_SKIP_SQL,
+    SUCCESS_STATUSES,
+    bump_failed_retry_counter,
+    run_distractor_only_pipeline,
+    sync_verify_tags,
+)
 from src.pipeline.smart_verify import run_smart_verify_pipeline
 
 
@@ -47,22 +55,116 @@ def fetch_tasks(
     limit: int,
     task_id: str | None,
     reprocess: bool,
+    retry_failed: bool = False,
+    gaps_only: bool = False,
+    skip_text: bool = False,
+    answer_type: str | None = None,
+    id_prefix: str | None = None,
+    only_fix_g7_failed: bool = False,
+    only_fix_g7_reprocess_failed: bool = False,
+    only_human_review: bool = False,
+    skip_coordinate: bool = False,
 ) -> list:
     level_sql = ", ".join(str(x) for x in levels)
     params: dict = {"limit": limit}
 
     status_filter = ""
-    if not reprocess:
+    if gaps_only:
+        # Pending first-run + verified tasks missing distractors (no failed churn).
         status_filter = """
-          AND COALESCE(tm.tags->>'smart_verify_status', 'pending') IN (
-            'pending', 'failed_at_llm', 'failed_at_sympy'
+          AND (
+            COALESCE(NULLIF(tm.tags->>'smart_verify_status', ''), 'pending') = 'pending'
+            OR (
+              tm.tags->>'smart_verify_status' IN (
+                'verified_match', 'verified_corrected', 'generated_from_scratch'
+              )
+              AND jsonb_array_length(COALESCE(tm.distractor_meta, '[]'::jsonb)) < 2
+              AND tm.answer_type NOT IN ('text', 'open_text', 'coordinate')
+            )
+            OR (
+              COALESCE(tm.tags->>'distractor_regen_pending', 'false') = 'true'
+              AND jsonb_array_length(COALESCE(tm.distractor_meta, '[]'::jsonb)) < 2
+              AND tm.answer_type NOT IN ('text', 'open_text', 'coordinate')
+            )
           )
         """
+    elif retry_failed:
+        # Failed tasks only — distractor gaps handled by --gaps-only (no overlap).
+        status_filter = """
+          AND COALESCE(tm.tags->>'smart_verify_status', 'pending') IN (
+            'failed_at_llm', 'failed_at_sympy'
+          )
+        """
+    elif only_human_review:
+        status_filter = """
+          AND tm.tags->>'smart_verify_status' = 'needs_human_review'
+        """
+    elif not reprocess:
+        # Only never-processed tasks; failed_at_* retried separately after gate fixes.
+        status_filter = """
+          AND COALESCE(NULLIF(tm.tags->>'smart_verify_status', ''), 'pending') = 'pending'
+        """
 
+    tag_filter = ""
+    if only_fix_g7_failed:
+        tag_filter = "AND tm.tags->>'fix_g7_failed' = 'true'"
+    elif only_fix_g7_reprocess_failed:
+        tag_filter = "AND tm.tags->>'fix_g7_reprocess_failed' = 'true'"
+    elif only_human_review:
+        tag_filter = """
+          AND COALESCE(tm.tags->>'human_reprocess_exhausted', 'false') != 'true'
+        """
+
+    queue_skip = QUEUE_SKIP_SQL
+    if task_id and reprocess:
+        queue_skip = """
+          AND COALESCE(tm.tags->>'needs_compound_split', 'false') != 'true'
+          AND COALESCE(tm.tags->>'needs_content_repair', 'false') != 'true'
+        """
+    elif only_human_review and reprocess:
+        queue_skip = """
+          AND COALESCE(tm.tags->>'needs_compound_split', 'false') != 'true'
+          AND COALESCE(tm.tags->>'needs_content_repair', 'false') != 'true'
+          AND COALESCE(tm.tags->>'smart_verify_retry_exhausted', 'false') != 'true'
+        """
+    elif (only_fix_g7_failed or only_fix_g7_reprocess_failed) and reprocess:
+        # Allow re-running tasks marked choices_complete by fix_g7_failed bypass.
+        queue_skip = """
+          AND COALESCE(tm.tags->>'distractor_regen_exhausted', 'false') != 'true'
+          AND COALESCE(tm.tags->>'needs_compound_split', 'false') != 'true'
+          AND COALESCE(tm.tags->>'needs_content_repair', 'false') != 'true'
+        """
     task_filter = ""
     if task_id:
         task_filter = "AND tm.id = :task_id"
         params["task_id"] = task_id
+        level_clause = ""
+    else:
+        level_clause = f"AND tb.class_level IN ({level_sql})"
+        if id_prefix:
+            task_filter = "AND tm.id LIKE :id_prefix"
+            params["id_prefix"] = id_prefix + "%"
+
+    if answer_type:
+        type_filter = "AND tm.answer_type = :answer_type"
+        params["answer_type"] = answer_type
+    elif skip_coordinate:
+        type_filter = "AND tm.answer_type != 'coordinate'"
+    elif skip_text:
+        type_filter = """
+          AND tm.answer_type IN (
+            'exact_number', 'decimal', 'fraction', 'expression',
+            'equation_solution', 'inequality', 'set', 'multiple_choice'
+          )
+        """
+    else:
+        type_filter = """
+          AND tm.answer_type IN (
+            'exact_number', 'decimal', 'fraction', 'expression',
+            'equation_solution', 'inequality', 'set', 'multiple_choice',
+            'text', 'open_text', 'coordinate'
+          )
+        """
 
     sql = f"""
         SELECT tm.id, tm.question_text, tm.correct_answer, tm.answer_type,
@@ -70,22 +172,75 @@ def fetch_tasks(
         FROM tasks_master tm
         JOIN textbook_toc toc ON toc.id = tm.toc_id
         JOIN textbooks tb ON tb.textbook_id = toc.textbook_id
-        WHERE tb.class_level IN ({level_sql})
-          AND tm.answer_type IN (
-            'exact_number', 'decimal', 'fraction', 'expression',
-            'equation_solution', 'inequality', 'set', 'multiple_choice'
-          )
+        WHERE 1=1
+          {level_clause}
+          {type_filter}
           {status_filter}
+          {tag_filter}
+          {queue_skip}
           {task_filter}
-        ORDER BY tb.class_level, tm.answer_type, tm.id
+        ORDER BY
+          CASE
+            WHEN COALESCE(NULLIF(tm.tags->>'smart_verify_status', ''), 'pending') = 'pending' THEN 0
+            ELSE 1
+          END,
+          tb.class_level, tm.answer_type, tm.id
         LIMIT :limit
     """
     with engine.connect() as conn:
         return conn.execute(text(sql), params).fetchall()
 
 
+def _pipeline_failure_result(
+    *,
+    answer: str | None,
+    dmeta: list,
+    tags: dict,
+    prev_status: str,
+    exc: BaseException,
+) -> dict:
+    """Isolate per-task crashes — mark failed, keep loop alive."""
+    err_tags = dict(tags)
+    sync_verify_tags(err_tags, "failed_at_sympy")
+    err_tags["smart_verify_error"] = (
+        f"pipeline_exception:{type(exc).__name__}:{str(exc)[:250]}"
+    )
+    bump_failed_retry_counter(err_tags, prev_status, "failed_at_sympy")
+    return {
+        "correct_answer": answer or "",
+        "correct_answer_latex": "",
+        "distractor_meta": dmeta,
+        "tags": err_tags,
+        "verification_status": "pending",
+        "action": "failed_at_sympy",
+    }
+
+
 def persist_result(engine, task_id: str, result: dict) -> None:
-    tags_json = json.dumps(result["tags"], ensure_ascii=False)
+    tags = dict(result.get("tags") or {})
+    if tags.get("smart_verify_status") in SUCCESS_STATUSES:
+        tags.pop("fix_g7_failed", None)
+        tags.pop("fix_g7_reprocess_failed", None)
+        tags.pop("human_reprocess_exhausted", None)
+        tags.pop("human_reprocess_status", None)
+        tags["fix_g7_reprocessed"] = "true"
+    elif tags.get("fix_g7_failed") == "true" and str(
+        tags.get("smart_verify_status", "")
+    ).startswith("failed"):
+        tags.pop("fix_g7_failed", None)
+        tags["fix_g7_reprocess_failed"] = "true"
+    elif tags.get("fix_g7_reprocess_failed") == "true" and str(
+        tags.get("smart_verify_status", "")
+    ).startswith("failed"):
+        tags.pop("fix_g7_reprocess_failed", None)
+        tags["fix_g7_reprocess_failed2"] = "true"
+    elif tags.get("fix_g7_reprocess_failed") == "true" and tags.get(
+        "smart_verify_status"
+    ) == "needs_human_review":
+        tags.pop("fix_g7_reprocess_failed", None)
+        tags["fix_g7_reprocess_human"] = "true"
+    result = {**result, "tags": tags}
+    tags_json = json.dumps(tags, ensure_ascii=False)
     dmeta = result.get("distractor_meta")
     dmeta_json = json.dumps(dmeta if dmeta is not None else [], ensure_ascii=False)
     vstatus = result.get("verification_status", "pending")
@@ -95,6 +250,7 @@ def persist_result(engine, task_id: str, result: dict) -> None:
             text("""
                 UPDATE tasks_master
                 SET correct_answer = :ans,
+                    correct_answer_latex = :latex,
                     distractor_meta = cast(:dmeta as jsonb),
                     tags = cast(:tags as jsonb),
                     verification_status = :vstatus,
@@ -104,6 +260,7 @@ def persist_result(engine, task_id: str, result: dict) -> None:
             {
                 "id": task_id,
                 "ans": result["correct_answer"],
+                "latex": result.get("correct_answer_latex") or "",
                 "dmeta": dmeta_json,
                 "tags": tags_json,
                 "vstatus": vstatus,
@@ -111,14 +268,43 @@ def persist_result(engine, task_id: str, result: dict) -> None:
         )
 
 
+def _mark_human_reprocess_exhausted(engine, task_id: str, status: str) -> None:
+    """One human_review reprocess attempt — drop from queue if still not verified."""
+    with engine.begin() as conn:
+        conn.execute(
+            text("""
+                UPDATE tasks_master
+                SET tags = tags
+                  || jsonb_build_object(
+                    'human_reprocess_exhausted', 'true',
+                    'human_reprocess_status', :status
+                  ),
+                    updated_at = NOW()
+                WHERE id = :id
+            """),
+            {"id": task_id, "status": status},
+        )
+
+
 def run_batch(engine, args: argparse.Namespace) -> dict[str, int]:
-    levels = _parse_levels(args)
+    levels = _parse_levels(args) if (args.class_level or args.grades) else (8,)
+    if args.task_id and not args.class_level and not args.grades:
+        levels = (5, 6, 7, 8)
     rows = fetch_tasks(
         engine,
         levels=levels,
         limit=args.limit,
         task_id=args.task_id,
         reprocess=args.reprocess,
+        retry_failed=args.retry_failed,
+        gaps_only=args.gaps_only,
+        skip_text=args.skip_text,
+        answer_type=args.answer_type,
+        id_prefix=args.id_prefix,
+        only_fix_g7_failed=args.only_fix_g7_failed,
+        only_fix_g7_reprocess_failed=args.only_fix_g7_reprocess_failed,
+        only_human_review=args.only_human_review,
+        skip_coordinate=args.skip_coordinate,
     )
 
     if not rows:
@@ -133,6 +319,7 @@ def run_batch(engine, args: argparse.Namespace) -> dict[str, int]:
         "failed_at_llm": 0,
         "failed_at_sympy": 0,
         "needs_human_review": 0,
+        "needs_compound_split": 0,
         "skipped": 0,
         "new_dist": 0,
     }
@@ -148,22 +335,58 @@ def run_batch(engine, args: argparse.Namespace) -> dict[str, int]:
             continue
 
         log.info("Smart verify: %s (%s)", tid, atype)
-        result = run_smart_verify_pipeline(
-            task_id=tid,
-            question=question or "",
-            correct_answer=answer,
-            answer_type=atype or "exact_number",
-            distractor_meta=dmeta,
-            tags=tags,
-            answer_authority=args.answer_authority,
-        )
+        prev_status = tags.get("smart_verify_status", "pending")
+
+        try:
+            if args.gaps_only and prev_status in SUCCESS_STATUSES:
+                result = run_distractor_only_pipeline(
+                    task_id=tid,
+                    question=question or "",
+                    correct_answer=answer or "",
+                    answer_type=atype or "exact_number",
+                    distractor_meta=dmeta,
+                    tags=tags,
+                )
+            else:
+                result = run_smart_verify_pipeline(
+                    task_id=tid,
+                    question=question or "",
+                    correct_answer=answer,
+                    answer_type=atype or "exact_number",
+                    distractor_meta=dmeta,
+                    tags=tags,
+                    answer_authority=args.answer_authority,
+                )
+                new_status = result["tags"].get("smart_verify_status", "unknown")
+                bump_failed_retry_counter(result["tags"], prev_status, new_status)
+        except Exception as exc:
+            log.exception("Smart verify pipeline crashed on %s", tid)
+            result = _pipeline_failure_result(
+                answer=answer,
+                dmeta=dmeta,
+                tags=tags,
+                prev_status=prev_status,
+                exc=exc,
+            )
 
         persist_result(engine, tid, result)
+
+        if args.only_human_review:
+            new_status = result["tags"].get("smart_verify_status", "")
+            if new_status in (
+                "needs_human_review",
+                "failed_at_llm",
+                "failed_at_sympy",
+            ):
+                _mark_human_reprocess_exhausted(engine, tid, new_status)
+
         stats["processed"] += 1
 
         status = result["tags"].get("smart_verify_status", "unknown")
         if status in stats:
             stats[status] += 1
+        elif result.get("action") == "needs_compound_split":
+            stats["needs_compound_split"] += 1
         if "+new_dist" in result.get("action", ""):
             stats["new_dist"] += 1
 
@@ -180,9 +403,51 @@ def main() -> int:
     p.add_argument("--class-level", type=int)
     p.add_argument("--grades", type=str, help="e.g. 5-8")
     p.add_argument("--task-id", type=str, help="Process single task")
-    p.add_argument("--limit", type=int, default=50)
+    p.add_argument(
+        "--id-prefix",
+        type=str,
+        default=None,
+        help="Only tasks whose id starts with prefix, e.g. G8_TB_",
+    )
+    p.add_argument(
+        "--only-fix-g7-failed",
+        action="store_true",
+        help="Only tasks tagged fix_g7_failed=true (use with --reprocess)",
+    )
+    p.add_argument(
+        "--only-human-review",
+        action="store_true",
+        help="Only needs_human_review tasks (use with --reprocess)",
+    )
+    p.add_argument(
+        "--skip-coordinate",
+        action="store_true",
+        help="Exclude coordinate answer_type from batch",
+    )
     p.add_argument("--dry-run", action="store_true")
     p.add_argument("--reprocess", action="store_true", help="Ignore smart_verify_status")
+    p.add_argument(
+        "--only-fix-g7-reprocess-failed",
+        action="store_true",
+        help="Only tasks tagged fix_g7_reprocess_failed=true (use with --reprocess)",
+    )
+    p.add_argument(
+        "--retry-failed",
+        action="store_true",
+        help="failed_at_llm/sympy + tasks missing distractors",
+    )
+    p.add_argument(
+        "--gaps-only",
+        action="store_true",
+        help="Only pending + verified tasks with <3 distractors (skip failed)",
+    )
+    p.add_argument("--skip-text", action="store_true", help="Numeric/algebraic types only")
+    p.add_argument(
+        "--answer-type",
+        type=str,
+        default=None,
+        help="Single answer_type filter, e.g. equation_solution",
+    )
     p.add_argument("--loop", action="store_true", help="Run until queue empty")
     p.add_argument("--sleep", type=float, default=0.0, help="Pause between tasks (seconds)")
     p.add_argument(
@@ -190,10 +455,17 @@ def main() -> int:
         choices=["ai_first", "textbook", "ai_if_sympy_confirms"],
         default=None,
     )
+    p.add_argument("--limit", type=int, default=50)
     args = p.parse_args()
 
     if not args.class_level and not args.grades and not args.task_id:
         p.error("Specify --class-level, --grades, or --task-id")
+    if args.only_fix_g7_reprocess_failed and not args.reprocess:
+        p.error("--only-fix-g7-reprocess-failed requires --reprocess")
+    if args.only_fix_g7_failed and not args.reprocess:
+        p.error("--only-fix-g7-failed requires --reprocess")
+    if args.only_human_review and not args.reprocess:
+        p.error("--only-human-review requires --reprocess")
 
     engine = create_engine(get_settings().database_url)
 

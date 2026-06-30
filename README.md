@@ -72,4 +72,14 @@ Swagger UI (только `development`): http://localhost:8004/docs
 
 ## Схема БД
 
-6 таблиц: `subjects` → `textbooks` → `topics` → `skills` → `tasks` → `task_answers`
+Основные таблицы в `algo_content`:
+
+| Таблица | Описание |
+|---------|----------|
+| `knowledge_hierarchy` | L1–L4 навыки |
+| `skill_prerequisites` | Пререквизиты навыков |
+| `textbooks` / `textbook_toc` | Учебники и оглавление |
+| `tasks_master` | Банк заданий (IRT, verify, distractors) |
+| `textbook_tasks` | Связь заданий с учебником |
+
+Статус классов и runbook скриптов: [`docs/GRADES_STATUS.md`](docs/GRADES_STATUS.md), [`scripts/README.md`](scripts/README.md).

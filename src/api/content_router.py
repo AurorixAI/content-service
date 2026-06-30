@@ -36,7 +36,7 @@ _SKILL_COLS = """
 _TASK_COLS = """
     tm.id, tm.skill_id, COALESCE(kh.name_ru, '') AS skill_name,
     tm.difficulty, tm.question_text, tm.question_latex,
-    tm.answer_type, tm.correct_answer,
+    tm.answer_type, tm.correct_answer, tm.correct_answer_latex,
     tm.answer_options, tm.distractor_meta,
     tm.irt_discrimination, tm.irt_difficulty, tm.irt_guessing
 """
@@ -54,22 +54,14 @@ def _skill_row(r) -> dict:
 
 
 def _task_row(r) -> dict:
-    return {
-        "id": r[0], "skill_id": r[1] or "", "skill_name": r[2] or "",
-        "difficulty": r[3] or "B", "question_text": r[4] or "",
-        "question_latex": r[5], "answer_type": r[7] or "exact_number",
-        "correct_answer": r[7] or "",
-        "answer_options": r[8], "distractor_meta": r[9],
-        "irt_discrimination": float(r[10] or 1.0),
-        "irt_difficulty": float(r[11] or 0.0),
-        "irt_guessing": float(r[12] or 0.0),
-    }
+    return _task_row_full(r)
 
 
 def _task_row_full(r) -> dict:
     """Same as _task_row but uses correct column offsets."""
     return {
         "id": r[0],
+        "task_id": r[0],
         "skill_id": r[1] or "",
         "skill_name": r[2] or "",
         "difficulty": r[3] or "B",
@@ -77,11 +69,12 @@ def _task_row_full(r) -> dict:
         "question_latex": r[5],
         "answer_type": r[6] or "exact_number",
         "correct_answer": r[7] or "",
-        "answer_options": r[8],
-        "distractor_meta": r[9],
-        "irt_discrimination": float(r[10] or 1.0),
-        "irt_difficulty": float(r[11] or 0.0),
-        "irt_guessing": float(r[12] or 0.0),
+        "correct_answer_latex": r[8] or "",
+        "answer_options": r[9],
+        "distractor_meta": r[10],
+        "irt_discrimination": float(r[11] or 1.0),
+        "irt_difficulty": float(r[12] or 0.0),
+        "irt_guessing": float(r[13] or 0.0),
     }
 
 

@@ -47,6 +47,10 @@ def main() -> int:
                tm.tags->>'sympy_compatible_string' as sympy_string,
                tm.tags->>'step_by_step_solution' as solution,
                tm.tags->>'answer_gemini_candidate' as gemini_candidate,
+               tm.tags->>'answer_canonical_source' as canonical_source,
+               tm.tags->>'answer_llm_prose' as llm_prose,
+               tm.tags->>'self_consistency_votes' as consistency_votes,
+               tm.tags->>'distractor_gate_rejected' as dist_rejected,
                COALESCE(tm.tags->>'verify_conflict', 'false') as conflict,
                COALESCE(tm.tags->>'verify_unresolved', 'false') as unresolved
         FROM tasks_master tm
@@ -83,8 +87,12 @@ def main() -> int:
             "sympy_string": r[11],
             "solution": r[12],
             "gemini_candidate": r[13],
-            "verify_conflict": r[14] == "true",
-            "verify_unresolved": r[15] == "true",
+            "canonical_source": r[14],
+            "llm_prose": r[15],
+            "consistency_votes": r[16],
+            "distractor_gate_rejected": r[17],
+            "verify_conflict": r[18] == "true",
+            "verify_unresolved": r[19] == "true",
         })
 
     with open(args.output, "w", encoding="utf-8") as f:

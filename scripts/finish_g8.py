@@ -1,11 +1,14 @@
 r"""
-G8 полная добивка.
+G8 полная добивка (fallback после Smart Verify v2).
 
 Шаги:
   1. Skill auto-mapping по toc_id (мгновенно)
   2. AIAnswerSolver для text задач без ответа
-  2b. Gemini Flash verify: перерешить и сверить / auto-fix ответ
-  3–6. Дистракторы — только если нет или ответ исправлен (3.5 Flash)
+  3–6. Дистракторы — только если Smart Verify не завершил задачу
+
+Smart Verify v2 (run_smart_verify.py) — основной путь для verify + distractors.
+finish_g8 пропускает задачи со smart_verify_status in
+(verified_match, verified_corrected, generated_from_scratch).
 """
 from __future__ import annotations
 

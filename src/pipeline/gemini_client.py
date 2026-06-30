@@ -23,6 +23,8 @@ from src.core.config import get_settings
 
 log = logging.getLogger(__name__)
 
+TSchema = TypeVar("TSchema", bound=BaseModel)
+
 
 class QuotaExhaustedError(Exception):
     """Raised when Vertex AI returns 429 and caller wants to skip retries."""
@@ -257,7 +259,94 @@ def call_gemini(
     raise RuntimeError("Gemini API: no response after all retries")
 
 
-TSchema = TypeVar("TSchema", bound=BaseModel)
+def call_gemini_structured(
+    prompt: str,
+    schema: Type[TSchema],
+    *,
+    model: Optional[str] = None,
+    temperature: float = 0.1,
+    max_tokens: int = 4096,
+    timeout: int = 300,
+    max_retries: int = 3,
+    thinking_budget: Optional[int] = 0,
+) -> TSchema:
+    """Call Gemini with JSON responseSchema enforced via Pydantic model."""
+    mdl = model or get_flash_model()
+    url = _VERTEX_BASE.format(
+        project=_vertex_project(), location=_vertex_location(), model=mdl,
+    )
+
+    gen_config: dict = {
+        "temperature": temperature,
+        "maxOutputTokens": max_tokens,
+        "responseMimeType": "application/json",
+        "responseSchema": schema.model_json_schema(),
+    }
+    if thinking_budget is not None:
+        gen_config["thinkingConfig"] = {"thinkingBudget": thinking_budget}
+
+    payload = {
+        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+        "generationConfig": gen_config,
+    }
+
+    bearer = _get_adc_token()
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {bearer}",
+    }
+
+    limiter = _limiter_for(mdl)
+    last_exc: Optional[Exception] = None
+    for attempt in range(max_retries):
+        try:
+            limiter.acquire()
+            resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
+            if resp.status_code == 401 and attempt < max_retries - 1:
+                bearer = _get_adc_token()
+                headers["Authorization"] = f"Bearer {bearer}"
+                time.sleep(1)
+                continue
+            if resp.status_code in (429, 500, 502, 503, 504):
+                if resp.status_code == 429:
+                    wait = min(15 * (2 ** attempt), 240)
+                    limiter.penalize(wait)
+                else:
+                    wait = 2 ** (attempt + 1)
+                log.warning(
+                    "Gemini structured HTTP %s (attempt %d/%d), retry in %ds",
+                    resp.status_code, attempt + 1, max_retries, wait,
+                )
+                time.sleep(wait)
+                last_exc = requests.HTTPError(response=resp)
+                continue
+
+            if 400 <= resp.status_code < 500:
+                log.error("Gemini structured HTTP %s: %s", resp.status_code, resp.text[:1500])
+            resp.raise_for_status()
+
+            data = resp.json()
+            candidate = data["candidates"][0]
+            parts = candidate["content"].get("parts", [])
+            text = " ".join(p.get("text", "") for p in parts).strip()
+            if not text:
+                raise RuntimeError("Gemini structured returned empty text")
+
+            parsed = parse_json_response(text)
+            if isinstance(parsed, dict):
+                return schema.model_validate(parsed)
+            raise ValueError(f"expected JSON object, got {type(parsed)}")
+
+        except (requests.ConnectionError, ValueError, RuntimeError) as exc:
+            last_exc = exc
+            if attempt < max_retries - 1:
+                time.sleep(2 ** (attempt + 1))
+                continue
+            raise
+
+    if last_exc is not None:
+        raise last_exc
+    raise RuntimeError("Gemini structured: no response after retries")
 
 
 def _extract_text_from_parts(parts: list[dict]) -> str:

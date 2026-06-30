@@ -31,3 +31,38 @@ class DistractorItem(BaseModel):
 
 class DistractorGenerationResponse(BaseModel):
     distractors: list[DistractorItem] = Field(..., min_length=1, max_length=4)
+
+
+class PedagogyItemReview(BaseModel):
+    index: int = Field(..., ge=0, le=5)
+    status: str = Field(
+        ...,
+        description="ok | rewrite | reject_value",
+    )
+    error_logic: str = Field(
+        default="",
+        description="Improved mistake description when status=rewrite",
+    )
+    issue: str = Field(default="", description="Why reject_value")
+
+
+class PedagogyReviewResponse(BaseModel):
+    items: list[PedagogyItemReview] = Field(..., min_length=1, max_length=4)
+    overall: str = Field(..., description="pass | needs_regen")
+
+
+class TextVerifyResponse(BaseModel):
+    """LLM output for text-route verify (no code_execution)."""
+
+    absolute_correct_answer: str = Field(
+        ...,
+        description="Final answer in school notation",
+    )
+    step_by_step_solution: str = Field(
+        ...,
+        description="Brief reasoning for student / distractor prompts",
+    )
+    confidence: str = Field(
+        default="medium",
+        description="high | medium | low",
+    )

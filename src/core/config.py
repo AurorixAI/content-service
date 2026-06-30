@@ -62,6 +62,16 @@ class Settings(BaseSettings):
         default="ai_if_sympy_confirms",
         pattern="^(ai_first|textbook|ai_if_sympy_confirms)$",
     )
+    smart_verify_text_authority: str = Field(
+        default="textbook",
+        pattern="^(ai_first|textbook|ai_if_sympy_confirms)$",
+    )
+    smart_verify_consistency_runs: int = 3
+    smart_verify_consistency_temperature: float = 0.2
+    distractor_gate_min_count: int = 3
+    distractor_gate_min_acceptable: int = 2
+    distractor_gate_max_retries: int = 4
+    distractor_gate_llm_batch_size: int = 5
 
     # Figures storage (persistent docker volume → served by FastAPI static)
     figures_dir: str = "/data/figures"
