@@ -74,7 +74,7 @@ class Settings(BaseSettings):
     distractor_gate_llm_batch_size: int = 5
 
     # Figures storage (persistent docker volume → served by FastAPI static)
-    figures_dir: str = "/data/figures"
+    figures_dir: str = "/app/data/figures"
     figures_url_prefix: str = "/api/v1/figures"
 
     # ARQ worker concurrency
