@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # App
     app_name: str = "ALGO Content Service"
     app_version: str = "1.0.0"
-    app_env: str = Field(default="production", pattern="^(development|production|testing)$")
+    app_env: str = Field(default="production", pattern="^(development|staging|production|testing)$")
     debug: bool = False
 
     # Database — shared platform PostgreSQL
