@@ -10,10 +10,11 @@ FROM python:3.12-slim AS runtime
 
 WORKDIR /app
 
-# System libs for psycopg2
+# System libs for psycopg2 + curl for the Docker healthcheck
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     gosu \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=deps /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
