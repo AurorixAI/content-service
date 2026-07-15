@@ -31,7 +31,7 @@ from src.pipeline.exercise_ranges import (
 )
 from src.pipeline.figure_links import attach_figure_refs, is_figure_solvable_online
 from src.pipeline.models import ExtractedTask, Figure
-from src.pipeline.ocr import GeminiVisionOCR
+from src.pipeline.ocr import AzureMistralOCR
 from src.pipeline.ocr_utils import is_usable_ocr_text
 from src.pipeline.pipeline_mode import pipeline_mode
 from src.pipeline.quality import filter_quality_tasks
@@ -248,7 +248,42 @@ class DigitizationOrchestrator:
             "[%s] TOC: %d total, %d leaf paragraphs to process",
             self.job_id, len(toc_sorted), len(leaves),
         )
+
+        # ── Определяем реальную границу содержания (back-matter detection) ──
+        # Используем page_start последнего параграфа как точку отсчёта.
+        # detect_back_matter_start работает из кэша OCR — без лишних API-вызовов.
+        _bm_ocr = AzureMistralOCR()
+        _last_para_page_start = leaves[-1].get("page_start", 1) if leaves else 1
+        _back_matter_page = _bm_ocr.detect_back_matter_start(
+            pdf_path,
+            scan_from=_last_para_page_start,
+            total_pages=pdf_total_pages,
+        )
+        if _back_matter_page <= pdf_total_pages:
+            _content_end = _back_matter_page - 1
+            log.info(
+                "[%s] Back-matter begins at page %d → content_end=%d "
+                "(was pdf_total=%d). Clamping TOC page_end values.",
+                self.job_id, _back_matter_page, _content_end, pdf_total_pages,
+            )
+            clamped = 0
+            for entry in toc_sorted:
+                if (entry.get("page_end") or 0) > _content_end:
+                    entry["page_end"] = _content_end
+                    clamped += 1
+            if clamped:
+                log.info(
+                    "[%s] Clamped page_end for %d TOC entries to ≤%d",
+                    self.job_id, clamped, _content_end,
+                )
+        else:
+            log.info(
+                "[%s] No back-matter detected — all %d pages are real content.",
+                self.job_id, pdf_total_pages,
+            )
+
         self.state.set_paragraphs_total(self.job_id, len(leaves))
+
 
         # ── Legend: extract once from the first ~10 pages (lookup table) ──
         resume_from = get_settings().resume_from_paragraph
@@ -258,7 +293,7 @@ class DigitizationOrchestrator:
             legend = {}
         else:
             try:
-                ocr_first = GeminiVisionOCR()
+                ocr_first = AzureMistralOCR()
                 head_text = ocr_first.process_pages(
                     pdf_path, 1, min(10, pdf_total_pages),
                     figures_by_page={},
@@ -272,7 +307,7 @@ class DigitizationOrchestrator:
 
         # Reusable workers — created once, used per paragraph
         fig_extractor = FigureExtractor(self.textbook_id)
-        ocr_worker = GeminiVisionOCR()
+        ocr_worker = AzureMistralOCR()
         extractor = TaskExtractor(legend=legend)
         skills_json = self._load_skills_json()
         mapper = SkeletonTextbookMapper(skills_json=skills_json)
@@ -432,14 +467,14 @@ class DigitizationOrchestrator:
         self.state.set_step(self.job_id, PipelineStep.LEGEND)
         legend: dict = {}
         try:
-            ocr_head = GeminiVisionOCR()
+            ocr_head = AzureMistralOCR()
             head_text = ocr_head.process_pages(pdf_path, 1, min(10, pdf_total_pages), figures_by_page={})
             legend = LegendExtractor().extract_legend(head_text)
         except Exception as exc:
             log.warning("[%s] Legend extraction failed: %s", self.job_id, exc)
 
         fig_extractor = FigureExtractor(self.textbook_id)
-        ocr_worker = GeminiVisionOCR()
+        ocr_worker = AzureMistralOCR()
         extractor = TaskExtractor(legend=legend)
         skills_json = self._load_skills_json()
         mapper = SkeletonTextbookMapper(skills_json=skills_json)
@@ -560,7 +595,7 @@ class DigitizationOrchestrator:
         entry: dict,
         pdf_path: str,
         fig_extractor: FigureExtractor,
-        ocr_worker: GeminiVisionOCR,
+        ocr_worker: AzureMistralOCR,
         extractor: TaskExtractor,
         mapper: SkeletonTextbookMapper,
         only_exercises: list[int] | None = None,

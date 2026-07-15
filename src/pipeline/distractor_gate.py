@@ -117,6 +117,9 @@ def _is_parseable_single(value: str, answer_type: str) -> bool:
             return True
         return parse_expr(val) is not None or len(val) >= 2
 
+    if at == "multiple_choice":
+        return bool(re.fullmatch(r"[A-F]", val, re.I)) or len(val) >= 2
+
     return len(val) >= 2
 
 
@@ -327,3 +330,50 @@ def stored_distractors_valid(
         max_count=len(items),
     )
     return len(accepted) >= min_count and not rejected
+
+
+def gate_clean_distractor_meta(
+    dmeta: list | None,
+    *,
+    question: str,
+    correct_answer: str,
+    answer_type: str,
+    min_count: int = 2,
+    max_count: int = 3,
+) -> list[dict] | None:
+    """Subset of stored distractor_meta that passes L1–L4 (drops peer-colliding extras)."""
+    if not isinstance(dmeta, list):
+        return None
+    items = [
+        {
+            "value": d.get("value", ""),
+            "error_logic": d.get("error_logic", d.get("explanation", "")),
+            "explanation": d.get("explanation", d.get("error_logic", "")),
+            "_src": d,
+        }
+        for d in dmeta
+        if isinstance(d, dict) and str(d.get("value", "")).strip()
+    ]
+    if len(items) < min_count:
+        return None
+    accepted, _ = validate_distractor_set(
+        items,
+        question=question,
+        correct_answer=correct_answer,
+        answer_type=answer_type,
+        max_count=max_count,
+    )
+    if len(accepted) < min_count:
+        return None
+    out: list[dict] = []
+    for a in accepted[:max_count]:
+        src = a.get("_src") if isinstance(a.get("_src"), dict) else {}
+        out.append(
+            {
+                **src,
+                "value": a.get("value", src.get("value", "")),
+                "error_logic": a.get("error_logic", src.get("error_logic", "")),
+                "explanation": a.get("explanation", src.get("explanation", "")),
+            }
+        )
+    return out

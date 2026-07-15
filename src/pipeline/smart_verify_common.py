@@ -7,12 +7,13 @@ from typing import Any, Optional
 
 from src.pipeline.answer_verify import answers_equivalent
 from src.pipeline.distractor_gate import stored_distractors_valid
+from src.pipeline.answer_sympy_gate import enrich_distractor_latex, to_answer_latex
 from src.pipeline.distractors import (
     generate_distractors,
     _minimum_distractor_count,
     _required_distractor_count,
 )
-from src.pipeline.gemini_client import get_flash_model
+from src.pipeline.deepseek_client import get_deepseek_model
 from src.pipeline.models import ExtractedTask
 
 log = logging.getLogger(__name__)
@@ -51,7 +52,7 @@ def sync_verify_tags(tags: dict, status: str) -> None:
     tags["smart_verify_status"] = status
     tags["answer_verify_mode"] = status
     tags["smart_verify_at"] = datetime.now(timezone.utc).isoformat()
-    tags["smart_verify_model"] = get_flash_model()
+    tags["smart_verify_model"] = get_deepseek_model()
 
 
 def clear_stale_verify_flags(tags: dict) -> None:
@@ -135,6 +136,7 @@ def apply_distractors(
 ) -> tuple[list, dict, str]:
     target = _required_distractor_count()
     minimum = _minimum_distractor_count()
+    prev_dmeta = list(dmeta)
 
     if not need_distractors:
         if distractors_valid(
@@ -172,7 +174,11 @@ def apply_distractors(
     elif need_distractors:
         tags["choices_complete"] = False
         tags["distractor_regen_pending"] = True
-        dmeta = []
+        # Keep partial new dist or previous meta — never wipe to [] on failed regen.
+        if got > 0:
+            dmeta = list(result_et.distractor_meta or [])[:target]
+        else:
+            dmeta = prev_dmeta
         action = f"{action}+regen_pending"
     return dmeta, tags, action
 
@@ -199,11 +205,13 @@ def run_distractor_only_pipeline(
         correct_answer=stored,
         answer_type=atype,
     ):
+        dmeta = enrich_distractor_latex(dmeta, atype)
         tags["choices_complete"] = True
         tags.pop("distractor_regen_pending", None)
         return {
             "status": "success",
             "correct_answer": stored,
+            "correct_answer_latex": to_answer_latex(stored, atype) if stored else "",
             "distractor_meta": dmeta[: _required_distractor_count()],
             "tags": tags,
             "action": f"{action}+dist_ok",
@@ -235,9 +243,13 @@ def run_distractor_only_pipeline(
                 attempts,
             )
 
+    dmeta = enrich_distractor_latex(dmeta, atype)
+    calatex = to_answer_latex(stored, atype) if stored else ""
+
     return {
         "status": "success",
         "correct_answer": stored,
+        "correct_answer_latex": calatex,
         "distractor_meta": dmeta,
         "tags": tags,
         "action": action,

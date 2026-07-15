@@ -6,7 +6,7 @@ from typing import Any, Optional
 
 from src.core.config import get_settings
 from src.pipeline.answer_verify import answers_equivalent
-from src.pipeline.gemini_client import call_gemini_structured, get_flash_model
+from src.pipeline.deepseek_client import call_deepseek_structured, get_deepseek_model
 from src.pipeline.smart_verify_common import (
     SUCCESS_STATUSES,
     apply_distractors,
@@ -28,16 +28,14 @@ def _build_mcq_prompt(
     *,
     alt_method: bool = False,
 ) -> str:
-    stored_line = (
-        f"Текущий ответ в базе (для сверки): {stored_answer}\n" if stored_answer else ""
-    )
     alt_line = "\nПерепроверь другим способом.\n" if alt_method else ""
     return (
         "Ты — учитель математики. Задача с выбором / сравнением / да-нет.\n"
+        "Решай по самому вопросу. Игнорируй любой уже сохранённый ответ: он может быть неверным или обрезанным.\n"
         "НЕ пиши код. Дай только финальный ответ в школьной записи.\n\n"
         f"ID: {task_id}\n"
         f"Вопрос:\n{question}\n\n"
-        f"{stored_line}{alt_line}\n"
+        f"{alt_line}\n"
         "Правила ответа:\n"
         "- да / нет / буква варианта (а, б, в) / число / краткая фраза\n"
         "- несколько подпунктов (д), е), ж)): 'да; д) π; е) 3,(14)'\n"
@@ -58,10 +56,10 @@ def _run_mcq_llm(
     temperature: float = 0.1,
 ) -> Optional[TextVerifyResponse]:
     try:
-        return call_gemini_structured(
+        return call_deepseek_structured(
             _build_mcq_prompt(task_id, question, stored, alt_method=alt_method),
             TextVerifyResponse,
-            model=get_flash_model(),
+            model=get_deepseek_model(),
             temperature=temperature,
         )
     except Exception as exc:

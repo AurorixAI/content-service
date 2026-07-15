@@ -19,7 +19,7 @@ from src.pipeline.answer_sympy_gate import (
     to_answer_latex,
 )
 from src.pipeline.answer_verify import answers_equivalent, stored_answer_matches_compute
-from src.pipeline.gemini_client import call_gemini_code_execution
+from src.pipeline.deepseek_client import call_deepseek_code_execution
 from src.pipeline.smart_verify_common import (
     SUCCESS_STATUSES,
     TERMINAL_SKIP_STATUSES,
@@ -50,33 +50,32 @@ def _build_compute_prompt(
     task_id: str,
     question: str,
     answer_type: str,
-    stored_answer: Optional[str],
+    stored_answer: Optional[str],  # kept in signature for compat, but NOT used in prompt
     *,
     alt_method: bool = False,
 ) -> str:
-    stored_line = (
-        f"Текущий ответ в базе (для сверки, не обязателен к копированию): {stored_answer}\n"
-        if stored_answer
-        else ""
-    )
+    # ВАЖНО: stored_answer намеренно НЕ передаётся в промпт.
+    # LLM должна решать задачу независимо, без "якорения" на ответ из учебника.
+    # Сравнение с учебником происходит ПОСЛЕ независимого вычисления.
     alt_line = (
-        "\nРеши другим способом и проверь результат.\n" if alt_method else ""
+        "\nРеши задачу другим методом (другой подход, другое разложение и т.п.).\n"
+        if alt_method else ""
     )
     return (
-        "Ты — точный математический парсер и калькулятор.\n"
-        "ЗАПРЕЩЕНО рассуждать вслух. Напиши и выполни Python-код (SymPy) для решения задачи.\n\n"
+        "Ты — точный математический решатель. Реши задачу с помощью Python/SymPy.\n"
+        "НЕ рассуждай вслух. Напиши только Python-код с результатом.\n\n"
         f"ID задачи: {task_id}\n"
         f"Тип ответа: {answer_type}\n"
         f"Текст задачи:\n{question}\n\n"
-        f"{stored_line}\n"
         f"{alt_line}"
-        "Верни СТРОГО JSON с полями:\n"
-        "- sympy_compatible_string: выражение SymPy (например Eq(2*x-4, 10) или simplify(...))\n"
+        "Код должен присвоить переменной `result` словарь с ключами:\n"
+        "- sympy_compatible_string: SymPy-выражение (напр. Eq(2*x-4, 10) или solve(...))\n"
         "- absolute_correct_answer: финальный ответ в школьной записи (только значение)\n"
         "- step_by_step_solution: краткое пошаговое решение для ученика\n\n"
-        "Для нескольких подответов используй разделитель '; '.\n"
-        "Только JSON, без markdown."
+        "Для нескольких корней используй '; ' как разделитель.\n"
+        "Верни ТОЛЬКО блок ```python ... ``` без пояснений."
     )
+
 
 
 def _error_result(
@@ -116,7 +115,7 @@ def _run_single_compute(
 ) -> tuple[Optional[SmartVerifyResponse], Optional[SympyGateResult], Optional[str]]:
     """One code_execution run + gate. Returns (llm_result, gate, canonical)."""
     try:
-        llm_result = call_gemini_code_execution(
+        llm_result = call_deepseek_code_execution(
             _build_compute_prompt(task_id, question, atype, stored, alt_method=alt_method),
             schema=SmartVerifyResponse,
             temperature=temperature,

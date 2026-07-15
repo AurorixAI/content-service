@@ -24,11 +24,13 @@ from src.pipeline.answer_sympy import (
     split_answer_parts,
     sympy_equivalent,
     try_validate_answer_for_question,
+    back_substitute_roots,
     _normalize_school_expression,
     _normalize_decimal_commas,
     _fraction_list_parts,
     _parse_scientific_value,
 )
+from src.pipeline.interval_normalizer import intervals_equivalent as _intervals_equivalent
 
 log = logging.getLogger(__name__)
 
@@ -65,6 +67,8 @@ class AnswerVerifyResult:
 
 def _norm(s: str) -> str:
     s = (s or "").lower().strip()
+    subs = str.maketrans("₀₁₂₃₄₅₆₇₈₉ₙ", "0123456789n")
+    s = s.translate(subs)
     s = s.replace("−", "-").replace("–", "-").replace("—", "-")
     s = s.replace("{", "").replace("}", "").replace("$", "")
     s = s.replace("\\sqrt", "sqrt").replace("\\frac", "")
@@ -119,6 +123,8 @@ def _parse_school_number(s: str) -> Optional[float]:
     m = _MIXED_FRAC_RE.match(s)
     if m:
         whole, n, d = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if d == 0:
+            return None
         sign = -1 if whole < 0 else 1
         return whole + sign * n / d
     m = _SIMPLE_FRAC_RE.match(s)
@@ -265,6 +271,46 @@ def _parse_labeled_variable_pairs(s: str) -> list[tuple[float, float]]:
     if len(vals) >= 2:
         return [(vals[0], vals[1])]
     return []
+
+
+def _parse_semicolon_xy_pairs(s: str) -> list[tuple[float, float]]:
+    """Parse semicolon-separated variable pairs: 'x=5; y=3' or 'x=4; y=8 или x=-2; y=-4'.
+    Also handles plain numeric semicolon pairs like 'x=3; y=2 или x=2; y=3' as coord tuples.
+    Returns list of (x_val, y_val) tuples.
+    """
+    s = (s or "").strip()
+    # Split on ' или ' first
+    or_chunks = re.split(r"\s+или\s+", s)
+    result: list[tuple[float, float]] = []
+    for chunk in or_chunks:
+        chunk = chunk.strip()
+        # Match pattern: var=val; var=val (optional more)
+        pairs_in_chunk: list[float] = []
+        for m in re.finditer(r"[a-zA-Z_]\w*\s*=\s*([^;,]+)", chunk):
+            v = _expr_to_float(m.group(1).strip())
+            if v is None:
+                break
+            pairs_in_chunk.append(round(v, 4))
+        if len(pairs_in_chunk) >= 2:
+            result.append(tuple(pairs_in_chunk[:2]))
+        else:
+            return []
+    return result
+
+
+def _extract_numbers_sorted(s: str) -> list[float]:
+    """Extract all numbers from any text (including prose answers).
+    E.g. 'мастер 60; ученик 40' → [40.0, 60.0]
+    Used for comparing word-problem answers that have same numbers but different text.
+    """
+    nums = []
+    for m in re.finditer(r"-?\d+(?:[.,]\d+)?", s or ""):
+        try:
+            nums.append(round(float(m.group().replace(",", ".")), 4))
+        except ValueError:
+            pass
+    return sorted(nums)
+
 
 
 def _coordinate_system_equivalent(a: str, b: str) -> bool:
@@ -956,6 +1002,10 @@ def _mcq_bool_equivalent(a: str, b: str) -> bool:
         "неправильно": "нет",
         "правильно": "да",
         "нет(равно2)": "нет",
+        "верно": "да",
+        "неверно": "нет",
+        "правда": "да",
+        "ложь": "нет",
     }
 
     def _to_bool_word(s: str) -> str | None:
@@ -1003,6 +1053,27 @@ def answers_equivalent(
     """Format-tolerant + SymPy equivalence."""
     a = _normalize_pm_text(_normalize_decimal_commas((stored or "").strip()))
     b = _normalize_pm_text(_normalize_decimal_commas((candidate or "").strip()))
+
+    at = (answer_type or "").lower()
+    if at in ("fraction", "decimal", "exact_number"):
+        if "=" in a:
+            a = a.split("=")[-1].strip()
+        if "=" in b:
+            b = b.split("=")[-1].strip()
+
+    # expression: strip leading LHS assignment like 'S_n = expr' → 'expr'
+    # Handles textbook answers that include the formula variable name: "S_n = n/(2n+1)" vs "n/(2n+1)"
+    if at == "expression":
+        # Match pattern: single variable/subscript = rest (e.g. "S_n = ", "b_6 = ", "a_n = ")
+        _lhs_re = re.compile(r"^[a-zA-Z]\w*(?:_\w+)?\s*=\s*", re.I)
+        a_stripped = _lhs_re.sub("", a).strip()
+        b_stripped = _lhs_re.sub("", b).strip()
+        if a_stripped and b_stripped:
+            if _norm(a_stripped) == _norm(b_stripped):
+                return True
+            # keep stripped versions for further comparison below
+            a, b = a_stripped, b_stripped
+
     if not a or not b:
         return False
     if _norm(a) == _norm(b):
@@ -1052,6 +1123,28 @@ def answers_equivalent(
         nb = _normalize_school_expression(b)
         if na and nb and _norm(na) == _norm(nb):
             return True
+        val_a = _try_fraction(a)
+        val_b = _try_fraction(b)
+        def _extract_tuple_nums(s: str) -> list[float]:
+            s_clean = s.strip().replace("(", "").replace(")", "").replace("[", "").replace("]", "")
+            parts = s_clean.split(";") if ";" in s_clean else s_clean.split(",")
+            res = []
+            for p in parts:
+                try:
+                    res.append(float(p.strip().replace(",", ".")))
+                except ValueError:
+                    pass
+            return res
+        if val_a is not None:
+            nums_b = _extract_tuple_nums(b)
+            if len(nums_b) == 2 and nums_b[1] != 0:
+                if abs(val_a - nums_b[0]/nums_b[1]) < 1e-6:
+                    return True
+        if val_b is not None:
+            nums_a = _extract_tuple_nums(a)
+            if len(nums_a) == 2 and nums_a[1] != 0:
+                if abs(val_b - nums_a[0]/nums_a[1]) < 1e-6:
+                    return True
         fa, fb = _fraction_list_parts(a), _fraction_list_parts(b)
         if len(fa) >= 2 and len(fa) == len(fb):
             try:
@@ -1078,6 +1171,29 @@ def answers_equivalent(
         if va and vb and len(va) == len(vb):
             if all(abs(x - y) < 1e-2 for x, y in zip(va, vb)):
                 return True
+        # Handle 'x=5; y=3' vs '(5; 3)' — semicolon-separated variable assignments vs coord tuples
+        def _all_pairs(s: str) -> list:
+            return (
+                _parse_coordinate_pairs(s)
+                or _parse_semicolon_xy_pairs(s)
+                or _parse_labeled_variable_pairs(s)
+                or _parse_indexed_variable_pairs(s)
+            )
+        sa_pairs = _all_pairs(a)
+        sb_pairs = _all_pairs(b)
+        if sa_pairs and sb_pairs and len(sa_pairs) == len(sb_pairs):
+            if sorted(sa_pairs) == sorted(sb_pairs):
+                return True
+        # If both sides contain same set of numbers (prose answers like "мастер 60; ученик 40")
+        # Only apply when both have words (text-rich answers), not pure math
+        has_words_a = bool(re.search(r"[а-яёА-ЯЁa-zA-Z]{3,}", a))
+        has_words_b = bool(re.search(r"[а-яёА-ЯЁa-zA-Z]{3,}", b))
+        if has_words_a and has_words_b:
+            nums_a = _extract_numbers_sorted(a)
+            nums_b = _extract_numbers_sorted(b)
+            if nums_a and nums_b and len(nums_a) == len(nums_b) and len(nums_a) >= 2:
+                if all(abs(x - y) < 0.1 for x, y in zip(nums_a, nums_b)):
+                    return True
 
     if at == "coordinate":
         if _coordinate_system_equivalent(a, b):
@@ -1098,6 +1214,13 @@ def answers_equivalent(
             return True
         if _sign_regions_equivalent(a, b) or _sign_regions_equivalent(b, a):
             return True
+        # SymPy-based set comparison: handles (a; b) ∪ (c; d) ↔ x < b или x > c
+        try:
+            _iv_eq = _intervals_equivalent(a, b)
+            if _iv_eq is True:
+                return True
+        except Exception:
+            pass
 
     if at == "set":
         if _sets_equivalent(a, b, question=question):
@@ -1152,14 +1275,13 @@ def answers_equivalent(
 
 
 def _gemini_solve(question: str, answer_type: str, *, use_pro: bool = False) -> str:
-    from src.pipeline.gemini_client import (
-        call_gemini,
-        get_flash_model,
-        get_pro_model,
+    from src.pipeline.deepseek_client import (
+        call_deepseek,
+        get_deepseek_model,
         parse_json_response,
     )
 
-    model = get_pro_model() if use_pro else get_flash_model()
+    model = get_deepseek_model() if use_pro else get_deepseek_model()
     label = "Pro" if use_pro else "Flash"
     prompt = (
         f"Ты — математический педагог. Реши задачу ({label}) и верни только финальный ответ.\n\n"
@@ -1168,12 +1290,11 @@ def _gemini_solve(question: str, answer_type: str, *, use_pro: bool = False) -> 
         'Верни JSON: {"answer":"<окончательный ответ>"}\n'
         "answer — краткий точный ответ в привычной школьной записи. Только JSON."
     )
-    raw = call_gemini(
+    raw = call_deepseek(
         prompt,
         model=model,
         temperature=0.1,
         max_tokens=2048,
-        thinking_budget=0,
     )
     data = parse_json_response(raw)
     if isinstance(data, dict):
@@ -1241,6 +1362,14 @@ def _decide_correction(
 
     stored_ok = try_validate_answer_for_question(question, stored, answer_type)
     consensus_ok = try_validate_answer_for_question(question, consensus, answer_type)
+
+    # Strategy 2: back-substitute roots into equation extracted from question text.
+    # This catches cases where Strategy 1 (expression simplification) can't verify,
+    # but we CAN algebraically prove which answer is correct.
+    if stored_ok is None:
+        stored_ok = back_substitute_roots(question, stored, answer_type)
+    if consensus_ok is None:
+        consensus_ok = back_substitute_roots(question, consensus, answer_type)
 
     if stored_ok is True and consensus_ok is not True:
         log.info(
@@ -1312,7 +1441,7 @@ def verify_answer(
     answer_type: str,
     *,
     auto_fix: bool = True,
-    call_gemini: bool = True,
+    call_deepseek: bool = True,
     dual_consensus: bool = True,
 ) -> AnswerVerifyResult:
     """Re-solve with Gemini (+ Pro on mismatch), SymPy gate before any correction."""
@@ -1350,7 +1479,7 @@ def verify_answer(
 
     gemini_flash = ""
     gemini_pro = ""
-    if call_gemini:
+    if call_deepseek:
         try:
             gemini_flash = gemini_solve(question, at)
         except Exception as exc:

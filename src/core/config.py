@@ -34,8 +34,13 @@ class Settings(BaseSettings):
     gemini_flash_model: str = "gemini-3.5-flash"
     gemini_pro_model: str = "gemini-3.5-flash"
 
-    # OCR — Gemini Vision (Vertex AI, ADC auth)
-    # RENDER_DPI and BATCH_SIZE are tuned in GeminiVisionOCR directly
+    # AI — Azure DeepSeek (V4 Pro for logic)
+    azure_deepseek_api_key: str = ""
+    azure_deepseek_endpoint: str = ""
+
+    # OCR — Azure Mistral OCR (for raw extraction)
+    azure_mistral_api_key: str = ""
+    azure_mistral_endpoint: str = ""
 
     # Pipeline tuning
     max_retries_gemini: int = 3
@@ -63,7 +68,7 @@ class Settings(BaseSettings):
         pattern="^(ai_first|textbook|ai_if_sympy_confirms)$",
     )
     smart_verify_text_authority: str = Field(
-        default="textbook",
+        default="ai_first",
         pattern="^(ai_first|textbook|ai_if_sympy_confirms)$",
     )
     smart_verify_consistency_runs: int = 3

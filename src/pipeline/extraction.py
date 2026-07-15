@@ -12,10 +12,9 @@ import logging
 import re
 from typing import Dict, List, Optional
 
-from src.pipeline.gemini_client import (
-    call_gemini,
-    get_api_key,
-    get_flash_model,
+from src.pipeline.deepseek_client import (
+    call_deepseek,
+    get_deepseek_key,
     parse_json_response,
 )
 from src.pipeline.exercise_ranges import parse_exercise_num
@@ -50,14 +49,14 @@ class LegendExtractor:
     }
 
     def __init__(self, api_key: str = ""):
-        self.api_key = api_key or get_api_key()
+        self.api_key = api_key or get_deepseek_key()
 
     def extract_legend(self, full_text: str, max_chars: int = 6000) -> Dict[str, str]:
         intro = full_text[:max_chars]
         prompt = self._build_prompt(intro)
         try:
-            response = call_gemini(
-                prompt, model=get_flash_model(), api_key=self.api_key, temperature=0.0, max_tokens=2048, thinking_budget=0,
+            response = call_deepseek(
+                prompt, temperature=0.0, max_tokens=2048
             )
             legend = self._parse(response)
             log.info("LegendExtractor: найдено %d маркеров: %s", len(legend), legend)
@@ -195,7 +194,6 @@ class TaskExtractor:
     """Извлекает задачи из текста параграфа через Gemini Flash."""
 
     def __init__(self, api_key: str = "", legend: Optional[Dict[str, str]] = None):
-        self.api_key = api_key or get_api_key()
         self.legend = legend or {}
 
     def set_legend(self, legend: Dict[str, str]) -> None:
@@ -216,14 +214,36 @@ class TaskExtractor:
         if not paragraph_text.strip():
             return []
 
+        chunks = [c.strip() for c in re.split(r'\n+--- страница ---\n+', paragraph_text) if c.strip()]
+        if not chunks:
+            chunks = [paragraph_text]
+
+        all_tasks = []
+        for i, chunk in enumerate(chunks):
+            log.info("§%s: извлечение из части %d/%d (%d символов)", paragraph_number, i + 1, len(chunks), len(chunk))
+            
+            if content_first or theme_stream:
+                tasks = self._extract_once(
+                    chunk, paragraph_number, paragraph_title,
+                    toc_id, exercise_num_range,
+                    content_first=content_first,
+                    theme_stream=theme_stream,
+                )
+            elif only_exercises:
+                tasks = self._extract_once(
+                    chunk, paragraph_number, paragraph_title,
+                    toc_id, exercise_num_range, only_exercises=only_exercises,
+                )
+            else:
+                tasks = self._extract_once(
+                    chunk, paragraph_number, paragraph_title,
+                    toc_id, exercise_num_range,
+                )
+            all_tasks.extend(tasks)
+
+        # Post-processing on the combined tasks
         if content_first or theme_stream:
-            tasks = self._extract_once(
-                paragraph_text, paragraph_number, paragraph_title,
-                toc_id, exercise_num_range,
-                content_first=content_first,
-                theme_stream=theme_stream,
-            )
-            tasks = self._normalize_paragraph_task_numbers(tasks)
+            tasks = self._normalize_paragraph_task_numbers(all_tasks)
             log.info(
                 "§%s: итого %d задач (%s)",
                 paragraph_number, len(tasks),
@@ -231,27 +251,14 @@ class TaskExtractor:
             )
             return tasks
 
-        if only_exercises:
-            tasks = self._extract_once(
-                paragraph_text, paragraph_number, paragraph_title,
-                toc_id, exercise_num_range, only_exercises=only_exercises,
+        tasks = all_tasks
+        if exercise_num_range:
+            target_ex = set(only_exercises) if only_exercises else None
+            tasks = self._fill_coverage_gaps(
+                tasks, paragraph_text, paragraph_number,
+                paragraph_title, toc_id, exercise_num_range,
+                target_exercises=target_ex,
             )
-            if exercise_num_range:
-                tasks = self._fill_coverage_gaps(
-                    tasks, paragraph_text, paragraph_number,
-                    paragraph_title, toc_id, exercise_num_range,
-                    target_exercises=set(only_exercises),
-                )
-        else:
-            tasks = self._extract_once(
-                paragraph_text, paragraph_number, paragraph_title,
-                toc_id, exercise_num_range,
-            )
-            if exercise_num_range:
-                tasks = self._fill_coverage_gaps(
-                    tasks, paragraph_text, paragraph_number,
-                    paragraph_title, toc_id, exercise_num_range,
-                )
 
         log.info("§%s: итого %d задач после coverage-fill", paragraph_number, len(tasks))
         return tasks
@@ -275,17 +282,11 @@ class TaskExtractor:
             theme_stream=theme_stream,
         )
         try:
-            response = call_gemini(
+            response = call_deepseek(
                 prompt,
-                model=extraction_model(
-                    content_first=content_first or theme_stream,
-                ),
-                api_key=self.api_key,
                 temperature=extraction_temperature(),
-                max_tokens=32768,
-                thinking_budget=thinking_budget("extraction")
-                if (content_first or theme_stream or is_high_quality())
-                else 0,
+                max_tokens=8192,
+                system_prompt="Ты — эксперт по математике на ОНЛАЙН-платформе. Извлекай JSON-массив задач строго по правилам.",
             )
             tasks = self._parse(response, paragraph_number, paragraph_title, toc_id)
             return self._filter_by_exercise_range(
@@ -472,8 +473,18 @@ class TaskExtractor:
             '"cognitive_load":"apply","task_marker":"","task_category":"standard",'
             '"image_description":"","is_online_solvable":true,"skip_reason":"",'
             '"requires_figure":false,"figure_refs":[]}\n\n'
-            "answer_type: exact_number, expression, multiple_choice, text, fraction, "
-            "equation_solution, set, coordinate, inequality\n"
+            "answer_type — выбирай строго по математическому содержанию:\n"
+            "  exact_number — единственное числовое значение (4, -7, √3, 2/3)\n"
+            "  decimal      — десятичная дробь (1,75; -0,3)\n"
+            "  fraction     — обыкновенная дробь (7/12; -5/8)\n"
+            "  expression   — алгебраическое выражение (2x²+3x, (a+b)²)\n"
+            "  equation_solution — одно или несколько уравнений/систем (x=2; y=-1)\n"
+            "  inequality   — неравенство/промежуток (x>-2; x∈[1;3])\n"
+            "  set          — выбор подмножества из ЯВНОГО списка объектов в условии\n"
+            "                 (задача типа «найди среди чисел 1,38; 2,5; ... те, которые...»)\n"
+            "  multiple_choice — вопрос с конечным числом вариантов А/Б/В или да/нет\n"
+            "  text         — открытый ответ без единственного числового/алгебр. значения\n"
+            "  coordinate   — точки на плоскости ((-2;3), (0;-1))\n"
             "difficulty — оцени САМ по математическому содержанию (не по ★/рубрикам учебника):\n"
             "  A — одно действие, шаблонное, очевидное\n"
             "  B — 2–3 шага, нужно понимание темы\n"

@@ -19,8 +19,13 @@ services:
       VERTEX_PROJECT_ID: ${VERTEX_PROJECT_ID:-}
       VERTEX_LOCATION: ${VERTEX_LOCATION:-global}
       GOOGLE_APPLICATION_CREDENTIALS: /app/.gcloud/application_default_credentials.json
+      AZURE_DEEPSEEK_API_KEY: ${AZURE_DEEPSEEK_API_KEY}
+      AZURE_DEEPSEEK_ENDPOINT: ${AZURE_DEEPSEEK_ENDPOINT}
+      AZURE_MISTRAL_API_KEY: ${AZURE_MISTRAL_API_KEY}
+      AZURE_MISTRAL_ENDPOINT: ${AZURE_MISTRAL_ENDPOINT}
     volumes:
       # Mount textbook files from host so the pipeline can read them
+      - .:/app
       - ${TEXTBOOKS_DIR:-./textbooks}:/textbooks:ro
       - ${GOOGLE_CREDENTIALS_PATH}:/app/.gcloud/application_default_credentials.json:ro
       - content_figures:/data/figures
@@ -58,7 +63,12 @@ services:
       VERTEX_PROJECT_ID: ${VERTEX_PROJECT_ID:-}
       VERTEX_LOCATION: ${VERTEX_LOCATION:-global}
       GOOGLE_APPLICATION_CREDENTIALS: /app/.gcloud/application_default_credentials.json
+      AZURE_DEEPSEEK_API_KEY: ${AZURE_DEEPSEEK_API_KEY}
+      AZURE_DEEPSEEK_ENDPOINT: ${AZURE_DEEPSEEK_ENDPOINT}
+      AZURE_MISTRAL_API_KEY: ${AZURE_MISTRAL_API_KEY}
+      AZURE_MISTRAL_ENDPOINT: ${AZURE_MISTRAL_ENDPOINT}
     volumes:
+      - .:/app
       - ${TEXTBOOKS_DIR:-./textbooks}:/textbooks:ro
       - ${GOOGLE_CREDENTIALS_PATH}:/app/.gcloud/application_default_credentials.json:ro
       - content_figures:/data/figures

@@ -201,6 +201,17 @@ def test_to_answer_latex_display_fracs():
     assert " / " not in to_answer_latex("a^2 + ab + b^2", "expression")
 
 
+def test_to_answer_latex_school_mixed_fractions():
+    from src.pipeline.answer_sympy_gate import to_answer_latex
+
+    assert to_answer_latex("5 3/5", "fraction") == r"$5\frac{3}{5}$"
+    assert to_answer_latex("2 1/2", "fraction") == r"$2\frac{1}{2}$"
+    assert to_answer_latex("-2 1/2", "fraction") == r"$-2\frac{1}{2}$"
+    assert to_answer_latex("-1 2/3", "fraction") == r"$-1\frac{2}{3}$"
+    assert to_answer_latex("7/18", "fraction") == r"$\frac{7}{18}$"
+    assert to_answer_latex("-7/18", "fraction") == r"$\frac{-7}{18}$"
+
+
 def test_symbolic_answers_not_false_equivalent():
     from src.pipeline.answer_verify import answers_equivalent
 

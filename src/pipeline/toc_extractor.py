@@ -28,10 +28,8 @@ from typing import Any, Dict, List, Optional
 
 import fitz  # PyMuPDF
 
-from src.pipeline.gemini_client import (
-    call_gemini_vision,
-    get_flash_model,
-    get_pro_model,
+from src.pipeline.deepseek_client import (
+    call_deepseek,
     parse_json_response,
 )
 
@@ -222,19 +220,23 @@ def _from_llm(pdf_path: str) -> List[Dict[str, Any]]:
     if not image_parts:
         return []
 
-    log.info("TOC: calling Gemini Vision on first %d pages of %s",
-             len(image_parts), Path(pdf_path).name)
+    # Используем AzureMistralOCR для распознавания оглавления со страниц PDF
+    from src.pipeline.ocr import AzureMistralOCR
+    ocr = AzureMistralOCR()
 
-    raw = call_gemini_vision(
-        _LLM_PROMPT,
-        image_parts,
-        model=get_pro_model(),
+    log.info("TOC: calling Mistral OCR on first %d pages of %s",
+             _FIRST_PAGES_FOR_LLM, Path(pdf_path).name)
+
+    raw = ocr.process_pages(pdf_path, 1, _FIRST_PAGES_FOR_LLM, ignore_back_matter=True)
+
+    # Передаём OCR-текст в DeepSeek для структурирования в JSON
+    raw = call_deepseek(
+        _LLM_PROMPT + "\n\nТекст учебника (OCR):\n---\n" + raw[:80000] + "\n---",
+        system_prompt="Ты — эксперт по школьным учебникам. Верни JSON-массив только.",
         temperature=0.1,
         max_tokens=8192,
-        timeout=300,
-        response_mime_type="application/json",
     )
-    parsed = _robust_parse_json(raw)
+    parsed = parse_json_response(raw)
     if isinstance(parsed, dict):
         parsed = parsed.get("toc") or parsed.get("entries") or []
     if not isinstance(parsed, list):
@@ -245,23 +247,20 @@ def _from_llm(pdf_path: str) -> List[Dict[str, Any]]:
     # Берём результат с большим числом записей.
     log.info("TOC: also trying last %d pages of %s",
              _LAST_PAGES_FOR_LLM, Path(pdf_path).name)
-    last_parts = _render_last_pages(pdf_path, _LAST_PAGES_FOR_LLM)
-    if last_parts:
-        raw2 = call_gemini_vision(
-            _LLM_PROMPT,
-            last_parts,
-            model=get_flash_model(),
-            temperature=0.1,
-            max_tokens=8192,
-            timeout=180,
-        )
-        parsed2 = _robust_parse_json(raw2)
-        if isinstance(parsed2, dict):
-            parsed2 = parsed2.get("toc") or parsed2.get("entries") or []
-        if isinstance(parsed2, list) and len(parsed2) > len(parsed):
-            log.info("TOC: last pages gave more entries (%d > %d) for %s — using last pages result",
-                     len(parsed2), len(parsed), Path(pdf_path).name)
-            parsed = parsed2
+    raw2_ocr = ocr.process_pages(pdf_path, max(1, len(fitz.open(pdf_path)) - _LAST_PAGES_FOR_LLM + 1), len(fitz.open(pdf_path)), ignore_back_matter=True)
+    raw2 = call_deepseek(
+        _LLM_PROMPT + "\n\nТекст учебника (OCR):\n---\n" + raw2_ocr[-80000:] + "\n---",
+        system_prompt="Ты — эксперт по школьным учебникам. Верни JSON-массив только.",
+        temperature=0.1,
+        max_tokens=8192,
+    )
+    parsed2 = parse_json_response(raw2)
+    if isinstance(parsed2, dict):
+        parsed2 = parsed2.get("toc") or parsed2.get("entries") or []
+    if isinstance(parsed2, list) and len(parsed2) > len(parsed):
+        log.info("TOC: last pages gave more entries (%d > %d) for %s — using last pages result",
+                 len(parsed2), len(parsed), Path(pdf_path).name)
+        parsed = parsed2
 
     entries: List[Dict[str, Any]] = []
     for sort_idx, item in enumerate(parsed):

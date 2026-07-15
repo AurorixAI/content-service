@@ -11,9 +11,11 @@ from typing import Optional
 
 from src.pipeline.answer_verify import (
     _extract_int_list,
+    _inequalities_equivalent,
     _looks_like_algebraic_expression,
     _norm,
     _normalize_ineq_symbols,
+    _parse_school_number,
     _to_float_bound,
     answers_equivalent,
 )
@@ -94,6 +96,80 @@ def resolve_distractor_equivalence_type(val: str, correct: str, answer_type: str
     return at
 
 
+_NUMERIC_INEQ_RE = re.compile(
+    r"^([+-]?[\d.,/()\s]+)\s*(<=|>=|<|>|=|!=|≠|≤|≥)\s*([+-]?[\d.,/()\s]+)$"
+)
+
+
+def _parse_numeric_ineq_side(raw: str) -> Optional[float]:
+    s = re.sub(r"\s+", " ", (raw or "").strip())
+    return _parse_school_number(s) if s else None
+
+
+def _parse_numeric_ineq_triple(s: str) -> Optional[tuple[float, str, float]]:
+    core = _extract_relation_core(s) or _normalize_ineq_symbols(_strip_trailing_reasoning(s))
+    m = _NUMERIC_INEQ_RE.match(core.strip())
+    if not m:
+        return None
+    lhs = _parse_numeric_ineq_side(m.group(1))
+    rhs = _parse_numeric_ineq_side(m.group(3))
+    if lhs is None or rhs is None:
+        return None
+    return lhs, m.group(2), rhs
+
+
+def _ineq_truth(lhs: float, op: str, rhs: float) -> Optional[bool]:
+    op = _normalize_ineq_symbols(op)
+    if op == "<":
+        return lhs < rhs - 1e-12
+    if op == ">":
+        return lhs > rhs + 1e-12
+    if op in ("≤", "<="):
+        return lhs <= rhs + 1e-12
+    if op in ("≥", ">="):
+        return lhs >= rhs - 1e-12
+    if op == "=":
+        return abs(lhs - rhs) < 1e-9
+    return None
+
+
+def _strict_inequality_collide(val: str, correct: str) -> Optional[bool]:
+    """
+    Numeric inequality collide without SymPy / loose answers_equivalent.
+
+    Collide when lhs/rhs match and both state the same truth (incl. < vs ≤ when both true).
+    """
+    tv = _parse_numeric_ineq_triple(val)
+    tc = _parse_numeric_ineq_triple(correct)
+    if tv and tc:
+        l1, o1, r1 = tv
+        l2, o2, r2 = tc
+        if abs(l1 - l2) > 1e-9 or abs(r1 - r2) > 1e-9:
+            return False
+        if o1 == o2:
+            return True
+        t1, t2 = _ineq_truth(l1, o1, r1), _ineq_truth(l2, o2, r2)
+        if t1 is not None and t2 is not None:
+            return t1 == t2
+        return False
+    if tv or tc:
+        return False
+    return None
+
+
+def _strict_numeric_collide(val: str, correct: str) -> Optional[bool]:
+    """
+    Exact numeric collide for distractor gate — no 2% answers_equivalent slack.
+
+    Returns True/False when both parse as school numbers, else None.
+    """
+    sa = _parse_school_number(val)
+    sb = _parse_school_number(correct)
+    if sa is not None and sb is not None:
+        return abs(sa - sb) < 1e-9
+    return None
+
+
 def values_collide_for_distractor(val: str, correct: str, answer_type: str) -> bool:
     """
     True when distractor value must be rejected as equal to the correct answer.
@@ -113,19 +189,27 @@ def values_collide_for_distractor(val: str, correct: str, answer_type: str) -> b
         return val_cmp == cor_cmp
 
     if _INEQ_RE.search(val) or _INEQ_RE.search(correct):
-        return answers_equivalent(val_cmp, cor_cmp, "inequality")
+        strict = _strict_inequality_collide(val_cmp, cor_cmp)
+        if strict is not None:
+            return strict
+        return _inequalities_equivalent(val_cmp, cor_cmp)
 
     if at in _NUMERIC_TYPES:
         sa, sb = _to_float_bound(val_cmp), _to_float_bound(cor_cmp)
         if sa is not None and sb is not None and abs(sa - sb) < 1e-9:
             return True
+        strict = _strict_numeric_collide(val_cmp, cor_cmp)
+        if strict is not None:
+            return strict
         equiv = resolve_distractor_equivalence_type(val, correct, answer_type)
         return answers_equivalent(val, correct, equiv)
 
     if at in ("text", "open_text"):
         if _looks_numeric_school_answer(val) or _looks_numeric_school_answer(correct):
-            equiv = resolve_distractor_equivalence_type(val, correct, "fraction")
-            return answers_equivalent(val, correct, equiv)
+            strict = _strict_numeric_collide(val_cmp, cor_cmp)
+            if strict is not None:
+                return strict
+            return False
         return False
 
     equiv = resolve_distractor_equivalence_type(val, correct, answer_type)

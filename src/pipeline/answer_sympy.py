@@ -21,6 +21,8 @@ def _latexish_to_sympy(s: str) -> str:
 
     s = re.sub(r"\d+\.?\d*[eE][+-]?\d+", _stash_sci, s)
     s = s.replace("−", "-").replace("–", "-").replace("—", "-")
+    s = re.sub(r"√(\d+(?:\.\d+)?)", r"sqrt(\1)", s)
+    s = re.sub(r"√([a-zA-Z])", r"sqrt(\1)", s)
     s = s.replace("√", "sqrt").replace("×", "*").replace("·", "*")
     s = s.replace("^", "**")
     s = re.sub(r"\\sqrt\{([^}]+)\}", r"sqrt(\1)", s)
@@ -30,7 +32,7 @@ def _latexish_to_sympy(s: str) -> str:
     s = re.sub(r"\\left|\\right", "", s)
     s = re.sub(r"\\cdot", "*", s)
     s = re.sub(r"\\times", "*", s)
-    s = re.sub(r",(\d)", r".\1", s)
+    s = re.sub(r"(\d),(\d)", r"\1.\2", s)
     # LaTeX / school exponents: a^{-10}, a**{-10}, ^{12}
     s = re.sub(r"\*\*\{([^}]+)\}", r"**(\1)", s)
     s = re.sub(r"\^\{([^}]+)\}", r"**(\1)", s)
@@ -45,6 +47,16 @@ def _latexish_to_sympy(s: str) -> str:
     s = re.sub(r"sqrt\*\(", "sqrt(", s)
     for i, tok in enumerate(sci_tokens):
         s = s.replace(f"__SCI{i}__", tok)
+
+    # Clean up redundant infinity boundaries in relations (e.g. (m >= 16/3) & (m < oo) -> m >= 16/3)
+    s = re.sub(r"\s*&\s*\(\s*[a-zA-Z_]\w*\s*<\s*oo\s*\)", "", s)
+    s = re.sub(r"\s*&\s*\(\s*oo\s*>\s*[a-zA-Z_]\w*\s*\)", "", s)
+    s = re.sub(r"\s*&\s*\(\s*[a-zA-Z_]\w*\s*>\s*-oo\s*\)", "", s)
+    s = re.sub(r"\s*&\s*\(\s*-oo\s*<\s*[a-zA-Z_]\w*\s*\)", "", s)
+    m = re.match(r"^\(([^)]+)\)$", s.strip())
+    if m:
+        s = m.group(1).strip()
+
     return s
 
 
@@ -359,12 +371,47 @@ def split_answer_parts(answer: str) -> list[str]:
         return cleaned
 
     if ";" in s:
-        parts = _clean(re.split(r"\s*;\s*", s))
-        if parts:
+        parts = []
+        depth = 0
+        curr = []
+        for ch in s:
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth = max(0, depth - 1)
+            
+            if ch == ";" and depth == 0:
+                parts.append("".join(curr))
+                curr = []
+            else:
+                curr.append(ch)
+        if curr:
+            parts.append("".join(curr))
+        
+        parts = _clean(parts)
+        if len(parts) >= 2:
             return parts
 
     if "," in s:
-        cand = _clean(re.split(r",\s+", s))
+        # Split by comma outside parentheses
+        parts = []
+        depth = 0
+        curr = []
+        for ch in s:
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth = max(0, depth - 1)
+            
+            if ch == "," and depth == 0:
+                parts.append("".join(curr))
+                curr = []
+            else:
+                curr.append(ch)
+        if curr:
+            parts.append("".join(curr))
+            
+        cand = _clean(parts)
         if len(cand) >= 2 and all(
             re.search(r"[=/^()]|[a-zA-Z]", p) for p in cand
         ):
@@ -389,6 +436,31 @@ def parse_expr(expr_str: str):
     raw = _normalize_school_expression(expr_str)
     if not raw:
         return None
+
+    # Handle top-level equation equality: x = y -> Eq(x, y)
+    eq_idx = -1
+    if "=" in raw:
+        depth = 0
+        eq_count = 0
+        for i, char in enumerate(raw):
+            if char in "([{":
+                depth += 1
+            elif char in ")]}":
+                depth -= 1
+            elif char == "=" and depth == 0:
+                eq_count += 1
+                eq_idx = i
+        if eq_count != 1:
+            eq_idx = -1
+
+    if eq_idx != -1:
+        lhs_part = raw[:eq_idx].strip()
+        rhs_part = raw[eq_idx + 1:].strip()
+        lhs = parse_expr(lhs_part)
+        rhs = parse_expr(rhs_part)
+        if lhs is not None and rhs is not None:
+            from sympy import Eq
+            return Eq(lhs, rhs)
 
     transformations = standard_transformations + (implicit_multiplication_application,)
     try:
@@ -478,6 +550,32 @@ def monte_carlo_equivalent(a_str: str, b_str: str, *, trials: int = 6) -> Option
     return True
 
 
+def _standardize_math_tuple(s: str) -> list[str] | None:
+    s = (s or "").strip()
+    m = re.match(r"^\((.+)\)$", s)
+    if m:
+        s = m.group(1).strip()
+    
+    parts = [p.strip() for p in re.split(r"[;,]", s) if p.strip()]
+    eqs = {}
+    for p in parts:
+        eq_match = re.match(r"^([a-zA-Z_]\w*)\s*(=|!=|≠)\s*(.+)$", p)
+        if eq_match:
+            eqs[eq_match.group(1)] = eq_match.group(3).strip()
+    if eqs:
+        sorted_keys = sorted(eqs.keys())
+        return [eqs[k] for k in sorted_keys]
+        
+    if ";" in s:
+        return [p.strip() for p in s.split(";") if p.strip()]
+    if "," in s:
+        cand = [p.strip() for p in s.split(",") if p.strip()]
+        if len(cand) >= 2 and not all(re.fullmatch(r"\d+", p) for p in cand):
+            return cand
+            
+    return None
+
+
 def sympy_equivalent(a: str, b: str, answer_type: str = "") -> Optional[bool]:
     """
     True = mathematically same, False = different, None = cannot decide.
@@ -489,17 +587,50 @@ def sympy_equivalent(a: str, b: str, answer_type: str = "") -> Optional[bool]:
     if a == b:
         return True
 
+    # Try tuple standardization
+    ta = _standardize_math_tuple(a)
+    tb = _standardize_math_tuple(b)
+    if ta is not None and tb is not None and len(ta) == len(tb) and len(ta) > 0:
+        results = [sympy_equivalent(x, y, answer_type) for x, y in zip(ta, tb)]
+        if all(r is True for r in results):
+            return True
+
     pa, pb = split_answer_parts(a), split_answer_parts(b)
     if len(pa) == len(pb) and len(pa) > 1:
-        results = [sympy_equivalent(x, y, answer_type) for x, y in zip(pa, pb)]
-        if any(r is False for r in results):
-            return False
-        if all(r is True for r in results):
+        matched_indices = set()
+        for x in pa:
+            found = False
+            for idx, y in enumerate(pb):
+                if idx not in matched_indices and sympy_equivalent(x, y, answer_type):
+                    matched_indices.add(idx)
+                    found = True
+                    break
+            if not found:
+                break
+        if len(matched_indices) == len(pb):
             return True
         return None
 
     ea, eb = parse_expr(a), parse_expr(b)
     if ea is not None and eb is not None:
+        try:
+            from sympy import nsimplify
+            ea = nsimplify(ea)
+            eb = nsimplify(eb)
+        except Exception:
+            pass
+
+        if ea == eb:
+            return True
+
+        try:
+            syms = list(ea.free_symbols | eb.free_symbols)
+            if len(syms) == 1:
+                if ea.as_set() == eb.as_set():
+                    return True
+        except Exception:
+            pass
+
         if _exprs_equivalent(ea, eb):
             return True
         mc = monte_carlo_equivalent(a, b)
@@ -577,3 +708,125 @@ def try_validate_answer_for_question(question: str, answer: str, answer_type: st
             return None
     except Exception:
         return None
+
+
+def back_substitute_roots(question: str, answer: str, answer_type: str) -> Optional[bool]:
+    """
+    Strategy 2 SymPy proof: extract equation from question text, substitute roots back in.
+
+    Returns:
+      True   — all roots satisfy the equation (mathematically proven)
+      False  — at least one root does NOT satisfy the equation (proven wrong)
+      None   — cannot verify algebraically (symbolic, text task, multi-variable, etc.)
+
+    Applicable to: equation_solution, set, exact_number, decimal, fraction.
+    """
+    import re
+
+    at = (answer_type or "").lower()
+    if at not in ("equation_solution", "set", "exact_number", "decimal", "fraction"):
+        return None
+
+    q = (question or "").strip()
+    ans = (answer or "").strip()
+    if not q or not ans:
+        return None
+
+    # ── Step 1: Find candidate equation lines in the question ──────────────
+    eq_lines = []
+    for line in q.splitlines():
+        line = line.strip()
+        if "=" in line and re.search(r"[0-9a-zA-Z\^]\s*=", line):
+            # Skip meta-hints: "Ответ:", "= ?", "нет данных"
+            if not re.search(r"[Оо]твет|=\s*\?|ОТВЕТ|нет\s*данных", line):
+                eq_lines.append(line)
+    if not eq_lines:
+        return None
+
+    # ── Step 2: Parse answer into numeric roots ─────────────────────────────
+    # Must be parenthesis-aware split: '3 - sqrt(5); 3 + sqrt(5)' must not split inside ()
+    def _paren_split(text: str) -> list:
+        parts, current, depth = [], [], 0
+        for ch in text:
+            if ch in "([":
+                depth += 1
+                current.append(ch)
+            elif ch in ")]":
+                depth -= 1
+                current.append(ch)
+            elif ch in ";," and depth == 0:
+                parts.append("".join(current).strip())
+                current = []
+            else:
+                current.append(ch)
+        if current:
+            parts.append("".join(current).strip())
+        return [p for p in parts if p]
+
+    try:
+        import sympy
+        from src.pipeline.answer_sympy import _latexish_to_sympy as _lts
+
+        roots = []
+        for p in _paren_split(ans):
+            p = p.strip().replace("x=", "").replace("y=", "").strip()
+            # Strip only OUTER matching parens (coordinate wrapper), not function parens
+            if p.startswith("(") and p.endswith(")"):
+                inner = p[1:-1]
+                if inner.count("(") == inner.count(")"):
+                    p = inner.strip()
+            try:
+                sym_p = _lts(p)
+                if sym_p:
+                    val_num = complex(sympy.N(sympy.sympify(sym_p)))
+                    roots.append(val_num)
+            except Exception:
+                pass
+        if not roots:
+            return None
+
+        # ── Step 3: Try each equation line ────────────────────────────────────
+        for eq_line in eq_lines[:3]:
+            eq_raw = re.sub(r"^[абвгдежзийклмнопрстуфхцч]\)\.?\s*", "", eq_line, flags=re.I)
+            eq_raw = re.sub(r"\\[\(\)]", "", eq_raw).replace("$", "").strip()
+
+            eq_sides = eq_raw.split("=")
+            if len(eq_sides) != 2:
+                continue
+            lhs_raw, rhs_raw = eq_sides
+
+            try:
+                lhs_sym = _lts(lhs_raw.strip())
+                rhs_sym = _lts(rhs_raw.strip())
+                if lhs_sym is None:
+                    continue
+
+                lhs_expr = sympy.sympify(lhs_sym)
+                rhs_expr = sympy.sympify(rhs_sym) if rhs_sym else sympy.Integer(0)
+                diff_expr = sympy.expand(lhs_expr - rhs_expr)
+                free_vars = diff_expr.free_symbols
+
+                # Only verify single-variable equations
+                if not free_vars or len(free_vars) > 1:
+                    continue
+                var = sorted(free_vars, key=lambda s: str(s))[0]
+
+                proofs = []
+                for root in roots:
+                    try:
+                        val_at_root = complex(sympy.N(diff_expr.subs(var, root)))
+                        proofs.append(abs(val_at_root) < 1e-4)
+                    except Exception:
+                        proofs.append(None)
+
+                if all(p is True for p in proofs):
+                    return True
+                if any(p is False for p in proofs):
+                    return False
+            except Exception:
+                continue
+
+    except Exception as e:
+        log.debug("back_substitute_roots error: %s", e)
+
+    return None

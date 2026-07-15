@@ -55,6 +55,7 @@ def fetch_tasks(
     limit: int,
     task_id: str | None,
     reprocess: bool,
+    reprocess_run_id: str | None = None,
     retry_failed: bool = False,
     gaps_only: bool = False,
     skip_text: bool = False,
@@ -62,16 +63,23 @@ def fetch_tasks(
     id_prefix: str | None = None,
     only_fix_g7_failed: bool = False,
     only_fix_g7_reprocess_failed: bool = False,
+    only_fix_g6_reverify: bool = False,
     only_human_review: bool = False,
     skip_coordinate: bool = False,
+    all_gap_types: bool = False,
 ) -> list:
     level_sql = ", ".join(str(x) for x in levels)
     params: dict = {"limit": limit}
 
     status_filter = ""
     if gaps_only:
+        gap_type_exclude = (
+            ""
+            if all_gap_types
+            else "AND tm.answer_type NOT IN ('text', 'open_text', 'coordinate')"
+        )
         # Pending first-run + verified tasks missing distractors (no failed churn).
-        status_filter = """
+        status_filter = f"""
           AND (
             COALESCE(NULLIF(tm.tags->>'smart_verify_status', ''), 'pending') = 'pending'
             OR (
@@ -79,12 +87,12 @@ def fetch_tasks(
                 'verified_match', 'verified_corrected', 'generated_from_scratch'
               )
               AND jsonb_array_length(COALESCE(tm.distractor_meta, '[]'::jsonb)) < 2
-              AND tm.answer_type NOT IN ('text', 'open_text', 'coordinate')
+              {gap_type_exclude}
             )
             OR (
               COALESCE(tm.tags->>'distractor_regen_pending', 'false') = 'true'
               AND jsonb_array_length(COALESCE(tm.distractor_meta, '[]'::jsonb)) < 2
-              AND tm.answer_type NOT IN ('text', 'open_text', 'coordinate')
+              {gap_type_exclude}
             )
           )
         """
@@ -105,11 +113,21 @@ def fetch_tasks(
           AND COALESCE(NULLIF(tm.tags->>'smart_verify_status', ''), 'pending') = 'pending'
         """
 
+    # --reprocess: one pass per run_id — loop stops when every task has this tag.
+    reprocess_once_filter = ""
+    if reprocess_run_id:
+        reprocess_once_filter = """
+          AND COALESCE(tm.tags->>'smart_verify_run_id', '') != :reprocess_run_id
+        """
+        params["reprocess_run_id"] = reprocess_run_id
+
     tag_filter = ""
     if only_fix_g7_failed:
         tag_filter = "AND tm.tags->>'fix_g7_failed' = 'true'"
     elif only_fix_g7_reprocess_failed:
         tag_filter = "AND tm.tags->>'fix_g7_reprocess_failed' = 'true'"
+    elif only_fix_g6_reverify:
+        tag_filter = "AND tm.tags->>'fix_g6_reverify' = 'pending'"
     elif only_human_review:
         tag_filter = """
           AND COALESCE(tm.tags->>'human_reprocess_exhausted', 'false') != 'true'
@@ -127,8 +145,8 @@ def fetch_tasks(
           AND COALESCE(tm.tags->>'needs_content_repair', 'false') != 'true'
           AND COALESCE(tm.tags->>'smart_verify_retry_exhausted', 'false') != 'true'
         """
-    elif (only_fix_g7_failed or only_fix_g7_reprocess_failed) and reprocess:
-        # Allow re-running tasks marked choices_complete by fix_g7_failed bypass.
+    elif (only_fix_g7_failed or only_fix_g7_reprocess_failed or only_fix_g6_reverify) and reprocess:
+        # Allow re-running tasks marked choices_complete by bypass scripts.
         queue_skip = """
           AND COALESCE(tm.tags->>'distractor_regen_exhausted', 'false') != 'true'
           AND COALESCE(tm.tags->>'needs_compound_split', 'false') != 'true'
@@ -176,6 +194,7 @@ def fetch_tasks(
           {level_clause}
           {type_filter}
           {status_filter}
+          {reprocess_once_filter}
           {tag_filter}
           {queue_skip}
           {task_filter}
@@ -216,14 +235,25 @@ def _pipeline_failure_result(
     }
 
 
-def persist_result(engine, task_id: str, result: dict) -> None:
+def persist_result(
+    engine, task_id: str, result: dict, *, reprocess_run_id: str | None = None
+) -> None:
     tags = dict(result.get("tags") or {})
+    if reprocess_run_id:
+        tags["smart_verify_run_id"] = reprocess_run_id
     if tags.get("smart_verify_status") in SUCCESS_STATUSES:
         tags.pop("fix_g7_failed", None)
         tags.pop("fix_g7_reprocess_failed", None)
         tags.pop("human_reprocess_exhausted", None)
         tags.pop("human_reprocess_status", None)
         tags["fix_g7_reprocessed"] = "true"
+    if tags.get("smart_verify_status") in SUCCESS_STATUSES and tags.get("fix_g6_reverify"):
+        tags.pop("fix_g6_failed", None)
+        tags.pop("fix_g6_human_review", None)
+        tags.pop("fix_g6_reverify", None)
+        tags.pop("fix_g6_reverify_failed", None)
+        tags.pop("fix_g6_reverify_human", None)
+        tags["fix_g6_reverified"] = "true"
     elif tags.get("fix_g7_failed") == "true" and str(
         tags.get("smart_verify_status", "")
     ).startswith("failed"):
@@ -239,18 +269,29 @@ def persist_result(engine, task_id: str, result: dict) -> None:
     ) == "needs_human_review":
         tags.pop("fix_g7_reprocess_failed", None)
         tags["fix_g7_reprocess_human"] = "true"
+    elif tags.get("fix_g6_reverify") == "pending" and str(
+        tags.get("smart_verify_status", "")
+    ).startswith("failed"):
+        tags["fix_g6_reverify"] = "failed"
+        tags["fix_g6_reverify_failed"] = tags.get("smart_verify_status", "failed")
+    elif tags.get("fix_g6_reverify") == "pending" and tags.get(
+        "smart_verify_status"
+    ) == "needs_human_review":
+        tags["fix_g6_reverify"] = "human"
+        tags["fix_g6_reverify_human"] = "true"
     result = {**result, "tags": tags}
     tags_json = json.dumps(tags, ensure_ascii=False)
+    log.info("Persist tags_json: %s", tags_json)
     dmeta = result.get("distractor_meta")
     dmeta_json = json.dumps(dmeta if dmeta is not None else [], ensure_ascii=False)
     vstatus = result.get("verification_status", "pending")
 
     with engine.begin() as conn:
-        conn.execute(
+        db_res = conn.execute(
             text("""
                 UPDATE tasks_master
                 SET correct_answer = :ans,
-                    correct_answer_latex = :latex,
+                    correct_answer_latex = COALESCE(NULLIF(:latex, ''), correct_answer_latex),
                     distractor_meta = cast(:dmeta as jsonb),
                     tags = cast(:tags as jsonb),
                     verification_status = :vstatus,
@@ -266,6 +307,7 @@ def persist_result(engine, task_id: str, result: dict) -> None:
                 "vstatus": vstatus,
             },
         )
+        log.info("Persist result: updated %d rows for task %s", db_res.rowcount, task_id)
 
 
 def _mark_human_reprocess_exhausted(engine, task_id: str, status: str) -> None:
@@ -296,6 +338,7 @@ def run_batch(engine, args: argparse.Namespace) -> dict[str, int]:
         limit=args.limit,
         task_id=args.task_id,
         reprocess=args.reprocess,
+        reprocess_run_id=getattr(args, "reprocess_run_id", None),
         retry_failed=args.retry_failed,
         gaps_only=args.gaps_only,
         skip_text=args.skip_text,
@@ -303,8 +346,10 @@ def run_batch(engine, args: argparse.Namespace) -> dict[str, int]:
         id_prefix=args.id_prefix,
         only_fix_g7_failed=args.only_fix_g7_failed,
         only_fix_g7_reprocess_failed=args.only_fix_g7_reprocess_failed,
+        only_fix_g6_reverify=args.only_fix_g6_reverify,
         only_human_review=args.only_human_review,
         skip_coordinate=args.skip_coordinate,
+        all_gap_types=args.all_gap_types,
     )
 
     if not rows:
@@ -369,7 +414,9 @@ def run_batch(engine, args: argparse.Namespace) -> dict[str, int]:
                 exc=exc,
             )
 
-        persist_result(engine, tid, result)
+        persist_result(
+            engine, tid, result, reprocess_run_id=getattr(args, "reprocess_run_id", None)
+        )
 
         if args.only_human_review:
             new_status = result["tags"].get("smart_verify_status", "")
@@ -425,11 +472,17 @@ def main() -> int:
         help="Exclude coordinate answer_type from batch",
     )
     p.add_argument("--dry-run", action="store_true")
-    p.add_argument("--reprocess", action="store_true", help="Ignore smart_verify_status")
+    p.add_argument("--reprocess", action="store_true",
+                   help="Re-run all tasks once (uses smart_verify_run_id; --loop stops after one pass)")
     p.add_argument(
         "--only-fix-g7-reprocess-failed",
         action="store_true",
         help="Only tasks tagged fix_g7_reprocess_failed=true (use with --reprocess)",
+    )
+    p.add_argument(
+        "--only-fix-g6-reverify",
+        action="store_true",
+        help="Only G6 bypass tasks tagged fix_g6_reverify=pending (use with --reprocess)",
     )
     p.add_argument(
         "--retry-failed",
@@ -439,7 +492,12 @@ def main() -> int:
     p.add_argument(
         "--gaps-only",
         action="store_true",
-        help="Only pending + verified tasks with <3 distractors (skip failed)",
+        help="Only pending + verified tasks with <2 distractors (skip failed)",
+    )
+    p.add_argument(
+        "--all-gap-types",
+        action="store_true",
+        help="With --gaps-only: include text/open_text/coordinate (default skips them)",
     )
     p.add_argument("--skip-text", action="store_true", help="Numeric/algebraic types only")
     p.add_argument(
@@ -464,10 +522,18 @@ def main() -> int:
         p.error("--only-fix-g7-reprocess-failed requires --reprocess")
     if args.only_fix_g7_failed and not args.reprocess:
         p.error("--only-fix-g7-failed requires --reprocess")
+    if args.only_fix_g6_reverify and not args.reprocess:
+        p.error("--only-fix-g6-reverify requires --reprocess")
     if args.only_human_review and not args.reprocess:
         p.error("--only-human-review requires --reprocess")
 
     engine = create_engine(get_settings().database_url)
+
+    if args.reprocess:
+        args.reprocess_run_id = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
+        log.info("Reprocess run_id=%s (one pass per --loop)", args.reprocess_run_id)
+    else:
+        args.reprocess_run_id = None
 
     if args.loop and not args.dry_run:
         total = {k: 0 for k in (

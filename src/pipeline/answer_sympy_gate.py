@@ -20,6 +20,8 @@ SMART_VERIFY_TYPES = frozenset({
     "inequality",
     "set",
     "multiple_choice",
+    "text",
+    "open_text",
 })
 
 CANONICAL_REASONS = frozenset({"sympy_match", "string_match"})
@@ -246,6 +248,11 @@ def format_expression_school(value: str) -> str:
     if ";" in s:
         return "; ".join(_format_labeled_part(p) for p in _split_expression_parts(s))
 
+    if "," in s and s.count("=") >= 2:
+        parts = _split_equation_solution_parts(s)
+        if len(parts) > 1:
+            return ", ".join(_format_labeled_part(p) for p in parts)
+
     return _format_expression_part(s)
 
 
@@ -257,6 +264,8 @@ _LABELED_PART_RE = re.compile(
     r"^([абвгдежзийклмнопрстуфхцчшщъыьэюя]\)|\d+\))\s*(.*)$",
     re.I,
 )
+_SCHOOL_MIXED_FRAC_RE = re.compile(r"^(-?\d+)\s+(\d+)/(\d+)$")
+_SCHOOL_SIMPLE_FRAC_RE = re.compile(r"^(-?\d+)/(\d+)$")
 
 
 def _format_labeled_part(segment: str) -> str:
@@ -271,7 +280,7 @@ def _format_expression_part(part: str) -> str:
     part = (part or "").strip()
     if not part:
         return part
-    m = re.match(r"^([a-zA-Z])\s*=\s*(.+)$", part)
+    m = re.match(r"^([a-zA-Z](?:_[a-zA-Z0-9]+|\d+)?)\s*=\s*(.+)$", part)
     if m:
         rhs = _format_algebraic_string(m.group(2).strip())
         return f"{m.group(1)} = {rhs}"
@@ -284,9 +293,18 @@ def _unwrap_sympy_call(s: str) -> str:
     return m.group(1).strip() if m else s
 
 
+def _is_school_fraction_literal(s: str) -> bool:
+    s = (s or "").strip()
+    return bool(_SCHOOL_MIXED_FRAC_RE.match(s) or _SCHOOL_SIMPLE_FRAC_RE.match(s))
+
+
 def _format_algebraic_string(s: str) -> str:
     s = _unwrap_sympy_call((s or "").strip())
     if not s:
+        return s
+    if "\\in" in s or "∈" in s or "\\notin" in s or "∉" in s:
+        return s
+    if _is_school_fraction_literal(s):
         return s
 
     if re.fullmatch(r"[\d.,]+[eE][+-]?\d+", s):
@@ -474,16 +492,32 @@ def _expression_parseable(s: str) -> bool:
 
 
 def _find_top_level_slash_index(s: str) -> int | None:
-    """Index of division `/` outside `{...}` (e.g. `a^{2} / 3`, `-a\\sqrt{6}/3`)."""
+    """Index of division `/` outside `{...}` and `(...)` if it is the ONLY top-level binary operator."""
     depth = 0
+    slash_idx = None
+    has_other_binary = False
     for i, ch in enumerate(s):
-        if ch == "{":
+        if ch in ("{", "("):
             depth += 1
-        elif ch == "}":
+        elif ch in ("}", ")"):
             depth = max(0, depth - 1)
-        elif ch == "/" and depth == 0:
-            if s[:i].strip() and s[i + 1 :].strip():
-                return i
+        elif depth == 0:
+            if ch == "/":
+                if s[:i].strip() and s[i + 1 :].strip():
+                    if slash_idx is not None:
+                        has_other_binary = True
+                    slash_idx = i
+            elif ch in ("+", "*", "=", "<", ">", "≤", "≥", "≠", ";"):
+                if ch in ("+", "-"):
+                    if s[:i].strip():
+                        has_other_binary = True
+                else:
+                    has_other_binary = True
+            elif ch == "-" and s[:i].strip():
+                has_other_binary = True
+
+    if slash_idx is not None and not has_other_binary:
+        return slash_idx
     return None
 
 
@@ -534,19 +568,32 @@ def _needs_math_wrap(s: str) -> bool:
     if re.fullmatch(r"[a-zA-Z]", s):
         return True
     return bool(
-        re.search(r"\\frac|\\sqrt|\^|±|√|[a-zA-Z].*[\+\-\*/=]|\\", s)
+        re.search(r"\\frac|\\sqrt|\^|±|√|≤|≥|≠|!=|<|>|[a-zA-Z].*[\+\-\*/=]|\\", s)
     )
+
+
+def _school_fraction_latex_inner(s: str) -> str | None:
+    """School mixed/simple fraction → KaTeX inner (no $)."""
+    s = (s or "").strip()
+    m = _SCHOOL_MIXED_FRAC_RE.match(s)
+    if m:
+        return rf"{m.group(1)}\frac{{{m.group(2)}}}{{{m.group(3)}}}"
+    m = _SCHOOL_SIMPLE_FRAC_RE.match(s)
+    if m:
+        return rf"\frac{{{m.group(1)}}}{{{m.group(2)}}}"
+    return None
 
 
 def _latex_math_content(s: str) -> str:
     """Inner LaTeX (without $ delimiters)."""
     s = (s or "").strip()
+    s = s.replace("≤", r"\le ").replace("≥", r"\ge ").replace("≠", r"\ne ").replace("!=", r"\ne ")
     short_dec = _short_decimal_latex(s)
     if short_dec is not None:
         return short_dec
-    m = re.fullmatch(r"(\d+)\s+(\d+)/(\d+)", s)
-    if m:
-        return rf"{m.group(1)}\frac{{{m.group(2)}}}{{{m.group(3)}}}"
+    frac = _school_fraction_latex_inner(s)
+    if frac is not None:
+        return frac
     m = re.fullmatch(
         r"([\d.,]+)\s*(?:\*|×|·)?\s*10\^\{?(-?\d+)\}?\s*(?:г|кг)?",
         s,
@@ -564,7 +611,7 @@ def _wrap_math_body(body: str) -> str:
     body = (body or "").strip()
     if not body:
         return body
-    fm = re.match(r"^([a-zA-Z])\s*=\s*(.+)$", body)
+    fm = re.match(r"^([a-zA-Z](?:_[a-zA-Z0-9]+|\d+)?)\s*=\s*(.+)$", body)
     if fm:
         return f"${fm.group(1)} = {_latex_math_content(fm.group(2).strip())}$"
     if _needs_math_wrap(body):
@@ -758,12 +805,32 @@ def _wrap_single_inequality(part: str) -> str:
     return f"${var} {op} {_latex_equation_rhs(rhs)}$"
 
 
+def _split_inequality_parts(s: str) -> list[str]:
+    s = (s or "").strip()
+    if not s:
+        return []
+    if ";" in s:
+        return [p.strip() for p in s.split(";") if p.strip()]
+    # Split by comma if followed by a variable and an inequality/equality operator
+    chunks = re.split(r",\s*([a-zA-Z_]\w*)\s*(=|!=|≠|>=|<=|≤|≥|<|>)\s*", s)
+    if len(chunks) > 1:
+        out = [chunks[0].strip()]
+        for i in range(1, len(chunks), 3):
+            if i + 2 < len(chunks):
+                out.append(f"{chunks[i]} {chunks[i+1]} {chunks[i+2].strip().rstrip(',')}")
+        return out
+    return [s]
+
+
 def _to_inequality_answer_latex(answer: str) -> str:
     raw = (answer or "").strip()
     if not raw or is_prose_answer(raw):
         return raw
     if ";" in raw:
         return "; ".join(_wrap_single_inequality(p) for p in _split_expression_parts(raw))
+    parts = _split_inequality_parts(raw)
+    if len(parts) > 1:
+        return ", ".join(_wrap_single_inequality(p) for p in parts)
     return _wrap_single_inequality(raw)
 
 
@@ -925,6 +992,9 @@ def _to_answer_latex_inner(answer: str, answer_type: str = "") -> str:
         if rendered and rendered != raw:
             return rendered
 
+    if _is_school_fraction_literal(raw):
+        return _latex_labeled_part(raw)
+
     school = (
         format_expression_school(raw)
         if at in ("expression", "fraction") or answer_needs_school_format(raw, at)
@@ -933,6 +1003,10 @@ def _to_answer_latex_inner(answer: str, answer_type: str = "") -> str:
 
     if ";" in school and not _COORD_PAIR_RE.search(school):
         return "; ".join(_latex_labeled_part(p) for p in _split_expression_parts(school))
+    if "," in school and school.count("=") >= 2:
+        parts = _split_equation_solution_parts(school)
+        if len(parts) > 1:
+            return ", ".join(_latex_labeled_part(p) for p in parts)
     return _latex_labeled_part(school)
 
 
@@ -1071,7 +1145,10 @@ def _school_rhs_from_sympy(expr: Any) -> str:
 
     simplified = nsimplify(e)
     out = str(simplified)
-    out = out.replace("sqrt(", "√").replace(")", "")
+    import re
+    out = re.sub(r"sqrt\((\d+)\)", r"√\1", out)
+    out = re.sub(r"sqrt\(([a-zA-Z])\)", r"√\1", out)
+    out = out.replace("sqrt(", "√")
     return out
 
 
@@ -1497,6 +1574,16 @@ def _gate_match(
     return False
 
 
+def _strip_units(s: str) -> str:
+    s = (s or "").strip()
+    s = re.sub(
+        r"(?<=\d)\s*(км/ч|км|м|ч|деталей|детали|деталь|страниц|страница|страницы|см³|кг|г|ц/га|ц|руб|рублей|рубля|кусков|куска|кусок|кв\.\s*м|м²)\b\.?",
+        "",
+        s,
+    )
+    return s.strip()
+
+
 def sympy_gate(
     sympy_string: str,
     absolute_answer: str,
@@ -1512,8 +1599,8 @@ def sympy_gate(
     from src.pipeline.answer_verify import answers_equivalent, _coordinate_system_equivalent
     from src.pipeline.answer_sympy import try_validate_answer_for_question
 
-    absolute_answer = (absolute_answer or "").strip()
-    stored_answer = (stored_answer or "").strip()
+    absolute_answer = _strip_units(absolute_answer)
+    stored_answer = _strip_units(stored_answer)
     if not absolute_answer:
         return SympyGateResult(ok=False, reason="empty_absolute_answer")
 

@@ -22,7 +22,7 @@ import os
 from sqlalchemy import create_engine, text
 
 from src.core.config import get_settings
-from src.pipeline.gemini_client import call_gemini, get_pro_model, parse_json_response
+from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model, parse_json_response
 from src.pipeline.curriculum_analyzer import SkillNode
 
 log = logging.getLogger(__name__)
@@ -193,9 +193,9 @@ def run(class_level: int, out_path: str) -> None:
     prompt = _build_prompt(class_level, current_l3, prev_l3, l2_map)
 
     try:
-        raw = call_gemini(
+        raw = call_deepseek(
             prompt,
-            model=get_pro_model(),
+            model=get_deepseek_model(),
             temperature=0.1,
             max_tokens=16384,
             json_mode=True,

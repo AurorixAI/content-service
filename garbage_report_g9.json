@@ -1,0 +1,248 @@
+{
+  "class_level": 9,
+  "ignored_theory": [
+    {
+      "id": "G9_TB_10_131_1",
+      "question_text": "Сколько корней имеет квадратный трёхчлен 3x² - 8x + 2?",
+      "correct_answer": "2",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_10_131_2",
+      "question_text": "Сколько корней имеет квадратный трёхчлен -1/2 y² + 6y - 18?",
+      "correct_answer": "1",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_10_131_3",
+      "question_text": "Сколько корней имеет квадратный трёхчлен m² - 3m + 3?",
+      "correct_answer": "0",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_1",
+      "question_text": "Какова степень уравнения: a) 2x^2 - 6x^5 + 1 = 0",
+      "correct_answer": "5",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_2",
+      "question_text": "Какова степень уравнения: г) (x + 8)(x - 7) = 0",
+      "correct_answer": "2",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_3",
+      "question_text": "Какова степень уравнения: б) x^6 - 4x^3 - 3 = 0",
+      "correct_answer": "6",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_4",
+      "question_text": "Какова степень уравнения: д) x/2 - x/4 = 5",
+      "correct_answer": "1",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_5",
+      "question_text": "Какова степень уравнения: в) 1/7 x^5 = 0",
+      "correct_answer": "5",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_6",
+      "question_text": "Какова степень уравнения: е) 5x^3 - 5x(x^2 + 4) = 17?",
+      "correct_answer": "1",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_1",
+      "question_text": "Какие числа образуют множество натуральных чисел?",
+      "correct_answer": "Числа, используемые для счёта предметов: 1, 2, 3, ...",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_12",
+      "question_text": "В каком виде можно представить любое рациональное число?",
+      "correct_answer": "В виде отношения m/n, где m и n — целые числа, n ≠ 0",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_2",
+      "question_text": "Какие действия всегда выполнимы в множестве натуральных чисел?",
+      "correct_answer": "Сложение и умножение",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_3",
+      "question_text": "Какие числа образуют множество целых чисел?",
+      "correct_answer": "Натуральные числа, противоположные им отрицательные числа и число 0",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_4",
+      "question_text": "Какие действия всегда выполнимы в множестве целых чисел?",
+      "correct_answer": "Сложение, вычитание и умножение",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_5",
+      "question_text": "Какие числа образуют множество рациональных чисел?",
+      "correct_answer": "Целые и дробные числа",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_6",
+      "question_text": "Какое обозначение принято для множества натуральных чисел?",
+      "correct_answer": "N",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_7",
+      "question_text": "Какое обозначение принято для множества целых чисел?",
+      "correct_answer": "Z",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_8",
+      "question_text": "Какое обозначение принято для множества рациональных чисел?",
+      "correct_answer": "Q",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_528_1",
+      "question_text": "Какой член последовательности a_1, a_2, a_3, ... следует за членом a_99, a_200, a_n, a_{n-1}, a_{n+1}, a_{2n}?",
+      "correct_answer": "a_100, a_201, a_{n+1}, a_n, a_{n+2}, a_{2n+1}",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_528_2",
+      "question_text": "Какой член последовательности a_1, a_2, a_3, ... предшествует члену a_71, a_100, a_{n-2}, a_{n+3}, a_{3n}?",
+      "correct_answer": "a_70, a_99, a_{n-3}, a_{n+2}, a_{3n-1}",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_658_1",
+      "question_text": "Какова сумма натуральных чисел, меньших 100 и не кратных 3?",
+      "correct_answer": "3267",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_658_2",
+      "question_text": "Какова сумма натуральных чисел, больших 50, но меньших 150 и не кратных 5?",
+      "correct_answer": "8000",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_4_КВ_4",
+      "question_text": "Что называется абсолютной погрешностью приближённого значения? Объясните смысл записи $x = a \\pm h$.",
+      "correct_answer": "Абсолютная погрешность — модуль разности точного и приближённого значений. Запись означает, что точное значение x лежит в интервале [a-h; a+h].",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_4_КВ_5",
+      "question_text": "Что называется относительной погрешностью приближённого значения?",
+      "correct_answer": "Относительная погрешность — отношение абсолютной погрешности к модулю приближённого значения.",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_6_КВ1",
+      "question_text": "Что такое нанометр и зелтосекунда?",
+      "correct_answer": "Нанометр — единица измерения длины, равная 10^-9 м. Зелтосекунда — единица измерения времени, равная 10^-21 с.",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_7_1",
+      "question_text": "Какой объект на плане обозначен цифрой 2 и какой — цифрой 3?",
+      "correct_answer": "Цифрой 2 обозначен гараж, цифрой 3 — сарай.",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    }
+  ],
+  "type_a": [],
+  "type_b": [
+    {
+      "id": "G9_TB_31_547",
+      "question_text": "Найдите расстояние: 28 м.",
+      "correct_answer": "28",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_580",
+      "question_text": "Найдите расстояние: 125 м.",
+      "correct_answer": "125",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_621_1",
+      "question_text": "Найдите сумму первых пяти членов геометрической прогрессии (x_n), если: a) x₅ = 1 1/9, q = 1/3",
+      "correct_answer": "134.444444",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    }
+  ],
+  "clean_sample_size": 1469,
+  "summary": {
+    "total": 1498,
+    "ignored_theory": 26,
+    "type_a": 0,
+    "type_b": 3,
+    "clean": 1469
+  }
+}

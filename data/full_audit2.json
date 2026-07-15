@@ -1,0 +1,455 @@
+{
+  "summary": {
+    "total": 1593,
+    "distractors_3plus": 1390,
+    "distractors_any": 1466,
+    "no_distractors": 127,
+    "sympy_proven": 0,
+    "in_review": 42,
+    "q3_verified": 373,
+    "smart_verified": 0,
+    "ocr_garbage_a": 0,
+    "ocr_garbage_b": 37
+  },
+  "paras": [
+    {
+      "toc_id": 1011,
+      "title": "Действия над действительными числами",
+      "number": "1",
+      "total": 44,
+      "distractors_ok": 40,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1012,
+      "title": "Сравнение действительных чисел",
+      "number": "2",
+      "total": 27,
+      "distractors_ok": 25,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1013,
+      "title": "Погрешность и точность приближения",
+      "number": "3",
+      "total": 67,
+      "distractors_ok": 47,
+      "no_distractors": 2,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1015,
+      "title": "Размеры объектов и длительность процессов в окружающем мире",
+      "number": "4",
+      "total": 11,
+      "distractors_ok": 9,
+      "no_distractors": 2,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1016,
+      "title": "Практико-ориентированные задачи",
+      "number": "5",
+      "total": 37,
+      "distractors_ok": 37,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1017,
+      "title": "Точность представления действительных чисел в виде десятичных дробей. Число π.",
+      "number": "6",
+      "total": 30,
+      "distractors_ok": 23,
+      "no_distractors": 3,
+      "in_review": 1,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1020,
+      "title": "Свойства чётности и нечётности функций",
+      "number": "7",
+      "total": 10,
+      "distractors_ok": 10,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1021,
+      "title": "Графики и свойства некоторых видов функций",
+      "number": "8",
+      "total": 30,
+      "distractors_ok": 28,
+      "no_distractors": 1,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1023,
+      "title": "Функция y = ax², её график и свойства",
+      "number": "9",
+      "total": 15,
+      "distractors_ok": 10,
+      "no_distractors": 5,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1024,
+      "title": "Графики функций y = ax² + n и y = a(x - m)²",
+      "number": "10",
+      "total": 38,
+      "distractors_ok": 31,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1025,
+      "title": "Построение графика квадратичной функции",
+      "number": "11",
+      "total": 26,
+      "distractors_ok": 25,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1026,
+      "title": "Дробно-линейная функция и её график",
+      "number": "12",
+      "total": 40,
+      "distractors_ok": 35,
+      "no_distractors": 4,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1029,
+      "title": "Целое уравнение и его корни",
+      "number": "13",
+      "total": 55,
+      "distractors_ok": 52,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1030,
+      "title": "Дробные рациональные уравнения",
+      "number": "14",
+      "total": 57,
+      "distractors_ok": 55,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1031,
+      "title": "Решение задач с помощью уравнений",
+      "number": "15",
+      "total": 16,
+      "distractors_ok": 16,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1033,
+      "title": "Решение неравенств второй степени с одной переменной",
+      "number": "16",
+      "total": 54,
+      "distractors_ok": 54,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1034,
+      "title": "Решение неравенств методом интервалов",
+      "number": "17",
+      "total": 25,
+      "distractors_ok": 25,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1035,
+      "title": "Некоторые приёмы решения целых уравнений",
+      "number": "18",
+      "total": 137,
+      "distractors_ok": 133,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1039,
+      "title": "Решение систем уравнений с двумя переменными",
+      "number": "20",
+      "total": 58,
+      "distractors_ok": 57,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1040,
+      "title": "Исследование системы двух линейных уравнений с двумя переменными",
+      "number": "21",
+      "total": 14,
+      "distractors_ok": 13,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1041,
+      "title": "Решение задач с помощью систем уравнений второй степени",
+      "number": "22",
+      "total": 16,
+      "distractors_ok": 16,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1043,
+      "title": "Неравенства с двумя переменными",
+      "number": "23",
+      "total": 27,
+      "distractors_ok": 25,
+      "no_distractors": 0,
+      "in_review": 1,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1044,
+      "title": "Системы неравенств с двумя переменными",
+      "number": "24",
+      "total": 14,
+      "distractors_ok": 9,
+      "no_distractors": 2,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1045,
+      "title": "Некоторые приёмы решения систем уравнений второй степени с двумя переменными",
+      "number": "25",
+      "total": 68,
+      "distractors_ok": 65,
+      "no_distractors": 1,
+      "in_review": 3,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1048,
+      "title": "Последовательности",
+      "number": "26",
+      "total": 13,
+      "distractors_ok": 13,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1049,
+      "title": "Определение арифметической прогрессии. Формула n-го члена арифметической прогрессии",
+      "number": "27",
+      "total": 63,
+      "distractors_ok": 59,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1050,
+      "title": "Формула суммы первых n членов арифметической прогрессии",
+      "number": "28",
+      "total": 43,
+      "distractors_ok": 42,
+      "no_distractors": 0,
+      "in_review": 1,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1052,
+      "title": "Определение геометрической прогрессии. Формула n-го члена геометрической прогрессии",
+      "number": "29",
+      "total": 51,
+      "distractors_ok": 50,
+      "no_distractors": 1,
+      "in_review": 5,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1053,
+      "title": "Формула суммы первых n членов геометрической прогрессии",
+      "number": "30",
+      "total": 13,
+      "distractors_ok": 13,
+      "no_distractors": 0,
+      "in_review": 0,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1054,
+      "title": "Метод математической индукции",
+      "number": "31",
+      "total": 35,
+      "distractors_ok": 30,
+      "no_distractors": 5,
+      "in_review": 2,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1055,
+      "title": "Дополнительные упражнения к главе V",
+      "number": "ДГ5",
+      "total": 100,
+      "distractors_ok": 74,
+      "no_distractors": 19,
+      "in_review": 3,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1056,
+      "title": "Задачи повышенной трудности",
+      "number": "ЗПТ",
+      "total": 71,
+      "distractors_ok": 53,
+      "no_distractors": 18,
+      "in_review": 7,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    },
+    {
+      "toc_id": 1057,
+      "title": "Упражнения для повторения курса 7–9 классов",
+      "number": "УПК",
+      "total": 288,
+      "distractors_ok": 216,
+      "no_distractors": 64,
+      "in_review": 19,
+      "sympy_proven": 0,
+      "ocr_garbage": 0
+    }
+  ],
+  "para31": {
+    "total": 35,
+    "distractors_ok": 30,
+    "in_review": 2,
+    "ocr_garbage": 0,
+    "sympy_proven": 0,
+    "verified": 7,
+    "last_update": "2026-07-14 07:27:06.868133"
+  },
+  "by_type": [
+    {
+      "answer_type": "text",
+      "total": 465,
+      "distractors_ok": 411,
+      "no_distractors": 36
+    },
+    {
+      "answer_type": "equation_solution",
+      "total": 270,
+      "distractors_ok": 249,
+      "no_distractors": 13
+    },
+    {
+      "answer_type": "inequality",
+      "total": 190,
+      "distractors_ok": 144,
+      "no_distractors": 26
+    },
+    {
+      "answer_type": "expression",
+      "total": 167,
+      "distractors_ok": 142,
+      "no_distractors": 25
+    },
+    {
+      "answer_type": "exact_number",
+      "total": 164,
+      "distractors_ok": 153,
+      "no_distractors": 7
+    },
+    {
+      "answer_type": "set",
+      "total": 92,
+      "distractors_ok": 88,
+      "no_distractors": 3
+    },
+    {
+      "answer_type": "multiple_choice",
+      "total": 81,
+      "distractors_ok": 54,
+      "no_distractors": 12
+    },
+    {
+      "answer_type": "coordinate",
+      "total": 69,
+      "distractors_ok": 62,
+      "no_distractors": 1
+    },
+    {
+      "answer_type": "fraction",
+      "total": 48,
+      "distractors_ok": 45,
+      "no_distractors": 2
+    },
+    {
+      "answer_type": "decimal",
+      "total": 47,
+      "distractors_ok": 42,
+      "no_distractors": 2
+    }
+  ],
+  "skills": {
+    "total_tasks": 1593,
+    "has_skill_ids": 0,
+    "toc_skill_mappings": 0
+  }
+}

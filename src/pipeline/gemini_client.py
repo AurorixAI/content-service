@@ -51,8 +51,8 @@ def _vertex_location() -> str:
 
 
 # ── Rate limiter ─────────────────────────────────────────────────────────
-# Sliding window per model family. Shared between call_gemini and
-# call_gemini_vision so per-paragraph workloads stay under quota.
+# Sliding window per model family. Shared between call_deepseek and
+# call_deepseek_vision so per-paragraph workloads stay under quota.
 
 
 class _SlidingWindowLimiter:
@@ -113,15 +113,15 @@ def _limiter_for(model: str) -> _SlidingWindowLimiter:
     return _PRO_LIMITER
 
 
-def get_flash_model() -> str:
+def get_deepseek_model() -> str:
     return get_settings().gemini_flash_model
 
 
-def get_pro_model() -> str:
+def get_deepseek_model() -> str:
     return get_settings().gemini_pro_model
 
 
-def get_api_key() -> str:
+def get_deepseek_key() -> str:
     return get_settings().gemini_api_key
 
 
@@ -151,7 +151,7 @@ def _get_adc_token() -> str:
     raise RuntimeError("Cannot get ADC token. Run: gcloud auth application-default login")
 
 
-def call_gemini(
+def call_deepseek(
     prompt: str,
     *,
     model: Optional[str] = None,
@@ -177,7 +177,7 @@ def call_gemini(
         requests.HTTPError — after all retries exhausted.
         RuntimeError      — empty response or auth failure.
     """
-    mdl = model or get_pro_model()
+    mdl = model or get_deepseek_model()
     url = _VERTEX_BASE.format(
         project=_vertex_project(), location=_vertex_location(), model=mdl,
     )
@@ -259,7 +259,7 @@ def call_gemini(
     raise RuntimeError("Gemini API: no response after all retries")
 
 
-def call_gemini_structured(
+def call_deepseek_structured(
     prompt: str,
     schema: Type[TSchema],
     *,
@@ -271,7 +271,7 @@ def call_gemini_structured(
     thinking_budget: Optional[int] = 0,
 ) -> TSchema:
     """Call Gemini with JSON responseSchema enforced via Pydantic model."""
-    mdl = model or get_flash_model()
+    mdl = model or get_deepseek_model()
     url = _VERTEX_BASE.format(
         project=_vertex_project(), location=_vertex_location(), model=mdl,
     )
@@ -370,7 +370,7 @@ def _extract_text_from_parts(parts: list[dict]) -> str:
     return texts[-1]
 
 
-def call_gemini_code_execution(
+def call_deepseek_code_execution(
     prompt: str,
     *,
     schema: Type[TSchema],
@@ -383,7 +383,7 @@ def call_gemini_code_execution(
     """
   Call Gemini Flash with code_execution tool; parse structured JSON into Pydantic schema.
     """
-    mdl = model or get_flash_model()
+    mdl = model or get_deepseek_model()
     url = _VERTEX_BASE.format(
         project=_vertex_project(), location=_vertex_location(), model=mdl,
     )
@@ -602,7 +602,7 @@ def _recover_truncated_array(text: str) -> Optional[str]:
     return text[: last_good + 1] + "]"
 
 
-def call_gemini_vision(
+def call_deepseek_vision(
     prompt: str,
     image_parts: list[dict],
     *,
@@ -620,7 +620,7 @@ def call_gemini_vision(
     response_mime_type: e.g. "application/json" to force JSON output mode.
     Returns extracted text from the model.
     """
-    mdl = model or get_pro_model()
+    mdl = model or get_deepseek_model()
     url = _VERTEX_BASE.format(
         project=_vertex_project(), location=_vertex_location(), model=mdl,
     )

@@ -397,10 +397,14 @@ class DBWriter:
         if task.mapping_confidence:
             tags.setdefault("mapping_confidence", round(task.mapping_confidence, 3))
 
+        from src.pipeline.answer_sympy_gate import to_answer_latex
+        correct_answer_latex = to_answer_latex(correct_answer, answer_type)
+
         result = conn.execute(
             text("""
                 INSERT INTO tasks_master (
                     id, skill_id, question_text, question_latex, correct_answer,
+                    correct_answer_latex,
                     answer_type, difficulty, cognitive_load,
                     irt_discrimination, irt_difficulty, irt_guessing,
                     distractor_meta, answer_options,
@@ -410,6 +414,7 @@ class DBWriter:
                     is_active, created_at
                 ) VALUES (
                     :id, :skill_id, :question_text, :question_latex, :correct_answer,
+                    :correct_answer_latex,
                     :answer_type, :difficulty, :cognitive_load,
                     :irt_a, :irt_b, :irt_c,
                     :distractor_meta, :answer_options,
@@ -427,6 +432,7 @@ class DBWriter:
                 "question_text": task.question_text,
                 "question_latex": task.question_latex or "",
                 "correct_answer": correct_answer,
+                "correct_answer_latex": correct_answer_latex,
                 "answer_type": answer_type,
                 "difficulty": difficulty,
                 "cognitive_load": cognitive_load,

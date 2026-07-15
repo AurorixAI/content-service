@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.pipeline.gemini_client import call_gemini, get_pro_model, parse_json_response
+from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model, parse_json_response
 from src.schemas.smart_verify import PedagogyItemReview, PedagogyReviewResponse
 
 _PEDAGOGY_JSON_HINT = (
@@ -82,9 +82,9 @@ def audit_distractor_pedagogy(
         answer_type=answer_type,
         distractors=distractors,
     )
-    text = call_gemini(
+    text = call_deepseek(
         prompt,
-        model=get_pro_model(),
+        model=get_deepseek_model(),
         temperature=0.1,
         max_tokens=2048,
     )
