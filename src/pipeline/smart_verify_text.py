@@ -90,6 +90,51 @@ def run_text_verify_pipeline(
 
     tags["smart_verify_route"] = "text"
 
+    # ── Early-exit guard (same as compute route) ──────────────────────────────
+    # IMPORTANT: failed tasks (unresolved, dual_failed, ...) are NEVER skipped.
+    _FAILED_MODES = frozenset({
+        "unresolved", "dual_failed", "stored_invalid",
+        "failed_at_llm", "failed_at_sympy",
+    })
+    _verify_mode = tags.get("answer_verify_mode") or ""
+    _is_smart_locked = (
+        tags.get("answer_locked")
+        and tags.get("answer_gemini_verified")
+        and tags.get("smart_verify_status") in SUCCESS_STATUSES
+        and _verify_mode not in _FAILED_MODES
+    )
+    _is_school_locked = (
+        tags.get("reverified_by") == "deepseek_school"
+        and tags.get("choices_complete")
+        and _verify_mode not in _FAILED_MODES
+    )
+    if _is_smart_locked or _is_school_locked:
+        has_old_distractors = distractors_valid(
+            dmeta,
+            question=question,
+            correct_answer=stored or "",
+            answer_type=atype,
+        )
+        if has_old_distractors:
+            return {
+                "status": "success",
+                "correct_answer": stored or "",
+                "distractor_meta": dmeta,
+                "tags": tags,
+                "action": "already_locked_skip",
+                "verification_status": "verified",
+            }
+        from src.pipeline.smart_verify_common import run_distractor_only_pipeline
+        return run_distractor_only_pipeline(
+            task_id=task_id,
+            question=question,
+            correct_answer=stored or "",
+            answer_type=atype,
+            distractor_meta=dmeta,
+            tags=tags,
+        )
+    # ── End early-exit guard ──────────────────────────────────────────────────
+
     local_sympy = compute_answer_from_question(question) if is_high_confidence_arithmetic(question) else None
     if local_sympy:
         tags["answer_local_sympy"] = local_sympy[:500]
@@ -233,6 +278,22 @@ def run_text_verify_pipeline(
         sync_verify_tags(tags, "verified_corrected")
         if not unanimous:
             tags["self_consistency_majority"] = True
+        # ── Confidence gate: don't auto-correct on low-confidence LLM──────────
+        # If the last LLM call returned confidence=low, treat as needs_human_review
+        last_confidence = (llm_result.confidence or "high").lower() if llm_result else "high"
+        if last_confidence == "low":
+            sync_verify_tags(tags, "needs_human_review")
+            tags["answer_gemini_candidate"] = winner[:500]
+            tags.pop("answer_gemini_verified", None)
+            return {
+                "status": "review",
+                "correct_answer": stored,
+                "distractor_meta": dmeta,
+                "tags": tags,
+                "action": "needs_human_review",
+                "verification_status": "pending",
+            }
+        # ───────────────────────────────────────────────────────────────
         dmeta = []
         need_distractors = True
         answer_corrected = True

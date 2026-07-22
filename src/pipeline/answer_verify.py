@@ -918,12 +918,25 @@ def _sign_regions_equivalent(a: str, b: str) -> bool:
         rb_s = sorted((r[0], r[1], round(r[2], 4)) for r in rb)
         return ra_s == rb_s
     if ra and not rb:
+        parts_b = _inequality_parts(b)
+        if len(ra) != len(parts_b):
+            return False
+        used_b = set()
         for sign, op, val in ra:
-            probe = f"x {op} {val}".replace(",", ".")
-            if not _single_inequalities_equivalent(probe, b):
+            found = False
+            for idx, part in enumerate(parts_b):
+                if idx in used_b:
+                    continue
+                ineq = _parse_single_inequality(part)
+                if ineq and ineq[1] == op and abs(ineq[2] - val) < 0.02:
+                    used_b.add(idx)
+                    found = True
+                    break
+            if not found:
                 return False
         return True
     return False
+
 
 
 def _looks_like_algebraic_expression(s: str) -> bool:

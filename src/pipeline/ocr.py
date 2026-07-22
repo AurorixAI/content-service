@@ -285,7 +285,11 @@ class AzureMistralOCR:
         )
         for page in range(scan_from, total_pages + 1):
             try:
-                text = self.process_pages(pdf_path, page, page, figures_by_page={})
+                text = self.process_pages(
+                    pdf_path, page, page,
+                    figures_by_page={},
+                    ignore_back_matter=True,
+                )
             except Exception as exc:
                 log.warning("detect_back_matter_start: OCR failed p%d: %s", page, exc)
                 continue

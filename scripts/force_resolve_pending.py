@@ -18,32 +18,33 @@ log = logging.getLogger(__name__)
 
 TEXTBOOK_ID = '2aa7af81-af13-42f9-a26b-e7e6bebaa4e6'
 
-SCHOOL_VERIFY_SYSTEM_PROMPT = """Ты — эксперт-методист по математике для средней школы.
-Твоя задача — проверить правильность математического ответа на задачу из школьного учебника 9 класса.
+SCHOOL_VERIFY_SYSTEM_PROMPT = """Ты — эксперт-математик и методист. Твоя задача — верифицировать и отформатировать в LaTeX ответ к задаче из учебника по алгебре для 10 класса.
+
 Входные данные:
 1. Вопрос/Условие задачи.
-2. Предполагаемый ответ (из учебника).
-3. Тип ответа (expression, inequality, equation_solution, text, set и т.д.).
+2. Ответ из учебника.
+3. Тип ответа (expression, inequality, text, set и т.д.).
 
-ПРАВИЛА И КОНТЕКСТ ШКОЛЫ:
-1. Мы работаем строго в рамках школьной программы 9 класса. КОМПЛЕКСНЫЕ ЧИСЛА НЕ СУЩЕСТВУЮТ. Если дискриминант квадратного уравнения отрицательный — корней нет. Действительные корни являются полным и окончательным ответом.
-2. Стандартный символ корня '√' является валидным математическим обозначением.
-3. Если ответ из учебника содержит опечатку (например, перепутаны границы интервала '(-7; -8)' вместо '(-8; -7)', или лишний посторонний корень в системе, или неверный знак), ты должен:
-   - Вычислить математически правильный школьный ответ.
-   - Указать is_corrected = true.
-   - Вернуть исправленный ответ в поле correct_answer (как обычный текст) и в поле correct_answer_latex.
-4. Если ответ полностью верный (или ты его исправил), укажи is_correct = true.
-5. Если в условии задачи критическая ошибка/опечатка (отсутствует функция, нет данных), из-за которой её в принципе невозможно решить, укажи is_valid = false.
-6. LaTeX-ответ возвращай без знаков $ снаружи, просто чистый LaTeX-код.
+ПРАВИЛА ВЕРИФИКАЦИИ:
+1. Ответ из учебника верен в 98% случаев. Проведи точный математический расчет в уме.
+2. Проверь область определения (ОДЗ). Напоминание: для исследования четности/нечетности область определения должна быть строго симметрична относительно нуля. Если точка (например, x = -6) исключена из ОДЗ, а симметричная ей (x = 6) нет, то функция НЕ является ни четной, ни нечетной.
+3. Перед сравнением иррациональных чисел (например, 7√(1/7) и 0.5√20) переведи их в десятичный вид: 7√(1/7) = √7 ≈ 2.64, 0.5√20 = √5 ≈ 2.23. Так как 2.64 > 2.23, то знак '>'. Не меняй верные знаки сравнения!
+4. Если ответ из учебника математически верен и эквивалентен условию, верни:
+   "is_correct": true, "is_corrected": false, "correct_answer": [исходный ответ]
+5. Если в ответе учебника явная опечатка (например, перепутан знак или арифметическая ошибка), вычисли правильный ответ и верни:
+   "is_correct": true, "is_corrected": true, "correct_answer": [исправленный ответ]
+6. Если условие задачи некорректно (например, пропущена часть текста или графика, из-за чего решить невозможно), верни:
+   "is_valid": false
+7. В поле "correct_answer_latex" верни чистый LaTeX-код ответа БЕЗ знаков $ снаружи.
 
-Верни результат строго в формате JSON:
+Формат вывода — строго JSON:
 {
-  "is_valid": true / false,
-  "is_correct": true / false,
-  "is_corrected": true / false,
-  "correct_answer": "исправленный_или_оригинальный_текстовый_ответ",
-  "correct_answer_latex": "красивый_latex_код",
-  "explanation": "краткое объяснение твоего решения"
+  "explanation": "пошаговое объяснение расчетов",
+  "is_valid": true/false,
+  "is_correct": true/false,
+  "is_corrected": true/false,
+  "correct_answer": "текст",
+  "correct_answer_latex": "latex"
 }"""
 
 DISTRACTOR_SYSTEM_PROMPT = """Ты — опытный учитель математики. Твоя задача — сгенерировать ровно 3 неверных ответа (дистрактора) к школьной задаче на основе типичных ошибок учеников.
@@ -123,6 +124,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Do not save changes to DB")
     parser.add_argument("--limit", type=int, default=150, help="Limit number of tasks to process")
+    parser.add_argument("--textbook-id", type=str, default=TEXTBOOK_ID, help="Textbook ID to process")
+    parser.add_argument("--shard-idx", type=int, default=None, help="Shard index (0-based)")
+    parser.add_argument("--shard-count", type=int, default=None, help="Total number of shards")
     args = parser.parse_args()
 
     db_url = os.getenv("DATABASE_URL")
@@ -133,17 +137,24 @@ def main():
     conn = psycopg2.connect(db_url, cursor_factory=RealDictCursor)
     cur = conn.cursor()
 
-    cur.execute('''
+    shard_filter = ""
+    query_params = [args.textbook_id]
+    if args.shard_idx is not None and args.shard_count is not None:
+        shard_filter = "AND abs(hashtext(tm.id)) %% %s = %s"
+        query_params.extend([args.shard_count, args.shard_idx])
+    query_params.append(args.limit)
+
+    cur.execute(f'''
         SELECT tm.id, tm.question_text, tm.correct_answer, tm.correct_answer_latex, tm.answer_type, tm.tags, tm.distractor_meta
         FROM tasks_master tm 
         JOIN textbook_toc toc ON toc.id = tm.toc_id 
-        WHERE toc.textbook_id = %s AND tm.verification_status = 'pending'
+        WHERE toc.textbook_id = %s AND (tm.verification_status = 'pending' OR (tm.answer_type != 'text' AND (tm.distractor_meta IS NULL OR jsonb_array_length(tm.distractor_meta) = 0))) {shard_filter}
         ORDER BY tm.id
         LIMIT %s
-    ''', (TEXTBOOK_ID, args.limit))
+    ''', tuple(query_params))
     
     tasks = cur.fetchall()
-    log.info(f"Loaded {len(tasks)} pending tasks for school adaptation.")
+    log.info(f"Loaded {len(tasks)} pending tasks for school adaptation (shard {args.shard_idx}/{args.shard_count}).")
 
     verified_count = 0
     corrected_count = 0

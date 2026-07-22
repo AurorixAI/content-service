@@ -7,12 +7,14 @@ from typing import Any, Optional
 from src.core.config import get_settings
 from src.pipeline.answer_verify import answers_equivalent
 from src.pipeline.deepseek_client import call_deepseek_structured, get_deepseek_model
+from src.pipeline.answer_sympy_gate import to_answer_latex
 from src.pipeline.smart_verify_common import (
     SUCCESS_STATUSES,
     apply_distractors,
     clear_stale_verify_flags,
     distractors_valid,
     pick_consensus_canonical,
+    run_distractor_only_pipeline,
     sync_verify_tags,
     verification_status,
 )
@@ -85,6 +87,52 @@ def run_mcq_verify_pipeline(
     authority = answer_authority or settings.smart_verify_text_authority
 
     tags["smart_verify_route"] = "mcq_text"
+
+    # ── Early-exit guard ────────────────────────────────────────────────────────
+    # Same logic as compute and text routes — skip LLM if already locked.
+    # IMPORTANT: failed tasks (unresolved, dual_failed, ...) are NEVER skipped.
+    _FAILED_MODES = frozenset({
+        "unresolved", "dual_failed", "stored_invalid",
+        "failed_at_llm", "failed_at_sympy",
+    })
+    _verify_mode = tags.get("answer_verify_mode") or ""
+    _is_smart_locked = (
+        tags.get("answer_locked")
+        and tags.get("answer_gemini_verified")
+        and tags.get("smart_verify_status") in SUCCESS_STATUSES
+        and _verify_mode not in _FAILED_MODES
+    )
+    _is_school_locked = (
+        tags.get("reverified_by") == "deepseek_school"
+        and tags.get("choices_complete")
+        and _verify_mode not in _FAILED_MODES
+    )
+    if _is_smart_locked or _is_school_locked:
+        has_old_distractors = distractors_valid(
+            dmeta,
+            question=question,
+            correct_answer=stored or "",
+            answer_type=atype,
+        )
+        if has_old_distractors:
+            return {
+                "status": "success",
+                "correct_answer": stored or "",
+                "correct_answer_latex": to_answer_latex(stored or "", atype),
+                "distractor_meta": dmeta,
+                "tags": tags,
+                "action": "already_locked_skip",
+                "verification_status": "verified",
+            }
+        return run_distractor_only_pipeline(
+            task_id=task_id,
+            question=question,
+            correct_answer=stored or "",
+            answer_type=atype,
+            distractor_meta=dmeta,
+            tags=tags,
+        )
+    # ── End early-exit guard ────────────────────────────────────────────────────
 
     llm_result = _run_mcq_llm(task_id, question, stored, alt_method=False, temperature=0.0)
     if llm_result is None:
@@ -191,6 +239,22 @@ def run_mcq_verify_pipeline(
             sync_verify_tags(tags, "verified_corrected")
             if not unanimous:
                 tags["self_consistency_majority"] = True
+            # ── Confidence gate: низкая уверенность → human review ──────────────
+            last_confidence = (llm_result.confidence or "high").lower() if llm_result else "high"
+            if last_confidence == "low":
+                sync_verify_tags(tags, "needs_human_review")
+                tags["answer_gemini_candidate"] = winner[:500]
+                tags.pop("answer_gemini_verified", None)
+                return {
+                    "status": "review",
+                    "correct_answer": stored,
+                    "correct_answer_latex": to_answer_latex(stored or "", atype),
+                    "distractor_meta": dmeta,
+                    "tags": tags,
+                    "action": "needs_human_review",
+                    "verification_status": "pending",
+                }
+            # ────────────────────────────────────────────────────────────────────
             dmeta = []
             need_distractors = True
             answer_corrected = True
@@ -220,7 +284,7 @@ def run_mcq_verify_pipeline(
     return {
         "status": "success",
         "correct_answer": final_answer,
-        "correct_answer_latex": "",
+        "correct_answer_latex": to_answer_latex(final_answer, atype),
         "distractor_meta": dmeta,
         "tags": tags,
         "action": action,

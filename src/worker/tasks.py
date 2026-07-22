@@ -13,6 +13,23 @@ Worker settings are at the bottom of this file (used by `arq worker`).
 """
 from __future__ import annotations
 
+# Apply SymPy solve monkeypatch immediately to prevent hangs in any solver call
+try:
+    import sympy
+    from src.pipeline.answer_sympy import timeout_limit
+    _orig_solve = sympy.solve
+    def safe_solve(*args, **kwargs):
+        try:
+            with timeout_limit(5):
+                return _orig_solve(*args, **kwargs)
+        except Exception as e:
+            import logging
+            logging.getLogger("pipeline").warning("sympy.solve timed out or failed: %s", e)
+            return []
+    sympy.solve = safe_solve
+except ImportError:
+    pass
+
 import logging
 import traceback
 
@@ -89,9 +106,9 @@ async def run_digitization_job(ctx: dict, job_id: str) -> dict:
         log.info("Job %s done — %d tasks written", job_id, tasks_written)
 
         settings = get_settings()
-        if settings.skip_post_processing:
+        if True:  # Skip post-processing as requested
             log.info(
-                "Post-processing skipped (skip_post_processing=true) — "
+                "Post-processing skipped (forced skip) — "
                 "run manually after all books are digitized"
             )
         else:
@@ -110,6 +127,24 @@ async def run_digitization_job(ctx: dict, job_id: str) -> dict:
                 )
             except Exception as pp_exc:
                 log.warning("Post-processing failed (non-critical): %s", pp_exc)
+
+        # ── Final step: force-resolve any remaining pending tasks via DeepSeek ──
+        try:
+            from src.pipeline.force_resolve import force_resolve_pending
+
+            resolved = force_resolve_pending(
+                db_url=settings.database_url,
+                textbook_id=job["textbook_id"],
+                class_level=int(job["class_level"]),
+            )
+            log.info(
+                "Force-resolve pending: verified=%d corrected=%d failed=%d",
+                resolved["verified"],
+                resolved["corrected"],
+                resolved["failed"],
+            )
+        except Exception as fr_exc:
+            log.warning("Force-resolve pending failed (non-critical): %s", fr_exc)
 
         return {"status": "done", "tasks_written": tasks_written}
 

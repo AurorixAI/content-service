@@ -115,6 +115,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Do not save changes to DB")
     parser.add_argument("--limit", type=int, default=10, help="Limit number of tasks to process")
+    parser.add_argument("--textbook-id", type=str, default=TEXTBOOK_ID, help="Textbook ID to process")
     args = parser.parse_args()
 
     db_url = os.getenv("DATABASE_URL")
@@ -132,7 +133,7 @@ def main():
         WHERE toc.textbook_id = %s AND tm.verification_status = 'pending'
         ORDER BY tm.id
         LIMIT %s
-    ''', (TEXTBOOK_ID, args.limit))
+    ''', (args.textbook_id, args.limit))
     
     tasks = cur.fetchall()
     log.info(f"Loaded {len(tasks)} pending tasks.")

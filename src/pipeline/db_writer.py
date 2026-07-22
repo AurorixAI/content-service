@@ -467,11 +467,9 @@ class DBWriter:
             },
         )
 
-        # Figures ↔ task (m2m). Drop refs that point to non-existent figures
-        # to prevent FK violations from rolling back the task INSERT.
         valid_refs = [
             fid for fid in (task.figure_refs or [])
-            if not valid_fig_ids or fid in valid_fig_ids
+            if valid_fig_ids and fid in valid_fig_ids
         ]
         dropped_refs = len(task.figure_refs or []) - len(valid_refs)
         if dropped_refs:
@@ -550,7 +548,7 @@ class DBWriter:
             rows = conn.execute(
                 text("""
                     SELECT tt.id, tt.number, tt.title, tt.page_start, tt.page_end,
-                           tt.level, tt.sort_order, p.number AS parent_number
+                           tt.level, tt.sort_order, p.number AS parent_number, tt.parent_id
                     FROM textbook_toc tt
                     LEFT JOIN textbook_toc p ON p.id = tt.parent_id
                     WHERE tt.textbook_id = CAST(:tb_id AS UUID)
@@ -562,7 +560,7 @@ class DBWriter:
             {
                 "id": r[0], "number": r[1], "title": r[2],
                 "page_start": r[3], "page_end": r[4], "level": r[5],
-                "sort_order": r[6], "parent_number": r[7] or "",
+                "sort_order": r[6], "parent_number": r[7] or "", "parent_id": r[8],
             }
             for r in rows
         ]

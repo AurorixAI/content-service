@@ -254,11 +254,23 @@ class DigitizationOrchestrator:
         # detect_back_matter_start работает из кэша OCR — без лишних API-вызовов.
         _bm_ocr = AzureMistralOCR()
         _last_para_page_start = leaves[-1].get("page_start", 1) if leaves else 1
-        _back_matter_page = _bm_ocr.detect_back_matter_start(
-            pdf_path,
-            scan_from=_last_para_page_start,
-            total_pages=pdf_total_pages,
-        )
+
+        BACK_MATTER_OVERRIDES = {
+            "3aeaf6a8-3b03-4b74-beb6-9a282b6749f1": 442,  # Grade 11 Nikolsky answers start at page 442
+        }
+
+        if self.textbook_id in BACK_MATTER_OVERRIDES:
+            _back_matter_page = BACK_MATTER_OVERRIDES[self.textbook_id]
+            log.info(
+                "[%s] Textbook %s back-matter start page overridden to %d",
+                self.job_id, self.textbook_id, _back_matter_page,
+            )
+        else:
+            _back_matter_page = _bm_ocr.detect_back_matter_start(
+                pdf_path,
+                scan_from=_last_para_page_start,
+                total_pages=pdf_total_pages,
+            )
         if _back_matter_page <= pdf_total_pages:
             _content_end = _back_matter_page - 1
             log.info(
@@ -635,6 +647,7 @@ class DigitizationOrchestrator:
             text_content = ocr_worker.process_pages(
                 pdf_path, p_start, p_end,
                 figures_by_page=fig_index,
+                ignore_back_matter=True,
             )
             if not is_usable_ocr_text(text_content):
                 log.warning(
@@ -646,6 +659,7 @@ class DigitizationOrchestrator:
                     pdf_path, p_start, p_end,
                     figures_by_page=fig_index,
                     force_refresh=True,
+                    ignore_back_matter=True,
                 )
 
         if not is_usable_ocr_text(text_content):
@@ -886,12 +900,19 @@ class DigitizationOrchestrator:
             self.state.increment_paragraph(self.job_id, 0)
             return 0, extracted_count
 
+        # Pre-write all extracted figures for this paragraph to prevent FK violations
+        if figures_map:
+            self.writer.write_figures(list(figures_map.values()), self.textbook_id)
+            log.info(
+                "[%s] §%s: pre-saved %d figures to DB",
+                self.job_id, number, len(figures_map),
+            )
+
         # ── Validate → Enrich → Distractors → Classify → Write (chunked) ──
         # Process in small chunks to avoid Gemini rate-limit bursts and write
         # partial results early (if something crashes later, earlier chunks survive).
         chunk_size = get_settings().enrich_chunk_size or len(tasks)
         total_written = 0
-        figures_written = False
 
         for chunk_start in range(0, len(tasks), chunk_size):
             chunk = tasks[chunk_start: chunk_start + chunk_size]
@@ -909,23 +930,6 @@ class DigitizationOrchestrator:
                 )
             if not chunk:
                 continue
-
-            # Write figures once (only on first chunk that survives quality gate)
-            if not figures_written and figures_map:
-                referenced_ids = {
-                    fid
-                    for task in chunk
-                    for fid in (task.figure_refs or [])
-                    if fid in figures_map
-                }
-                if referenced_ids:
-                    ref_figures = [figures_map[fid] for fid in referenced_ids]
-                    self.writer.write_figures(ref_figures, self.textbook_id)
-                    log.info(
-                        "[%s] §%s: figures saved %d/%d",
-                        self.job_id, number, len(ref_figures), len(figures_map),
-                    )
-                figures_written = True
 
             written_chunk = self.writer.write_batch(
                 chunk,

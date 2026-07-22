@@ -169,6 +169,63 @@ def run_smart_verify_pipeline(
     stored = (correct_answer or "").strip() or None
     authority = answer_authority or get_settings().smart_verify_answer_authority
 
+    # ── Early-exit guard ────────────────────────────────────────────────────────
+    # If this task was already locked by a previous smart-verify pass, skip the
+    # expensive LLM compute entirely.  Only regenerate distractors if missing.
+    #
+    # Two signals are treated as "locked":
+    #   1. answer_locked=True + answer_gemini_verified=True + SUCCESS status  (smart_verify path)
+    #   2. reverified_by='deepseek_school' + choices_complete=True
+    #      AND verify_mode is not a failure mode  (force_resolve path)
+    #
+    # IMPORTANT: failed tasks (unresolved, dual_failed, stored_invalid, failed_at_*)
+    # are NEVER locked — they must always be retried by the next pass.
+    _FAILED_MODES = frozenset({
+        "unresolved", "dual_failed", "stored_invalid",
+        "failed_at_llm", "failed_at_sympy",
+    })
+    _verify_mode = tags.get("answer_verify_mode") or ""
+    _is_smart_locked = (
+        tags.get("answer_locked")
+        and tags.get("answer_gemini_verified")
+        and tags.get("smart_verify_status") in SUCCESS_STATUSES
+        and _verify_mode not in _FAILED_MODES
+    )
+    _is_school_locked = (
+        tags.get("reverified_by") == "deepseek_school"
+        and tags.get("choices_complete")
+        and _verify_mode not in _FAILED_MODES
+    )
+    if _is_smart_locked or _is_school_locked:
+        has_old_distractors = distractors_valid(
+            dmeta,
+            question=question,
+            correct_answer=stored or "",
+            answer_type=atype,
+        )
+        if has_old_distractors:
+            # Nothing to do — fully complete.
+            return {
+                "status": "success",
+                "correct_answer": stored or "",
+                "correct_answer_latex": to_answer_latex(stored or "", atype),
+                "distractor_meta": dmeta,
+                "tags": tags,
+                "action": "already_locked_skip",
+                "verification_status": "verified",
+            }
+        # Distractors missing — regenerate without touching the answer.
+        from src.pipeline.smart_verify_common import run_distractor_only_pipeline
+        return run_distractor_only_pipeline(
+            task_id=task_id,
+            question=question,
+            correct_answer=stored or "",
+            answer_type=atype,
+            distractor_meta=dmeta,
+            tags=tags,
+        )
+    # ── End early-exit guard ────────────────────────────────────────────────────
+
     compound = detect_compound(
         task_id=task_id,
         question_text=question or "",
@@ -295,6 +352,7 @@ def run_smart_verify_pipeline(
             return {
                 "status": "review",
                 "correct_answer": stored,
+                "correct_answer_latex": to_answer_latex(stored or "", atype),
                 "distractor_meta": dmeta,
                 "tags": tags,
                 "action": "needs_human_review",
@@ -322,6 +380,7 @@ def run_smart_verify_pipeline(
             return {
                 "status": "review",
                 "correct_answer": stored,
+                "correct_answer_latex": to_answer_latex(stored or "", atype),
                 "distractor_meta": dmeta,
                 "tags": tags,
                 "action": "needs_human_review",

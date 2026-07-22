@@ -16,6 +16,7 @@ from typing import Any, Tuple
 from src.pipeline.models import ExtractedTask
 
 log = logging.getLogger("pipeline")
+from src.pipeline.answer_sympy import safe_simplify, timeout_limit, TimeoutException
 
 
 class SymPySolver:
@@ -29,6 +30,14 @@ class SymPySolver:
     _BLANK_PATTERNS = (r"\square", r"\Box", r"\ldots", r"…", "?", "__", "___")
 
     def compute(self, task: ExtractedTask) -> ExtractedTask:
+        try:
+            with timeout_limit(5):
+                return self._compute_internal(task)
+        except Exception as e:
+            log.warning("SymPy compute timed out or failed: %s", e)
+            return task
+
+    def _compute_internal(self, task: ExtractedTask) -> ExtractedTask:
         """Пробует вычислить answer_raw из question_latex, если он пуст.
         
         Стратегии:
@@ -62,7 +71,7 @@ class SymPySolver:
         if "=" not in clean:
             try:
                 expr = parse_latex(clean)
-                val = sympy.simplify(expr)
+                val = safe_simplify(expr)
                 # Если числовое — сохраняем как строку
                 num = float(N(val, 10))
                 # Prefer integer representation when exact
@@ -80,8 +89,8 @@ class SymPySolver:
             try:
                 lhs = parse_latex(lhs_str)
                 rhs = parse_latex(rhs_str)
-                lhs_val = float(N(sympy.simplify(lhs), 10))
-                rhs_val = float(N(sympy.simplify(rhs), 10))
+                lhs_val = float(N(safe_simplify(lhs), 10))
+                rhs_val = float(N(safe_simplify(rhs), 10))
                 # Обе стороны числовые → просто проверяем, ответа нет
                 # Значит это "найди x" — пробуем solve
                 _ = lhs_val, rhs_val
@@ -120,6 +129,7 @@ class SymPySolver:
           '2 + 3 * 4'          → '14'
           'x + 5 = 12'         → '7'
           '(3/4) + (1/2)'      → '5/4'
+          'x**2 = 4'           → '2; -2'
         Возвращает строку-ответ или None при неудаче.
         """
         if not expr_str or not expr_str.strip():
@@ -129,8 +139,9 @@ class SymPySolver:
             from sympy import sympify, N, symbols, solve, Eq, Rational
             from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application
 
-            transformations = standard_transformations + (implicit_multiplication_application,)
-            s = expr_str.strip().replace("^", "**").replace(",", ".")
+            with timeout_limit(5):
+                transformations = standard_transformations + (implicit_multiplication_application,)
+                s = expr_str.strip().replace("^", "**").replace(",", ".")
 
             if "=" in s:
                 parts = s.split("=", 1)
@@ -145,7 +156,7 @@ class SymPySolver:
                     return None
                 results = []
                 for sol in sols:
-                    sol = sympy.simplify(sol)
+                    sol = safe_simplify(sol)
                     if sol.is_Number:
                         f = float(N(sol, 15))
                         results.append(str(int(f)) if f == int(f) else str(sol))
@@ -154,7 +165,7 @@ class SymPySolver:
                 return "; ".join(results) if results else None
             else:
                 expr = parse_expr(s, transformations=transformations)
-                val = sympy.simplify(expr)
+                val = safe_simplify(expr)
                 if val.is_Number:
                     f = float(N(val, 15))
                     # Prefer exact fraction over decimal
@@ -191,13 +202,15 @@ class SymPySolver:
 
         for strategy in strategies:
             try:
-                result, confidence = strategy(answer, task)
+                with timeout_limit(5):
+                    result, confidence = strategy(answer, task)
                 if result is not None and confidence >= 0.5:
                     task.sympy_verified = True
                     task.sympy_answer = str(result)
                     task.sympy_confidence = confidence
                     return task
-            except Exception:
+            except Exception as e:
+                log.debug("Strategy %s failed or timed out: %s", strategy.__name__, e)
                 continue
 
         log.debug("SymPy не смог верифицировать: %s (%s)", task.temp_id, answer)
