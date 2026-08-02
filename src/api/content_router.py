@@ -11,6 +11,7 @@ Prefix: /api/v1/content
 """
 from __future__ import annotations
 
+import re
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -41,6 +42,28 @@ _TASK_COLS = """
     tm.irt_discrimination, tm.irt_difficulty, tm.irt_guessing
 """
 
+_RE_FIGURE      = re.compile(r'\[FIGURE\s+id=["\'][^"\']*["\']\]', re.I)
+_RE_MARKERS     = re.compile(r'[★●◆▲►•◉]')
+_RE_SUBPOINT    = re.compile(r'^\s*(?:\d+|[а-яёa-z])[).\s]\s*', re.I)
+
+
+def _clean_text(s: str | None) -> str:
+    """
+    Очешено:
+    - [FIGURE id="..."] маркеры
+    - макреы с учебника (★ ● ◆ …)
+    - Указатели перед примерами (1), а), б))
+    """
+    if not s:
+        return ""
+    s = _RE_FIGURE.sub("", s)
+    s = _RE_MARKERS.sub("", s)
+    s = _RE_SUBPOINT.sub("", s)
+    # Убирание лишних пробелов и пустых строк
+    s = re.sub(r'[ \t]{2,}', ' ', s)
+    s = re.sub(r'\n{3,}', '\n\n', s)
+    return s.strip()
+
 
 def _skill_row(r) -> dict:
     return {
@@ -48,7 +71,7 @@ def _skill_row(r) -> dict:
         "description": r[4], "class_level_start": r[5], "class_level_end": r[6],
         "sequence_order": r[7] or 0, "importance": r[8] or 5,
         "cognitive_type": r[9], "is_active": bool(r[10]),
-        "example_task": r[11], "assessed_ability": r[12],
+        "example_task": _clean_text(r[11]), "assessed_ability": r[12],
         "difficulty_level": r[13], "formula": r[14],
     }
 
@@ -65,12 +88,12 @@ def _task_row_full(r) -> dict:
         "skill_id": r[1] or "",
         "skill_name": r[2] or "",
         "difficulty": r[3] or "B",
-        "question_text": r[4] or "",
+        "question_text": _clean_text(r[4]),
         "question_latex": r[5],
         "answer_type": r[6] or "exact_number",
-        "correct_answer": r[7] or "",
+        "correct_answer": _clean_text(r[7]),
         "correct_answer_latex": r[8] or "",
-        "answer_options": r[9],
+        "answer_options": [_clean_text(opt) if isinstance(opt, str) else opt for opt in r[9]] if isinstance(r[9], list) else r[9],
         "distractor_meta": r[10],
         "irt_discrimination": float(r[11] or 1.0),
         "irt_difficulty": float(r[12] or 0.0),
@@ -283,7 +306,7 @@ def list_tasks(
         return [
             {
                 "task_id": r[0], "toc_id": r[1], "skill_id": r[2] or "",
-                "difficulty": r[3] or "B", "question_text": r[4] or "",
+                "difficulty": r[3] or "B", "question_text": _clean_text(r[4]),
                 "question_latex": r[5], "answer_type": r[6] or "exact_number",
                 "has_template": bool(r[7]),
             }
