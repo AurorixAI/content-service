@@ -63,12 +63,24 @@ def clear_stale_verify_flags(tags: dict) -> None:
         "verify_reverted",
         "distractor_regen_pending",
         "smart_verify_error",
+        # These are candidates from a previous failed/review run.  The current
+        # successful run writes ``answer_llm_prose`` afresh, so retaining an
+        # older candidate makes audit logs appear contradictory.
+        "answer_gemini_candidate",
+        "answer_gemini_flash",
+        "answer_gemini_pro_candidate",
+        "self_consistency_votes",
+        "self_consistency_majority",
     ):
         tags.pop(key, None)
 
 
 def verification_status(tags: dict) -> str:
-    if tags.get("smart_verify_status") in SUCCESS_STATUSES:
+    if (
+        tags.get("smart_verify_status") in SUCCESS_STATUSES
+        and tags.get("choices_complete") is True
+        and not tags.get("distractor_regen_pending")
+    ):
         return "verified"
     return "pending"
 
@@ -102,8 +114,19 @@ def pick_consensus_canonical(
     return None, False, votes
 
 
-def distractors_complete(dmeta: list | None) -> bool:
-    return isinstance(dmeta, list) and len(dmeta) >= _minimum_distractor_count()
+def distractors_complete(
+    dmeta: list | None,
+    *,
+    question: str = "",
+    correct_answer: str = "",
+    answer_type: str = "",
+) -> bool:
+    minimum = _minimum_distractor_count(
+        correct_answer,
+        answer_type,
+        question,
+    )
+    return isinstance(dmeta, list) and len(dmeta) >= minimum
 
 
 def distractors_valid(
@@ -118,7 +141,11 @@ def distractors_valid(
         question=question,
         correct_answer=correct_answer,
         answer_type=answer_type,
-        min_count=_minimum_distractor_count(),
+        min_count=_minimum_distractor_count(
+            correct_answer,
+            answer_type,
+            question,
+        ),
     )
 
 
@@ -134,8 +161,8 @@ def apply_distractors(
     answer_corrected: bool,
     action: str,
 ) -> tuple[list, dict, str]:
-    target = _required_distractor_count()
-    minimum = _minimum_distractor_count()
+    target = _required_distractor_count(final_answer, atype, question)
+    minimum = _minimum_distractor_count(final_answer, atype, question)
     prev_dmeta = list(dmeta)
 
     if not need_distractors:
@@ -163,8 +190,15 @@ def apply_distractors(
         force_distractors=True,
     )
     tags.update(result_et.tags or {})
-    got = len(result_et.distractor_meta or [])
-    if got >= minimum:
+    generated = list(result_et.distractor_meta or [])
+    got = len(generated)
+    generated_valid = distractors_valid(
+        generated,
+        question=question,
+        correct_answer=final_answer,
+        answer_type=atype,
+    )
+    if got >= minimum and generated_valid:
         dmeta = result_et.distractor_meta[:target]
         tags["choices_complete"] = True
         tags.pop("distractor_regen_pending", None)
@@ -199,7 +233,12 @@ def run_distractor_only_pipeline(
     stored = (correct_answer or "").strip()
     action = tags.get("smart_verify_status", "verified_match")
 
-    if distractors_complete(dmeta) and distractors_valid(
+    if distractors_complete(
+        dmeta,
+        question=question,
+        correct_answer=stored,
+        answer_type=atype,
+    ) and distractors_valid(
         dmeta,
         question=question,
         correct_answer=stored,
@@ -212,7 +251,7 @@ def run_distractor_only_pipeline(
             "status": "success",
             "correct_answer": stored,
             "correct_answer_latex": to_answer_latex(stored, atype) if stored else "",
-            "distractor_meta": dmeta[: _required_distractor_count()],
+            "distractor_meta": dmeta[: _required_distractor_count(stored, atype, question)],
             "tags": tags,
             "action": f"{action}+dist_ok",
             "verification_status": verification_status(tags),

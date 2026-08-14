@@ -20,12 +20,49 @@ log = logging.getLogger(__name__)
 
 _COMMA_DECIMAL = re.compile(r"(?<!\d),(?=\d)|(?<=\d),(?!\d)")  # Russian decimal comma
 
-_RU_LOGIC = re.compile(r"\s+(?:или|or|and|и)\s+", re.I)
-
-
 def _prep(s: str) -> str:
-    """Normalize whitespace, minus signs, infinity symbols."""
+    """Normalize display LaTeX and school notation before set parsing.
+
+    Stored answers may be wrapped in LaTeX while model evidence commonly uses
+    plain school notation.  This function intentionally changes notation only
+    (never a bound or an operator), so equivalent intervals reach the same
+    mathematical comparator.
+    """
     s = (s or "").strip()
+    s = s.replace("$", "")
+    s = re.sub(r"\\(?:left|right|bigl|bigr|Bigl|Bigr|big|Big)", "", s)
+    s = s.replace(r"\dfrac", r"\frac")
+    # Interval endpoints use scalar fractions. Repeat for a simple nested
+    # LaTeX fraction without attempting to parse arbitrary LaTeX expressions.
+    for _ in range(2):
+        normalized = re.sub(
+            r"\\frac\{([^{}]+)\}\{([^{}]+)\}", r"\1/\2", s,
+        )
+        if normalized == s:
+            break
+        s = normalized
+    s = (
+        s.replace(r"\infty", "∞")
+        .replace(r"\cup", "∪")
+        .replace(r"\cap", "∩")
+        .replace(r"\in", "∈")
+        .replace(r"\leqslant", "≤")
+        .replace(r"\leq", "≤")
+        .replace(r"\geqslant", "≥")
+        .replace(r"\geq", "≥")
+        .replace(r"\wedge", " and ")
+        .replace(r"\land", " and ")
+        .replace(r"\vee", " or ")
+        .replace(r"\lor", " or ")
+        .replace("&", " and ")
+        .replace(r"\,", " ")
+        .replace(r"\;", " ")
+    )
+    # Endpoint fractions are mathematical atoms: model code frequently emits
+    # spaces around `/` and after a unary minus, while the set parser expects
+    # a single scalar token (e.g. ``-7/4``).
+    s = re.sub(r"\s*/\s*", "/", s)
+    s = re.sub(r"-\s+(?=\d)", "-", s)
     # Replace minus/dash variants
     s = s.replace("\u2212", "-").replace("\u2013", "-").replace("\u2014", "-")
     # Infinity variants — order matters (longer first)
@@ -34,6 +71,61 @@ def _prep(s: str) -> str:
     s = _COMMA_DECIMAL.sub(".", s)
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+def _strip_outer_parens(s: str) -> str:
+    """Remove balanced outer parentheses around one logical clause only."""
+    value = (s or "").strip()
+    while value.startswith("(") and value.endswith(")"):
+        depth = 0
+        encloses_all = True
+        for index, char in enumerate(value):
+            if char == "(":
+                depth += 1
+            elif char == ")":
+                depth -= 1
+                if depth == 0 and index != len(value) - 1:
+                    encloses_all = False
+                    break
+        if depth != 0 or not encloses_all:
+            break
+        value = value[1:-1].strip()
+    return value
+
+
+def _split_top_level_logic(s: str) -> tuple[list[str], list[str]]:
+    """Split ``and``/``or`` outside brackets and preserve their semantics."""
+    value = _strip_outer_parens(s)
+    parts: list[str] = []
+    operators: list[str] = []
+    start = 0
+    depth = 0
+    index = 0
+    while index < len(value):
+        char = value[index]
+        if char in "([":
+            depth += 1
+            index += 1
+            continue
+        if char in ")]":
+            depth = max(0, depth - 1)
+            index += 1
+            continue
+        if depth == 0:
+            word = re.match(r"\s+(или|or|и|and)\s+", value[index:], re.I)
+            if word:
+                parts.append(value[start:index].strip())
+                operators.append(
+                    "union" if word.group(1).lower() in {"или", "or"} else "intersection"
+                )
+                index += word.end()
+                start = index
+                continue
+        index += 1
+    if operators:
+        parts.append(value[start:].strip())
+        return parts, operators
+    return [value], []
 
 
 def _parse_bound(s: str):
@@ -180,14 +272,13 @@ def _parse_inequality_text(s: str):
     if _INTERVAL_RE.search(s):
         return _parse_interval_notation(s)
 
-    # Split on "или" / "and" / "or"
-    clauses = _RU_LOGIC.split(s)
-    if not clauses:
+    clauses, operators = _split_top_level_logic(s)
+    if not clauses or any(not clause for clause in clauses):
         return None
 
     sets = []
     for clause in clauses:
-        clause = clause.strip()
+        clause = _strip_outer_parens(clause)
         m = _INEQ_VAR_RE.match(clause)
         if m:
             iv = _ineq_to_sympy_set(m.group(1), _OP_MAP.get(m.group(2), m.group(2)), m.group(3))
@@ -217,8 +308,12 @@ def _parse_inequality_text(s: str):
     if len(sets) == 1:
         return sets[0]
     try:
-        from sympy import Union
-        return Union(*sets)
+        from sympy import Intersection, Union
+
+        result = sets[0]
+        for operator, item in zip(operators, sets[1:]):
+            result = Union(result, item) if operator == "union" else Intersection(result, item)
+        return result
     except Exception:
         return None
 

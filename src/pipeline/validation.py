@@ -10,8 +10,10 @@ src/pipeline/validation.py
   5. expression — произвольное символьное выражение
 """
 
+from __future__ import annotations
+
 import logging
-from typing import Any, Tuple
+from typing import Any, Tuple, Optional
 
 from src.pipeline.models import ExtractedTask
 

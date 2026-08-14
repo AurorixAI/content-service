@@ -17,6 +17,8 @@ from __future__ import annotations
 
 import json
 import logging
+import multiprocessing
+import threading
 import re
 import textwrap
 import time
@@ -39,25 +41,119 @@ _LOCAL_EXEC_TIMEOUT_S = 15
 _MAX_RETRIES = 5
 _RETRY_BACKOFF = [2, 5, 15, 30, 60]  # секунд между попытками
 
-# Persistent HTTP session — переиспользуем TCP-соединения (keep-alive)
-# Это исключает RemoteDisconnected при открытии нового сокета на каждый запрос
-_session: requests.Session | None = None
+# Persistent HTTP sessions — one per worker thread (keep-alive).
+# ``requests.Session`` is not thread-safe.  LaTeX backfill calls DeepSeek
+# through ``asyncio.to_thread``, so a single process-wide session could mix
+# concurrent connection-pool state and leave a worker waiting long past the
+# intended request timeout.
+_session_local = threading.local()
+
+
+class _GlobalRequestLimiter:
+    """One process-wide, retry-aware request pacer.
+
+    Smart Verify uses one coordinator with many worker threads.  Reserving a
+    slot immediately before every HTTP attempt means initial calls and all
+    retries share exactly the same RPM budget; worker count cannot create a
+    burst above the configured limit.
+    """
+
+    def __init__(self, requests_per_minute: int):
+        if not 1 <= int(requests_per_minute) <= 250:
+            raise ValueError("requests_per_minute must be between 1 and 250")
+        self.requests_per_minute = int(requests_per_minute)
+        self.interval = 60.0 / self.requests_per_minute
+        self._lock = threading.Lock()
+        self._next_slot = 0.0
+        self._attempts = 0
+        self._responses_429 = 0
+
+    def acquire(self) -> None:
+        with self._lock:
+            now = time.monotonic()
+            slot = max(now, self._next_slot)
+            self._next_slot = slot + self.interval
+            self._attempts += 1
+        delay = slot - now
+        if delay > 0:
+            time.sleep(delay)
+
+    def record_status(self, status_code: int) -> None:
+        if status_code != 429:
+            return
+        with self._lock:
+            self._responses_429 += 1
+
+    def stats(self) -> dict[str, int]:
+        with self._lock:
+            return {
+                "requests_per_minute": self.requests_per_minute,
+                "request_attempts": self._attempts,
+                "responses_429": self._responses_429,
+            }
+
+
+_global_request_limiter: Optional[_GlobalRequestLimiter] = None
+_global_request_limiter_guard = threading.Lock()
+
+
+def configure_global_request_limiter(requests_per_minute: int) -> None:
+    """Configure the limiter once, before coordinator workers are started."""
+    global _global_request_limiter
+    limiter = _GlobalRequestLimiter(requests_per_minute)
+    with _global_request_limiter_guard:
+        _global_request_limiter = limiter
+
+
+def global_request_limiter_stats() -> dict[str, int]:
+    with _global_request_limiter_guard:
+        limiter = _global_request_limiter
+    if limiter is None:
+        return {
+            "requests_per_minute": 0,
+            "request_attempts": 0,
+            "responses_429": 0,
+        }
+    return limiter.stats()
+
+
+def _acquire_global_request_slot() -> None:
+    with _global_request_limiter_guard:
+        limiter = _global_request_limiter
+    if limiter is not None:
+        limiter.acquire()
+
+
+def _record_global_response(status_code: int) -> None:
+    with _global_request_limiter_guard:
+        limiter = _global_request_limiter
+    if limiter is not None:
+        limiter.record_status(status_code)
 
 
 def _get_session() -> requests.Session:
-    """Возвращает единый persistent Session с правильным пулингом."""
-    global _session
-    if _session is None:
-        _session = requests.Session()
-        # Keep-alive + pool_connections=10, pool_maxsize=20
+    """Return this worker thread's persistent, isolated HTTP session."""
+    session = getattr(_session_local, "session", None)
+    if session is None:
+        session = requests.Session()
+        # Keep-alive + pool_connections=50, pool_maxsize=100
         adapter = requests.adapters.HTTPAdapter(
-            pool_connections=10,
-            pool_maxsize=20,
+            pool_connections=50,
+            pool_maxsize=100,
             max_retries=0,  # retries управляем сами
         )
-        _session.mount("https://", adapter)
-        _session.mount("http://", adapter)
-    return _session
+        session.mount("https://", adapter)
+        session.mount("http://", adapter)
+        _session_local.session = session
+    return session
+
+
+def _reset_session() -> None:
+    """Discard only the calling worker's failed keep-alive connection."""
+    session = getattr(_session_local, "session", None)
+    if session is not None:
+        session.close()
+    _session_local.session = None
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -79,45 +175,81 @@ def _get_azure_url_and_headers() -> tuple[str, dict]:
     return url, headers
 
 
-def _post_with_retry(url: str, headers: dict, payload: dict, timeout: int = 180) -> dict:
+def _post_with_retry(
+    url: str, headers: dict, payload: dict, timeout: int = 180, max_retries: Optional[int] = None,
+) -> dict:
     """POST к Azure DeepSeek с авто-retry на 429/5xx. Использует persistent Session."""
     last_exc: Exception = RuntimeError("No attempts made")
     session = _get_session()
-    for attempt in range(_MAX_RETRIES):
+    retry_count = max_retries if max_retries is not None else _MAX_RETRIES
+    for attempt in range(retry_count):
         try:
+            # This is intentionally inside the retry loop: every real HTTP
+            # attempt consumes one shared coordinator slot.
+            _acquire_global_request_slot()
             resp = session.post(url, headers=headers, json=payload, timeout=timeout)
+            _record_global_response(resp.status_code)
             if resp.status_code == 200:
                 return resp.json()
             elif resp.status_code == 429:
                 wait = _RETRY_BACKOFF[min(attempt, len(_RETRY_BACKOFF) - 1)] * 2
-                log.warning("DeepSeek rate-limit 429 — ожидание %ds (попытка %d)", wait, attempt + 1)
-                time.sleep(wait)
                 last_exc = RuntimeError(f"HTTP 429 rate-limit")
+                if attempt < retry_count - 1:
+                    log.warning(
+                        "DeepSeek rate-limit 429 — ожидание %ds перед попыткой %d/%d",
+                        wait, attempt + 2, retry_count,
+                    )
+                    time.sleep(wait)
+                else:
+                    log.warning("DeepSeek rate-limit 429 — последняя попытка %d/%d", attempt + 1, retry_count)
                 continue
             elif resp.status_code >= 500:
                 wait = _RETRY_BACKOFF[min(attempt, len(_RETRY_BACKOFF) - 1)]
-                log.warning("DeepSeek server error %s — retry %ds", resp.status_code, wait)
-                time.sleep(wait)
                 last_exc = RuntimeError(f"HTTP {resp.status_code}")
+                if attempt < retry_count - 1:
+                    log.warning(
+                        "DeepSeek server error %s — ожидание %ds перед попыткой %d/%d",
+                        resp.status_code, wait, attempt + 2, retry_count,
+                    )
+                    time.sleep(wait)
+                else:
+                    log.warning(
+                        "DeepSeek server error %s — последняя попытка %d/%d",
+                        resp.status_code, attempt + 1, retry_count,
+                    )
                 continue
             else:
                 log.error("DeepSeek API Error %s: %s", resp.status_code, resp.text[:1000])
                 raise RuntimeError(f"DeepSeek API Error: {resp.status_code} — {resp.text[:300]}")
         except requests.Timeout:
             wait = _RETRY_BACKOFF[min(attempt, len(_RETRY_BACKOFF) - 1)]
-            log.warning("DeepSeek timeout (попытка %d) — retry %ds", attempt + 1, wait)
-            time.sleep(wait)
             last_exc = TimeoutError("Request timeout")
+            if attempt < retry_count - 1:
+                log.warning(
+                    "DeepSeek timeout — ожидание %ds перед попыткой %d/%d",
+                    wait, attempt + 2, retry_count,
+                )
+                time.sleep(wait)
+            else:
+                log.warning("DeepSeek timeout — последняя попытка %d/%d", attempt + 1, retry_count)
         except requests.RequestException as e:
             wait = _RETRY_BACKOFF[min(attempt, len(_RETRY_BACKOFF) - 1)]
-            log.warning("DeepSeek connection error: %s (попытка %d) — retry %ds", e, attempt + 1, wait)
-            # Сбрасываем сессию — старое keep-alive соединение закрыто сервером,
-            # следующая попытка установит свежее TCP-соединение
-            global _session
-            _session = None
-            session = _get_session()
-            time.sleep(wait)
             last_exc = e
+            if attempt < retry_count - 1:
+                log.warning(
+                    "DeepSeek connection error: %s — ожидание %ds перед попыткой %d/%d",
+                    e, wait, attempt + 2, retry_count,
+                )
+                # Reset only this worker's failed connection. Other concurrent
+                # requests keep their own independent sessions.
+                _reset_session()
+                session = _get_session()
+                time.sleep(wait)
+            else:
+                log.warning(
+                    "DeepSeek connection error: %s — последняя попытка %d/%d",
+                    e, attempt + 1, retry_count,
+                )
         except RuntimeError:
             raise
         except Exception as exc:
@@ -265,14 +397,17 @@ def call_deepseek(
     max_tokens: int = 8192,
     response_format: Optional[dict[str, str]] = None,
     timeout: int = 180,
-    model: Optional[str] = None,  # ignored
+    model: Optional[str] = None,
     thinking_budget: Optional[int] = None,  # ignored
     **kwargs,  # поглощаем legacy Gemini kwargs (model=, api_key=, thinking_budget=)
 ) -> str:
     """Базовый вызов Azure DeepSeek-V4-Pro. Возвращает текст ответа."""
     url, headers = _get_azure_url_and_headers()
     payload: Dict[str, Any] = {
-        "model": kwargs.get("model", get_deepseek_model()),
+        # Honour the explicit model passed by a caller.  The previous
+        # implementation silently ignored this parameter and only happened to
+        # use the desired model because the environment default matched it.
+        "model": model or kwargs.get("model") or get_deepseek_model(),
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt},
@@ -283,7 +418,13 @@ def call_deepseek(
     if response_format:
         payload["response_format"] = response_format
 
-    result = _post_with_retry(url, headers, payload)
+    result = _post_with_retry(
+        url,
+        headers,
+        payload,
+        timeout=timeout,
+        max_retries=kwargs.get("max_retries"),
+    )
     return result["choices"][0]["message"]["content"]
 
 
@@ -329,7 +470,9 @@ def call_deepseek_structured(
     last_exc: Exception = RuntimeError("No attempts")
     for attempt in range(max_retries):
         try:
-            result = _post_with_retry(url, headers, payload, timeout=timeout)
+            result = _post_with_retry(
+                url, headers, payload, timeout=timeout, max_retries=1,
+            )
             text = result["choices"][0]["message"]["content"]
             parsed = parse_json_response(text)
             if isinstance(parsed, dict):
@@ -381,36 +524,44 @@ def _extract_python_code(llm_text: str) -> str:
     return ""
 
 
+def _sandbox_child(full_code: str, result_queue) -> None:
+    """Execute untrusted generated math code in a disposable process."""
+    namespace: dict = {}
+    try:
+        exec(full_code, namespace)  # noqa: S102
+        result_queue.put(("ok", namespace.get("result")))
+    except Exception as exc:
+        result_queue.put(("error", f"{type(exc).__name__}: {exc}"))
+
+
 def _run_code_in_sandbox(code: str) -> dict:
     """
     Выполняет Python-код в изолированном namespace с SymPy.
     Возвращает namespace после выполнения (для чтения result).
-    Timeout реализован через threading.
+    Timeout реализован отдельным процессом: зависший SymPy вызов нельзя
+    надёжно прервать из Python-thread, а coordinator не должен оставаться
+    живым после истечения лимита.
 
     БЕЗОПАСНОСТЬ: код генерирован DeepSeek на основе математической задачи.
     Импорты ограничены предустановленным _SYMPY_SANDBOX_IMPORTS.
     """
-    import threading
-
     full_code = _SYMPY_SANDBOX_IMPORTS + "\n" + code
-    namespace: dict = {}
-    exc_holder: list = []
+    context = multiprocessing.get_context("spawn")
+    result_queue = context.Queue(maxsize=1)
+    process = context.Process(target=_sandbox_child, args=(full_code, result_queue))
+    process.start()
+    process.join(timeout=_LOCAL_EXEC_TIMEOUT_S)
 
-    def _target():
-        try:
-            exec(full_code, namespace)  # noqa: S102
-        except Exception as e:
-            exc_holder.append(e)
-
-    thread = threading.Thread(target=_target, daemon=True)
-    thread.start()
-    thread.join(timeout=_LOCAL_EXEC_TIMEOUT_S)
-
-    if thread.is_alive():
+    if process.is_alive():
+        process.terminate()
+        process.join(timeout=2)
         raise TimeoutError(f"Код не выполнился за {_LOCAL_EXEC_TIMEOUT_S}с (бесконечный цикл?)")
-    if exc_holder:
-        raise exc_holder[0]
-    return namespace
+    if result_queue.empty():
+        raise RuntimeError(f"Sandbox завершился без result (exit={process.exitcode})")
+    status, payload = result_queue.get_nowait()
+    if status != "ok":
+        raise RuntimeError(payload)
+    return {"result": payload}
 
 
 def _prompt_for_code_generation(task_prompt: str) -> str:
@@ -423,8 +574,7 @@ def _prompt_for_code_generation(task_prompt: str) -> str:
         2. Последние строки кода должны присвоить результат переменной `result`:
            result = {{
                "sympy_compatible_string": "...",  # SymPy-выражение для проверки
-               "absolute_correct_answer": "...",  # финальный ответ в школьной записи
-               "step_by_step_solution": "..."     # краткое пошаговое решение
+               "absolute_correct_answer": "..."   # финальный ответ в школьной записи
            }}
         3. Для `absolute_correct_answer` — школьная запись (не LaTeX \\frac, а 3/4)
         4. Для нескольких корней — разделяй через '; ' (пример: 'x = 2; x = -3')
@@ -491,7 +641,9 @@ def call_deepseek_code_execution(
     for attempt in range(max_retries):
         try:
             # Шаг 1: Получаем Python-код от DeepSeek
-            resp_data = _post_with_retry(url, headers, payload, timeout=timeout)
+            resp_data = _post_with_retry(
+                url, headers, payload, timeout=timeout, max_retries=1,
+            )
             llm_text = resp_data["choices"][0]["message"]["content"]
             python_code = _extract_python_code(llm_text)
 
@@ -565,8 +717,8 @@ def get_deepseek_key() -> str:
 
 
 def get_deepseek_model() -> str:
-    """Возвращает имя модели DeepSeek для логирования."""
-    return "deepseek-v4-pro"
+    """Возвращает имя модели DeepSeek."""
+    return get_settings().azure_deepseek_model or "deepseek-v4-flash"
 
 
 def call_deepseek_vision(*args, **kwargs):

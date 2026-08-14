@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model, parse_json_response
+from src.pipeline.deepseek_client import call_deepseek_structured, get_deepseek_model
 from src.schemas.smart_verify import PedagogyItemReview, PedagogyReviewResponse
 
 _PEDAGOGY_JSON_HINT = (
@@ -50,11 +50,19 @@ def _build_prompt(
         f"Тип ответа: {answer_type}\n\n"
         f"Дистракторы:\n{dist_block}\n\n"
         "Критерии для каждого дистрактора:\n"
-        "- ok: конкретная реалистичная школьная ошибка, объясняет ИМЕННО это value\n"
+        "- Сначала независимо реши задачу и пересчитай КАЖДУЮ арифметическую "
+        "цепочку в error_logic\n"
+        "- ok: конкретная реалистичная школьная ошибка, все заявленные действия "
+        "действительно приводят ИМЕННО к этому value\n"
         "- rewrite: value норм, но error_logic слишком общий/натянутый/короткий — "
         "перепиши error_logic (мин. 25 символов, конкретный шаг)\n"
         "- reject_value: value неправдоподобен как ошибка ИЛИ логика не может "
-        "привести к этому value — нужна полная перегенерация dist\n\n"
+        "привести к этому value — нужна полная перегенерация dist\n"
+        "- Если в тексте сначала получено число A, а потом без корректной операции "
+        "объявлено другое число value, это обязательно reject_value\n"
+        "- Пример: «получил 73, переставил цифры и получил 47» — reject_value, "
+        "потому что перестановка цифр 73 даёт 37, а не 47\n"
+        "- Длина и уверенный стиль текста не являются доказательством качества\n\n"
         "overall=pass если все ok или rewrite (без reject_value).\n"
         "overall=needs_regen если хотя бы один reject_value.\n"
         f"Верни JSON: {_PEDAGOGY_JSON_HINT}\n"
@@ -82,13 +90,17 @@ def audit_distractor_pedagogy(
         answer_type=answer_type,
         distractors=distractors,
     )
-    text = call_deepseek(
+    return call_deepseek_structured(
         prompt,
+        PedagogyReviewResponse,
         model=get_deepseek_model(),
         temperature=0.1,
         max_tokens=2048,
+        timeout=90,
+        # A later candidate-set retry has more context; repeated identical
+        # transport requests are not useful for pedagogy quality.
+        max_retries=1,
     )
-    return _parse_pedagogy_response(parse_json_response(text))
 
 
 def apply_pedagogy_review(

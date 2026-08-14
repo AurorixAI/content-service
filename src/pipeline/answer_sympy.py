@@ -85,7 +85,9 @@ def _latexish_to_sympy(s: str) -> str:
     s = s.replace("^", "**")
     s = re.sub(r"\\sqrt\{([^}]+)\}", r"sqrt(\1)", s)
     s = re.sub(r"\\sqrt\[3\]\{([^}]+)\}", r"(\1)**(1/3)", s)
-    s = re.sub(r"\\frac\{([^}]+)\}\{([^}]+)\}", r"((\1)/(\2))", s)
+    # Both \frac and \dfrac are emitted by the LaTeX backfill. They have the
+    # same mathematical meaning and must reach the same local verifier.
+    s = re.sub(r"\\d?frac\{([^}]+)\}\{([^}]+)\}", r"((\1)/(\2))", s)
     s = re.sub(r"\$", "", s)
     s = re.sub(r"\\left|\\right", "", s)
     s = re.sub(r"\\cdot", "*", s)

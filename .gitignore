@@ -16,3 +16,7 @@ textbooks/
 data/pipeline_cache/
 alembic/__pycache__/
 alembic/versions/__pycache__/
+backups/*.sql
+backups/*.dump
+backups/*.json
+!backups/backup_manifest_*.json

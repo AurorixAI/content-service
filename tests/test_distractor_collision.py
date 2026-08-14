@@ -57,6 +57,14 @@ def test_true_equivalents_do_collide(val, correct, answer_type):
     assert values_collide_for_distractor(val, correct, answer_type)
 
 
+def test_symbolic_formula_with_changed_sign_is_not_collision():
+    assert not values_collide_for_distractor(
+        "m2*c2*(T-T2)/(c1*(T1+T))",
+        "m2*c2*(T-T2)/(c1*(T1-T))",
+        "expression",
+    )
+
+
 # ── Int-list / fraction parsing ───────────────────────────────────────────────
 
 def test_fraction_not_parsed_as_int_list():

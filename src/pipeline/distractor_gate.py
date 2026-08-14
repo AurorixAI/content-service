@@ -7,7 +7,10 @@ from dataclasses import dataclass
 from typing import Optional
 
 from src.pipeline.answer_sympy import parse_expr, try_validate_answer_for_question
-from src.pipeline.answer_sympy_gate import _try_validate_equation_answer
+from src.pipeline.answer_sympy_gate import (
+    _comparison_answer_key,
+    _try_validate_equation_answer,
+)
 from src.pipeline.answer_verify import (
     _norm,
     _normalize_ineq_symbols,
@@ -42,6 +45,143 @@ _NUMERIC_TEXT_RE = re.compile(
 )
 _MIXED_FRAC_RE = re.compile(r"^\d+\s+\d+/\d+$")
 _FRAC_RE = re.compile(r"^\d+/\d+$")
+
+
+def effective_distractor_answer_type(
+    question: str,
+    correct_answer: str,
+    answer_type: str,
+) -> str:
+    """Return the validation domain for a distractor.
+
+    ``answer_type`` is historical source metadata and a non-trivial number of
+    imported tasks are labelled ``exact_number`` even though their answer is a
+    coordinate pair, a system of roots, an interval, or a formula.  The
+    metadata must stay unchanged, but the gate must validate the *actual*
+    answer format rather than attempting to parse every such value as one
+    number.
+    """
+    declared = (answer_type or "").lower()
+    if declared not in _NUMERIC_TYPES:
+        return declared
+
+    raw = (correct_answer or "").replace("$", "").strip()
+    if not raw:
+        return declared
+
+    # A comparison task is handled by its dedicated exact-number/sign gate.
+    if _comparison_answer_key(raw, question):
+        return declared
+
+    # Intervals and systems of inequalities have their own equivalence logic.
+    # Check the question as well: legacy imports often wrap the answer in
+    # LaTeX and use ``\cup`` / ``\infty`` instead of Unicode characters.
+    # A coordinate pair remains an equation solution unless the task itself
+    # explicitly asks for a domain, interval, or solution set.
+    interval_context = f"{question or ''} {raw}"
+    has_interval_delimiter = bool(
+        re.search(r"[∪∞∈]|\\(?:cup|infty|in)\b", interval_context)
+    )
+    if not has_interval_delimiter:
+        # Parenthesized semicolon pairs are coordinates unless the question or
+        # answer explicitly identifies an interval/domain/solution set.  The
+        # endpoint may itself be a LaTeX fraction, so inspect the full context
+        # instead of using a character-only pair heuristic.
+        has_interval_delimiter = bool(
+            re.search(r"[\[(].*;.*[\])]", raw, re.S)
+            and re.search(
+                r"(?:промежут|множество\s+решен|област[ьи]\s+определ|x\s*[∈<>≤≥])",
+                interval_context,
+                re.I,
+            )
+        )
+    if not has_interval_delimiter:
+        # A bounded interval can have no union/infinity token at all.  Allow
+        # it only when the question asks to solve an inequality/system or
+        # explicitly requests an interval; ordinary coordinate pairs remain
+        # equation solutions.
+        has_interval_delimiter = bool(
+            re.search(r"[\[(].*;.*[\])]", raw, re.S)
+            and re.search(
+                r"(?:неравенств|двойн\w*\s+неравен|промежут|множество\s+решен|"
+                r"област[ьи]\s+определ|x\s*[∈<>≤≥])",
+                interval_context,
+                re.I,
+            )
+        )
+    if has_interval_delimiter:
+        return "inequality"
+
+    # Coordinates, variable assignments, and multiple roots are solution sets.
+    if re.search(r"\b[a-zA-Zа-яА-Я][\w₀-₉]*\s*=", raw):
+        return "equation_solution"
+    if re.search(r"\([^()]*;[^()]*\)", raw) or raw.count(";") >= 2:
+        return "equation_solution"
+
+    # Ratios and symbolic formulae are valid expressions, not malformed numbers.
+    if ":" in raw or re.search(r"[A-Za-zА-Яа-я]|[=+*/^]", raw):
+        return "expression"
+    return declared
+
+_DIGIT_SWAP_LOGIC_RE = re.compile(
+    r"получил(?:а)?(?:\s+число)?\s*\$?(-?\d{2,})\$?"
+    r"[\s\S]{0,180}?(?:перестав\w*\s+цифр|перепутал\w*\s+(?:порядок\s+)?цифр)"
+    r"[\s\S]{0,140}?(?:запис\w*|получ\w*)\s*\$?(-?\d{2,})\$?",
+    re.I,
+)
+_PLACE_VALUE_EQ_RE = re.compile(
+    r"(\d+)\s*(?:[·*]\s*)?a\s*\+\s*b\s*=\s*(-?\d+)",
+    re.I,
+)
+_AB_ASSIGN_RE = re.compile(
+    r"a\s*=\s*(-?\d+)\s*[,;]\s*b\s*=\s*(-?\d+)",
+    re.I,
+)
+
+
+def _standalone_comparison_sign(value: str) -> Optional[str]:
+    raw = (value or "").replace("$", "").strip()
+    raw = (
+        raw.replace("≤", "<=").replace("≥", ">=")
+        .replace("\\leqslant", "<=").replace("\\leq", "<=")
+        .replace("\\geqslant", ">=").replace("\\geq", ">=")
+    )
+    return raw if raw in {"<", ">", "="} else None
+
+
+def _error_logic_has_obvious_contradiction(error_logic: str) -> bool:
+    """Reject explicit transformations whose own numbers cannot be true.
+
+    A distractor may contain an incorrect student operation, but a named
+    deterministic transformation must actually yield the claimed value.
+    """
+    text = (error_logic or "").replace("−", "-")
+
+    for match in _DIGIT_SWAP_LOGIC_RE.finditer(text):
+        before = match.group(1)
+        after = match.group(2)
+        sign = "-" if before.startswith("-") else ""
+        digits = before.lstrip("-")
+        expected = sign + digits[::-1]
+        if int(expected) != int(after):
+            return True
+
+    equations = list(_PLACE_VALUE_EQ_RE.finditer(text))
+    for assignment in _AB_ASSIGN_RE.finditer(text):
+        prior = [eq for eq in equations if eq.end() <= assignment.start()]
+        if not prior:
+            continue
+        eq = prior[-1]
+        if assignment.start() - eq.end() > 220:
+            continue
+        coefficient = int(eq.group(1))
+        claimed = int(eq.group(2))
+        a_value = int(assignment.group(1))
+        b_value = int(assignment.group(2))
+        if coefficient * a_value + b_value != claimed:
+            return True
+
+    return False
 
 
 def _strip_trailing_reasoning(val: str) -> str:
@@ -98,24 +238,51 @@ def _is_parseable_single(value: str, answer_type: str) -> bool:
         # Compound text answers may contain single-digit numeric parts (e.g. "1; 3; 2.25").
         return len(val) >= 1
 
+    def safe_parse(candidate: str) -> bool:
+        try:
+            return parse_expr(candidate) is not None
+        except (SyntaxError, TypeError, ValueError):
+            return False
+
     if at in _NUMERIC_TYPES:
+        # Some historical tasks are typed as exact_number although their
+        # actual answer is a comparison sign or a decimal place name.
+        comparison = val.replace("$", "").strip()
+        comparison = (
+            comparison.replace("≤", "<=").replace("≥", ">=")
+            .replace("\\leq", "<=").replace("\\geq", ">=")
+        )
+        if _extract_relation_core(val) or re.fullmatch(
+            r"(?:[A-Za-zА-Яа-я0-9_]+\s*)?(?:<=|>=|<|>|=)"
+            r"(?:\s*[A-Za-zА-Яа-я0-9_]+)?",
+            comparison,
+        ):
+            return True
+        if re.fullmatch(
+            r"(?:до\s+)?(?:единиц(?:ы|а)?|десятк(?:ов|и|а)?|"
+            r"сот(?:ен|ни|ня)?|тысяч(?:и)?|миллион(?:ов|а)?)"
+            r"(?:\s+(?:тысяч|миллион(?:ов|а)?))?",
+            val,
+            re.I,
+        ):
+            return True
         try:
             float(val.replace(",", ".").replace(" ", ""))
             return True
         except ValueError:
-            return parse_expr(val) is not None
+            return safe_parse(val)
 
     if at == "equation_solution":
         if re.search(r"=\s*", val):
             return True
-        return parse_expr(val) is not None or bool(re.search(r"-?\d", val))
+        return safe_parse(val) or bool(re.search(r"-?\d", val))
 
     if at in ("expression", "fraction", "inequality", "set"):
         if re.fullmatch(r"-?\d+(?:[.,]\d+)?", val.replace(" ", "")):
             return True
         if "/" in val:
             return True
-        return parse_expr(val) is not None or len(val) >= 2
+        return safe_parse(val) or len(val) >= 2
 
     if at == "multiple_choice":
         return bool(re.fullmatch(r"[A-F]", val, re.I)) or len(val) >= 2
@@ -139,6 +306,8 @@ def _is_implausible(value: str, correct_answer: str, answer_type: str, error_log
     el = (error_logic or "").strip()
     if len(el) < 10:
         return True  # every distractor needs a concrete school-level mistake description
+    if _error_logic_has_obvious_contradiction(el):
+        return True
     if _GARBAGE_RE.match((value or "").strip()):
         return True
 
@@ -238,7 +407,11 @@ def validate_distractor(
     """Validate one distractor candidate."""
     val = (value or "").strip()
     accepted = accepted or []
-    at = (answer_type or "").lower()
+    at = effective_distractor_answer_type(question, correct_answer, answer_type)
+
+    if at == "exact_number" and _comparison_answer_key(correct_answer, question):
+        if _standalone_comparison_sign(val) is None:
+            return DistractorCheck(ok=False, reason="invalid_comparison_choice")
 
     if not _is_parseable(val, at):
         return DistractorCheck(ok=False, reason="parse_failed")

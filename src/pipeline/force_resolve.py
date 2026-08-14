@@ -43,7 +43,7 @@ SCHOOL_VERIFY_SYSTEM_PROMPT = """Ты — эксперт-математик и �
    "is_correct": true, "is_corrected": true, "correct_answer": [исправленный ответ]
 6. Если условие задачи некорректно (например, пропущена часть текста или графика, из-за чего решить невозможно), верни:
    "is_valid": false
-7. В поле "correct_answer_latex" верни чистый LaTeX-код ответа БЕЗ знаков $ снаружи.
+7. В поле "correct_answer_latex" верни чистый LaTeX-код ответа, обёрнутый в знаки $...$ снаружи (например, $\\dfrac{1}{2}$ или $x = 5$).
 
 Формат вывода — строго JSON:
 {
@@ -150,22 +150,35 @@ def force_resolve_pending(
             latex = re.sub(r"^\$+|\$+$", "", latex.strip())
 
             if not is_valid:
-                # Фатально невалидная задача — помечаем и деактивируем
+                # Content validity has one canonical status.  ``invalid_task``
+                # is not allowed by the DB constraint; rejected + inactive
+                # keeps the task auditable while excluding it from students.
+                invalid_reason = str(result.get("explanation") or "LLM classified task as mathematically invalid")
                 with conn:
                     cur = conn.cursor()
                     cur.execute(
                         """
                         UPDATE tasks_master
-                        SET verification_status = 'invalid_task',
+                        SET verification_status = 'rejected',
                             is_active = false,
-                            tags = tags || '{"invalid_task": true}'::jsonb,
+                            tags = jsonb_set(
+                                COALESCE(tags, '{}'::jsonb),
+                                '{content_quality}',
+                                jsonb_build_object(
+                                    'status', 'mathematically_invalid',
+                                    'reason', %(reason)s,
+                                    'review_source', 'force_resolve',
+                                    'reviewed_at', NOW()
+                                ),
+                                TRUE
+                            ),
                             updated_at = now()
                         WHERE id = %(id)s
                         """,
-                        {"id": task_id},
+                        {"id": task_id, "reason": invalid_reason},
                     )
                 stats["invalid"] += 1
-                log.info("force_resolve: %s marked invalid_task", task_id)
+                log.info("force_resolve: %s marked rejected/mathematically_invalid", task_id)
 
             elif is_correct or is_corrected:
                 # Успешно верифицирована или исправлена

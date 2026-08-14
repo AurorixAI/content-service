@@ -71,7 +71,11 @@ def _norm(s: str) -> str:
     s = s.translate(subs)
     s = s.replace("−", "-").replace("–", "-").replace("—", "-")
     s = s.replace("{", "").replace("}", "").replace("$", "")
-    s = s.replace("\\sqrt", "sqrt").replace("\\frac", "")
+    # Pure TeX spacing must never make one numerical answer look different
+    # from the same value in plain school notation (``24\\,000`` vs ``24000``).
+    s = s.replace(r"\,", "").replace(r"\!", "").replace(r"\ ", "")
+    s = s.replace(r"\%", "%")
+    s = s.replace("\\sqrt", "sqrt").replace("\\dfrac", "").replace("\\frac", "")
     s = re.sub(r"\s+", "", s)
     s = s.replace(",", ".")
     s = re.sub(r"^\d+\)", "", s)
@@ -94,7 +98,7 @@ def _extract_numbers(s: str) -> list[float]:
 
 
 def _try_fraction(s: str) -> Optional[float]:
-    s = (s or "").strip().replace(",", ".")
+    s = (s or "").strip().replace("$", "").replace(",", ".")
     v = _parse_school_number(s)
     if v is not None:
         return v
@@ -168,7 +172,7 @@ def _eval_surd_arithmetic(s: str) -> Optional[float]:
 
 def _expr_to_float(s: str) -> Optional[float]:
     """Parse school math text (fractions, surds) to float via SymPy."""
-    s = _normalize_surd_text((s or "").strip())
+    s = _normalize_surd_text((s or "").strip().replace("$", ""))
     if not s:
         return None
     v = _parse_school_number(s)
@@ -180,9 +184,9 @@ def _expr_to_float(s: str) -> Optional[float]:
     try:
         from sympy import N
 
-        from src.pipeline.answer_sympy import _latexish_to_sympy, parse_expr
+        from src.pipeline.answer_sympy import _normalize_school_expression, parse_expr
 
-        for raw in (s, _latexish_to_sympy(s)):
+        for raw in (s, _normalize_school_expression(s)):
             expr = parse_expr(raw)
             if expr is not None:
                 val = N(expr)
@@ -191,6 +195,31 @@ def _expr_to_float(s: str) -> Optional[float]:
     except Exception:
         pass
     return None
+
+
+def _percent_value(s: str) -> Optional[float]:
+    """Parse a percentage in *percentage points*, preserving its unit role."""
+    raw = _normalize_decimal_commas((s or "").strip())
+    raw = raw.replace("$", "").replace(r"\%", "%")
+    raw = raw.replace(r"\,", "").replace("{", "").replace("}", "")
+    raw = re.sub(r"\s+", "", raw)
+    if not raw.endswith("%"):
+        return None
+    raw = raw[:-1]
+    try:
+        return float(raw)
+    except ValueError:
+        return _try_fraction(raw)
+
+
+def _percent_rounding_tolerance(s: str) -> float:
+    raw = _normalize_decimal_commas((s or "").strip())
+    raw = raw.replace("$", "").replace(r"\%", "%")
+    raw = raw.replace(r"\,", "").replace("{", "").replace("}", "")
+    raw = re.sub(r"\s+", "", raw)
+    if raw.endswith("%"):
+        raw = raw[:-1]
+    return _explicit_numeric_rounding_tolerance(raw) or 0.0
 
 
 def _split_equation_solution_chunks(s: str) -> list[str]:
@@ -338,7 +367,10 @@ def _solution_value_set(s: str) -> list[float]:
         return cs
     vals: list[float] = []
     for part in _equation_solution_parts(s):
-        part = part.strip()
+        # Individual roots are frequently stored as separate inline-LaTeX
+        # fragments: ``$x_1 = 2$; $x_2 = -2$``.  Delimiters are presentation
+        # only and must not prevent the assignment parser from seeing x_i.
+        part = part.strip().strip("$ ")
         m = re.match(r"^([x-zA-Z][_₀₁₂\d]*)\s*=\s*(.+)$", part, re.I)
         num_s = m.group(2).strip() if m else part
         v = _expr_to_float(num_s)
@@ -484,6 +516,65 @@ def _equation_solution_sets_equivalent(a: str, b: str) -> bool:
     return True
 
 
+def _parameterized_solution_equivalent(a: str, b: str) -> bool:
+    """Compare equal affine integer solution families, preserving source style."""
+    def canonical(value: str) -> Optional[tuple[str, object, object]]:
+        text = (value or "").replace("$", "").strip()
+        text = text.replace(r"\mathbb{Z}", "Z").replace(r"\mathbb Z", "Z")
+        text = text.replace(r"\in", "∈").replace(r"\pi", "π")
+        # Keep braces intact: ``\dfrac{\pi}{2}`` must remain valid LaTeX
+        # until the school-expression normalizer expands the fraction below.
+        match = re.fullmatch(
+            r"([a-zA-Z])\s*=\s*(.+?)\s*,?\s*([a-zA-Z])\s*(?:∈|in)\s*(?:Z|ℤ|integers)",
+            text,
+            flags=re.I,
+        )
+        if not match:
+            return None
+        variable, rhs, parameter = match.groups()
+        if not re.search(rf"(?<![a-zA-Z]){re.escape(parameter)}(?![a-zA-Z])", rhs):
+            return None
+        try:
+            import sympy
+            from src.pipeline.answer_sympy import _normalize_school_expression
+
+            normalized = _normalize_school_expression(rhs).replace(r"\pi", "pi")
+            normalized = re.sub(
+                rf"pi(?={re.escape(parameter)}(?![a-zA-Z]))", "pi*", normalized,
+            )
+            normalized = re.sub(
+                rf"(?<![a-zA-Z]){re.escape(parameter)}(?![a-zA-Z])",
+                "_sv_k",
+                normalized,
+            )
+            k = sympy.Symbol("_sv_k", integer=True)
+            expr = sympy.sympify(normalized, locals={"pi": sympy.pi, "_sv_k": k})
+            coefficient = sympy.simplify(sympy.diff(expr, k))
+            offset = sympy.simplify(expr.subs(k, 0))
+            if coefficient == 0 or coefficient.free_symbols:
+                return None
+            if sympy.simplify(expr - (coefficient * k + offset)) != 0:
+                return None
+            return variable.lower(), coefficient, offset
+        except Exception:
+            return None
+
+    left, right = canonical(a), canonical(b)
+    if left is None or right is None or left[0] != right[0]:
+        return False
+    try:
+        import sympy
+
+        left_coefficient, left_offset = left[1:]
+        right_coefficient, right_offset = right[1:]
+        if sympy.simplify(abs(left_coefficient) - abs(right_coefficient)) != 0:
+            return False
+        shift = sympy.simplify((left_offset - right_offset) / left_coefficient)
+        return shift.is_integer is True
+    except Exception:
+        return False
+
+
 def _normalize_ineq_symbols(s: str) -> str:
     s = (s or "").strip()
     for old, new in (
@@ -513,7 +604,10 @@ def _to_float_bound(s: str) -> Optional[float]:
             return float(Fraction(raw))
     except Exception:
         pass
-    ex = parse_expr(raw)
+    try:
+        ex = parse_expr(raw)
+    except (SyntaxError, TypeError, ValueError):
+        ex = None
     if ex is not None:
         try:
             from sympy import N
@@ -665,6 +759,32 @@ def _numeric_parts_equivalent(a: str, b: str, *, tol: float = 0.02) -> bool:
     vals_a.sort()
     vals_b.sort()
     return all(abs(x - y) <= max(tol, tol * max(abs(x), 1.0)) for x, y in zip(vals_a, vals_b))
+
+
+def _explicit_numeric_rounding_tolerance(value: str) -> Optional[float]:
+    """Tolerance implied by the literal precision of one scalar answer.
+
+    A decimal written as ``1.6`` may intentionally be a one-decimal rounded
+    representation of ``1.587...`` and therefore carries a half-unit-in-last-
+    place tolerance of ``0.05``.  A two-decimal literal carries ``0.005``.
+    Integers and fractions are exact.  This avoids the old unsafe 2% relative
+    tolerance where, for example, 56.25 falsely matched 170/3.
+    """
+    raw = _normalize_decimal_commas((value or "").strip())
+    raw = raw.strip("$ ")
+    if "=" in raw:
+        raw = raw.rsplit("=", 1)[-1].strip()
+    raw = raw.replace("{,}", ".").replace(",", ".")
+    raw = re.sub(r"\s+", "", raw)
+    decimal = re.fullmatch(r"[+-]?(?:\d+\.\d+|\.\d+)", raw)
+    if decimal:
+        places = len(raw.rsplit(".", 1)[-1])
+        return 0.5 * (10.0 ** (-places))
+    if re.fullmatch(r"[+-]?\d+", raw):
+        return 1e-9
+    if re.fullmatch(r"[+-]?\d+\s*/\s*[+-]?\d+", raw):
+        return 1e-9
+    return None
 
 
 def _has_free_parameters(s: str) -> bool:
@@ -1066,6 +1186,39 @@ def answers_equivalent(
     """Format-tolerant + SymPy equivalence."""
     a = _normalize_pm_text(_normalize_decimal_commas((stored or "").strip()))
     b = _normalize_pm_text(_normalize_decimal_commas((candidate or "").strip()))
+    # A bare decimal is not a percentage.  Losing ``%`` changes the quantity
+    # by a factor of one hundred, so it must never be treated as a cosmetic
+    # formatting difference.
+    has_percent_a = "%" in a.replace(r"\%", "%")
+    has_percent_b = "%" in b.replace(r"\%", "%")
+    if has_percent_a != has_percent_b:
+        return False
+    if has_percent_a:
+        percent_a = _percent_value(a)
+        percent_b = _percent_value(b)
+        if percent_a is not None and percent_b is not None:
+            # A recorded percentage with decimal places is commonly the
+            # requested rounded school answer.  Its explicit precision is a
+            # safe tolerance; a bare ratio was rejected above before reaching
+            # this point.
+            tolerance = max(
+                _percent_rounding_tolerance(a),
+                _percent_rounding_tolerance(b),
+            )
+            return abs(percent_a - percent_b) <= tolerance
+
+    def standalone_sign(value: str) -> Optional[str]:
+        raw = (value or "").replace("$", "").strip()
+        raw = (
+            raw.replace("≤", "<=").replace("≥", ">=")
+            .replace("\\leqslant", "<=").replace("\\leq", "<=")
+            .replace("\\geqslant", ">=").replace("\\geq", ">=")
+        )
+        return raw if raw in {"<", ">", "=", "<=", ">="} else None
+
+    sign_a, sign_b = standalone_sign(a), standalone_sign(b)
+    if sign_a is not None and sign_b is not None:
+        return sign_a == sign_b
 
     at = (answer_type or "").lower()
     if at in ("fraction", "decimal", "exact_number"):
@@ -1173,6 +1326,8 @@ def answers_equivalent(
     if at == "equation_solution":
         if _mcq_bool_equivalent(a, b):
             return True
+        if _parameterized_solution_equivalent(a, b):
+            return True
         if _compound_parts_equivalent(a, b):
             return True
         if _coordinate_system_equivalent(a, b):
@@ -1251,8 +1406,11 @@ def answers_equivalent(
         sa = _to_float_bound(a) if at != "fraction" else _try_fraction(a)
         sb = _to_float_bound(b) if at != "fraction" else _try_fraction(b)
         if sa is not None and sb is not None:
-            denom = max(abs(sa), abs(sb), 1.0)
-            if abs(sa - sb) / denom < 0.02:
+            tol_a = _explicit_numeric_rounding_tolerance(a)
+            tol_b = _explicit_numeric_rounding_tolerance(b)
+            literal_tolerances = [tol for tol in (tol_a, tol_b) if tol is not None]
+            tolerance = max(literal_tolerances, default=1e-9)
+            if abs(sa - sb) <= tolerance + 1e-12:
                 return True
 
     fa, fb = _try_fraction(a), _try_fraction(b)
@@ -1280,9 +1438,15 @@ def answers_equivalent(
         return True
     # algebraic rewrite: 2n+1 vs n+(n+1)
     if re.search(r"\bn\b", a, re.I) and re.search(r"\bn\b", b, re.I):
-        mc = monte_carlo_equivalent(a.replace("n", "x"), b.replace("n", "x"))
-        if mc is True:
-            return True
+        try:
+            mc = monte_carlo_equivalent(a.replace("n", "x"), b.replace("n", "x"))
+            if mc is True:
+                return True
+        # This is an optional last-chance convenience for ordinary formulas.
+        # General solutions (``x = …, k ∈ Z``) are not expressions and must
+        # never turn a parsing exception into a failed task or loose match.
+        except Exception:
+            pass
 
     return False
 

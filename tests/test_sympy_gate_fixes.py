@@ -20,6 +20,81 @@ def test_no_real_roots():
     assert gate.ok, gate.reason
 
 
+def test_selected_smaller_fraction_is_proved_from_a_true_relation():
+    gate = sympy_gate(
+        "Rational(3,10) < Rational(3,8)",
+        "3/10",
+        "exact_number",
+        question="Какая часть ленты меньше: 3/10 или 3/8?",
+        stored_answer="3/10",
+    )
+
+    assert gate.ok, gate.reason
+    assert gate.reason == "semantic_comparison_value_match"
+
+
+def test_boolean_relation_is_not_accepted_without_a_selection_question():
+    gate = sympy_gate(
+        "Rational(3,10) < Rational(3,8)",
+        "3/10",
+        "exact_number",
+        question="Проверьте, верно ли неравенство 3/10 < 3/8.",
+        stored_answer="3/10",
+    )
+
+    assert not gate.ok
+
+
+def test_general_trigonometric_solution_is_proved_by_integer_substitution():
+    gate = sympy_gate(
+        "Eq(cos(x), 0)",
+        "x = π/2 + πn, n ∈ Z",
+        "equation_solution",
+        question="Решите уравнение cos x = 0",
+        stored_answer=r"$x = \dfrac{\pi}{2} + \pi k, k \in \mathbb{Z}$",
+    )
+    assert gate.ok, gate.reason
+    assert gate.reason == "general_solution_substitution"
+
+
+def test_general_trig_solution_with_wrong_period_is_rejected():
+    gate = sympy_gate(
+        "Eq(cos(x), 0)",
+        "x = π/2 + 2πn, n ∈ Z",
+        "equation_solution",
+        question="Решите уравнение cos x = 0",
+    )
+    assert not gate.ok
+
+
+def test_general_trig_solution_uses_equation_inside_solve_wrapper():
+    gate = sympy_gate(
+        "solve(cos(x - pi), x)",
+        "x = pi/2 + pi*n, n ∈ Z",
+        "equation_solution",
+        question="Решите уравнение cos(x - pi) = 0",
+    )
+    assert gate.ok, gate.reason
+
+
+def test_general_trig_solution_uses_equation_inside_condition_set():
+    gate = sympy_gate(
+        "ConditionSet(x, Eq(cos(x) + 1, 0), S.Integers)",
+        "x = pi + 2*pi*n, n ∈ Z",
+        "equation_solution",
+        question="Решите уравнение cos x = -1",
+    )
+    assert gate.ok, gate.reason
+
+
+def test_general_solution_comparison_never_raises_on_set_notation():
+    assert not answers_equivalent(
+        "x = π/3 + πk, k ∈ Z",
+        "x = π/2 + πk, k ∈ Z",
+        "equation_solution",
+    )
+
+
 def test_write_equation_task():
     q = "Запишите квадратное уравнение ax^2 + bx + c = 0, если a=2, b=3, c=4"
     assert is_write_equation_task(q)
@@ -49,6 +124,46 @@ def test_pm_surd_equivalent():
 def test_indexed_roots_equivalent():
     assert answers_equivalent("x_1 = 0, x_2 = 7", "0; 7", "equation_solution")
     assert answers_equivalent("x_1 = 0, x_2 = -5", "-5; 0", "equation_solution")
+
+
+def test_latex_indexed_roots_match_plain_root_list():
+    assert answers_equivalent(
+        r"$x_1 = 2$; $x_2 = -2$; $x_3 = -5$",
+        "x = -5; x = -2; x = 2",
+        "equation_solution",
+    )
+
+
+def test_general_solution_allows_only_dummy_parameter_rename():
+    assert answers_equivalent(
+        r"$x = \pi k, k \in \mathbb{Z}$",
+        "x = πn, n ∈ Z",
+        "equation_solution",
+    )
+    assert not answers_equivalent(
+        r"$x = \pi k, k \in \mathbb{Z}$",
+        "x = 2πn, n ∈ Z",
+        "equation_solution",
+    )
+    assert answers_equivalent(
+        r"$x = \dfrac{\pi}{2} + \pi k, k \in \mathbb{Z}$",
+        "x = π/2 + πn, n ∈ Z",
+        "equation_solution",
+    )
+    assert answers_equivalent(
+        r"$x = \dfrac{5\pi}{2} + \pi k, k \in \mathbb{Z}$",
+        "x = π/2 + πn, n ∈ Z",
+        "equation_solution",
+    )
+    assert answers_equivalent(
+        r"$x = 1 + 2\pi k, k \in \mathbb{Z}$",
+        "x = 1 + 2πn, n ∈ Z",
+        "equation_solution",
+    )
+
+
+def test_dfrac_number_matches_plain_fraction():
+    assert answers_equivalent(r"$\dfrac{1}{4}$", "1/4", "exact_number")
 
 
 def test_latex_pm_equivalent():
@@ -252,6 +367,25 @@ def test_inequality_format_equivalent():
     assert answers_equivalent("нет решений", "нет таких значений", "inequality")
 
 
+def test_latex_interval_and_conjunction_are_mathematically_equivalent():
+    from src.pipeline.interval_normalizer import intervals_equivalent
+
+    stored = r"$\left(-\frac{7}{4}; \frac{5}{4}\right]$"
+    computed = r"x \leq 5 / 4 \wedge x > - 7 / 4"
+
+    assert intervals_equivalent(stored, computed) is True
+    assert answers_equivalent(stored, computed, "inequality")
+
+
+def test_latex_union_interval_is_mathematically_equivalent_to_plain_union():
+    from src.pipeline.interval_normalizer import intervals_equivalent
+
+    assert intervals_equivalent(
+        r"$[0; 2) \cup (2; +\infty)$",
+        "[0; 2) ∪ (2; +∞)",
+    ) is True
+
+
 def test_set_equivalence_fixes():
     from src.pipeline.answer_verify import answers_equivalent
 
@@ -290,6 +424,12 @@ def test_numeric_inequality_equivalent():
 
     assert answers_equivalent("21 > 2", "21 > 2", "inequality")
     assert not answers_equivalent("21 > 2", "21 > -12", "inequality")
+
+
+def test_standalone_comparison_signs_are_compared_as_atomic_answers():
+    assert answers_equivalent("$=$", "=", "exact_number")
+    assert answers_equivalent("$<$", "<", "exact_number")
+    assert not answers_equivalent("=", ">", "exact_number")
 
 
 def test_radical_comparison_not_equivalent_by_numeric_multiset():
@@ -357,6 +497,86 @@ def test_sympy_gate_integer_from_inequality():
     ) == "3"
 
 
+def test_sympy_gate_comparison_uses_computed_values_not_eq_boolean():
+    gate = sympy_gate(
+        "Eq(441, 488)",
+        "A < K",
+        "exact_number",
+        question="Сравните результаты. Запишите знак сравнения: A ... K.",
+        stored_answer="$=$",
+    )
+    assert gate.ok, gate.reason
+    assert gate.computed_local == "<"
+    assert gate.reason == "semantic_comparison_match"
+
+
+def test_sympy_gate_comparison_preserves_matching_stored_format():
+    gate = sympy_gate(
+        "Eq(12, 11)",
+        "K > 11",
+        "exact_number",
+        question="Сравните K и 11. Запишите знак сравнения: K ... 11.",
+        stored_answer="$>$",
+    )
+    assert gate.ok, gate.reason
+    assert gate.computed_local == "$>$"
+
+
+def test_sympy_gate_place_value_normalizes_russian_grammar():
+    gate = sympy_gate(
+        "1583",
+        "до тысяч",
+        "exact_number",
+        question="До какого разряда округляют число до ближайших тысяч?",
+        stored_answer="тысячи",
+    )
+    assert gate.ok, gate.reason
+    assert gate.computed_local == "тысячи"
+    assert gate.reason == "semantic_place_value_match"
+
+
+def test_sympy_gate_place_value_accepts_local_exponent_proof():
+    gate = sympy_gate(
+        "Integer(2)",
+        "сотен",
+        "exact_number",
+        question="До какого разряда нужно округлить число?",
+        stored_answer="десятков",
+    )
+    assert gate.ok, gate.reason
+    assert gate.computed_local == "сотен"
+
+
+def test_sympy_gate_expression_compares_raw_before_latex_formatting():
+    expression = "x*(x - 6)/(x**2 - 6*x + 9)"
+    gate = sympy_gate(
+        expression,
+        expression,
+        "expression",
+        question="Найдите производную функции.",
+    )
+    assert gate.ok, gate.reason
+    assert gate.reason == "sympy_match_raw"
+
+
+def test_sympy_gate_parses_simple_python_conditional():
+    assert evaluate_sympy_string(
+        "(49630 - 53210) if 49630 < 53210 else (53210 - 49630)",
+        "exact_number",
+    ) == "-3580"
+
+
+def test_sympy_gate_does_not_accept_boolean_as_numeric_proof():
+    gate = sympy_gate(
+        "True",
+        "12",
+        "exact_number",
+        question="Вычислите количество предметов.",
+        stored_answer="$12$",
+    )
+    assert not gate.ok
+
+
 def test_distractor_multipart_parse():
     from src.pipeline.distractor_gate import validate_distractor
 
@@ -393,6 +613,13 @@ def test_numeric_list_order_equivalent():
 
     assert answers_equivalent("1.587401052", "1,6", "exact_number")
     assert answers_equivalent("5/8", "0,625", "fraction")
+
+
+def test_exact_number_does_not_use_unsafe_relative_percent_tolerance():
+    assert not answers_equivalent("$56.25$", "170/3", "exact_number")
+    assert not stored_answer_matches_compute(
+        "$56.25$", "170/3", "56.6666666667", answer_type="exact_number",
+    )
 
 
 def test_coordinate_answer_latex():
@@ -447,4 +674,3 @@ def test_to_question_latex_wraps_math():
     assert len(out) == 2
     assert out[0].get("value_latex")
     assert out[1].get("value_latex")
-

@@ -11,7 +11,12 @@ import re
 
 from src.core.config import get_settings
 from src.pipeline.answer_verify import _normalize_ineq_symbols
-from src.pipeline.distractor_gate import _extract_relation_core, validate_distractor_set
+from src.pipeline.distractor_gate import (
+    _extract_relation_core,
+    effective_distractor_answer_type,
+    validate_distractor_set,
+)
+from src.pipeline.answer_sympy_gate import _comparison_answer_key
 from src.pipeline.models import ExtractedTask
 
 log = logging.getLogger(__name__)
@@ -26,6 +31,19 @@ _BINARY_ANSWER_PATTERNS = {
     "рациональным", "иррациональным", "рациональное", "иррациональное",
     "да", "нет", "верно", "неверно", "true", "false",
 }
+_COMPARISON_SIGN_QUESTION_RE = re.compile(
+    r"(?:знак\s+сравнен|сравните|поставьте\s+знак|"
+    r"какой\s+знак|[A-Za-zА-Яа-я]\s*\.\.\.\s*[A-Za-zА-Яа-я0-9])",
+    re.I,
+)
+
+
+def _is_comparison_sign_task(question: str, answer: str, atype: str) -> bool:
+    if (atype or "").lower() != "exact_number":
+        return False
+    return bool(_COMPARISON_SIGN_QUESTION_RE.search(question or "")) and bool(
+        _comparison_answer_key(answer, question)
+    )
 
 
 def _is_binary_answer(answer: str, atype: str) -> bool:
@@ -42,13 +60,25 @@ def _is_binary_answer(answer: str, atype: str) -> bool:
     return False
 
 
-def _required_distractor_count() -> int:
+def _required_distractor_count(
+    answer: str = "",
+    atype: str = "",
+    question: str = "",
+) -> int:
     """Target distractor count (ideal)."""
+    if _is_comparison_sign_task(question, answer, atype):
+        return 2
     return get_settings().distractor_gate_min_count
 
 
-def _minimum_distractor_count(answer: str = "", atype: str = "") -> int:
+def _minimum_distractor_count(
+    answer: str = "",
+    atype: str = "",
+    question: str = "",
+) -> int:
     """Minimum acceptable distractors. Binary answers (да/нет etc.) need only 1."""
+    if _is_comparison_sign_task(question, answer, atype):
+        return 2
     if _is_binary_answer(answer, atype):
         return 1
     return get_settings().distractor_gate_min_acceptable
@@ -63,7 +93,7 @@ def _has_complete_distractors(task: ExtractedTask) -> bool:
     meta = task.distractor_meta
     answer = getattr(task, "answer_raw", "") or ""
     atype = getattr(task, "answer_type", "") or ""
-    need = _minimum_distractor_count(answer, atype)
+    need = _minimum_distractor_count(answer, atype, task.question_text or "")
     return isinstance(meta, list) and len(meta) >= need
 
 
@@ -73,21 +103,16 @@ def _clear_distractors(task: ExtractedTask) -> None:
 
 
 
-def _solution_block(task: ExtractedTask) -> str:
-    sol = (task.tags or {}).get("step_by_step_solution", "")
-    if sol:
-        return f"Пошаговое решение:\n{sol}\n\n"
-    return ""
-
-
 def _build_distractor_prompt(
     task: ExtractedTask,
     answer: str,
     *,
     rejected: list[dict] | None = None,
 ) -> str:
-    atype = (task.answer_type or "exact_number").lower()
-    sol = _solution_block(task)
+    declared_type = (task.answer_type or "exact_number").lower()
+    atype = effective_distractor_answer_type(
+        task.question_text or "", answer, declared_type
+    )
     reject_block = ""
     if rejected:
         lines = [
@@ -104,6 +129,18 @@ def _build_distractor_prompt(
     if atype in _NUMERIC_TYPES:
         numeric_hint = "- Каждый дистрактор — конкретное число\n"
 
+    comparison_sign_task = _is_comparison_sign_task(
+        task.question_text or "",
+        answer,
+        declared_type,
+    )
+    if comparison_sign_task:
+        numeric_hint = (
+            "- Ответом является только знак сравнения. Создай ровно два "
+            "уникальных неверных знака из набора <, >, =; никаких слов или "
+            "выражений в value.\n"
+        )
+
     type_hint = ""
     if atype in _TEXT_TYPES:
         type_hint = (
@@ -119,15 +156,16 @@ def _build_distractor_prompt(
         )
 
     settings = get_settings()
-    min_count = settings.distractor_gate_min_count
+    min_count = _required_distractor_count(answer, atype, task.question_text or "")
     batch_size = max(min_count, settings.distractor_gate_llm_batch_size)
+    if comparison_sign_task:
+        batch_size = min_count
 
     return (
         "Ты — опытный учитель математики. "
         f"Придумай ровно {batch_size} правдоподобных НЕВЕРНЫХ ответа — типичные ошибки ученика.\n\n"
         f"Задача: {task.question_text}\n"
-        f"{sol}"
-        f"Правильный ответ: {answer}\n"
+        f"Правильный ответ: {(_comparison_answer_key(answer, task.question_text or '') if comparison_sign_task else answer)}\n"
         f"{reject_block}\n"
         "Требования:\n"
         f"{numeric_hint}"
@@ -148,6 +186,12 @@ _ERROR_LOGIC_REQUIREMENTS = (
     "(минимум 25 символов)\n"
     "- error_logic должен объяснять, как ученик получил ИМЕННО это value, "
     "а не другое число или формулировку\n"
+    "- Пересчитай всю указанную в error_logic арифметику: ошибочное правило может "
+    "быть неверным, но каждое последующее вычисление обязано действительно привести "
+    "к указанному value\n"
+    "- Нельзя сначала получить одно число, а затем без точного действия объявить "
+    "другое; нельзя добавлять произвольную вторую ошибку только ради нужного value\n"
+    "- Если для value нет короткой правдоподобной цепочки ошибки, выбери другой value\n"
     "- Укажи шаг: что перепутал, не довёл, пропустил, неверно преобразовал\n"
     "- ЗАПРЕЩЕНО: «типичная ошибка», «ошибка при вычислении», «неправильно решил», "
     "«ученик ошибся», «ошибка в задаче» без конкретики\n"
@@ -261,9 +305,14 @@ def _try_deterministic_distractors(
     all_rejected: list[dict],
 ) -> list[dict]:
     """Rule-based distractors when LLM cannot pass gate (comparisons, tiny decimals)."""
-    atype = (task.answer_type or "exact_number").lower()
+    declared_type = (task.answer_type or "exact_number").lower()
+    atype = effective_distractor_answer_type(
+        task.question_text or "", answer, declared_type
+    )
     skip_l3 = atype in _TEXT_TYPES or atype in ("inequality", "set")
-    target = get_settings().distractor_gate_min_count
+    target = _required_distractor_count(
+        answer, declared_type, task.question_text or ""
+    )
     question = task.question_text or ""
 
     candidates: list[str] = []
@@ -330,15 +379,27 @@ def _top_up_distractors(
     all_rejected: list[dict],
 ) -> list[dict]:
     """One focused LLM call to fill missing distractors (need exactly 3 total)."""
-    from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model, parse_json_response
+    from src.pipeline.deepseek_client import call_deepseek_structured, get_deepseek_model
+    from src.schemas.smart_verify import DistractorGenerationResponse
 
-    need = _required_distractor_count() - len(accepted)
+    need = _required_distractor_count(
+        answer,
+        task.answer_type or "exact_number",
+        task.question_text or "",
+    ) - len(accepted)
     if need <= 0:
         return accepted
 
-    atype = (task.answer_type or "exact_number").lower()
-    skip_l3 = atype in _TEXT_TYPES
-    min_count = _required_distractor_count()
+    declared_type = (task.answer_type or "exact_number").lower()
+    atype = effective_distractor_answer_type(
+        task.question_text or "", answer, declared_type
+    )
+    skip_l3 = atype in _TEXT_TYPES or atype in ("inequality", "set")
+    min_count = _required_distractor_count(
+        answer,
+        declared_type,
+        task.question_text or "",
+    )
     existing = [str(d.get("value", "")) for d in accepted]
     reject_lines = [
         f"- {r.get('value', '?')}: {r.get('gate_reason', 'invalid')}"
@@ -354,14 +415,19 @@ def _top_up_distractors(
         f'Верни JSON: {{"distractors":[{{"value":"...","error_logic":"..."}}]}}\n'
     )
     try:
-        text = call_deepseek(prompt, model=get_deepseek_model(), temperature=0.4, max_tokens=1024)
-        parsed = parse_json_response(text)
-        if isinstance(parsed, dict) and "distractors" in parsed:
-            items = parsed["distractors"]
-        elif isinstance(parsed, list):
-            items = parsed
-        else:
-            return accepted
+        response = call_deepseek_structured(
+            prompt,
+            DistractorGenerationResponse,
+            model=get_deepseek_model(),
+            temperature=0.4,
+            max_tokens=1024,
+            timeout=90,
+            # Retry at the candidate-set level below, where rejected values
+            # are carried into the next prompt.  Retrying the same transport
+            # request five times only blocks the worker and burns rate budget.
+            max_retries=1,
+        )
+        items = [item.model_dump() for item in response.distractors]
         raw_items = [
             {
                 "value": d.get("value", ""),
@@ -402,25 +468,19 @@ def _apply_pedagogy_inline(
     task: ExtractedTask,
     answer: str,
     all_rejected: list[dict],
-) -> list[dict]:
+) -> tuple[list[dict], bool]:
     """
     Запускает LLM-ревью педагогического качества error_logic ВНУТРИ пайплайна.
     - ok → без изменений
     - rewrite → DeepSeek переписывает error_logic более конкретно
     - reject_value → дистрактор убирается и добавляется в all_rejected для retry
-    Вызывается однократно после первого успешного прохода gate L1-L4.
+    Повторяется, если состав набора изменился после reject/regeneration.
     """
     from src.pipeline.distractor_pedagogy import (
         apply_pedagogy_review,
         audit_distractor_pedagogy,
-        looks_generic_error_logic,
     )
     atype = (task.answer_type or "exact_number").lower()
-
-    # Быстрый pre-filter: если все error_logic уже хорошие — пропускаем LLM-ревью
-    if not any(looks_generic_error_logic(d.get("error_logic", "")) for d in accepted):
-        log.debug("Pedagogy pre-filter: all error_logic OK, skipping LLM review")
-        return accepted
 
     try:
         review = audit_distractor_pedagogy(
@@ -435,7 +495,7 @@ def _apply_pedagogy_inline(
             log.info(
                 "Pedagogy review PASS (%s): %d distractors OK", task.temp_id, len(updated)
             )
-            return updated
+            return updated, True
         elif outcome == "needs_regen":
             # Добавляем reject_value в all_rejected для следующего retry
             for item in review.items:
@@ -453,48 +513,50 @@ def _apply_pedagogy_inline(
                 i for i, item in enumerate(review.items)
                 if (item.status or "").lower() != "reject_value"
             }
-            return [d for i, d in enumerate(accepted) if i in kept_indices]
+            return [d for i, d in enumerate(accepted) if i in kept_indices], False
         else:
-            # invalid_review — используем оригинал без изменений
-            log.warning("Pedagogy review invalid_review for %s, using originals", task.temp_id)
-            return accepted
+            log.warning("Pedagogy review invalid_review for %s", task.temp_id)
+            return accepted, False
     except Exception as exc:
-        log.warning("Pedagogy review failed for %s: %s — using gate-passed result", task.temp_id, exc)
-        return accepted
+        log.warning("Pedagogy review failed for %s: %s", task.temp_id, exc)
+        return accepted, False
 
 
 def _ai_generate_distractors(task: ExtractedTask, answer: str) -> None:
     from src.pipeline.deepseek_client import get_deepseek_model
 
     settings = get_settings()
-    atype = (task.answer_type or "exact_number").lower()
+    atype = effective_distractor_answer_type(
+        task.question_text or "", answer, task.answer_type or "exact_number"
+    )
     skip_l3 = atype in _TEXT_TYPES or atype in ("inequality", "set")
-    target = settings.distractor_gate_min_count
-    minimum = settings.distractor_gate_min_acceptable
+    target = _required_distractor_count(
+        answer, task.answer_type or "exact_number", task.question_text or ""
+    )
+    minimum = _minimum_distractor_count(
+        answer, task.answer_type or "exact_number", task.question_text or ""
+    )
     max_retries = settings.distractor_gate_max_retries
 
     all_rejected: list[dict] = []
     accepted: list[dict] = []
-    pedagogy_done = False  # запускаем LLM-ревью только один раз
 
     for attempt in range(max_retries + 1):
         prompt = _build_distractor_prompt(task, answer, rejected=all_rejected or None)
-        from src.pipeline.deepseek_client import call_deepseek, parse_json_response
+        from src.pipeline.deepseek_client import call_deepseek_structured
+        from src.schemas.smart_verify import DistractorGenerationResponse
 
         try:
-            text = call_deepseek(
+            response = call_deepseek_structured(
                 prompt + '\nВерни JSON: {"distractors":[{"value":"...","error_logic":"..."}]}\n',
+                DistractorGenerationResponse,
                 model=get_deepseek_model(),
                 temperature=0.3,
-                max_tokens=2048,
+                max_tokens=4096,
+                timeout=90,
+                max_retries=1,
             )
-            parsed = parse_json_response(text)
-            if isinstance(parsed, dict) and "distractors" in parsed:
-                items = parsed["distractors"]
-            elif isinstance(parsed, list):
-                items = parsed
-            else:
-                raise ValueError("invalid distractor JSON")
+            items = [item.model_dump() for item in response.distractors]
             raw_items = [
                 {
                     "value": d.get("value", ""),
@@ -533,11 +595,6 @@ def _ai_generate_distractors(task: ExtractedTask, answer: str) -> None:
                 break
         accepted = unique
 
-        # Педагогическое ревью после первого набора достаточного числа дистракторов
-        if len(accepted) >= minimum and not pedagogy_done:
-            accepted = _apply_pedagogy_inline(accepted, task, answer, all_rejected)
-            pedagogy_done = True
-
         if len(accepted) >= target:
             break
 
@@ -547,7 +604,9 @@ def _ai_generate_distractors(task: ExtractedTask, answer: str) -> None:
         if len(accepted) >= target or len(accepted) == before:
             break
 
-    min_count = _minimum_distractor_count(answer, atype)
+    min_count = _minimum_distractor_count(
+        answer, task.answer_type or "exact_number", task.question_text or ""
+    )
 
     if len(accepted) < min_count:
         accepted = _try_deterministic_distractors(

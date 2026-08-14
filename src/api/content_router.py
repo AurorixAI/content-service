@@ -37,8 +37,10 @@ _TASK_COLS = """
     tm.id, tm.skill_id, COALESCE(kh.name_ru, '') AS skill_name,
     tm.difficulty, tm.question_text, tm.question_latex,
     tm.answer_type, tm.correct_answer, tm.correct_answer_latex,
-    tm.answer_options, tm.distractor_meta,
-    tm.irt_discrimination, tm.irt_difficulty, tm.irt_guessing
+    tm.answer_options, tm.answer_options_latex, tm.distractor_meta,
+    tm.irt_discrimination, tm.irt_difficulty, tm.irt_guessing,
+    tm.verification_status, tm.latex_status, tm.is_active,
+    COALESCE(tm.tags->'content_quality', '{}'::jsonb) AS content_quality
 """
 
 
@@ -71,10 +73,15 @@ def _task_row_full(r) -> dict:
         "correct_answer": r[7] or "",
         "correct_answer_latex": r[8] or "",
         "answer_options": r[9],
-        "distractor_meta": r[10],
-        "irt_discrimination": float(r[11] or 1.0),
-        "irt_difficulty": float(r[12] or 0.0),
-        "irt_guessing": float(r[13] or 0.0),
+        "answer_options_latex": r[10],
+        "distractor_meta": r[11],
+        "irt_discrimination": float(r[12] or 1.0),
+        "irt_difficulty": float(r[13] or 0.0),
+        "irt_guessing": float(r[14] or 0.0),
+        "verification_status": r[15] or "pending",
+        "latex_status": r[16],
+        "is_active": bool(r[17]),
+        "content_quality": r[18] or {},
     }
 
 
