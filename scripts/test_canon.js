@@ -1,0 +1,11 @@
+const optD = "$(-\\infty; 3]$";
+console.log("Original optD:", optD);
+let s = optD;
+s = s.replace(/\$\$/g, "").replace(/\$/g, "");
+console.log("After $ strip:", s);
+s = s.replace(/\\infty/g, "inf");
+console.log("After infty replace:", s);
+s = s.replace(/∞/g, "inf");
+console.log("After unicode replace:", s);
+s = s.replace(/\\[a-zA-Z]+/g, "");
+console.log("After generic latex strip:", s);

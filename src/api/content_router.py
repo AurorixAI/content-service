@@ -40,7 +40,8 @@ _TASK_COLS = """
     tm.answer_options, tm.answer_options_latex, tm.distractor_meta,
     tm.irt_discrimination, tm.irt_difficulty, tm.irt_guessing,
     tm.verification_status, tm.latex_status, tm.is_active,
-    COALESCE(tm.tags->'content_quality', '{}'::jsonb) AS content_quality
+    COALESCE(tm.tags->'content_quality', '{}'::jsonb) AS content_quality,
+    tm.question_image_url
 """
 
 
@@ -82,6 +83,7 @@ def _task_row_full(r) -> dict:
         "latex_status": r[16],
         "is_active": bool(r[17]),
         "content_quality": r[18] or {},
+        "question_image_url": r[19],
     }
 
 
