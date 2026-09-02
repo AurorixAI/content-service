@@ -94,9 +94,14 @@ is_useful=false: photo, portrait, decorative, cover, ornament, other
 """
 
 
-def figure_id_for(page: int, idx: int) -> str:
-    """Каноничный ID: fig-p{page}-{idx}, 1-based."""
-    return f"fig-p{page}-{idx}"
+def figure_id_for(textbook_id: str, page: int, idx: int) -> str:
+    """Return a globally unique, stable figure ID.
+
+    Page numbers repeat across textbooks, so ``fig-p30-1`` cannot safely be a
+    primary key.  The short textbook UUID keeps IDs readable while making
+    references unambiguous across the whole content bank.
+    """
+    return f"fig-{textbook_id[:8]}-p{page}-{idx}"
 
 
 class FigureExtractor:
@@ -372,7 +377,7 @@ class FigureExtractor:
                 log.warning("Crop failed page=%d idx=%d: %s", page_no, idx, exc)
                 continue
 
-            fid = figure_id_for(page_no, idx)
+            fid = figure_id_for(self.textbook_id, page_no, idx)
             file_path = self.figures_dir / f"{fid}.png"
             try:
                 pix_crop.save(str(file_path))
@@ -506,7 +511,7 @@ class FigureExtractor:
                 log.warning("Pixmap failed page %d: %s", page_no, exc)
                 continue
 
-            fid = figure_id_for(page_no, idx)
+            fid = figure_id_for(self.textbook_id, page_no, idx)
             file_path = self.figures_dir / f"{fid}.png"
             pix.save(str(file_path))
             figures.append(Figure(

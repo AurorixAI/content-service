@@ -6,7 +6,7 @@ def test_content_task_api_keeps_canonical_and_display_option_layers_parallel():
         "task-1", "skill-1", "Навык", "B", "Условие", "Условие $x$",
         "mcq", "2", "$2$", ["2", "1"], ["$2$", "$1$"], [{"value": "1"}],
         1.2, -0.3, 0.25, "rejected", "verified", False,
-        {"status": "mathematically_invalid"},
+        {"status": "mathematically_invalid"}, None,
     )
 
     task = _task_row_full(row)

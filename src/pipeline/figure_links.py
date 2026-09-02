@@ -72,27 +72,18 @@ def _nearest_figure_refs(
     paragraph_text: str,
     valid: set[str],
 ) -> list[str]:
-    """Find figure IDs near the task text."""
+    """Return only figure IDs proven to belong to the task's local block.
+
+    A figure marker elsewhere in the paragraph is not evidence that it belongs
+    to this task.  In particular, using every marker in a paragraph as a
+    fallback made a task referring to one numbered drawing inherit an
+    unrelated drawing from a neighbouring exercise/page.  It is safer to
+    leave an unresolved visual task for curation than to show a pupil a
+    mathematically wrong graph.
+    """
     refs = _refs_in_text(block, valid)
     if refs:
         return refs
-    q = (question or "").strip()
-    if len(q) >= 10:
-        needle = q[:80]
-        pos = paragraph_text.find(needle)
-        if pos >= 0:
-            window = paragraph_text[max(0, pos - 600): pos + len(q) + 600]
-            refs = _refs_in_text(window, valid)
-            if refs:
-                return refs
-    if FIGURE_HINT_RE.search(q) or FIGURE_HINT_RE.search(block):
-        refs = _refs_in_text(block + "\n" + q, valid)
-        if refs:
-            return refs
-        # все маркеры § — если задача явно про рисунок
-        all_refs = _refs_in_text(paragraph_text, valid)
-        if all_refs and FIGURE_HINT_RE.search(q):
-            return all_refs[:3]
     return []
 
 
