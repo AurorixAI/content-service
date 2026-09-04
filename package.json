@@ -1,0 +1,12 @@
+{
+  "name": "content-service",
+  "private": true,
+  "description": "Node-зависимости для валидации формул (KaTeX). Python-стек — requirements.txt.",
+  "type": "commonjs",
+  "scripts": {
+    "katex-check": "echo '[]' | node src/validate/katex_compile.js && echo ' katex OK'"
+  },
+  "dependencies": {
+    "katex": "0.16.11"
+  }
+}

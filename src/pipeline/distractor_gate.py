@@ -61,27 +61,7 @@ def _extract_relation_core(val: str) -> Optional[str]:
     return f"{m.group(1).strip()} {m.group(2)} {m.group(3).strip()}"
 
 
-def _looks_numeric_school_answer(s: str) -> bool:
-    s = (s or "").strip()
-    if not s:
-        return False
-    if _NUMERIC_TEXT_RE.match(s):
-        return True
-    if _MIXED_FRAC_RE.match(s) or _FRAC_RE.match(s):
-        return True
-    if _extract_relation_core(s):
-        return True
-    return False
-
-
 def _looks_multipart(value: str) -> bool:
-    val = (value or "").strip()
-    if ";" in val:
-        return True
-    return bool(_LABELED_PREFIX_RE.search(val))
-
-
-def _is_parseable_single(value: str, answer_type: str) -> bool:
     val = (value or "").strip()
     if ";" in val:
         return True
@@ -202,6 +182,33 @@ def _collision_with_correct(val: str, correct_answer: str, answer_type: str) -> 
     return values_collide_for_distractor(val, correct_answer, answer_type)
 
 
+def _value_parts(s: str) -> list[str]:
+    """Разбить многозначный ответ («x = 2,5; x = -2,5») на нормализованные части."""
+    return [n for n in (_norm(p) for p in re.split(r"[;]", s or "")) if n]
+
+
+def _is_proper_subset_of_correct(val: str, correct_answer: str, answer_type: str) -> bool:
+    """Дистрактор — часть правильного ответа, а не ошибка.
+
+    «Взял только один корень из двух» даёт `x = 2,5` при верном `x = 2,5; x = -2,5`.
+    Полной коллизии нет, поэтому прежний гейт такой вариант пропускал — и ученик
+    получал вопрос, где второй вариант тоже верен, просто неполон. Для MCQ это
+    хуже обычного брака: неправильного ответа там, по сути, нет.
+
+    Отбраковываем только строгое подмножество: равный набор — это коллизия
+    (её ловит `_collision_with_correct`), а лишняя часть — уже другая ошибка.
+    """
+    if (answer_type or "").lower() in ("text", "open_text"):
+        return False
+    correct_parts = _value_parts(correct_answer)
+    if len(correct_parts) < 2:
+        return False
+    val_parts = _value_parts(val)
+    if not val_parts or len(val_parts) >= len(correct_parts):
+        return False
+    return set(val_parts).issubset(set(correct_parts))
+
+
 @dataclass
 class DistractorCheck:
     ok: bool
@@ -242,6 +249,9 @@ def validate_distractor(
 
     if _collision_with_correct(val, correct_answer, at):
         return DistractorCheck(ok=False, reason="collision_correct")
+
+    if _is_proper_subset_of_correct(val, correct_answer, at):
+        return DistractorCheck(ok=False, reason="subset_of_correct")
 
     for prev in accepted:
         if _peer_collision(val, prev, at):

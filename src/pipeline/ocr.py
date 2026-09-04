@@ -88,6 +88,32 @@ class GeminiVisionOCR:
         log.info("Gemini Vision OCR завершён: %d символов", len(text))
         return text
 
+    def _text_layer_fallback(self, doc, page_index: int) -> str:
+        """Текстовый слой PDF, когда Vision не смог распознать страницу.
+
+        Раньше на этом месте стояла пустая строка: страница просто исчезала из
+        книги, и в логе оставалась одна строчка ERROR. На `textzadachi5` так
+        терялась стр. 7 — плотная страница с задачами 4–8 и 18–21, при том что
+        в PDF по ней лежал готовый текстовый слой на 1 747 символов.
+
+        Слой есть не у всякой книги (чистый скан его не имеет), поэтому это
+        именно фолбэк, а не замена OCR: у сканов с текстовым слоем он спасает
+        страницу бесплатно, у остальных — вернёт пусто, как и раньше.
+        """
+        try:
+            raw = doc[page_index].get_text() or ""
+        except Exception as exc:  # noqa: BLE001
+            log.error("Text-layer fallback failed p%d: %s", page_index + 1, exc)
+            return ""
+        if is_usable_ocr_text(raw):
+            log.warning(
+                "OCR failed p%d — подставлен текстовый слой PDF (%d симв.)",
+                page_index + 1, len(raw.strip()),
+            )
+            return raw
+        log.error("Single-page OCR failed: p%d (текстового слоя тоже нет)", page_index + 1)
+        return ""
+
     def process_pages(
         self,
         pdf_path: str,
@@ -226,13 +252,16 @@ class GeminiVisionOCR:
                     if is_usable_ocr_text(single):
                         results.append(single)
                     else:
-                        log.error("Single-page OCR failed: p%d", pn0 + 1)
-                        results.append("")
+                        results.append(self._text_layer_fallback(doc, pn0))
             elif is_usable_ocr_text(batch_text):
                 results.append(batch_text)
             else:
-                log.error("OCR failed for pages %s", page_label)
-                results.append("")
+                recovered = [self._text_layer_fallback(doc, pn0) for pn0 in page_nums]
+                if any(recovered):
+                    results.extend(recovered)
+                else:
+                    log.error("OCR failed for pages %s", page_label)
+                    results.append("")
 
             if batch_end < hi:
                 time.sleep(self.REQUEST_DELAY)

@@ -16,3 +16,11 @@ textbooks/
 data/pipeline_cache/
 alembic/__pycache__/
 alembic/versions/__pycache__/
+node_modules/
+
+# Выход прогонов, а не исходники: картинки рисунков, отладочные рендеры страниц
+# и собранный вьюер очереди проверки. Восстанавливаются прогоном, в репозитории
+# заняли бы мегабайты бинарников.
+data/figures/
+data/*.png
+data/*.html

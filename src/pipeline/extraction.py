@@ -20,6 +20,7 @@ from src.pipeline.gemini_client import (
 )
 from src.pipeline.exercise_ranges import parse_exercise_num
 from src.pipeline.models import ExtractedTask
+from src.pipeline import schema_vocab as vocab
 from src.pipeline.quality import (
     extraction_model,
     extraction_temperature,
@@ -578,9 +579,10 @@ class TaskExtractor:
             figure_refs = [str(r).strip() for r in raw_refs if str(r).strip()]
             requires_figure = bool(item.get("requires_figure", False)) or bool(figure_refs)
 
-            diff = str(item.get("difficulty", "B")).strip().upper()
-            if diff not in ("A", "B", "C"):
-                diff = "B"
+            # Правило одно на весь конвейер (`schema_vocab`), а не своя копия
+            # в каждом производителе задач: расхождение здесь и в
+            # `_dict_to_task` и было B40.
+            diff = vocab.clamp_difficulty(item.get("difficulty"))
 
             tasks.append(
                 ExtractedTask(

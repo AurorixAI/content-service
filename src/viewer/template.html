@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 -apple-system, Segoe UI, Roboto, sans-serif; color: #1a1a1a; background: #f5f5f5; }
+  header { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 1px solid #ddd;
+           padding: 10px 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 16px; margin: 0; }
+  header .stats { color: #666; font-size: 13px; }
+  header label { font-size: 14px; cursor: pointer; user-select: none; }
+  main { padding: 16px; display: flex; flex-direction: column; gap: 10px; max-width: 1100px; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; }
+  .card.review { border-left: 4px solid #e0a800; }
+  .card.reject { border-left: 4px solid #cc0000; }
+  .chead { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; flex-wrap: wrap; }
+  .num { font-weight: 700; }
+  .kind, .badge { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #eef; color: #335; }
+  .badge.rev { background: #fff3cd; color: #7a5b00; }
+  .badge.rej { background: #fde; color: #a00; }
+  .badge.conf { background: #eef7ee; color: #2c5c2c; font-variant-numeric: tabular-nums; }
+  .badge.src { background: #eef; color: #335; }
+  .badge.src.ai { background: #fde7cd; color: #8a4b00; }
+  .shared { font-style: italic; color: #555; background: #fafafa; border-left: 3px solid #ccc;
+            padding: 2px 8px; margin: 4px 0; }
+  .subs { margin: 6px 0 0; padding-left: 18px; }
+  .subs li { margin: 2px 0; }
+  .answer { margin-top: 6px; padding: 3px 8px; background: #eef7ee; border-left: 3px solid #3a3;
+            border-radius: 4px; }
+  .answer .asrc { color: #888; font-size: 11px; }
+  .reasons { margin-top: 6px; }
+  .reasons span { font-size: 11px; color: #a00; background: #fde; padding: 1px 5px;
+                  border-radius: 4px; margin-right: 4px; display: inline-block; margin-bottom: 2px; }
+  /* формула не отрендерилась → красная рамка */
+  .katex-error { border: 1px solid #cc0000; border-radius: 3px; padding: 0 2px; }
+  body.only-review .card:not(.review):not(.reject) { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>__TITLE__</h1>
+  <span class="stats">__STATS__</span>
+  <label><input type="checkbox" id="revfilter"> только требующие проверки</label>
+</header>
+<main>
+__CONTENT__
+</main>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+  document.getElementById('revfilter').addEventListener('change', function (e) {
+    document.body.classList.toggle('only-review', e.target.checked);
+  });
+  window.addEventListener('load', function () {
+    if (window.renderMathInElement) {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false,
+        errorColor: '#cc0000'
+      });
+    }
+  });
+</script>
+</body>
+</html>

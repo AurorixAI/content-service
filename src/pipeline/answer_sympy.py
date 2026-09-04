@@ -415,8 +415,60 @@ def parse_expr(expr_str: str):
         return None
 
 
+#: Показатель степени выше этого раскрывать бессмысленно: школьный ответ таких
+#: не содержит, а `simplify` на них уходит в перебор.
+_MAX_EXPONENT = 64
+
+#: Порог размера дерева выражения. Школьный ответ до него не дотягивает.
+_MAX_OPS = 200
+
+
+def _too_hard_for_simplify(expr) -> bool:
+    """Выражение, на котором `sympy.simplify` может не вернуться.
+
+    Найдено живым замером по выгрузке прода (2026-09-02). Задача
+    `G7_ALG_18_13.4` содержит ответ `a^{36} - 3a^{24b}^{13} + …` — испорченный
+    распознаванием `a^{24}b^{13}`, где показателем степени стала **переменная**.
+    KaTeX такую формулу компилирует молча, разбор проходит, а `simplify`
+    на ней не возвращается: замер показал больше двух минут без признаков
+    завершения.
+
+    Прервать это извне нельзя. `signal.alarm` не помогает: SymPy в этот момент
+    внутри C-кода, и питоновский обработчик сигнала не выполняется, пока
+    управление не вернётся в интерпретатор — проверено, будильник на 5 секунд
+    не сработал за 120. Значит, единственная защита — не звать `simplify`
+    вовсе. Проверка дерева стоит микросекунды, в отличие от самого вызова.
+
+    Возврат `True` означает «не берусь», а не «выражения разные»: вызывающий
+    падает на численную проверку и Монте-Карло, которые ограничены по времени
+    по самой своей природе.
+    """
+    try:
+        import sympy
+    except ImportError:  # pragma: no cover — sympy в requirements
+        return False
+
+    try:
+        for power in expr.atoms(sympy.Pow):
+            exponent = power.exp
+            # Переменная в показателе — тот самый случай G7_ALG_18_13.4.
+            if exponent.free_symbols:
+                return True
+            if exponent.is_Integer and abs(int(exponent)) > _MAX_EXPONENT:
+                return True
+        if sympy.count_ops(expr) > _MAX_OPS:
+            return True
+    except Exception:  # noqa: BLE001 — любой сбой обхода означает «не берусь»
+        return True
+    return False
+
+
 def _exprs_equivalent(a, b) -> bool:
     import sympy
+
+    if _too_hard_for_simplify(a) or _too_hard_for_simplify(b):
+        log.debug("simplify пропущен: выражение вне границ (%.60s / %.60s)", a, b)
+        return False
 
     try:
         if sympy.simplify(a - b) == 0:
@@ -449,6 +501,15 @@ def monte_carlo_equivalent(a_str: str, b_str: str, *, trials: int = 6) -> Option
     if not isinstance(a, Expr) or not isinstance(b, Expr):
         return None
 
+    # Подстановка чисел в выражение с переменной в показателе — не быстрее
+    # `simplify`, а медленнее: `a**(876488338465357824*b**13)` при `a=3, b=5`
+    # заставляет Python считать целое число с квинтиллионом цифр. Именно здесь
+    # вешалась задача `G7_ALG_18_13.4`, а не в `simplify`, как показалось
+    # сначала. Тот же заслон, что и там: не берёмся — значит `None`.
+    if _too_hard_for_simplify(a) or _too_hard_for_simplify(b):
+        log.debug("Монте-Карло пропущено: выражение вне границ")
+        return None
+
     if _exprs_equivalent(a, b):
         return True
 
@@ -478,6 +539,19 @@ def monte_carlo_equivalent(a_str: str, b_str: str, *, trials: int = 6) -> Option
     return True
 
 
+def _is_boolean_atom(expr) -> bool:
+    """Свернулось ли выражение в булеву константу (`BooleanTrue`/`BooleanFalse`).
+
+    Так выглядит закрытое сравнение без свободных переменных: `21 > 2` → True.
+    """
+    try:
+        from sympy.logic.boolalg import BooleanAtom
+
+        return isinstance(expr, BooleanAtom)
+    except ImportError:  # pragma: no cover — sympy в requirements
+        return isinstance(expr, bool)
+
+
 def sympy_equivalent(a: str, b: str, answer_type: str = "") -> Optional[bool]:
     """
     True = mathematically same, False = different, None = cannot decide.
@@ -500,6 +574,14 @@ def sympy_equivalent(a: str, b: str, answer_type: str = "") -> Optional[bool]:
 
     ea, eb = parse_expr(a), parse_expr(b)
     if ea is not None and eb is not None:
+        # Закрытое числовое сравнение SymPy сворачивает в булево:
+        # `21 > 2` → True и `21 > -12` → True. Сравнивать эти булевы между
+        # собой нельзя — иначе ЛЮБЫЕ два истинных (или два ложных) неравенства
+        # объявляются одним ответом. Истинность высказывания ≠ равенство
+        # ответов, решить этот случай SymPy не может → None, пусть решают
+        # структурные проверки выше (`_numeric_inequality_equivalent` и др.).
+        if _is_boolean_atom(ea) and _is_boolean_atom(eb):
+            return None
         if _exprs_equivalent(ea, eb):
             return True
         mc = monte_carlo_equivalent(a, b)
@@ -560,6 +642,8 @@ def try_validate_answer_for_question(question: str, answer: str, answer_type: st
         import sympy
         from sympy import N
 
+        if _too_hard_for_simplify(target):
+            return None
         simplified = sympy.simplify(target)
         answer_expr = parse_expr(ans)
         if answer_expr is None:

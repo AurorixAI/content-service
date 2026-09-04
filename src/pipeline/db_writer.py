@@ -12,7 +12,9 @@ from typing import Any, Dict, List, Optional
 from sqlalchemy import create_engine, text
 
 from src.core.config import get_settings
+from src.pipeline import schema_vocab as vocab
 from src.pipeline.models import ExtractedTask, Figure
+from src.pipeline.task_ids import build_source_reference, build_task_id
 
 log = logging.getLogger(__name__)
 
@@ -284,12 +286,10 @@ class DBWriter:
 
         # Valid enum values enforced by DB CHECK constraints
         _VALID_DIFFICULTY = {"A", "B", "C"}
-        _VALID_COGLOAD = {"recall", "apply", "analyze"}
-        _VALID_ANSWER_TYPE = {
-            "exact_number", "expression", "multiple_choice", "text",
-            "fraction", "equation_solution", "set", "coordinate",
-            "inequality", "decimal", "open_text", "multiple_values",
-        }
+        # Общий словарь: см. `schema_vocab`. Здесь копия совпадала с базой,
+        # но именно наличие копий и позволило второй разойтись незамеченной.
+        _VALID_COGLOAD = vocab.COGNITIVE_LOADS
+        _VALID_ANSWER_TYPE = vocab.ANSWER_TYPES
         _VALID_TASK_CATEGORY = {
             "standard", "advanced", "olympiad",
             "oral", "research", "project", "with_drawing",
@@ -379,15 +379,17 @@ class DBWriter:
         is_star = False
         # ─────────────────────────────────────────────────────────
 
-        task_id = (
-            f"{prefix}_{task.paragraph_number}_{task.exercise_number}"
-            .replace(".", "_").replace(" ", "")
-        )[:60]  # VARCHAR(60) в БД
+        # Формат общий со staging-путём: `src/pipeline/task_ids.py`. Раньше
+        # здесь была подстановка «точка → подчёркивание» без приведения к ASCII,
+        # и в проде осело 8 020 идентификаторов с `§`, длинным тире и кириллицей.
+        task_id = build_task_id(
+            prefix, task.paragraph_number, task.exercise_number,
+        ) or f"{prefix}_{task.temp_id}"[:60]
 
-        # IRT b — только из difficulty (A/B/C), без надбавок за маркеры
-        irt_b = {"A": -1.0, "B": 0.5, "C": 1.5}.get(difficulty, 0.0)
-        irt_a = 1.0
-        irt_c = 0.2 if answer_type == "multiple_choice" else 0.0
+        # IRT — только из difficulty (A/B/C), без надбавок за маркеры.
+        # Формула одна на оба пути записи (`schema_vocab.irt_params`): пока
+        # она жила только здесь, staging-путь потерял её целиком (B39).
+        irt = vocab.irt_params(difficulty, answer_type)
 
         # Enrich tags with quality signals before writing
         tags = dict(task.tags or {})
@@ -430,9 +432,9 @@ class DBWriter:
                 "answer_type": answer_type,
                 "difficulty": difficulty,
                 "cognitive_load": cognitive_load,
-                "irt_a": irt_a,
-                "irt_b": irt_b,
-                "irt_c": irt_c,
+                "irt_a": irt["irt_discrimination"],
+                "irt_b": irt["irt_difficulty"],
+                "irt_c": irt["irt_guessing"],
                 "distractor_meta": json.dumps(task.distractor_meta or [], ensure_ascii=False),
                 "answer_options": json.dumps(task.answer_options or [], ensure_ascii=False),
                 "toc_id": task.toc_id,
@@ -440,7 +442,9 @@ class DBWriter:
                 "is_star": is_star,
                 "task_category": task_category,
                 "verification_status": "verified" if task.sympy_verified else "pending",
-                "source_ref": f"{textbook_id}::{task.paragraph_number}:{task.exercise_number}",
+                "source_ref": build_source_reference(
+                    textbook_id, task.paragraph_number, task.exercise_number,
+                ),
             },
         )
         if result.fetchone() is None:
@@ -631,13 +635,29 @@ class DBWriter:
         return [n for n in range(lo, hi + 1) if n not in in_db]
 
     def paragraph_has_tasks(self, toc_id) -> bool:
-        """True if tasks_master already contains rows for this TOC entry — used for resume."""
+        """Параграф уже обработан? Используется для резюме прогона.
+
+        Смотрит в **обе** таблицы. Раньше проверялся только `tasks_master`, и
+        после перевода конвейера на staging (И3) резюме сломалось молча:
+        задачи уезжали в `tasks_staging`, проверка их не видела, и повторный
+        запуск прогонял книгу заново — с оплатой всех вызовов. На книге в 108
+        страниц это стоило полного второго прогона.
+
+        `tasks_staging` проверяется первым: там результат появляется сразу,
+        а в `tasks_master` — только после промоушена, который может и не
+        случиться (например, если гейты отправили задачи на проверку).
+        """
         if toc_id is None:
             return False
         engine = _engine()
         with engine.connect() as conn:
             row = conn.execute(
-                text("SELECT 1 FROM tasks_master WHERE toc_id = :tid LIMIT 1"),
+                text("""
+                    SELECT 1 FROM tasks_staging WHERE toc_id = :tid
+                    UNION ALL
+                    SELECT 1 FROM tasks_master  WHERE toc_id = :tid
+                    LIMIT 1
+                """),
                 {"tid": toc_id},
             ).fetchone()
         return row is not None

@@ -26,6 +26,10 @@ class ExtractedTask:
 
     question_text: str = ""
     question_latex: str = ""
+    #: Общее условие группы («В задачах 140–145 решите уравнение:»).
+    #: Напечатано в книге один раз, а относится ко всем задачам диапазона —
+    #: без него запись не читается сама по себе. Заполняет src/pipeline/structure.py.
+    shared_context: str = ""
     answer_raw: str = ""
     answer_type: str = "exact_number"
     # exact_number, expression, multiple_choice, text, fraction,
@@ -61,6 +65,18 @@ class ExtractedTask:
     # figure_refs: ID изображений в task_figures (напр. ["fig-p12-1"])
     requires_figure: bool = False
     figure_refs: List[str] = field(default_factory=list)
+
+    # --- Провенанс (инвариант И1) ---
+    # Откуда взялось значение и насколько мы в нём уверены. Без этого
+    # придуманный моделью ответ неотличим от напечатанного в книге, и всё,
+    # что ниже по течению, валидирует догадку, не зная, что это догадка.
+    # Словарь значений и порядок авторитета — src/pipeline/provenance.py.
+    answer_source: str = "absent"      # book_key|book_solution|sympy_derived|ai_solved|absent
+    text_source: str = "book_ocr"      # book_ocr|ai_repaired
+    answer_source_page: Optional[int] = None
+    confidence: Dict[str, Any] = field(default_factory=dict)  # {ocr, structure, answer}
+    #: Причины, по которым задача помечена к ручной проверке (заполняют гейты).
+    review_flags: List[str] = field(default_factory=list)
 
     # --- Дуальный маппинг ---
     # skill_id может быть None — задачи без маппинга на ядро (textbook-only)

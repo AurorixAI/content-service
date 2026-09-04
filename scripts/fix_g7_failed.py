@@ -462,6 +462,7 @@ def pass3_manual_fixes(engine, *, dry_run: bool) -> dict[str, int]:
     return stats
 
 
+def pass2_distractor_verify(engine, rows: list[dict], *, dry_run: bool) -> dict[str, int]:
     """Second pass: trust stored answer when distractor regen succeeds."""
     stats = {"reconciled": 0, "skipped": 0}
     for row in rows:
@@ -489,6 +490,8 @@ def pass3_manual_fixes(engine, *, dry_run: bool) -> dict[str, int]:
     return stats
 
 
+def run_retry_loop(engine, *, limit: int) -> None:
+    """Third pass: hand the still-failing tasks back to the smart-verify loop."""
     import subprocess
 
     subprocess.run(
