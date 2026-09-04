@@ -21,6 +21,13 @@ from src.core.exceptions import PipelineError
 from src.core.job_state import JobStateManager, PipelineStep
 from src.pipeline.classification import SkeletonTextbookMapper
 from src.pipeline.db_writer import DBWriter
+from src.pipeline import gates as G
+from src.pipeline.staging import StagingWriter, new_run_id
+from src.pipeline import structure as structure_layer
+from src.pipeline import provenance as prov
+from src.pipeline import scoring
+from src.pipeline import usage
+from src.pipeline.answer_key import is_empty_answer
 from src.pipeline.enrichment import AIAnswerSolver
 from src.pipeline.extraction import LegendExtractor, ParagraphSplitter, TaskExtractor
 from src.pipeline.figures import FigureExtractor, figures_index_by_page
@@ -30,6 +37,7 @@ from src.pipeline.exercise_ranges import (
     task_id_prefix,
 )
 from src.pipeline.figure_links import attach_figure_refs, is_figure_solvable_online
+from src.pipeline import schema_vocab as vocab
 from src.pipeline.models import ExtractedTask, Figure
 from src.pipeline.ocr import GeminiVisionOCR
 from src.pipeline.ocr_utils import is_usable_ocr_text
@@ -150,6 +158,58 @@ def _is_offline_task(task: ExtractedTask, known_figure_ids: set[str] | None = No
 from src.pipeline.dedup import is_duplicate_question, question_fingerprint
 
 
+def _is_synthetic_number(number: object) -> bool:
+    """Номер вида `_7` присвоен экстрактором разделу без номера в книге.
+
+    Конвенция `toc_extractor` (`f"_{sort_idx + 1}"`): у настоящего параграфа
+    номер напечатан в учебнике, у «Введения» / «Ответов» / «Приложений» — нет.
+    """
+    return str(number or "").strip().startswith("_")
+
+
+def content_leaves(toc: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Разделить оглавление на обрабатываемые параграфы и служебные разделы.
+
+    Возвращает `(обрабатываемые, пропущенные)`.
+
+    **Родитель определяется по `parent_number`, а не по `parent_id`.** Это не
+    придирка: `db_writer.load_toc` отдаёт JOIN-ом именно `parent_number`, поля
+    `parent_id` в его словарях нет вообще. Прежний код спрашивал `parent_id`,
+    всегда получал `None`, и множество родителей выходило пустым — то есть
+    родительские главы от листьев не отличались никогда. Маскировал это фильтр
+    `level >= 2`: главы первого уровня отсеивались заодно со служебными
+    разделами. Убери фильтр — и главы пошли бы в обработку вместе со своими
+    подпараграфами, а их страницы обрабатывались бы дважды.
+
+    Служебное от содержательного отличаем по синтетическому номеру `_N`,
+    который `toc_extractor` присваивает разделам без номера в книге
+    («Введение», «Ответы», «Приложения»). У настоящего параграфа номер
+    напечатан — даже если он первого уровня, как «6. Задачи на повторение».
+    """
+    parent_numbers = {
+        str(t.get("parent_number") or "").strip()
+        for t in toc
+        if str(t.get("parent_number") or "").strip()
+    }
+    parent_ids = {t.get("parent_id") for t in toc if t.get("parent_id") is not None}
+
+    keep: list[dict] = []
+    skip: list[dict] = []
+    for t in toc:
+        number = str(t.get("number") or "").strip()
+        is_parent = number in parent_numbers or (
+            t.get("id") is not None and t.get("id") in parent_ids
+        )
+        if is_parent:
+            continue  # глава: её содержание разложено по подпараграфам
+        level = t.get("level") or 1
+        if level >= 2 or not _is_synthetic_number(number):
+            keep.append(t)
+        else:
+            skip.append(t)
+    return keep, skip
+
+
 class DigitizationOrchestrator:
     """Runs the full digitization pipeline for one textbook, streaming
     progress updates into the job state manager.
@@ -176,14 +236,117 @@ class DigitizationOrchestrator:
         self.target_paragraphs = target_paragraphs
         self.state = JobStateManager()
         self.writer = DBWriter()
+        # И3: конвейер пишет в staging, в tasks_master переносит промоушен.
+        # run_id адресует попытку целиком — по нему промоушен и откат.
+        self.run_id = new_run_id()
+        self.staging = StagingWriter()
         # Заполняется после figure extraction; используется фильтром
         self._known_figure_ids: set[str] = set()
+
+    # ── Запись результата (единственный шов, инвариант И3) ────────────────
+
+    def _write_tasks(self, tasks: List[ExtractedTask]) -> int:
+        """Единственная точка, через которую результат конвейера покидает процесс.
+
+        Гейты стоят ЗДЕСЬ, а не «где-то рядом»: вердикт вычисляется на каждый
+        батч и уезжает в staging вместе с задачей. Ничего не отбрасывается —
+        `reject` тоже пишется, иначе брак либо теряется, либо просачивается
+        мимо учёта (И3).
+
+        `pipeline_write_target=master` возвращает прежнее прямое write в
+        `tasks_master` — аварийный откат, не штатный режим.
+        """
+        if not tasks:
+            return 0
+
+        prefix = task_id_prefix(self.textbook_id, self.class_level)
+
+        if get_settings().pipeline_write_target == "master":
+            log.warning(
+                "[%s] запись напрямую в tasks_master (аварийный режим, гейты не применяются)",
+                self.job_id,
+            )
+            return self.writer.write_batch(
+                tasks, self.textbook_id, self.class_level, prefix=prefix
+            )
+
+        verdicts = G.evaluate_batch(tasks)
+        summary = G.apply_verdicts(tasks, verdicts)
+        # Скоринг считается из готового вердикта (KaTeX уже прогнан батчем выше)
+        # и заполняет `confidence`. Без него в staging уезжали пустые {} —
+        # очередь ручной проверки строить было не по чему.
+        review = scoring.score_tasks(tasks, verdicts)
+        written = self.staging.write_batch(
+            tasks,
+            verdicts,
+            textbook_id=self.textbook_id,
+            class_level=self.class_level,
+            run_id=self.run_id,
+            prefix=prefix,
+        )
+        log.info(
+            "[%s] staging: записано %d (pass=%d review=%d reject=%d · "
+            "брак=%d ждут ответа=%d, run=%s)",
+            self.job_id, written,
+            summary.get(G.PASS, 0), summary.get(G.REVIEW, 0), summary.get(G.REJECT, 0),
+            review["n_needs_review"], review["n_awaiting_answer"], self.run_id,
+        )
+        return written
+
+    def _mark_extraction_provenance(
+        self, tasks: List[ExtractedTask]
+    ) -> List[ExtractedTask]:
+        """Пометить ответы, пришедшие из извлечения, как произведённые моделью.
+
+        Извлечение возвращает `answer_raw` заполненным — модель решает задачу
+        по ходу чтения страницы. Провенанс при этом оставался `absent`, то есть
+        «ответа нет ни из одного источника», хотя ответ есть. Это ровно та
+        неразличимость, ради которой заводился И1: снаружи такой ответ
+        неотличим от напечатанного в книге.
+
+        Метка `ai_solved` здесь **консервативна**. Если книга печатает ответ
+        рядом с условием, он тоже уедет как `ai_solved` — и это лучше обратной
+        ошибки: заниженный источник даёт задаче лишнюю проверку человеком, а
+        завышенный протащил бы догадку в банк под видом книжной истины.
+        Настоящий книжный ответ поднимет провенанс до `book_key` при join'е —
+        `provenance.outranks` это разрешает.
+        """
+        marked = 0
+        for t in tasks:
+            if t.answer_source == prov.ABSENT and not is_empty_answer(t.answer_raw):
+                t.answer_source = prov.AI_SOLVED
+                marked += 1
+        if marked:
+            log.info(
+                "[%s] провенанс: %d ответов помечены ai_solved (источник — извлечение)",
+                self.job_id, marked,
+            )
+        return tasks
+
+    def _apply_structure(
+        self, tasks: List[ExtractedTask], number: str = "?"
+    ) -> List[ExtractedTask]:
+        """Структурный слой: общий контекст, склейка через разрыв, порядок.
+
+        Применяется на ПОЛНОМ списке задач параграфа — до фильтров и до
+        разбиения на чанки. Склейка иначе не сработает: голова и хвост одной
+        разорванной задачи могут попасть в разные чанки.
+        """
+        tasks, summary = structure_layer.apply(tasks)
+        if any(summary.values()):
+            log.info(
+                "[%s] §%s: структура — контекст снят=%d распространён=%d, "
+                "склеено=%d, разделов пересортировано=%d, разрывов нумерации=%d",
+                self.job_id, number,
+                summary["cleaned"], summary["propagated"],
+                summary["merged"], summary["reordered"],
+                summary["numbering_gaps"],
+            )
+        return tasks
 
     # ── Public entry points ───────────────────────────────────────────────
 
     def run_pdf(self, pdf_path: str) -> int:
-        from src.pipeline.pipeline_mode import pipeline_mode
-
         if pipeline_mode(self.textbook_id) == "theme_stream":
             return self.run_pdf_theme_stream(pdf_path)
         return self._run_pdf_page_based(pdf_path)
@@ -238,16 +401,20 @@ class DigitizationOrchestrator:
 
         # True leaf nodes: entries that are not parents of any other entry.
         # This handles 2-level (skip level 1) and 3-level (skip level 1+2) TOCs.
-        parent_ids = {t.get("parent_id") for t in toc_sorted if t.get("parent_id") is not None}
-        candidate_leaves = [t for t in toc_sorted if t.get("id") not in parent_ids]
-        # Always skip pure top-level structural chapters (level 1 with no pages worth processing)
-        leaves = [t for t in candidate_leaves if (t.get("level") or 1) >= 2]
+        leaves, skipped = content_leaves(toc_sorted)
         if not leaves:
             leaves = toc_sorted  # fallback: treat the whole TOC as leaves
         log.info(
             "[%s] TOC: %d total, %d leaf paragraphs to process",
             self.job_id, len(toc_sorted), len(leaves),
         )
+        # Что именно не обрабатывается — в лог поимённо. Пропуск страниц не
+        # должен быть невидимым: раньше так терялись целые разделы.
+        for t in skipped:
+            log.info(
+                "[%s] TOC: пропущен служебный раздел «%s» (стр. %s–%s)",
+                self.job_id, t.get("title"), t.get("page_start"), t.get("page_end"),
+            )
         self.state.set_paragraphs_total(self.job_id, len(leaves))
 
         # ── Legend: extract once from the first ~10 pages (lookup table) ──
@@ -394,6 +561,8 @@ class DigitizationOrchestrator:
                 self.job_id, len(failed_paras), failed_paras,
             )
 
+        log.info("[%s] %s", self.job_id, usage.TRACKER.format_report())
+
         self.writer.update_digitization_status(self.textbook_id, "done", 100.0, total_written)
         return total_written
 
@@ -416,10 +585,7 @@ class DigitizationOrchestrator:
             log.warning("[%s] Could not read PDF length: %s", self.job_id, exc)
             pdf_total_pages = 240
 
-        parent_ids = {t.get("parent_id") for t in toc if t.get("parent_id")}
-        leaves = [t for t in toc if t.get("id") not in parent_ids and (t.get("level") or 1) >= 2]
-        if not leaves:
-            leaves = [t for t in toc if (t.get("level") or 1) >= 2]
+        leaves, _skipped = content_leaves(toc)
         leaves.sort(key=lambda t: t.get("sort_order") or 0)
 
         matcher = TocMatcher(leaves)
@@ -552,6 +718,8 @@ class DigitizationOrchestrator:
                 self.job_id, len(failed), failed,
             )
 
+        log.info("[%s] %s", self.job_id, usage.TRACKER.format_report())
+
         self.writer.update_digitization_status(self.textbook_id, "done", 100.0, total_written)
         return total_written
 
@@ -677,6 +845,8 @@ class DigitizationOrchestrator:
         tasks: List[ExtractedTask] = [self._dict_to_task(item) for item in items]
         log.info("[%s] Loaded %d tasks from JSON", self.job_id, len(tasks))
 
+        tasks = self._apply_structure(tasks)
+
         self.state.set_step(self.job_id, PipelineStep.VALIDATE)
         tasks = self._validate_batch(tasks)
 
@@ -693,13 +863,9 @@ class DigitizationOrchestrator:
         tasks = mapper.map_batch(tasks)
 
         self.state.set_step(self.job_id, PipelineStep.WRITE)
-        written = self.writer.write_batch(
-            tasks,
-            self.textbook_id,
-            self.class_level,
-            prefix=task_id_prefix(self.textbook_id, self.class_level),
-        )
+        written = self._write_tasks(tasks)
         self.state.increment_written(self.job_id, written)
+        log.info("[%s] %s", self.job_id, usage.TRACKER.format_report())
         self.writer.update_digitization_status(self.textbook_id, "done", 100.0, written)
         return written
 
@@ -794,6 +960,9 @@ class DigitizationOrchestrator:
         if not tasks:
             self.state.increment_paragraph(self.job_id, 0)
             return 0, 0
+
+        tasks = self._mark_extraction_provenance(tasks)
+        tasks = self._apply_structure(tasks, number)
 
         if figures_map:
             tasks = attach_figure_refs(tasks, para["text"], figures_map)
@@ -892,12 +1061,7 @@ class DigitizationOrchestrator:
                     )
                 figures_written = True
 
-            written_chunk = self.writer.write_batch(
-                chunk,
-                self.textbook_id,
-                self.class_level,
-                prefix=task_id_prefix(self.textbook_id, self.class_level),
-            )
+            written_chunk = self._write_tasks(chunk)
             total_written += written_chunk
             if len(tasks) > chunk_size:
                 log.info(
@@ -1080,10 +1244,10 @@ class DigitizationOrchestrator:
 
     # ── Conversion ────────────────────────────────────────────────────────
 
-    # Allowed values for varchar(20) DB columns. AI sometimes returns a long
-    # phrase instead of a single token — we clamp to the safe default.
-    _ALLOWED_ANSWER_TYPE = {"exact_number", "multiple_choice", "open_text", "interval", "expression", "set", "boolean", "ordered_list"}
-    _ALLOWED_COGNITIVE = {"recall", "apply", "analyze", "evaluate", "create"}
+    # Наборы допустимых значений живут в `schema_vocab` — одном месте на весь
+    # конвейер. Здесь они раньше были свои и расходились с базой в обе стороны:
+    # пропускали `boolean`/`interval`/`ordered_list`, которых CHECK не знает,
+    # и схлопывали в `exact_number` семь типов, которые база принимает.
     _ALLOWED_CATEGORY = {"standard", "star", "olympiad", "applied", "research", "oral"}
 
     @staticmethod
@@ -1103,12 +1267,19 @@ class DigitizationOrchestrator:
             question_text=item.get("question_text", ""),
             question_latex=item.get("question_latex", ""),
             answer_raw=str(item.get("answer_raw", item.get("correct_answer", ""))),
-            answer_type=PipelineOrchestrator._clamp(item.get("answer_type"), PipelineOrchestrator._ALLOWED_ANSWER_TYPE, "exact_number"),
-            difficulty=item.get("difficulty", "B"),
-            cognitive_load=PipelineOrchestrator._clamp(item.get("cognitive_load"), PipelineOrchestrator._ALLOWED_COGNITIVE, "apply"),
+            answer_type=vocab.clamp(
+                item.get("answer_type"), vocab.ANSWER_TYPES, vocab.DEFAULT_ANSWER_TYPE,
+            ),
+            # B40: сырое значение отсюда доезжало до `tasks_master`, где на
+            # `difficulty` стоит CHECK, и вставка падала внутри `promote()` —
+            # то есть задача тихо оставалась в карантине как `failed`.
+            difficulty=vocab.clamp_difficulty(item.get("difficulty")),
+            cognitive_load=vocab.clamp(
+                item.get("cognitive_load"), vocab.COGNITIVE_LOADS, vocab.DEFAULT_COGNITIVE_LOAD,
+            ),
             is_star=bool(item.get("is_star", False)),
             task_marker=item.get("task_marker", ""),
-            task_category=PipelineOrchestrator._clamp(item.get("task_category"), PipelineOrchestrator._ALLOWED_CATEGORY, "standard"),
+            task_category=DigitizationOrchestrator._clamp(item.get("task_category"), DigitizationOrchestrator._ALLOWED_CATEGORY, "standard"),
             skill_id=item.get("skill_id", ""),
             toc_id=item.get("toc_id"),
             tags=item.get("tags", {}),

@@ -29,7 +29,7 @@ class SymPySolver:
     _BLANK_PATTERNS = (r"\square", r"\Box", r"\ldots", r"…", "?", "__", "___")
 
     def compute(self, task: ExtractedTask) -> ExtractedTask:
-        """Пробует вычислить answer_raw из question_latex, если он пуст.
+        r"""Пробует вычислить answer_raw из question_latex, если он пуст.
         
         Стратегии:
         1. Выражение вида  `E = \square`  → вычислить E

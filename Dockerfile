@@ -10,15 +10,25 @@ FROM python:3.12-slim AS runtime
 
 WORKDIR /app
 
-# System libs for psycopg2 + curl for the Docker healthcheck
+# System libs for psycopg2 + curl for the Docker healthcheck.
+# nodejs — для KaTeX-гейта (src/validate/katex.py вызывает katex_compile.js).
+# Без него компиляция формул «мягко пропускается»: гейт не падает, но и не
+# работает — проверено фактом на первом живом прогоне, где `compile_measured`
+# был False у всей книги, а в логе стояло «не найден `node` в PATH».
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     gosu \
     curl \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=deps /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=deps /usr/local/bin /usr/local/bin
+# KaTeX ставится из package.json — версия закреплена там (katex@0.16.11).
+COPY package.json package-lock.json ./
+RUN npm install --omit=dev --no-audit --no-fund
+
 COPY src/ ./src/
 COPY data/ ./data/
 COPY alembic/ ./alembic/

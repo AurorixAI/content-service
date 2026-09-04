@@ -21,6 +21,8 @@ from src.pipeline.gemini_client import (
 )
 from src.pipeline.models import ExtractedTask
 from src.pipeline.quality import thinking_budget, enrichment_max_tokens, enrichment_retry_max
+from src.pipeline import provenance as prov
+from src.pipeline.answer_key import needs_ai_answer
 
 log = logging.getLogger("pipeline")
 
@@ -32,10 +34,17 @@ class AIAnswerSolver:
         self.api_key = api_key or get_api_key()
 
     def solve(self, task: ExtractedTask, figure_context: str = "") -> ExtractedTask:
-        """Заполняет task.answer_raw если он пустой. Не трогает ничего больше."""
+        """Заполняет task.answer_raw если он пустой. Не трогает ничего больше.
+
+        Инвариант И2: это **последний** источник ответа, а не первый. Разрешение
+        на вызов даёт `answer_key.needs_ai_answer` — она пропускает только задачи,
+        которым ни книга, ни SymPy ответа не дали. Заполненный ответ помечается
+        `answer_source="ai_solved"`, чтобы всё, что ниже по течению, знало, что
+        проверяет догадку, а не напечатанное в книге.
+        """
         if not task.question_text.strip():
             return task
-        if task.answer_raw and task.answer_raw.strip() not in ("", "—", "-", "?", "..."):
+        if not needs_ai_answer(task):
             return task
 
         fig_block = f"\nРисунок к задаче:\n{figure_context.strip()}\n" if figure_context.strip() else ""
@@ -65,6 +74,9 @@ class AIAnswerSolver:
                         ans = str(ans)
                     if isinstance(ans, str) and ans.strip():
                         task.answer_raw = ans.strip()
+                        task.answer_source = prov.AI_SOLVED
+                        task.confidence = dict(task.confidence or {})
+                        task.confidence["answer"] = 0.0  # измерено: подтверждений нет
                         return task
             except Exception as e:
                 log.warning("AIAnswerSolver error (%s) attempt %d: %s", task.temp_id, attempt + 1, e)

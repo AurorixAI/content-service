@@ -872,6 +872,27 @@ def _sign_regions_equivalent(a: str, b: str) -> bool:
         rb_s = sorted((r[0], r[1], round(r[2], 4)) for r in rb)
         return ra_s == rb_s
     if ra and not rb:
+        # Проза вида «положительные при x > -6,5; отрицательные при x < -6,5»
+        # против голой записи «x > -6,5; x < -6,5». Пробовать каждую область
+        # против ВСЕЙ строки нельзя: `x > -6.5` не эквивалентно строке из двух
+        # неравенств, и разбор проваливался на любом ответе с двумя областями.
+        # Сопоставляем поэлементно, каждая часть расходуется один раз.
+        parts = [p.strip() for p in re.split(r";", b) if p.strip()]
+        if len(parts) == len(ra) and len(parts) > 1:
+            used: set[int] = set()
+            for sign, op, val in ra:
+                probe = f"x {op} {val}"
+                hit = False
+                for i, part in enumerate(parts):
+                    if i in used:
+                        continue
+                    if _single_inequalities_equivalent(probe, part):
+                        used.add(i)
+                        hit = True
+                        break
+                if not hit:
+                    return False
+            return True
         for sign, op, val in ra:
             probe = f"x {op} {val}".replace(",", ".")
             if not _single_inequalities_equivalent(probe, b):

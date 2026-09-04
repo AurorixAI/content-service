@@ -51,6 +51,18 @@ class Settings(BaseSettings):
     # Post-processing (AI A/B/C + empty skills) — defer until all books digitized
     skip_post_processing: bool = True
 
+    # Куда конвейер пишет результат (инвариант И3).
+    # staging — в `tasks_staging`, в `tasks_master` переносит только
+    # `scripts/promote.py` после гейтов. Это штатный режим.
+    # master — прежнее прямое write в `tasks_master`, аварийный откат.
+    pipeline_write_target: str = Field(default="staging", pattern="^(staging|master)$")
+
+    # Пороги доверия (Сессия 5). Ниже порога — задача уходит в ручную проверку.
+    # Подобраны по фактическим срабатываниям на 6 книгах прототипа, не с потолка:
+    # см. EVAL.md, строка «Сессия 5».
+    ocr_confidence_threshold: float = 0.70
+    structure_confidence_threshold: float = 0.70
+
     # Gemini rate limiting (per process, sliding window)
     # Gemini 3.5 Flash has generous Flash-tier quotas (2000+ RPM)
     gemini_pro_rpm: int = 40

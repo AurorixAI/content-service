@@ -20,6 +20,7 @@ import requests
 from pydantic import BaseModel
 
 from src.core.config import get_settings
+from src.pipeline.usage import TRACKER
 
 log = logging.getLogger(__name__)
 
@@ -48,6 +49,62 @@ def _vertex_project() -> str:
 
 def _vertex_location() -> str:
     return get_settings().vertex_location.strip() or "global"
+
+
+#: Прямой эндпоинт Gemini API (auth ключом в query, без OAuth).
+_GENLANG_BASE = (
+    "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+)
+
+
+def use_api_key() -> bool:
+    """Идти по API-ключу, а не через Vertex.
+
+    `.env.example` документирует ключ как «Option A: проще, прямой API», но
+    транспорта под него не было: все четыре точки входа жёстко собирали
+    Vertex-URL и требовали ADC-токен, а `get_api_key()` хоть и вызывался в
+    четырёх модулях, на аутентификацию не влиял вообще. Ключ выбирается, когда
+    проект Vertex не задан, а ключ есть — Vertex остаётся приоритетным путём
+    для прода, где нужны квоты повыше.
+    """
+    s = get_settings()
+    return not s.vertex_project_id.strip() and bool(s.gemini_api_key.strip())
+
+
+def _endpoint(model: str) -> tuple[str, dict]:
+    """URL и заголовки для одного вызова — единственное место выбора транспорта.
+
+    Ключ уезжает **заголовком** `x-goog-api-key`, а не query-параметром, и это
+    не стилистика (B42). `resp.raise_for_status()` поднимает `HTTPError`, чей
+    текст содержит полный URL, а вызывающие это исключение логируют — например
+    `AIAnswerSolver.solve` пишет `log.warning(..., e)` на каждой попытке.
+    С ключом в query достаточно одной 4xx на ключевом транспорте, чтобы ключ
+    осел в логах воркера. Заголовки в текст исключения не попадают.
+    """
+    if use_api_key():
+        return _GENLANG_BASE.format(model=model), {
+            "Content-Type": "application/json",
+            "x-goog-api-key": get_api_key().strip(),
+        }
+    url = _VERTEX_BASE.format(
+        project=_vertex_project(), location=_vertex_location(), model=model,
+    )
+    return url, {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {_get_adc_token()}",
+    }
+
+
+def _refresh_auth(headers: dict) -> bool:
+    """Обновить креды после 401. `False` — обновлять нечего, повтор бессмыслен.
+
+    ADC-токен протухает и обновляется; API-ключ не протухает, поэтому 401 на
+    нём означает негодный ключ, и ретрай только съест время.
+    """
+    if use_api_key():
+        return False
+    headers["Authorization"] = f"Bearer {_get_adc_token()}"
+    return True
 
 
 # ── Rate limiter ─────────────────────────────────────────────────────────
@@ -163,7 +220,7 @@ def call_gemini(
     max_retries: int = 3,
     thinking_budget: Optional[int] = 0,
 ) -> str:
-    """Call Gemini via Vertex AI global endpoint with ADC. Billed via GCP.
+    """Call Gemini. Транспорт выбирает `_endpoint`: Vertex+ADC либо API-ключ.
 
     thinking_budget:
       0     — default. Disables thinking so maxOutputTokens is fully
@@ -178,9 +235,24 @@ def call_gemini(
         RuntimeError      — empty response or auth failure.
     """
     mdl = model or get_pro_model()
-    url = _VERTEX_BASE.format(
-        project=_vertex_project(), location=_vertex_location(), model=mdl,
-    )
+
+    # Кэш до сети: повтор того же запроса не стоит ничего. Кэшируются только
+    # успешные ответы — см. llm_cache.
+    from src.pipeline.llm_cache import get_cache
+
+    cache = get_cache()
+    cache_key = None
+    if cache is not None:
+        cache_key = cache.make_key(
+            mdl, prompt, temperature=temperature, max_tokens=max_tokens,
+            json_mode=json_mode, thinking=thinking_budget, kind="text",
+        )
+        hit = cache.get(cache_key)
+        if hit is not None:
+            TRACKER.record_cache_hit(mdl)
+            return hit
+
+    url, headers = _endpoint(mdl)
 
     gen_config: dict = {
         "temperature": temperature,
@@ -196,11 +268,6 @@ def call_gemini(
         "generationConfig": gen_config,
     }
 
-    bearer = _get_adc_token()
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer}",
-    }
 
     limiter = _limiter_for(mdl)
     last_exc: Optional[Exception] = None
@@ -210,8 +277,8 @@ def call_gemini(
             resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
             if resp.status_code == 401 and attempt < max_retries - 1:
                 log.warning("Gemini 401 — refreshing ADC token (attempt %d)", attempt + 1)
-                bearer = _get_adc_token()
-                headers["Authorization"] = f"Bearer {bearer}"
+                if not _refresh_auth(headers):
+                    break  # негодный ключ: обновлять нечего
                 time.sleep(1)
                 continue
             if resp.status_code in (429, 500, 502, 503, 504):
@@ -232,6 +299,7 @@ def call_gemini(
                 log.error("Gemini HTTP %s body: %s", resp.status_code, resp.text[:1000])
             resp.raise_for_status()
             data = resp.json()
+            TRACKER.record(mdl, data.get("usageMetadata"))
             candidate = data["candidates"][0]
             finish = candidate.get("finishReason", "")
             parts = candidate["content"].get("parts", [])
@@ -243,6 +311,10 @@ def call_gemini(
                     "Gemini MAX_TOKENS for model %s — returning truncated response (%d chars)",
                     mdl, len(text),
                 )
+            else:
+                # Обрезанный ответ в кэш не кладём: повтор мог бы дать целый.
+                if cache is not None and cache_key:
+                    cache.set(cache_key, mdl, text)
             return text
 
         except requests.ConnectionError as exc:
@@ -272,9 +344,7 @@ def call_gemini_structured(
 ) -> TSchema:
     """Call Gemini with JSON responseSchema enforced via Pydantic model."""
     mdl = model or get_flash_model()
-    url = _VERTEX_BASE.format(
-        project=_vertex_project(), location=_vertex_location(), model=mdl,
-    )
+    url, headers = _endpoint(mdl)
 
     gen_config: dict = {
         "temperature": temperature,
@@ -290,11 +360,6 @@ def call_gemini_structured(
         "generationConfig": gen_config,
     }
 
-    bearer = _get_adc_token()
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer}",
-    }
 
     limiter = _limiter_for(mdl)
     last_exc: Optional[Exception] = None
@@ -303,8 +368,8 @@ def call_gemini_structured(
             limiter.acquire()
             resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
             if resp.status_code == 401 and attempt < max_retries - 1:
-                bearer = _get_adc_token()
-                headers["Authorization"] = f"Bearer {bearer}"
+                if not _refresh_auth(headers):
+                    break  # негодный ключ: обновлять нечего
                 time.sleep(1)
                 continue
             if resp.status_code in (429, 500, 502, 503, 504):
@@ -326,6 +391,7 @@ def call_gemini_structured(
             resp.raise_for_status()
 
             data = resp.json()
+            TRACKER.record(mdl, data.get("usageMetadata"))
             candidate = data["candidates"][0]
             parts = candidate["content"].get("parts", [])
             text = " ".join(p.get("text", "") for p in parts).strip()
@@ -384,9 +450,7 @@ def call_gemini_code_execution(
   Call Gemini Flash with code_execution tool; parse structured JSON into Pydantic schema.
     """
     mdl = model or get_flash_model()
-    url = _VERTEX_BASE.format(
-        project=_vertex_project(), location=_vertex_location(), model=mdl,
-    )
+    url, headers = _endpoint(mdl)
 
     gen_config: dict = {
         "temperature": temperature,
@@ -401,11 +465,6 @@ def call_gemini_code_execution(
         "generationConfig": gen_config,
     }
 
-    bearer = _get_adc_token()
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer}",
-    }
 
     limiter = _limiter_for(mdl)
     last_exc: Optional[Exception] = None
@@ -415,8 +474,8 @@ def call_gemini_code_execution(
             limiter.acquire()
             resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
             if resp.status_code == 401 and attempt < max_retries - 1:
-                bearer = _get_adc_token()
-                headers["Authorization"] = f"Bearer {bearer}"
+                if not _refresh_auth(headers):
+                    break  # негодный ключ: обновлять нечего
                 time.sleep(1)
                 continue
             if resp.status_code in (429, 500, 502, 503, 504):
@@ -438,6 +497,7 @@ def call_gemini_code_execution(
             resp.raise_for_status()
 
             data = resp.json()
+            TRACKER.record(mdl, data.get("usageMetadata"))
             candidate = data["candidates"][0]
             parts = candidate["content"].get("parts", [])
             text = _extract_text_from_parts(parts)
@@ -462,6 +522,49 @@ def call_gemini_code_execution(
 
 
 _VALID_ESCAPE_NEXT = set('"\\/bfnrtu')
+
+# --- B11: escape-последовательность против команды LaTeX -----------------
+# `\f`, `\b`, `\n`, `\r`, `\t` — валидные JSON-escape, поэтому json.loads
+# молча превращает `\frac` в form feed + "rac", а `\text` в таб + "ext".
+# Формула при этом компилируется и показывает ученику мусор, а compile_rate
+# остаётся 1.0 (замерено на 10 769 формулах, см. EVAL.md).
+#
+# Backspace и form feed в тексте учебника не встречаются никогда, поэтому
+# `\b` и `\f` — всегда LaTeX.
+_ALWAYS_LATEX_NEXT = set("bf")
+
+# `\n`, `\r`, `\t` неоднозначны: перевод строки в условии задачи легитимен.
+# Решает точное совпадение максимального пробега ASCII-букв с именем команды —
+# `\neq` → команда, `\nline2` → перевод строки.
+_AMBIGUOUS_ESCAPE_NEXT = set("nrt")
+
+_LATEX_COMMANDS_NRT = frozenset("""
+nabla ncong ne nearrow neq neg nexists ngeq ngtr niplus nleq nless nmid
+nparallel nrightarrow nsubseteq nsupseteq not notin nu nwarrow
+rangle rbrace rbrack rceil rfloor rho right rightarrow rightleftharpoons rm
+tan tanh tau tbinom text textbf textit textrm textstyle tfrac therefore
+theta tilde times to top triangle triangleq
+""".split())
+
+
+def _letter_run(text: str, start: int) -> str:
+    """Максимальный пробег ASCII-букв, начиная с `start`."""
+    end = start
+    n = len(text)
+    while end < n and text[end].isascii() and text[end].isalpha():
+        end += 1
+    return text[start:end]
+
+
+def _escape_is_latex(text: str, esc_pos: int) -> bool:
+    """`text[esc_pos]` — буква сразу после обратного слэша. True, если это
+    начало команды LaTeX, а не JSON-escape управляющего символа."""
+    ch = text[esc_pos]
+    if ch in _ALWAYS_LATEX_NEXT:
+        return True
+    if ch in _AMBIGUOUS_ESCAPE_NEXT:
+        return _letter_run(text, esc_pos) in _LATEX_COMMANDS_NRT
+    return False
 
 
 def _repair_json_backslashes(text: str) -> str:
@@ -493,7 +596,7 @@ def _repair_json_backslashes(text: str) -> str:
             continue
         # backslash inside string — peek next
         nxt = text[i + 1] if i + 1 < n else ''
-        if nxt in _VALID_ESCAPE_NEXT:
+        if nxt in _VALID_ESCAPE_NEXT and not _escape_is_latex(text, i + 1):
             if nxt == 'u':
                 # need 4 hex digits
                 hexpart = text[i + 2:i + 6]
@@ -528,18 +631,12 @@ def parse_json_response(text: str) -> object:
     if m:
         raw = m.group(1).strip()
 
-    # 2. Fast path — tolerate trailing garbage via raw_decode (Gemini sometimes
-    #    appends repeated closing brackets or extra newlines after the object).
-    try:
-        obj, _ = json.JSONDecoder().raw_decode(raw)
-        return obj
-    except json.JSONDecodeError:
-        pass
-
-    # 3. Repair stray backslashes (LaTeX) — escape any \ not followed by a
-    #    valid JSON escape: \" \\ \/ \b \f \n \r \t \uXXXX (4 hex digits).
-    #    Walk the string char-by-char (only INSIDE JSON strings) so we handle
-    #    runs of N backslashes deterministically without lookahead pitfalls.
+    # 2. Normalise backslashes BEFORE parsing. Раньше здесь стоял быстрый путь
+    #    `raw_decode(raw)`, и он был корнем B11: `{"latex": "\frac{1}{2}"}` —
+    #    валидный JSON, который молча даёт form feed + "rac". Порча зависела от
+    #    того, попалась ли в том же ответе команда с невалидным escape (`\left`),
+    #    которая роняла разбор в ветку ремонта — отсюда кучность дефекта по
+    #    страницам. Разбираем только после нормализации.
     repaired = _repair_json_backslashes(raw)
     try:
         obj, _ = json.JSONDecoder().raw_decode(repaired)
@@ -614,16 +711,14 @@ def call_gemini_vision(
     response_mime_type: Optional[str] = None,
     skip_retry_on_429: bool = False,
 ) -> str:
-    """Call Gemini with image/PDF parts via Vertex AI (ADC auth).
+    """Call Gemini with image/PDF parts. Транспорт выбирает `_endpoint`.
 
     image_parts: list of {"mimeType": "image/png", "data": "<base64>"}
     response_mime_type: e.g. "application/json" to force JSON output mode.
     Returns extracted text from the model.
     """
     mdl = model or get_pro_model()
-    url = _VERTEX_BASE.format(
-        project=_vertex_project(), location=_vertex_location(), model=mdl,
-    )
+    url, headers = _endpoint(mdl)
 
     parts: list[dict] = [{"inlineData": p} for p in image_parts]
     parts.append({"text": prompt})
@@ -640,11 +735,6 @@ def call_gemini_vision(
         "generationConfig": gen_config,
     }
 
-    bearer = _get_adc_token()
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {bearer}",
-    }
 
     limiter = _limiter_for(mdl)
     last_exc: Optional[Exception] = None
@@ -654,8 +744,8 @@ def call_gemini_vision(
             resp = requests.post(url, headers=headers, json=payload, timeout=timeout)
             if resp.status_code == 401 and attempt < max_retries - 1:
                 log.warning("Gemini Vision 401 — refreshing ADC token (attempt %d)", attempt + 1)
-                bearer = _get_adc_token()
-                headers["Authorization"] = f"Bearer {bearer}"
+                if not _refresh_auth(headers):
+                    break  # негодный ключ: обновлять нечего
                 time.sleep(1)
                 continue
             if resp.status_code in (429, 500, 502, 503, 504):
@@ -678,6 +768,7 @@ def call_gemini_vision(
 
             resp.raise_for_status()
             data = resp.json()
+            TRACKER.record(mdl, data.get("usageMetadata"))
             candidate = data["candidates"][0]
             parts_out = candidate["content"].get("parts", [])
             text = " ".join(p.get("text", "") for p in parts_out).strip()

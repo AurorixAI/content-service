@@ -31,20 +31,13 @@ jobs:
         run: python -m py_compile $(find src -name "*.py")
 
       - name: Run tests
-        # 5 known-failing pedagogy/math-logic tests are deselected until the
-        # underlying distractor-gate / sympy-equivalence / theme-parser logic
-        # is fixed (tracked separately). They predate CI and are real logic
-        # discrepancies, not test-infra issues — remove a --deselect line once
-        # the corresponding behaviour is fixed.
+        # Отключённых тестов больше нет: B4.3 (sympy-эквивалентность областей
+        # знака) и B4.4 (дистрактор — подмножество ответа) починены, оба
+        # --deselect сняты. Новый --deselect не добавлять: красный тест здесь
+        # означает реальное расхождение логики, а не проблему тест-инфры.
         # `python -m pytest` (not bare `pytest`) so the repo root is on
         # sys.path and the tests' `import src.*` resolves.
-        run: |
-          python -m pytest tests/ -q --tb=short \
-            --deselect "tests/test_distractor_gate.py::test_stored_distractors_valid_rejects_subset_of_answer" \
-            --deselect "tests/test_distractor_gate.py::test_inequality_distractors_not_false_peer_collision" \
-            --deselect "tests/test_sympy_gate_fixes.py::test_numeric_inequality_equivalent" \
-            --deselect "tests/test_sympy_gate_fixes.py::test_sign_region_inequality" \
-            --deselect "tests/test_theme_stream.py::test_finds_repetition_header"
+        run: python -m pytest tests/ -q --tb=short
 
   deploy:
     needs: test

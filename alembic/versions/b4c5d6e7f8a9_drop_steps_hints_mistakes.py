@@ -13,7 +13,7 @@ from __future__ import annotations
 from alembic import op
 
 revision = "b4c5d6e7f8a9"
-down_revision = "exam_support_nullable_skillid"
+down_revision = "a8b9c0d1e2f3"
 branch_labels = None
 depends_on = None
 
