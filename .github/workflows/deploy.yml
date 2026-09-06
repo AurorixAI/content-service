@@ -27,8 +27,19 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
       - name: Install dependencies
         run: pip install -r requirements.txt pytest
+
+      # The LaTeX backfill validator shells out to KaTeX through Node.  Without
+      # the module the validator fails closed and every display-contract test
+      # reports a validator error instead of a real verdict.
+      - name: Install KaTeX for the LaTeX validator
+        run: npm ci --no-audit --no-fund
 
       - name: Compile check
         run: python -m py_compile $(find src -name "*.py")

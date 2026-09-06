@@ -1,0 +1,8 @@
+{
+  "name": "content-service",
+  "private": true,
+  "description": "Node dependencies used by the offline LaTeX tooling (KaTeX validator).",
+  "dependencies": {
+    "katex": "0.16.47"
+  }
+}

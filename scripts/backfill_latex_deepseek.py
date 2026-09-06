@@ -434,8 +434,14 @@ def parse_task_bundle_response(raw: str, expected_fields: dict[str, dict]) -> di
 # ВАЛИДАЦИЯ: KaTeX через Node, отдельно $$ блоки и $ inline
 # ═══════════════════════════════════════════════════════════════
 
-KATEX_VALIDATE_JS = """
-const katex = require('/Users/arslan/Desktop/ALGO/algo-front/node_modules/katex');
+# ``katex`` is resolved from this repository's own ``node_modules`` (see
+# package.json), never from a checkout-specific absolute path: the validator
+# has to run identically on a developer machine and in CI.
+_KATEX_MODULE = os.environ.get("KATEX_MODULE") or os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "node_modules", "katex"
+)
+
+KATEX_VALIDATE_JS = "const katex = require(%s);\n" % json.dumps(_KATEX_MODULE) + """
 let input = '';
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', d => input += d);
@@ -475,7 +481,7 @@ process.stdin.on('end', () => {
 });
 """
 
-NODE_BIN = os.environ.get("NODE_BIN") or shutil.which("node") or "/Users/arslan/.nvm/versions/node/v20.20.2/bin/node"
+NODE_BIN = os.environ.get("NODE_BIN") or shutil.which("node") or "node"
 _MATH_VALUE_LABEL_RE = re.compile(r"^(?:answer|dmeta\[\d+\]\.value|option\[\d+\])$")
 _CYRILLIC_RE = re.compile(r"[А-Яа-яЁё]")
 # Exactly one inline formula.  ``.+`` used to accept internal ``$`` characters,

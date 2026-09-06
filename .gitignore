@@ -20,3 +20,4 @@ backups/*.sql
 backups/*.dump
 backups/*.json
 !backups/backup_manifest_*.json
+node_modules/
