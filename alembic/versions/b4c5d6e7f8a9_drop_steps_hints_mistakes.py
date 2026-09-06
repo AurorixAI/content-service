@@ -11,6 +11,7 @@ Create Date: 2026-06-10
 from __future__ import annotations
 
 from alembic import op
+import sqlalchemy as sa
 
 revision = "b4c5d6e7f8a9"
 # The migration file that used this temporary revision name was never present
@@ -20,10 +21,19 @@ branch_labels = None
 depends_on = None
 
 
+def _columns(table: str) -> set[str]:
+    return {c["name"] for c in sa.inspect(op.get_bind()).get_columns(table)}
+
+
+def _indexes(table: str) -> set[str]:
+    return {i["name"] for i in sa.inspect(op.get_bind()).get_indexes(table)}
+
+
 def upgrade() -> None:
-    op.drop_column("tasks_master", "solution_steps")
-    op.drop_column("tasks_master", "hints")
-    op.drop_column("tasks_master", "common_mistakes")
+    existing = _columns("tasks_master")
+    for column in ("solution_steps", "hints", "common_mistakes"):
+        if column in existing:
+            op.drop_column("tasks_master", column)
 
 
 def downgrade() -> None:

@@ -21,8 +21,20 @@ branch_labels = None
 depends_on = None
 
 
+def _columns(table: str) -> set[str]:
+    return {c["name"] for c in sa.inspect(op.get_bind()).get_columns(table)}
+
+
+def _indexes(table: str) -> set[str]:
+    return {i["name"] for i in sa.inspect(op.get_bind()).get_indexes(table)}
+
+
 def upgrade() -> None:
-    op.add_column("tasks_master", sa.Column("answer_options_latex", postgresql.JSONB(), nullable=True))
+    if "answer_options_latex" not in _columns("tasks_master"):
+        op.add_column(
+            "tasks_master",
+            sa.Column("answer_options_latex", postgresql.JSONB(), nullable=True),
+        )
 
 
 def downgrade() -> None:

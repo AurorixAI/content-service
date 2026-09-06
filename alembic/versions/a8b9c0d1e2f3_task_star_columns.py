@@ -19,15 +19,29 @@ branch_labels = None
 depends_on = None
 
 
+def _columns(table: str) -> set[str]:
+    return {c["name"] for c in sa.inspect(op.get_bind()).get_columns(table)}
+
+
+def _indexes(table: str) -> set[str]:
+    return {i["name"] for i in sa.inspect(op.get_bind()).get_indexes(table)}
+
+
 def upgrade() -> None:
-    op.add_column(
-        "tasks_master",
-        sa.Column("is_star", sa.Boolean(), nullable=False, server_default="false"),
-    )
-    op.add_column(
-        "tasks_master",
-        sa.Column("task_category", sa.String(20), nullable=False, server_default="standard"),
-    )
+    # Parts of this change were applied to the deployed databases by hand,
+    # without stamping Alembic, so the columns can already be there while the
+    # revision still counts as pending. Converge instead of aborting.
+    existing = _columns("tasks_master")
+    if "is_star" not in existing:
+        op.add_column(
+            "tasks_master",
+            sa.Column("is_star", sa.Boolean(), nullable=False, server_default="false"),
+        )
+    if "task_category" not in existing:
+        op.add_column(
+            "tasks_master",
+            sa.Column("task_category", sa.String(20), nullable=False, server_default="standard"),
+        )
     # Backfill из JSONB
     op.execute("""
         UPDATE tasks_master
@@ -39,11 +53,14 @@ def upgrade() -> None:
         SET task_category = COALESCE(tags->>'category', 'standard')
         WHERE tags ? 'category'
     """)
-    op.create_index(
-        "ix_tasks_master_is_star", "tasks_master", ["is_star"],
-        postgresql_where=sa.text("is_star = TRUE"),
-    )
-    op.create_index("ix_tasks_master_task_category", "tasks_master", ["task_category"])
+    present = _indexes("tasks_master")
+    if "ix_tasks_master_is_star" not in present:
+        op.create_index(
+            "ix_tasks_master_is_star", "tasks_master", ["is_star"],
+            postgresql_where=sa.text("is_star = TRUE"),
+        )
+    if "ix_tasks_master_task_category" not in present:
+        op.create_index("ix_tasks_master_task_category", "tasks_master", ["task_category"])
 
 
 def downgrade() -> None:

@@ -45,4 +45,6 @@ ENV PYTHONUNBUFFERED=1 \
 EXPOSE 8004
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8004"]
+# Migrations run to completion before the first worker starts, so a request
+# can never reach a half-upgraded schema.
+CMD ["sh", "-c", "python -m src.core.migration_runner && exec uvicorn src.main:app --host 0.0.0.0 --port 8004"]

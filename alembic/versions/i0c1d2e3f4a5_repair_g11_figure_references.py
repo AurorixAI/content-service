@@ -6,7 +6,7 @@ textbook and repairs only the fifteen reviewed task links.  The visual URL is
 also corrected because print packages consume ``question_image_url`` directly.
 
 Revision ID: i0c1d2e3f4a5
-Revises: h9b0c1d2e3f4
+Revises: h9c0d1e2f3a4
 Create Date: 2026-08-29
 """
 from __future__ import annotations
@@ -15,7 +15,7 @@ from alembic import op
 
 
 revision = "i0c1d2e3f4a5"
-down_revision = "h9b0c1d2e3f4"
+down_revision = "h9c0d1e2f3a4"
 branch_labels = None
 depends_on = None
 
