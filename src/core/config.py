@@ -34,8 +34,14 @@ class Settings(BaseSettings):
     gemini_flash_model: str = "gemini-3.5-flash"
     gemini_pro_model: str = "gemini-3.5-flash"
 
-    # OCR — Gemini Vision (Vertex AI, ADC auth)
-    # RENDER_DPI and BATCH_SIZE are tuned in GeminiVisionOCR directly
+    # AI — Azure DeepSeek
+    azure_deepseek_api_key: str = ""
+    azure_deepseek_endpoint: str = ""
+    azure_deepseek_model: str = "deepseek-v4-flash"
+
+    # OCR — Azure Mistral OCR (for raw extraction)
+    azure_mistral_api_key: str = ""
+    azure_mistral_endpoint: str = ""
 
     # Pipeline tuning
     max_retries_gemini: int = 3
@@ -63,14 +69,17 @@ class Settings(BaseSettings):
         pattern="^(ai_first|textbook|ai_if_sympy_confirms)$",
     )
     smart_verify_text_authority: str = Field(
-        default="textbook",
+        default="ai_first",
         pattern="^(ai_first|textbook|ai_if_sympy_confirms)$",
     )
     smart_verify_consistency_runs: int = 3
     smart_verify_consistency_temperature: float = 0.2
     distractor_gate_min_count: int = 3
     distractor_gate_min_acceptable: int = 2
-    distractor_gate_max_retries: int = 4
+    # One processing pass should make bounded progress.  Failed candidates are
+    # retained in the dedicated regeneration queue instead of holding one
+    # worker for five long LLM/pedagogy cycles.
+    distractor_gate_max_retries: int = 2
     distractor_gate_llm_batch_size: int = 5
 
     # Figures storage (persistent docker volume → served by FastAPI static)

@@ -397,10 +397,14 @@ class DBWriter:
         if task.mapping_confidence:
             tags.setdefault("mapping_confidence", round(task.mapping_confidence, 3))
 
+        from src.pipeline.answer_sympy_gate import to_answer_latex
+        correct_answer_latex = to_answer_latex(correct_answer, answer_type)
+
         result = conn.execute(
             text("""
                 INSERT INTO tasks_master (
                     id, skill_id, question_text, question_latex, correct_answer,
+                    correct_answer_latex,
                     answer_type, difficulty, cognitive_load,
                     irt_discrimination, irt_difficulty, irt_guessing,
                     distractor_meta, answer_options,
@@ -410,6 +414,7 @@ class DBWriter:
                     is_active, created_at
                 ) VALUES (
                     :id, :skill_id, :question_text, :question_latex, :correct_answer,
+                    :correct_answer_latex,
                     :answer_type, :difficulty, :cognitive_load,
                     :irt_a, :irt_b, :irt_c,
                     :distractor_meta, :answer_options,
@@ -427,6 +432,7 @@ class DBWriter:
                 "question_text": task.question_text,
                 "question_latex": task.question_latex or "",
                 "correct_answer": correct_answer,
+                "correct_answer_latex": correct_answer_latex,
                 "answer_type": answer_type,
                 "difficulty": difficulty,
                 "cognitive_load": cognitive_load,
@@ -461,11 +467,9 @@ class DBWriter:
             },
         )
 
-        # Figures ↔ task (m2m). Drop refs that point to non-existent figures
-        # to prevent FK violations from rolling back the task INSERT.
         valid_refs = [
             fid for fid in (task.figure_refs or [])
-            if not valid_fig_ids or fid in valid_fig_ids
+            if valid_fig_ids and fid in valid_fig_ids
         ]
         dropped_refs = len(task.figure_refs or []) - len(valid_refs)
         if dropped_refs:
@@ -544,7 +548,7 @@ class DBWriter:
             rows = conn.execute(
                 text("""
                     SELECT tt.id, tt.number, tt.title, tt.page_start, tt.page_end,
-                           tt.level, tt.sort_order, p.number AS parent_number
+                           tt.level, tt.sort_order, p.number AS parent_number, tt.parent_id
                     FROM textbook_toc tt
                     LEFT JOIN textbook_toc p ON p.id = tt.parent_id
                     WHERE tt.textbook_id = CAST(:tb_id AS UUID)
@@ -556,7 +560,7 @@ class DBWriter:
             {
                 "id": r[0], "number": r[1], "title": r[2],
                 "page_start": r[3], "page_end": r[4], "level": r[5],
-                "sort_order": r[6], "parent_number": r[7] or "",
+                "sort_order": r[6], "parent_number": r[7] or "", "parent_id": r[8],
             }
             for r in rows
         ]

@@ -1,6 +1,8 @@
 """Pydantic contracts for Smart Verify pipeline (compute + distractors)."""
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
@@ -15,10 +17,6 @@ class SmartVerifyResponse(BaseModel):
         ...,
         description="Final answer computed via Python/SymPy (school notation)",
     )
-    step_by_step_solution: str = Field(
-        ...,
-        description="Step-by-step solution for student / distractor prompts",
-    )
 
 
 class DistractorItem(BaseModel):
@@ -30,7 +28,10 @@ class DistractorItem(BaseModel):
 
 
 class DistractorGenerationResponse(BaseModel):
-    distractors: list[DistractorItem] = Field(..., min_length=1, max_length=4)
+    # The generator deliberately asks for extra candidates because the
+    # deterministic L1-L4 gate may reject some. Only the final validated
+    # minimum/target set is persisted (normally 2-3 items).
+    distractors: list[DistractorItem] = Field(..., min_length=1, max_length=6)
 
 
 class PedagogyItemReview(BaseModel):
@@ -58,11 +59,26 @@ class TextVerifyResponse(BaseModel):
         ...,
         description="Final answer in school notation",
     )
-    step_by_step_solution: str = Field(
-        ...,
-        description="Brief reasoning for student / distractor prompts",
-    )
     confidence: str = Field(
         default="medium",
         description="high | medium | low",
+    )
+
+
+class TextAnswerRelationResponse(BaseModel):
+    """Whether a unanimous text candidate actually changes the source meaning.
+
+    Three source-blind solves establish a candidate answer.  This compact,
+    source-aware comparison is deliberately only an editorial write gate: it
+    prevents harmless paraphrases (for example a different grammatical form
+    of a unit) from overwriting the original answer.
+    """
+
+    relation: Literal[
+        "equivalent",
+        "candidate_corrects_source",
+        "inconclusive",
+    ] = Field(
+        ...,
+        description="equivalent | candidate_corrects_source | inconclusive",
     )

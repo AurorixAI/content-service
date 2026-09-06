@@ -88,6 +88,11 @@ def find_markers(text: str) -> list[ThemeMarker]:
         title = m.group(3).strip().rstrip("*").strip()
         found.append(ThemeMarker("theme", num, title, m.group(0).strip(), m.start()))
 
+    for m in _REPETITION.finditer(text):
+        num = m.group(1)
+        title = m.group(0).strip()
+        found.append(ThemeMarker("repetition", num, title, m.group(0).strip(), m.start()))
+
     for m in _THEME_SINGLE.finditer(text):
         if any(f.offset == m.start() for f in found):
             continue
@@ -97,11 +102,6 @@ def find_markers(text: str) -> list[ThemeMarker]:
         if re.match(r"^\d+\.\s+[А-Я]", title) and len(num) >= 2:
             continue
         found.append(ThemeMarker("theme", num, title, m.group(0).strip(), m.start()))
-
-    for m in _REPETITION.finditer(text):
-        num = m.group(1)
-        title = m.group(0).strip()
-        found.append(ThemeMarker("repetition", num, title, m.group(0).strip(), m.start()))
 
     for m in _SELF_TEST.finditer(text):
         test_num = m.group(1) or ""

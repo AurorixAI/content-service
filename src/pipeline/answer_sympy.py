@@ -8,6 +8,64 @@ from typing import Optional
 
 log = logging.getLogger(__name__)
 
+import signal
+from contextlib import contextmanager
+
+class TimeoutException(Exception):
+    pass
+
+@contextmanager
+def timeout_limit(seconds: int):
+    def signal_handler(signum, frame):
+        raise TimeoutException("Timed out!")
+    
+    old_handler = None
+    try:
+        old_handler = signal.signal(signal.SIGALRM, signal_handler)
+        signal.alarm(seconds)
+    except ValueError:
+        pass
+        
+    try:
+        yield
+    finally:
+        try:
+            signal.alarm(0)
+            if old_handler is not None:
+                signal.signal(signal.SIGALRM, old_handler)
+        except ValueError:
+            pass
+
+def safe_simplify(expr, timeout: int = 3):
+    import sympy
+    try:
+        with timeout_limit(timeout):
+            return sympy.simplify(expr)
+    except Exception as e:
+        log.warning("sympy.simplify timed out or failed: %s", e)
+        return expr
+
+
+def timeout_default(seconds: int = 5, default_val = None):
+    """Decorator: run func with SIGALRM timeout; return default_val on timeout or error."""
+    def decorator(func):
+        from functools import wraps
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            try:
+                with timeout_limit(seconds):
+                    return func(*args, **kwargs)
+            except TimeoutException:
+                log.warning("Function %s timed out after %ds", func.__name__, seconds)
+                return default_val
+            except Exception as e:
+                log.debug("Function %s failed: %s: %s", func.__name__, type(e).__name__, e)
+                return default_val
+        return wrapper
+    return decorator
+
+
+
 _SYMBOL_NAMES = "abcdefghijklmnopqrsuvwxyz"
 
 
@@ -21,16 +79,20 @@ def _latexish_to_sympy(s: str) -> str:
 
     s = re.sub(r"\d+\.?\d*[eE][+-]?\d+", _stash_sci, s)
     s = s.replace("−", "-").replace("–", "-").replace("—", "-")
+    s = re.sub(r"√(\d+(?:\.\d+)?)", r"sqrt(\1)", s)
+    s = re.sub(r"√([a-zA-Z])", r"sqrt(\1)", s)
     s = s.replace("√", "sqrt").replace("×", "*").replace("·", "*")
     s = s.replace("^", "**")
     s = re.sub(r"\\sqrt\{([^}]+)\}", r"sqrt(\1)", s)
     s = re.sub(r"\\sqrt\[3\]\{([^}]+)\}", r"(\1)**(1/3)", s)
-    s = re.sub(r"\\frac\{([^}]+)\}\{([^}]+)\}", r"((\1)/(\2))", s)
+    # Both \frac and \dfrac are emitted by the LaTeX backfill. They have the
+    # same mathematical meaning and must reach the same local verifier.
+    s = re.sub(r"\\d?frac\{([^}]+)\}\{([^}]+)\}", r"((\1)/(\2))", s)
     s = re.sub(r"\$", "", s)
     s = re.sub(r"\\left|\\right", "", s)
     s = re.sub(r"\\cdot", "*", s)
     s = re.sub(r"\\times", "*", s)
-    s = re.sub(r",(\d)", r".\1", s)
+    s = re.sub(r"(\d),(\d)", r"\1.\2", s)
     # LaTeX / school exponents: a^{-10}, a**{-10}, ^{12}
     s = re.sub(r"\*\*\{([^}]+)\}", r"**(\1)", s)
     s = re.sub(r"\^\{([^}]+)\}", r"**(\1)", s)
@@ -45,6 +107,36 @@ def _latexish_to_sympy(s: str) -> str:
     s = re.sub(r"sqrt\*\(", "sqrt(", s)
     for i, tok in enumerate(sci_tokens):
         s = s.replace(f"__SCI{i}__", tok)
+
+    # Clean up redundant infinity boundaries in relations (e.g. (m >= 16/3) & (m < oo) -> m >= 16/3)
+    s = re.sub(r"\s*&\s*\(\s*[a-zA-Z_]\w*\s*<\s*oo\s*\)", "", s)
+    s = re.sub(r"\s*&\s*\(\s*oo\s*>\s*[a-zA-Z_]\w*\s*\)", "", s)
+    s = re.sub(r"\s*&\s*\(\s*[a-zA-Z_]\w*\s*>\s*-oo\s*\)", "", s)
+    s = re.sub(r"\s*&\s*\(\s*-oo\s*<\s*[a-zA-Z_]\w*\s*\)", "", s)
+    m = re.match(r"^\(([^)]+)\)$", s.strip())
+    if m:
+        s = m.group(1).strip()
+
+    return s
+
+
+def _normalize_math_unicode(s: str) -> str:
+    """Replace Unicode math characters with ASCII/SymPy equivalents.
+    
+    Must be called BEFORE any SymPy parsing. Key conversions:
+      π → pi (with implicit mult: 2π→2*pi, πn→pi*n)
+      √ → sqrt,  ∞ → oo,  − → - (minus sign variants)
+    """
+    s = s.replace("−", "-").replace("–", "-").replace("—", "-")
+    s = s.replace("×", "*").replace("·", "*").replace("÷", "/")
+    s = s.replace("≤", "<=").replace("≥", ">=").replace("≠", "!=")
+    s = s.replace("∞", "oo")
+    s = s.replace("√", "sqrt")
+    # π followed by digit: 2π/3 → 2*pi/3  (already caught by later implicit mult rules,
+    # but we handle π prefix explicitly to avoid mis-tokenizing)
+    s = re.sub(r"(\d)π", r"\1*pi", s)   # 2π → 2*pi
+    s = re.sub(r"π([a-zA-Z])", r"pi*\1", s)  # πn → pi*n
+    s = s.replace("π", "pi")
     return s
 
 
@@ -55,12 +147,15 @@ def _normalize_school_expression(s: str) -> str:
     s = re.sub(r"([a-zA-Z0-9\)])\\sqrt\{([^}]+)\}", r"\1*sqrt(\2)", s)
     s = re.sub(r"([a-zA-Z])√\s*([a-zA-Z])", r"\1*sqrt(\2)", s)
     s = re.sub(r"(\d+)√\s*(\d+)", r"\1*sqrt(\2)", s)
+    # Unicode math normalization (π, √, ∞, minus variants)
+    s = _normalize_math_unicode(s)
     s = _latexish_to_sympy(s)
     # var*sqrt(var) or sqrt(var)*var → var**(3/2)
     for _ in range(2):
         s = re.sub(r"([a-zA-Z])\*sqrt\(\1\)", r"\1**(3/2)", s, flags=re.I)
         s = re.sub(r"sqrt\(([a-zA-Z])\)\*\1", r"\1**(3/2)", s, flags=re.I)
     return s
+
 
 
 def _strip_units(s: str) -> str:
@@ -254,6 +349,7 @@ def _validate_formula_with_cases(question: str, answer: str, formula_expr: str) 
     return True
 
 
+@timeout_default(5, default_val=None)
 def try_validate_expression_answer(question: str, answer: str) -> Optional[bool]:
     """Validate expression answer against question (substitution, compare, numeric)."""
     q = (question or "").strip()
@@ -359,12 +455,47 @@ def split_answer_parts(answer: str) -> list[str]:
         return cleaned
 
     if ";" in s:
-        parts = _clean(re.split(r"\s*;\s*", s))
-        if parts:
+        parts = []
+        depth = 0
+        curr = []
+        for ch in s:
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth = max(0, depth - 1)
+            
+            if ch == ";" and depth == 0:
+                parts.append("".join(curr))
+                curr = []
+            else:
+                curr.append(ch)
+        if curr:
+            parts.append("".join(curr))
+        
+        parts = _clean(parts)
+        if len(parts) >= 2:
             return parts
 
     if "," in s:
-        cand = _clean(re.split(r",\s+", s))
+        # Split by comma outside parentheses
+        parts = []
+        depth = 0
+        curr = []
+        for ch in s:
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth = max(0, depth - 1)
+            
+            if ch == "," and depth == 0:
+                parts.append("".join(curr))
+                curr = []
+            else:
+                curr.append(ch)
+        if curr:
+            parts.append("".join(curr))
+            
+        cand = _clean(parts)
         if len(cand) >= 2 and all(
             re.search(r"[=/^()]|[a-zA-Z]", p) for p in cand
         ):
@@ -389,6 +520,31 @@ def parse_expr(expr_str: str):
     raw = _normalize_school_expression(expr_str)
     if not raw:
         return None
+
+    # Handle top-level equation equality: x = y -> Eq(x, y)
+    eq_idx = -1
+    if "=" in raw:
+        depth = 0
+        eq_count = 0
+        for i, char in enumerate(raw):
+            if char in "([{":
+                depth += 1
+            elif char in ")]}":
+                depth -= 1
+            elif char == "=" and depth == 0:
+                eq_count += 1
+                eq_idx = i
+        if eq_count != 1:
+            eq_idx = -1
+
+    if eq_idx != -1:
+        lhs_part = raw[:eq_idx].strip()
+        rhs_part = raw[eq_idx + 1:].strip()
+        lhs = parse_expr(lhs_part)
+        rhs = parse_expr(rhs_part)
+        if lhs is not None and rhs is not None:
+            from sympy import Eq
+            return Eq(lhs, rhs)
 
     transformations = standard_transformations + (implicit_multiplication_application,)
     try:
@@ -419,12 +575,12 @@ def _exprs_equivalent(a, b) -> bool:
     import sympy
 
     try:
-        if sympy.simplify(a - b) == 0:
+        if safe_simplify(a - b) == 0:
             return True
     except Exception:
         pass
     try:
-        if sympy.Eq(sympy.simplify(a), sympy.simplify(b)):
+        if sympy.Eq(safe_simplify(a), safe_simplify(b)):
             return True
     except Exception:
         pass
@@ -478,28 +634,168 @@ def monte_carlo_equivalent(a_str: str, b_str: str, *, trials: int = 6) -> Option
     return True
 
 
+def _standardize_math_tuple(s: str) -> list[str] | None:
+    s = (s or "").strip()
+    m = re.match(r"^\((.+)\)$", s)
+    if m:
+        s = m.group(1).strip()
+    
+    parts = [p.strip() for p in re.split(r"[;,]", s) if p.strip()]
+    eqs = {}
+    for p in parts:
+        eq_match = re.match(r"^([a-zA-Z_]\w*)\s*(=|!=|≠)\s*(.+)$", p)
+        if eq_match:
+            eqs[eq_match.group(1)] = eq_match.group(3).strip()
+    if eqs:
+        sorted_keys = sorted(eqs.keys())
+        return [eqs[k] for k in sorted_keys]
+        
+    if ";" in s:
+        return [p.strip() for p in s.split(";") if p.strip()]
+    if "," in s:
+        cand = [p.strip() for p in s.split(",") if p.strip()]
+        if len(cand) >= 2 and not all(re.fullmatch(r"\d+", p) for p in cand):
+            return cand
+            
+    return None
+
+
+def _parse_scalar_numeric(s: str):
+    """Parse a single math expression to a complex number, or None.
+    
+    Uses sympy.N() for evaluation. Returns None on failure.
+    Designed to handle trig constants: pi/2, -3*pi/2, sqrt(2), etc.
+    """
+    s = s.strip()
+    if not s:
+        return None
+    try:
+        import sympy
+        from sympy.parsing.sympy_parser import (
+            implicit_multiplication_application,
+            parse_expr as sympy_parse_expr,
+            standard_transformations,
+        )
+        transformations = standard_transformations + (implicit_multiplication_application,)
+        expr = sympy_parse_expr(s, transformations=transformations)
+        return complex(sympy.N(expr, 15))
+    except Exception:
+        return None
+
+
+def _numeric_multiset_compare(a: str, b: str) -> Optional[bool]:
+    """Fast numeric comparison for comma/semicolon-separated math values.
+    
+    Compares sets of numbers (including trig constants) by evaluating them
+    numerically. Safe against trig expressions — never calls solve() or as_set().
+    
+    Returns True if same multiset numerically, False if different sizes or values,
+    None if parsing fails (fallback to symbolic comparison).
+    
+    Examples handled correctly:
+      '-3pi/2, -pi/2, pi/2, 5pi/2'  vs  '-3*pi/2; -pi/2; pi/2; 5*pi/2'  → True
+      '{pi/2, 0, -pi, 2*pi}'         vs  '{0, pi/2, -pi, 2*pi}'           → True
+      'pi/2'                          vs  'pi/2'                            → True
+    """
+    def to_numeric_values(s: str):
+        # Strip set/tuple braces
+        s = re.sub(r"^[{(\[]\s*|\s*[})\]]$", "", s.strip())
+        # Split on ; or ,
+        parts = [p.strip() for p in re.split(r"[;,]", s) if p.strip()]
+        if not parts:
+            return None
+        values = []
+        for p in parts:
+            v = _parse_scalar_numeric(p)
+            if v is None:
+                return None
+            values.append(v)
+        return sorted(values, key=lambda x: (x.real, x.imag))
+
+    va = to_numeric_values(a)
+    vb = to_numeric_values(b)
+    if va is None or vb is None:
+        return None
+    if len(va) != len(vb):
+        return False
+    return all(abs(x - y) < 1e-6 for x, y in zip(va, vb))
+
+
+@timeout_default(5, default_val=None)
 def sympy_equivalent(a: str, b: str, answer_type: str = "") -> Optional[bool]:
     """
     True = mathematically same, False = different, None = cannot decide.
+
+    Strategy order (fast → slow, bailing early):
+      1. String equality after unicode normalization
+      2. Numeric multi-set comparison (handles π/∞ sets, trig values)
+      3. SymPy parse + direct equality / simplification
+      4. Monte-Carlo random substitution
+    Deliberately avoids as_set() / solve() to prevent hangs on trig expressions.
     """
     a = (a or "").strip()
     b = (b or "").strip()
     if not a or not b:
         return None
+    # Strategy 1: normalized string equality
+    a_norm = _normalize_math_unicode(a)
+    b_norm = _normalize_math_unicode(b)
+    if a_norm == b_norm:
+        return True
     if a == b:
         return True
 
+    # Strategy 2: fast numeric multi-set comparison
+    # Handles: 'π/2', 'pi/2'; '-3π/2,-π/2,π/2', '-3*pi/2;-pi/2;pi/2'
+    # No symbolic solving, just N() evaluation — safe and fast
+    numeric_result = _numeric_multiset_compare(a_norm, b_norm)
+    if numeric_result is not None:
+        return numeric_result
+
+    # Strategy 3: Try tuple/part standardization
+    ta = _standardize_math_tuple(a)
+    tb = _standardize_math_tuple(b)
+    if ta is not None and tb is not None and len(ta) == len(tb) and len(ta) > 0:
+        results = [sympy_equivalent(x, y, answer_type) for x, y in zip(ta, tb)]
+        if all(r is True for r in results):
+            return True
+
     pa, pb = split_answer_parts(a), split_answer_parts(b)
     if len(pa) == len(pb) and len(pa) > 1:
-        results = [sympy_equivalent(x, y, answer_type) for x, y in zip(pa, pb)]
-        if any(r is False for r in results):
-            return False
-        if all(r is True for r in results):
+        matched_indices = set()
+        for x in pa:
+            found = False
+            for idx, y in enumerate(pb):
+                if idx not in matched_indices and sympy_equivalent(x, y, answer_type):
+                    matched_indices.add(idx)
+                    found = True
+                    break
+            if not found:
+                break
+        if len(matched_indices) == len(pb):
             return True
         return None
 
+    # Strategy 4: SymPy symbolic parse (skip as_set() — hangs on trig)
     ea, eb = parse_expr(a), parse_expr(b)
     if ea is not None and eb is not None:
+        try:
+            from sympy import nsimplify
+            ea = nsimplify(ea)
+            eb = nsimplify(eb)
+        except Exception:
+            pass
+
+        if ea == eb:
+            import sympy
+            if isinstance(ea, (sympy.logic.boolalg.BooleanAtom, bool)):
+                if _normalize_math_unicode(a).replace(" ", "") != _normalize_math_unicode(b).replace(" ", ""):
+                    return False
+            return True
+
+        # NOTE: deliberately omitting ea.as_set() == eb.as_set()
+        # as it calls sympy.solve() internally and hangs on trig expressions.
+
         if _exprs_equivalent(ea, eb):
             return True
         mc = monte_carlo_equivalent(a, b)
@@ -507,12 +803,14 @@ def sympy_equivalent(a: str, b: str, answer_type: str = "") -> Optional[bool]:
             return mc
         return False
 
+    # Strategy 5: Monte-Carlo only
     mc = monte_carlo_equivalent(a, b)
     if mc is not None:
         return mc
     return None
 
 
+@timeout_default(5, default_val=None)
 def sympy_numeric_equal(a: str, b: str) -> Optional[bool]:
     ea, eb = parse_expr(a), parse_expr(b)
     if ea is None or eb is None:
@@ -525,6 +823,7 @@ def sympy_numeric_equal(a: str, b: str) -> Optional[bool]:
         return None
 
 
+@timeout_default(5, default_val=None)
 def try_validate_answer_for_question(question: str, answer: str, answer_type: str) -> Optional[bool]:
     """
     When possible, check answer against expression extracted from question.
@@ -560,7 +859,7 @@ def try_validate_answer_for_question(question: str, answer: str, answer_type: st
         import sympy
         from sympy import N
 
-        simplified = sympy.simplify(target)
+        simplified = safe_simplify(target)
         answer_expr = parse_expr(ans)
         if answer_expr is None:
             return None
@@ -577,3 +876,126 @@ def try_validate_answer_for_question(question: str, answer: str, answer_type: st
             return None
     except Exception:
         return None
+
+
+@timeout_default(5, default_val=None)
+def back_substitute_roots(question: str, answer: str, answer_type: str) -> Optional[bool]:
+    """
+    Strategy 2 SymPy proof: extract equation from question text, substitute roots back in.
+
+    Returns:
+      True   — all roots satisfy the equation (mathematically proven)
+      False  — at least one root does NOT satisfy the equation (proven wrong)
+      None   — cannot verify algebraically (symbolic, text task, multi-variable, etc.)
+
+    Applicable to: equation_solution, set, exact_number, decimal, fraction.
+    """
+    import re
+
+    at = (answer_type or "").lower()
+    if at not in ("equation_solution", "set", "exact_number", "decimal", "fraction"):
+        return None
+
+    q = (question or "").strip()
+    ans = (answer or "").strip()
+    if not q or not ans:
+        return None
+
+    # ── Step 1: Find candidate equation lines in the question ──────────────
+    eq_lines = []
+    for line in q.splitlines():
+        line = line.strip()
+        if "=" in line and re.search(r"[0-9a-zA-Z\^]\s*=", line):
+            # Skip meta-hints: "Ответ:", "= ?", "нет данных"
+            if not re.search(r"[Оо]твет|=\s*\?|ОТВЕТ|нет\s*данных", line):
+                eq_lines.append(line)
+    if not eq_lines:
+        return None
+
+    # ── Step 2: Parse answer into numeric roots ─────────────────────────────
+    # Must be parenthesis-aware split: '3 - sqrt(5); 3 + sqrt(5)' must not split inside ()
+    def _paren_split(text: str) -> list:
+        parts, current, depth = [], [], 0
+        for ch in text:
+            if ch in "([":
+                depth += 1
+                current.append(ch)
+            elif ch in ")]":
+                depth -= 1
+                current.append(ch)
+            elif ch in ";," and depth == 0:
+                parts.append("".join(current).strip())
+                current = []
+            else:
+                current.append(ch)
+        if current:
+            parts.append("".join(current).strip())
+        return [p for p in parts if p]
+
+    try:
+        import sympy
+        from src.pipeline.answer_sympy import _latexish_to_sympy as _lts
+
+        roots = []
+        for p in _paren_split(ans):
+            p = p.strip().replace("x=", "").replace("y=", "").strip()
+            # Strip only OUTER matching parens (coordinate wrapper), not function parens
+            if p.startswith("(") and p.endswith(")"):
+                inner = p[1:-1]
+                if inner.count("(") == inner.count(")"):
+                    p = inner.strip()
+            try:
+                sym_p = _lts(p)
+                if sym_p:
+                    val_num = complex(sympy.N(sympy.sympify(sym_p)))
+                    roots.append(val_num)
+            except Exception:
+                pass
+        if not roots:
+            return None
+
+        # ── Step 3: Try each equation line ────────────────────────────────────
+        for eq_line in eq_lines[:3]:
+            eq_raw = re.sub(r"^[абвгдежзийклмнопрстуфхцч]\)\.?\s*", "", eq_line, flags=re.I)
+            eq_raw = re.sub(r"\\[\(\)]", "", eq_raw).replace("$", "").strip()
+
+            eq_sides = eq_raw.split("=")
+            if len(eq_sides) != 2:
+                continue
+            lhs_raw, rhs_raw = eq_sides
+
+            try:
+                lhs_sym = _lts(lhs_raw.strip())
+                rhs_sym = _lts(rhs_raw.strip())
+                if lhs_sym is None:
+                    continue
+
+                lhs_expr = sympy.sympify(lhs_sym)
+                rhs_expr = sympy.sympify(rhs_sym) if rhs_sym else sympy.Integer(0)
+                diff_expr = sympy.expand(lhs_expr - rhs_expr)
+                free_vars = diff_expr.free_symbols
+
+                # Only verify single-variable equations
+                if not free_vars or len(free_vars) > 1:
+                    continue
+                var = sorted(free_vars, key=lambda s: str(s))[0]
+
+                proofs = []
+                for root in roots:
+                    try:
+                        val_at_root = complex(sympy.N(diff_expr.subs(var, root)))
+                        proofs.append(abs(val_at_root) < 1e-4)
+                    except Exception:
+                        proofs.append(None)
+
+                if all(p is True for p in proofs):
+                    return True
+                if any(p is False for p in proofs):
+                    return False
+            except Exception:
+                continue
+
+    except Exception as e:
+        log.debug("back_substitute_roots error: %s", e)
+
+    return None

@@ -16,10 +16,10 @@ import json
 import logging
 from typing import Dict, List, Optional
 
-from src.pipeline.gemini_client import (
-    call_gemini,
-    get_api_key,
-    get_pro_model,
+from src.pipeline.deepseek_client import (
+    call_deepseek,
+    get_deepseek_key,
+    get_deepseek_model,
     parse_json_response,
 )
 from src.pipeline.models import ExtractedTask
@@ -34,8 +34,8 @@ class SkeletonTextbookMapper:
     """Иерархический маппинг задачи → L4-навык (два вызова Gemini Pro)."""
 
     def __init__(self, api_key: str = "", skills_json: str = ""):
-        self.api_key = api_key or get_api_key()
-        self.model = get_pro_model()
+        self.api_key = api_key or get_deepseek_key()
+        self.model = get_deepseek_model()
         self.skills_json = skills_json
         self._class_level = 5
 
@@ -153,7 +153,7 @@ class SkeletonTextbookMapper:
             "Только JSON."
         )
         try:
-            raw = call_gemini(
+            raw = call_deepseek(
                 prompt,
                 api_key=self.api_key,
                 model=self.model,
@@ -211,7 +211,7 @@ class SkeletonTextbookMapper:
             "Только JSON."
         )
         try:
-            raw = call_gemini(
+            raw = call_deepseek(
                 prompt,
                 api_key=self.api_key,
                 model=self.model,

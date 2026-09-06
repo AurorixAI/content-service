@@ -1,0 +1,432 @@
+{
+  "class_level": 9,
+  "ignored_theory": [
+    {
+      "id": "G9_TB_10_131_1",
+      "question_text": "Сколько корней имеет квадратный трёхчлен 3x² - 8x + 2?",
+      "correct_answer": "2",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_10_131_2",
+      "question_text": "Сколько корней имеет квадратный трёхчлен -1/2 y² + 6y - 18?",
+      "correct_answer": "1",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_10_131_3",
+      "question_text": "Сколько корней имеет квадратный трёхчлен m² - 3m + 3?",
+      "correct_answer": "0",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_1",
+      "question_text": "Какова степень уравнения: a) 2x^2 - 6x^5 + 1 = 0",
+      "correct_answer": "5",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_2",
+      "question_text": "Какова степень уравнения: г) (x + 8)(x - 7) = 0",
+      "correct_answer": "2",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_3",
+      "question_text": "Какова степень уравнения: б) x^6 - 4x^3 - 3 = 0",
+      "correct_answer": "6",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_4",
+      "question_text": "Какова степень уравнения: д) x/2 - x/4 = 5",
+      "correct_answer": "1",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_5",
+      "question_text": "Какова степень уравнения: в) 1/7 x^5 = 0",
+      "correct_answer": "5",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_13_210_6",
+      "question_text": "Какова степень уравнения: е) 5x^3 - 5x(x^2 + 4) = 17?",
+      "correct_answer": "1",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_1",
+      "question_text": "Какие числа образуют множество натуральных чисел?",
+      "correct_answer": "Числа, используемые для счёта предметов: 1, 2, 3, ...",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_12",
+      "question_text": "В каком виде можно представить любое рациональное число?",
+      "correct_answer": "В виде отношения m/n, где m и n — целые числа, n ≠ 0",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_2",
+      "question_text": "Какие действия всегда выполнимы в множестве натуральных чисел?",
+      "correct_answer": "Сложение и умножение",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_3",
+      "question_text": "Какие числа образуют множество целых чисел?",
+      "correct_answer": "Натуральные числа, противоположные им отрицательные числа и число 0",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_4",
+      "question_text": "Какие действия всегда выполнимы в множестве целых чисел?",
+      "correct_answer": "Сложение, вычитание и умножение",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_5",
+      "question_text": "Какие числа образуют множество рациональных чисел?",
+      "correct_answer": "Целые и дробные числа",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_6",
+      "question_text": "Какое обозначение принято для множества натуральных чисел?",
+      "correct_answer": "N",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_7",
+      "question_text": "Какое обозначение принято для множества целых чисел?",
+      "correct_answer": "Z",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_1_8",
+      "question_text": "Какое обозначение принято для множества рациональных чисел?",
+      "correct_answer": "Q",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_528_1",
+      "question_text": "Какой член последовательности a_1, a_2, a_3, ... следует за членом a_99, a_200, a_n, a_{n-1}, a_{n+1}, a_{2n}?",
+      "correct_answer": "a_100, a_201, a_{n+1}, a_n, a_{n+2}, a_{2n+1}",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_528_2",
+      "question_text": "Какой член последовательности a_1, a_2, a_3, ... предшествует члену a_71, a_100, a_{n-2}, a_{n+3}, a_{3n}?",
+      "correct_answer": "a_70, a_99, a_{n-3}, a_{n+2}, a_{3n-1}",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_658_1",
+      "question_text": "Какова сумма натуральных чисел, меньших 100 и не кратных 3?",
+      "correct_answer": "3267",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_658_2",
+      "question_text": "Какова сумма натуральных чисел, больших 50, но меньших 150 и не кратных 5?",
+      "correct_answer": "8000",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_4_КВ_4",
+      "question_text": "Что называется абсолютной погрешностью приближённого значения? Объясните смысл записи $x = a \\pm h$.",
+      "correct_answer": "Абсолютная погрешность — модуль разности точного и приближённого значений. Запись означает, что точное значение x лежит в интервале [a-h; a+h].",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_4_КВ_5",
+      "question_text": "Что называется относительной погрешностью приближённого значения?",
+      "correct_answer": "Относительная погрешность — отношение абсолютной погрешности к модулю приближённого значения.",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_6_КВ1",
+      "question_text": "Что такое нанометр и зелтосекунда?",
+      "correct_answer": "Нанометр — единица измерения длины, равная 10^-9 м. Зелтосекунда — единица измерения времени, равная 10^-21 с.",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_7_1",
+      "question_text": "Какой объект на плане обозначен цифрой 2 и какой — цифрой 3?",
+      "correct_answer": "Цифрой 2 обозначен гараж, цифрой 3 — сарай.",
+      "answer_type": "text",
+      "in_hr": null,
+      "verified": null
+    }
+  ],
+  "type_a": [],
+  "type_b": [
+    {
+      "id": "G9_TB_12_177_b",
+      "question_text": "Решите уравнение: $g(x) = 6$.",
+      "correct_answer": "6",
+      "answer_type": "equation_solution",
+      "in_hr": null,
+      "verified": "true"
+    },
+    {
+      "id": "G9_TB_27_550_1",
+      "question_text": "Найдите первый член арифметической прогрессии (x_n), если известно, что: а) x_30 = 128, d = 4.",
+      "correct_answer": "12",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_550_2",
+      "question_text": "Найдите первый член арифметической прогрессии (x_n), если известно, что: б) x_11 = 36, d = -8.",
+      "correct_answer": "116",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_550_3",
+      "question_text": "Найдите первый член арифметической прогрессии (x_n), если известно, что: в) x_45 = -208, d = -7.",
+      "correct_answer": "100",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_550_4",
+      "question_text": "Найдите первый член арифметической прогрессии (x_n), если известно, что: г) x_17 = 1, d = -3.",
+      "correct_answer": "49",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_551_1",
+      "question_text": "Найдите разность арифметической прогрессии (y_n), в которой: а) y_1 = 10, y_5 = 22.",
+      "correct_answer": "3",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_551_2",
+      "question_text": "Найдите разность арифметической прогрессии (y_n), в которой: б) y_1 = 16, y_8 = -1.",
+      "correct_answer": "-17/7",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_551_3",
+      "question_text": "Найдите разность арифметической прогрессии (y_n), в которой: в) y_1 = 28, y_15 = -21.",
+      "correct_answer": "-7/2",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_27_551_4",
+      "question_text": "Найдите разность арифметической прогрессии (y_n), в которой: г) y_1 = -22, y_16 = -4.",
+      "correct_answer": "6/5",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_28_568_1",
+      "question_text": "Найдите значение выражения: а) 125^{-1} * 25^2.",
+      "correct_answer": "5",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_28_568_2",
+      "question_text": "Найдите значение выражения: б) (16^{-3} * 4^5) / 8.",
+      "correct_answer": "1/32",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": "true"
+    },
+    {
+      "id": "G9_TB_28_569_1",
+      "question_text": "Найдите сумму первых шестидесяти членов арифметической прогрессии (a_n), если: a) a_1 = 3, a_60 = 57.",
+      "correct_answer": "1800",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_28_570_1",
+      "question_text": "Найдите сумму первых восьми членов арифметической прогрессии: a) -23; -20; ...",
+      "correct_answer": "-100",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_28_570_2",
+      "question_text": "Найдите сумму первых восьми членов арифметической прогрессии: b) 14,2; 9,6; ...",
+      "correct_answer": "-15.2",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": "true"
+    },
+    {
+      "id": "G9_TB_28_571_1",
+      "question_text": "Вычислите сумму первых девяти членов арифметической прогрессии (b_n), если: a) b_1 = -17, d = 6.",
+      "correct_answer": "63",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": "true"
+    },
+    {
+      "id": "G9_TB_28_571_2",
+      "question_text": "Вычислите сумму первых девяти членов арифметической прогрессии (b_n), если: b) b_1 = 6,4, d = 0,8.",
+      "correct_answer": "86.4",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_29_596_1",
+      "question_text": "Найдите первый член геометрической прогрессии (b_n), если: a) b_6 = 3, q = 3;",
+      "correct_answer": "1/81",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_2_21_b",
+      "question_text": "Найдите значение выражения: (7,6 - 8,5) : (0,23 + 2,92).",
+      "correct_answer": "-2/7",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_2_21_d",
+      "question_text": "Найдите значение выражения: 12,48 : (1,23 + 1,17) - 14,7 : 0,49.",
+      "correct_answer": "-24.8",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_620_1",
+      "question_text": "Найдите сумму первых семи членов геометрической прогрессии (b_n), если: a) b₇ = 72,9, q = 1,5",
+      "correct_answer": "205.9",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_620_3",
+      "question_text": "Найдите сумму первых семи членов геометрической прогрессии (b_n), если: б) b₅ = 16/9, q = 2/3",
+      "correct_answer": "2059/81",
+      "answer_type": "fraction",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_31_621_2",
+      "question_text": "Найдите сумму первых пяти членов геометрической прогрессии (x_n), если: б) x₄ = 121,5, q = -3",
+      "correct_answer": "-22.5",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_3_33_a",
+      "question_text": "Найдите значение выражения: 12 2/5 - 2 2/7 : 1 19/21.",
+      "correct_answer": "11",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_3_38_1",
+      "question_text": "Найдите абсолютную погрешность приближённого значения, полученного в результате округления: а) числа 9,87 до единиц;",
+      "correct_answer": "0,13",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_3_38_2",
+      "question_text": "Найдите абсолютную погрешность приближённого значения, полученного в результате округления: б) числа 124 до десятков;",
+      "correct_answer": "4",
+      "answer_type": "exact_number",
+      "in_hr": null,
+      "verified": null
+    },
+    {
+      "id": "G9_TB_3_38_4",
+      "question_text": "Найдите абсолютную погрешность приближённого значения, полученного в результате округления: г) числа 0,198 до сотых.",
+      "correct_answer": "0,002",
+      "answer_type": "decimal",
+      "in_hr": null,
+      "verified": null
+    }
+  ],
+  "clean_sample_size": 1180,
+  "summary": {
+    "total": 1232,
+    "ignored_theory": 26,
+    "type_a": 0,
+    "type_b": 26,
+    "clean": 1180
+  }
+}

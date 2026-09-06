@@ -23,6 +23,15 @@ from src.pipeline.distractor_gate import validate_distractor
         ("x = -2", "x = 2", "equation_solution"),
         ("21 < 2", "21 > 2", "inequality"),
         ("-5(2q - p)", "-5", "expression"),
+        # G6: large integers / mixed fractions — must NOT false-collide (2% tolerance bug)
+        ("149763", "150567", "text"),
+        ("149765", "149763", "text"),
+        ("9987", "9997", "exact_number"),
+        ("94 2/9", "94 4/9", "text"),
+        ("94 4/9", "94 2/9", "fraction"),
+        # SymPy must not mark unrelated inequalities as equivalent
+        ("-2/9 > -5/9", "-45 < -20", "text"),
+        ("-2/9 < -5/9", "-45 < -20", "text"),
     ],
 )
 def test_valid_distractors_do_not_collide(val, correct, answer_type):
@@ -37,12 +46,23 @@ def test_valid_distractors_do_not_collide(val, correct, answer_type):
         ("1/3", "1/3", "expression"),
         ("4", "4", "exact_number"),
         ("0,625", "5/8", "fraction"),
+        ("94 8/18", "94 4/9", "text"),
+        ("94 4/9", "94 8/18", "fraction"),
+        ("-2/15 ≤ 3/4", "-2/15 < 3/4", "inequality"),
         ("x <= 3,5", "x <= 7/2", "inequality"),
         ("1, 2, 3", "3; 2; 1", "set"),
     ],
 )
 def test_true_equivalents_do_collide(val, correct, answer_type):
     assert values_collide_for_distractor(val, correct, answer_type)
+
+
+def test_symbolic_formula_with_changed_sign_is_not_collision():
+    assert not values_collide_for_distractor(
+        "m2*c2*(T-T2)/(c1*(T1+T))",
+        "m2*c2*(T-T2)/(c1*(T1-T))",
+        "expression",
+    )
 
 
 # ── Int-list / fraction parsing ───────────────────────────────────────────────

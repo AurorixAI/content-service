@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import logging
 import sys
@@ -28,7 +29,6 @@ FETCH_SQL = """
     JOIN textbooks tb ON tb.textbook_id = toc.textbook_id
     WHERE tb.class_level = :level
       AND COALESCE(tm.correct_answer, '') NOT IN ('', '—', '-')
-      AND jsonb_array_length(COALESCE(tm.distractor_meta, '[]'::jsonb)) >= 1
       AND COALESCE(tm.tags->>'needs_content_repair', 'false') != 'true'
       AND COALESCE(tm.tags->>'distractor_locked', 'false') != 'true'
       AND tm.tags->>'smart_verify_status' IN (
@@ -50,49 +50,77 @@ def _dmeta(raw) -> list:
     return json.loads(raw or "[]")
 
 
+def _is_gap(dmeta: list) -> bool:
+    return len(dmeta) < 2
+
+
+def _is_gate_fail(row: dict, dmeta: list) -> bool:
+    if _is_gap(dmeta):
+        return True
+    try:
+        return not stored_distractors_valid(
+            dmeta,
+            question=row["question_text"] or "",
+            correct_answer=row["correct_answer"] or "",
+            answer_type=row["answer_type"] or "",
+            min_count=2,
+        )
+    except Exception:
+        return True
+
+
 def find_invalid(engine, class_level: int) -> list[dict]:
     with engine.connect() as conn:
         rows = conn.execute(text(FETCH_SQL), {"level": class_level}).mappings().all()
     invalid: list[dict] = []
     for row in rows:
         dmeta = _dmeta(row["distractor_meta"])
-        if not dmeta:
-            continue
-        try:
-            ok = stored_distractors_valid(
-                dmeta,
-                question=row["question_text"] or "",
-                correct_answer=row["correct_answer"] or "",
-                answer_type=row["answer_type"] or "",
-                min_count=2,
-            )
-        except Exception:
-            log.exception("audit crash %s", row["id"])
-            invalid.append(dict(row))
-            continue
-        if not ok:
+        if _is_gate_fail(row, dmeta):
             invalid.append(dict(row))
     return invalid
 
 
-def regen_batch(engine, rows: list[dict], *, sleep: float) -> dict[str, int]:
-    stats = {"processed": 0, "ok": 0, "partial": 0, "fail": 0}
+def _regen_input_meta(dmeta: list, *, force_wipe: bool) -> list:
+    """
+    Gaps: same as run_smart_verify --gaps-only (keep existing meta, top-up).
+    Gate-fail with dist>=2: optional full wipe when --force-wipe.
+    """
+    if force_wipe and len(dmeta) >= 2:
+        return []
+    return list(dmeta)
+
+
+def regen_batch(
+    engine,
+    rows: list[dict],
+    *,
+    sleep: float,
+    force_wipe: bool,
+) -> dict[str, int]:
+    stats = {"processed": 0, "ok": 0, "partial": 0, "fail": 0, "skipped_persist": 0}
     for row in rows:
         tid = row["id"]
         tags = _tags(row["tags"])
-        dmeta = _dmeta(row["distractor_meta"])
+        backup_dmeta = copy.deepcopy(_dmeta(row["distractor_meta"]))
         tags.pop("distractor_regen_exhausted", None)
         tags.pop("distractor_gate_rejected", None)
-        tags["distractor_regen_attempts"] = 0
+        tags["distractor_regen_attempts"] = int(tags.get("distractor_regen_attempts") or 0) + 1
         stats["processed"] += 1
-        log.info("REGEN %s (%s) — had %d dist", tid, row["answer_type"], len(dmeta))
+        mode = "gap" if _is_gap(backup_dmeta) else "gate_fail"
+        log.info(
+            "REGEN %s (%s) — had %d dist [%s]",
+            tid,
+            row["answer_type"],
+            len(backup_dmeta),
+            mode,
+        )
         try:
             result = run_distractor_only_pipeline(
                 task_id=tid,
                 question=row["question_text"] or "",
                 correct_answer=row["correct_answer"] or "",
                 answer_type=row["answer_type"] or "exact_number",
-                distractor_meta=[],
+                distractor_meta=_regen_input_meta(backup_dmeta, force_wipe=force_wipe),
                 tags=tags,
             )
         except Exception:
@@ -100,7 +128,6 @@ def regen_batch(engine, rows: list[dict], *, sleep: float) -> dict[str, int]:
             stats["fail"] += 1
             continue
 
-        persist_result(engine, tid, result)
         got = len(result.get("distractor_meta") or [])
         new_ok = stored_distractors_valid(
             result.get("distractor_meta") or [],
@@ -109,6 +136,18 @@ def regen_batch(engine, rows: list[dict], *, sleep: float) -> dict[str, int]:
             answer_type=row["answer_type"] or "",
             min_count=2,
         )
+
+        # Never persist a worse/empty set over a non-empty backup.
+        if got < len(backup_dmeta) and not new_ok:
+            stats["skipped_persist"] += 1
+            stats["fail"] += 1
+            log.info("  → fail (kept %d dist, not persisting wipe)", len(backup_dmeta))
+            if sleep > 0:
+                time.sleep(sleep)
+            continue
+
+        persist_result(engine, tid, result)
+
         if got >= 2 and new_ok:
             stats["ok"] += 1
             log.info("  → OK %d dist (gate clean)", got)
@@ -131,16 +170,36 @@ def main() -> int:
     ap.add_argument("--limit", type=int, default=0, help="0 = all invalid")
     ap.add_argument("--sleep", type=float, default=1.0)
     ap.add_argument("--loop", action="store_true")
+    ap.add_argument(
+        "--force-wipe",
+        action="store_true",
+        help="Full regen (distractor_meta=[]) only for gate-fail with dist>=2",
+    )
+    ap.add_argument(
+        "--gaps-only",
+        action="store_true",
+        help="Only tasks with <2 distractors (same path as smart_verify --gaps-only)",
+    )
+    ap.add_argument(
+        "--gate-fail-only",
+        action="store_true",
+        help="Only tasks with dist>=2 that fail stored gate (not gaps)",
+    )
     args = ap.parse_args()
 
     engine = create_engine(get_settings().database_url)
 
     while True:
         invalid = find_invalid(engine, args.class_level)
+        if args.gaps_only:
+            invalid = [r for r in invalid if _is_gap(_dmeta(r["distractor_meta"]))]
+        if args.gate_fail_only:
+            invalid = [r for r in invalid if not _is_gap(_dmeta(r["distractor_meta"]))]
         log.info("G%d invalid distractor sets: %d", args.class_level, len(invalid))
         if args.dry_run:
             for row in invalid[:30]:
-                log.info("  %s (%s)", row["id"], row["answer_type"])
+                dmeta = _dmeta(row["distractor_meta"])
+                log.info("  %s (%s) dist=%d", row["id"], row["answer_type"], len(dmeta))
             if len(invalid) > 30:
                 log.info("  ... +%d more", len(invalid) - 30)
             return 0
@@ -150,7 +209,7 @@ def main() -> int:
             log.info("All stored distractors pass gate.")
             return 0
 
-        stats = regen_batch(engine, batch, sleep=args.sleep)
+        stats = regen_batch(engine, batch, sleep=args.sleep, force_wipe=args.force_wipe)
         log.info("BATCH: %s", stats)
         if not args.loop or stats["processed"] == 0:
             break

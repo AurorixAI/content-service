@@ -2,13 +2,61 @@
 from __future__ import annotations
 
 import logging
+import multiprocessing as mp
+import queue as queue_module
 import re
+import signal
+import threading
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Optional
 
 from src.pipeline.answer_sympy import _latexish_to_sympy, parse_expr, split_answer_parts, sympy_equivalent
 
 log = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# SymPy Timeout Guard — prevents infinite simplify/solve loops
+# Uses SIGALRM (Unix only, main-thread only — matches our nohup usage)
+# ---------------------------------------------------------------------------
+
+SYMPY_EVAL_TIMEOUT = 25   # seconds per evaluate_sympy_string call
+SYMPY_GATE_TIMEOUT = 55   # seconds total for the entire sympy_gate call
+
+
+class _SymPyTimeout(Exception):
+    """Raised when a SymPy computation exceeds the allowed time budget."""
+
+
+def _alarm_handler(signum, frame):  # noqa: ARG001
+    raise _SymPyTimeout("SymPy computation timed out")
+
+
+@contextmanager
+def _sympy_time_limit(seconds: int):
+    """
+    Context manager: raises _SymPyTimeout if the body takes longer than
+    *seconds*.  Safe to nest — restores the previous alarm on exit.
+    """
+    try:
+        old_handler = signal.signal(signal.SIGALRM, _alarm_handler)
+        old_remaining = signal.alarm(seconds)
+        # If there was an existing alarm, use whichever fires sooner.
+        if old_remaining and old_remaining < seconds:
+            signal.alarm(old_remaining)
+    except (OSError, ValueError):
+        # SIGALRM unavailable (Windows / non-main thread) — skip guard.
+        old_handler = None
+        old_remaining = 0
+    try:
+        yield
+    finally:
+        if old_handler is not None:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old_handler)
+            if old_remaining:
+                signal.alarm(old_remaining)
 
 # Answer types supported by Smart Verify compute step
 SMART_VERIFY_TYPES = frozenset({
@@ -20,9 +68,88 @@ SMART_VERIFY_TYPES = frozenset({
     "inequality",
     "set",
     "multiple_choice",
+    "text",
+    "open_text",
 })
 
-CANONICAL_REASONS = frozenset({"sympy_match", "string_match"})
+CANONICAL_REASONS = frozenset({
+    "sympy_match",
+    "sympy_match_raw",
+    "string_match",
+})
+
+
+_COMPARISON_QUESTION_RE = re.compile(
+    r"(?:знак\s+сравнен|сравните|поставьте\s+знак|"
+    r"какой\s+знак|[A-Za-zА-Яа-я]\s*\.\.\.\s*[A-Za-zА-Яа-я0-9])",
+    re.I,
+)
+_COMPARISON_VALUE_QUESTION_RE = re.compile(
+    r"(?:какая|какое|какой|выберите|найдите)[^.?!]{0,120}"
+    r"(?:меньш\w*|наименьш\w*|больш\w*|наибольш\w*)",
+    re.I,
+)
+_PLACE_VALUE_QUESTION_RE = re.compile(
+    r"(?:до\s+какого\s+разряда|какого\s+разряда|"
+    r"разряд\w*[^.?!]{0,80}округл|округл\w*[^.?!]{0,80}разряд)",
+    re.I,
+)
+_PLACE_VALUE_PATTERNS: tuple[tuple[str, re.Pattern[str], int], ...] = (
+    ("hundred_millions", re.compile(r"сот(?:ен|ни|ня)?\s+миллион", re.I), 8),
+    ("ten_millions", re.compile(r"десятк(?:ов|и|а)?\s+миллион", re.I), 7),
+    ("millions", re.compile(r"миллион", re.I), 6),
+    ("hundred_thousands", re.compile(r"сот(?:ен|ни|ня)?\s+тысяч", re.I), 5),
+    ("ten_thousands", re.compile(r"десятк(?:ов|и|а)?\s+тысяч", re.I), 4),
+    ("thousands", re.compile(r"тысяч", re.I), 3),
+    ("hundreds", re.compile(r"сот(?:ен|ни|ня)?", re.I), 2),
+    ("tens", re.compile(r"десятк(?:ов|и|а)?", re.I), 1),
+    ("units", re.compile(r"единиц(?:ы|а)?", re.I), 0),
+)
+_PLACE_VALUE_DISPLAY = {
+    "hundred_millions": "сотен миллионов",
+    "ten_millions": "десятков миллионов",
+    "millions": "миллионов",
+    "hundred_thousands": "сотен тысяч",
+    "ten_thousands": "десятков тысяч",
+    "thousands": "тысяч",
+    "hundreds": "сотен",
+    "tens": "десятков",
+    "units": "единиц",
+}
+
+
+def _comparison_answer_key(value: str, question: str) -> Optional[str]:
+    """Return the requested comparison sign, without confusing it with formulae."""
+    if not _COMPARISON_QUESTION_RE.search(question or ""):
+        return None
+    raw = (value or "").strip().lower()
+    raw = raw.replace("$", "").replace("\\left", "").replace("\\right", "")
+    raw = (
+        raw.replace("\\leqslant", "<=").replace("\\leq", "<=")
+        .replace("\\geqslant", ">=").replace("\\geq", ">=")
+        .replace("≤", "<=").replace("≥", ">=")
+    )
+    signs = re.findall(r"(?<![<>])(?:<=|>=|<|>|=)(?![=])", raw)
+    if len(signs) == 1:
+        return signs[0]
+    if re.search(r"\bравн", raw):
+        return "="
+    if re.search(r"\bменьш", raw):
+        return "<"
+    if re.search(r"\bбольш", raw):
+        return ">"
+    return None
+
+
+def _place_value_answer_key(value: str, question: str) -> Optional[str]:
+    """Normalize Russian grammatical variants of decimal place-value answers."""
+    if not _PLACE_VALUE_QUESTION_RE.search(question or ""):
+        return None
+    raw = (value or "").replace("$", "").strip().lower().replace("ё", "е")
+    for key, pattern, _index in _PLACE_VALUE_PATTERNS:
+        if pattern.search(raw):
+            return key
+    return None
 
 
 def _sympy_namespace() -> dict[str, Any]:
@@ -40,7 +167,11 @@ def _sympy_namespace() -> dict[str, Any]:
         Ne,
         Or,
         Piecewise,
+        Integer,
+        Rational,
         Union,
+        ceiling,
+        floor,
         oo,
         pi,
         simplify,
@@ -53,6 +184,10 @@ def _sympy_namespace() -> dict[str, Any]:
     return {
         "Abs": Abs,
         "Piecewise": Piecewise,
+        "Integer": Integer,
+        "Rational": Rational,
+        "floor": floor,
+        "ceiling": ceiling,
         "Interval": Interval,
         "Union": Union,
         "And": And,
@@ -246,6 +381,11 @@ def format_expression_school(value: str) -> str:
     if ";" in s:
         return "; ".join(_format_labeled_part(p) for p in _split_expression_parts(s))
 
+    if "," in s and s.count("=") >= 2:
+        parts = _split_equation_solution_parts(s)
+        if len(parts) > 1:
+            return ", ".join(_format_labeled_part(p) for p in parts)
+
     return _format_expression_part(s)
 
 
@@ -257,6 +397,8 @@ _LABELED_PART_RE = re.compile(
     r"^([абвгдежзийклмнопрстуфхцчшщъыьэюя]\)|\d+\))\s*(.*)$",
     re.I,
 )
+_SCHOOL_MIXED_FRAC_RE = re.compile(r"^(-?\d+)\s+(\d+)/(\d+)$")
+_SCHOOL_SIMPLE_FRAC_RE = re.compile(r"^(-?\d+)/(\d+)$")
 
 
 def _format_labeled_part(segment: str) -> str:
@@ -271,7 +413,7 @@ def _format_expression_part(part: str) -> str:
     part = (part or "").strip()
     if not part:
         return part
-    m = re.match(r"^([a-zA-Z])\s*=\s*(.+)$", part)
+    m = re.match(r"^([a-zA-Z](?:_[a-zA-Z0-9]+|\d+)?)\s*=\s*(.+)$", part)
     if m:
         rhs = _format_algebraic_string(m.group(2).strip())
         return f"{m.group(1)} = {rhs}"
@@ -284,9 +426,18 @@ def _unwrap_sympy_call(s: str) -> str:
     return m.group(1).strip() if m else s
 
 
+def _is_school_fraction_literal(s: str) -> bool:
+    s = (s or "").strip()
+    return bool(_SCHOOL_MIXED_FRAC_RE.match(s) or _SCHOOL_SIMPLE_FRAC_RE.match(s))
+
+
 def _format_algebraic_string(s: str) -> str:
     s = _unwrap_sympy_call((s or "").strip())
     if not s:
+        return s
+    if "\\in" in s or "∈" in s or "\\notin" in s or "∉" in s:
+        return s
+    if _is_school_fraction_literal(s):
         return s
 
     if re.fullmatch(r"[\d.,]+[eE][+-]?\d+", s):
@@ -474,16 +625,32 @@ def _expression_parseable(s: str) -> bool:
 
 
 def _find_top_level_slash_index(s: str) -> int | None:
-    """Index of division `/` outside `{...}` (e.g. `a^{2} / 3`, `-a\\sqrt{6}/3`)."""
+    """Index of division `/` outside `{...}` and `(...)` if it is the ONLY top-level binary operator."""
     depth = 0
+    slash_idx = None
+    has_other_binary = False
     for i, ch in enumerate(s):
-        if ch == "{":
+        if ch in ("{", "("):
             depth += 1
-        elif ch == "}":
+        elif ch in ("}", ")"):
             depth = max(0, depth - 1)
-        elif ch == "/" and depth == 0:
-            if s[:i].strip() and s[i + 1 :].strip():
-                return i
+        elif depth == 0:
+            if ch == "/":
+                if s[:i].strip() and s[i + 1 :].strip():
+                    if slash_idx is not None:
+                        has_other_binary = True
+                    slash_idx = i
+            elif ch in ("+", "*", "=", "<", ">", "≤", "≥", "≠", ";"):
+                if ch in ("+", "-"):
+                    if s[:i].strip():
+                        has_other_binary = True
+                else:
+                    has_other_binary = True
+            elif ch == "-" and s[:i].strip():
+                has_other_binary = True
+
+    if slash_idx is not None and not has_other_binary:
+        return slash_idx
     return None
 
 
@@ -534,19 +701,32 @@ def _needs_math_wrap(s: str) -> bool:
     if re.fullmatch(r"[a-zA-Z]", s):
         return True
     return bool(
-        re.search(r"\\frac|\\sqrt|\^|±|√|[a-zA-Z].*[\+\-\*/=]|\\", s)
+        re.search(r"\\frac|\\sqrt|\^|±|√|≤|≥|≠|!=|<|>|[a-zA-Z].*[\+\-\*/=]|\\", s)
     )
+
+
+def _school_fraction_latex_inner(s: str) -> str | None:
+    """School mixed/simple fraction → KaTeX inner (no $)."""
+    s = (s or "").strip()
+    m = _SCHOOL_MIXED_FRAC_RE.match(s)
+    if m:
+        return rf"{m.group(1)}\frac{{{m.group(2)}}}{{{m.group(3)}}}"
+    m = _SCHOOL_SIMPLE_FRAC_RE.match(s)
+    if m:
+        return rf"\frac{{{m.group(1)}}}{{{m.group(2)}}}"
+    return None
 
 
 def _latex_math_content(s: str) -> str:
     """Inner LaTeX (without $ delimiters)."""
     s = (s or "").strip()
+    s = s.replace("≤", r"\le ").replace("≥", r"\ge ").replace("≠", r"\ne ").replace("!=", r"\ne ")
     short_dec = _short_decimal_latex(s)
     if short_dec is not None:
         return short_dec
-    m = re.fullmatch(r"(\d+)\s+(\d+)/(\d+)", s)
-    if m:
-        return rf"{m.group(1)}\frac{{{m.group(2)}}}{{{m.group(3)}}}"
+    frac = _school_fraction_latex_inner(s)
+    if frac is not None:
+        return frac
     m = re.fullmatch(
         r"([\d.,]+)\s*(?:\*|×|·)?\s*10\^\{?(-?\d+)\}?\s*(?:г|кг)?",
         s,
@@ -564,7 +744,7 @@ def _wrap_math_body(body: str) -> str:
     body = (body or "").strip()
     if not body:
         return body
-    fm = re.match(r"^([a-zA-Z])\s*=\s*(.+)$", body)
+    fm = re.match(r"^([a-zA-Z](?:_[a-zA-Z0-9]+|\d+)?)\s*=\s*(.+)$", body)
     if fm:
         return f"${fm.group(1)} = {_latex_math_content(fm.group(2).strip())}$"
     if _needs_math_wrap(body):
@@ -758,12 +938,32 @@ def _wrap_single_inequality(part: str) -> str:
     return f"${var} {op} {_latex_equation_rhs(rhs)}$"
 
 
+def _split_inequality_parts(s: str) -> list[str]:
+    s = (s or "").strip()
+    if not s:
+        return []
+    if ";" in s:
+        return [p.strip() for p in s.split(";") if p.strip()]
+    # Split by comma if followed by a variable and an inequality/equality operator
+    chunks = re.split(r",\s*([a-zA-Z_]\w*)\s*(=|!=|≠|>=|<=|≤|≥|<|>)\s*", s)
+    if len(chunks) > 1:
+        out = [chunks[0].strip()]
+        for i in range(1, len(chunks), 3):
+            if i + 2 < len(chunks):
+                out.append(f"{chunks[i]} {chunks[i+1]} {chunks[i+2].strip().rstrip(',')}")
+        return out
+    return [s]
+
+
 def _to_inequality_answer_latex(answer: str) -> str:
     raw = (answer or "").strip()
     if not raw or is_prose_answer(raw):
         return raw
     if ";" in raw:
         return "; ".join(_wrap_single_inequality(p) for p in _split_expression_parts(raw))
+    parts = _split_inequality_parts(raw)
+    if len(parts) > 1:
+        return ", ".join(_wrap_single_inequality(p) for p in parts)
     return _wrap_single_inequality(raw)
 
 
@@ -925,6 +1125,9 @@ def _to_answer_latex_inner(answer: str, answer_type: str = "") -> str:
         if rendered and rendered != raw:
             return rendered
 
+    if _is_school_fraction_literal(raw):
+        return _latex_labeled_part(raw)
+
     school = (
         format_expression_school(raw)
         if at in ("expression", "fraction") or answer_needs_school_format(raw, at)
@@ -933,6 +1136,10 @@ def _to_answer_latex_inner(answer: str, answer_type: str = "") -> str:
 
     if ";" in school and not _COORD_PAIR_RE.search(school):
         return "; ".join(_latex_labeled_part(p) for p in _split_expression_parts(school))
+    if "," in school and school.count("=") >= 2:
+        parts = _split_equation_solution_parts(school)
+        if len(parts) > 1:
+            return ", ".join(_latex_labeled_part(p) for p in parts)
     return _latex_labeled_part(school)
 
 
@@ -1071,7 +1278,10 @@ def _school_rhs_from_sympy(expr: Any) -> str:
 
     simplified = nsimplify(e)
     out = str(simplified)
-    out = out.replace("sqrt(", "√").replace(")", "")
+    import re
+    out = re.sub(r"sqrt\((\d+)\)", r"√\1", out)
+    out = re.sub(r"sqrt\(([a-zA-Z])\)", r"√\1", out)
+    out = out.replace("sqrt(", "√")
     return out
 
 
@@ -1214,6 +1424,23 @@ def _parse_sympy_compatible_string(sympy_string: str) -> Any:
 
     ns = _sympy_namespace()
 
+    # Code-execution models occasionally serialize a perfectly deterministic
+    # Python conditional instead of Piecewise/Abs.  Resolve only the simple
+    # top-level form locally; each branch and the condition are still parsed in
+    # the restricted SymPy namespace.
+    conditional = re.match(
+        r"^(?P<yes>.+?)\s+if\s+(?P<condition>.+?)\s+else\s+(?P<no>.+)$",
+        raw,
+        re.DOTALL,
+    )
+    if conditional:
+        condition_raw = _latexish_to_sympy(conditional.group("condition").strip())
+        condition = sympify(condition_raw, locals=ns)
+        if condition is sympy.true or condition is True:
+            return _parse_sympy_compatible_string(conditional.group("yes"))
+        if condition is sympy.false or condition is False:
+            return _parse_sympy_compatible_string(conditional.group("no"))
+
     m = re.match(r"^solve\s*\((.+)\)\s*$", raw, re.DOTALL | re.I)
     if m:
         inner = m.group(1).strip()
@@ -1276,7 +1503,172 @@ def _parse_sympy_compatible_string(sympy_string: str) -> Any:
     raise ValueError(f"cannot parse sympy_compatible_string: {raw[:80]!r}")
 
 
-def evaluate_sympy_string(
+def _numeric_comparison(lhs: Any, rhs: Any) -> Optional[str]:
+    """Compare two locally evaluated real scalar expressions."""
+    try:
+        import sympy
+
+        delta = sympy.N(sympy.simplify(lhs - rhs))
+        if getattr(delta, "is_real", None) is not True:
+            return None
+        value = float(delta)
+    except Exception:
+        return None
+    if abs(value) < 1e-10:
+        return "="
+    return "<" if value < 0 else ">"
+
+
+def _comparison_from_sympy_string(sympy_string: str) -> Optional[str]:
+    """Recover the actual sign between the two values produced by the solver."""
+    raw = (sympy_string or "").strip()
+    relation = re.match(r"^(?:Eq|Ne|Lt|Le|Gt|Ge)\s*\((.*)\)\s*$", raw, re.DOTALL)
+    if relation:
+        inner = relation.group(1)
+        depth = 0
+        split_at: Optional[int] = None
+        for index, char in enumerate(inner):
+            if char in "([{":
+                depth += 1
+            elif char in ")]}":
+                depth -= 1
+            elif char == "," and depth == 0:
+                split_at = index
+                break
+        if split_at is not None:
+            try:
+                lhs = _parse_sympy_compatible_string(inner[:split_at])
+                rhs = _parse_sympy_compatible_string(inner[split_at + 1 :])
+            except Exception:
+                return None
+            return _numeric_comparison(lhs, rhs)
+
+    try:
+        obj = _parse_sympy_compatible_string(raw)
+    except Exception:
+        return None
+    if isinstance(obj, (tuple, list)) and len(obj) == 2:
+        return _numeric_comparison(obj[0], obj[1])
+    return None
+
+
+def _comparison_value_from_true_relation(
+    sympy_string: str,
+    absolute_answer: str,
+    question: str,
+    answer_type: str,
+) -> Optional[str]:
+    """Prove the selected operand in an explicit «which is less/more» task.
+
+    A boolean on its own is never a task answer.  This narrow exception is
+    only for a question that explicitly asks to select the smaller/larger
+    value, when the model supplies the two operands and their relation.  The
+    candidate must equal the mathematically selected operand exactly.
+    """
+    if (answer_type or "").lower() not in {"exact_number", "decimal", "fraction"}:
+        return None
+    q = question or ""
+    if not _COMPARISON_VALUE_QUESTION_RE.search(q):
+        return None
+
+    raw = (sympy_string or "").strip()
+    relation_match = re.match(r"^(Lt|Le|Gt|Ge)\s*\((.*)\)\s*$", raw, re.DOTALL)
+    lhs_text = rhs_text = ""
+    relation = ""
+    if relation_match:
+        relation, inner = relation_match.groups()
+        depth = 0
+        split_at: Optional[int] = None
+        for index, char in enumerate(inner):
+            if char in "([{":
+                depth += 1
+            elif char in ")]}":
+                depth -= 1
+            elif char == "," and depth == 0:
+                split_at = index
+                break
+        if split_at is None:
+            return None
+        lhs_text, rhs_text = inner[:split_at], inner[split_at + 1:]
+    else:
+        infix = re.match(r"^(.+?)\s*(<=|>=|<|>)\s*(.+)$", raw, re.DOTALL)
+        if not infix:
+            return None
+        lhs_text, relation, rhs_text = infix.groups()
+
+    try:
+        lhs = _parse_sympy_compatible_string(lhs_text.strip())
+        rhs = _parse_sympy_compatible_string(rhs_text.strip())
+    except Exception:
+        return None
+    sign = _numeric_comparison(lhs, rhs)
+    if sign is None:
+        return None
+    relation_sign = {"Lt": "<", "Le": "<=", "Gt": ">", "Ge": ">="}.get(
+        relation, relation,
+    )
+    if relation_sign == "<=" and sign not in {"<", "="}:
+        return None
+    if relation_sign == ">=" and sign not in {">", "="}:
+        return None
+    if relation_sign in {"<", ">"} and sign != relation_sign:
+        return None
+
+    from src.pipeline.answer_verify import answers_equivalent
+
+    wants_smaller = bool(re.search(r"(?:меньш\w*|наименьш\w*)", q, re.I))
+    wants_larger = bool(re.search(r"(?:больш\w*|наибольш\w*)", q, re.I))
+    if wants_smaller == wants_larger:
+        return None
+    selected = lhs if (wants_smaller and sign == "<") or (wants_larger and sign == ">") else rhs
+    # The restricted parser can turn ``Rational(3, 10)`` into a binary float
+    # before SymPy sees it.  Preserve an explicit Rational literal from the
+    # original evidence rather than comparing its rounded machine value.
+    selected_source = lhs_text.strip() if selected is lhs else rhs_text.strip()
+    rational_literal = re.fullmatch(
+        r"Rational\(\s*(-?\d+)\s*,\s*(\d+)\s*\)", selected_source,
+        re.I,
+    )
+    selected_text = (
+        f"{rational_literal.group(1)}/{rational_literal.group(2)}"
+        if rational_literal else _format_sympy_result(selected, answer_type) or str(selected)
+    )
+    if not answers_equivalent(absolute_answer, selected_text, answer_type, question=question):
+        return None
+    return selected_text
+
+
+def _place_value_from_sympy_string(sympy_string: str) -> Optional[str]:
+    """Map a proof token (exponent or power of ten) to a decimal place."""
+    try:
+        import math
+        import sympy
+
+        obj = _parse_sympy_compatible_string(sympy_string)
+        if getattr(obj, "free_symbols", set()):
+            return None
+        value = float(sympy.N(obj))
+        if not math.isfinite(value) or value < 0:
+            return None
+        rounded = int(round(value))
+        if abs(value - rounded) > 1e-10:
+            return None
+        # New prompt contract: 0=units, 1=tens, 2=hundreds, ...
+        if 0 <= rounded <= 8:
+            exponent = rounded
+        elif rounded > 0 and rounded == 10 ** int(round(math.log10(rounded))):
+            exponent = int(round(math.log10(rounded)))
+        else:
+            return None
+    except Exception:
+        return None
+    for key, _pattern, index in _PLACE_VALUE_PATTERNS:
+        if index == exponent:
+            return key
+    return None
+
+
+def _evaluate_sympy_string_inner(
     sympy_string: str,
     answer_type: str,
     *,
@@ -1361,6 +1753,33 @@ def evaluate_sympy_string(
     return format_school_notation(result, at) if result else None
 
 
+def evaluate_sympy_string(
+    sympy_string: str,
+    answer_type: str,
+    *,
+    question: str = "",
+) -> Optional[str]:
+    """
+    Evaluate LLM sympy_compatible_string locally → canonical answer string.
+    Returns None if evaluation fails or exceeds SYMPY_EVAL_TIMEOUT seconds.
+    """
+    try:
+        with _sympy_time_limit(SYMPY_EVAL_TIMEOUT):
+            return _evaluate_sympy_string_inner(
+                sympy_string, answer_type, question=question
+            )
+    except _SymPyTimeout:
+        log.warning(
+            "evaluate_sympy_string TIMEOUT (%ds) for: %.120s",
+            SYMPY_EVAL_TIMEOUT,
+            sympy_string,
+        )
+        return None
+    except Exception as exc:
+        log.debug("evaluate_sympy_string unexpected error: %s", exc)
+        return None
+
+
 @dataclass
 class SympyGateResult:
     ok: bool
@@ -1435,6 +1854,192 @@ def _try_validate_equation_answer(question: str, answer: str) -> Optional[bool]:
     return None
 
 
+def _general_integer_solution_rhs(answer: str) -> Optional[Any]:
+    """Parse the RHS of ``x = f(k), k ∈ Z`` into a SymPy expression.
+
+    This is deliberately narrow: it is used only to compare a declared
+    one-parameter *general solution* against an equation, never to infer an
+    answer from arbitrary prose.  The parameter is rebound as an integer so
+    trigonometric periodicity is evaluated exactly.
+    """
+    text = (answer or "").replace("$", "").strip()
+    text = text.replace(r"\mathbb{Z}", "Z").replace(r"\mathbb Z", "Z")
+    text = text.replace(r"\in", "∈").replace(r"\pi", "π")
+    match = re.fullmatch(
+        r"x\s*=\s*(.+?)\s*,?\s*([a-zA-Z])\s*(?:∈|in)\s*(?:Z|ℤ|integers)",
+        text,
+        flags=re.I,
+    )
+    if not match:
+        return None
+    rhs, parameter = match.groups()
+    if not re.search(rf"(?<![a-zA-Z]){re.escape(parameter)}(?![a-zA-Z])", rhs):
+        return None
+    try:
+        import sympy
+        from src.pipeline.answer_sympy import _normalize_school_expression
+
+        integer_parameter = sympy.Symbol("_sv_k", integer=True)
+        normalized = _normalize_school_expression(rhs).replace(r"\pi", "pi")
+        # The generic expression normalizer treats a letter immediately after
+        # ``pi`` as part of the identifier (``pik``).  Here that letter is the
+        # explicitly declared integer parameter, so restore multiplication
+        # before rebinding it below.
+        normalized = re.sub(
+            rf"pi(?={re.escape(parameter)}(?![a-zA-Z]))",
+            "pi*",
+            normalized,
+        )
+        normalized = re.sub(
+            rf"(?<![a-zA-Z]){re.escape(parameter)}(?![a-zA-Z])",
+            "_sv_k",
+            normalized,
+        )
+        return sympy.sympify(normalized, locals={"pi": sympy.pi, "_sv_k": integer_parameter})
+    except Exception:
+        return None
+
+
+def _equation_matches_general_integer_solution(equation: Any, answer: str) -> bool:
+    """Prove equality of an equation's real solution set and ``x=f(k), k∈Z``.
+
+    A simple substitution proves only that the proposed family is a subset of
+    the roots.  It would wrongly accept a doubled period (for example
+    ``π/2 + 2πk`` for ``cos(x)=0``).  For affine integer families we compare
+    exact residue classes from ``solveset``: every real root must be in the
+    proposed lattice and the union of the equation's lattices must cover every
+    residue of the proposed one.
+    """
+    rhs = _general_integer_solution_rhs(answer)
+    if rhs is None:
+        return False
+    try:
+        import sympy
+        from math import gcd
+        from functools import reduce
+
+        variables = list(equation.free_symbols)
+        if len(variables) != 1:
+            return False
+        variable = variables[0]
+        parameter = next(iter(rhs.free_symbols), None)
+        if parameter is None:
+            return False
+
+        def lattice(expr: Any, symbol: Any) -> Optional[tuple[Any, Any]]:
+            period = sympy.simplify(sympy.diff(expr, symbol))
+            if not period or period.free_symbols:
+                return None
+            offset = sympy.simplify(expr.subs(symbol, 0))
+            try:
+                if float(sympy.N(period)) < 0:
+                    period = -period
+            except Exception:
+                return None
+            return period, offset
+
+        candidate = lattice(rhs, parameter)
+        if candidate is None:
+            return False
+        candidate_period, candidate_offset = candidate
+
+        solved = sympy.solveset(equation, variable, domain=sympy.S.Reals)
+        terms = list(solved.args) if isinstance(solved, sympy.Union) else [solved]
+        solution_lattices: list[tuple[Any, Any]] = []
+        for term in terms:
+            if not isinstance(term, sympy.ImageSet) or term.base_set != sympy.S.Integers:
+                return False
+            lam = term.lamda
+            if len(lam.variables) != 1:
+                return False
+            parsed = lattice(lam.expr, lam.variables[0])
+            if parsed is None:
+                return False
+            solution_lattices.append(parsed)
+        if not solution_lattices:
+            return False
+
+        residue_classes: list[tuple[int, int]] = []
+        for period, offset in solution_lattices:
+            multiple = sympy.simplify(period / candidate_period)
+            residue = sympy.simplify((offset - candidate_offset) / candidate_period)
+            if multiple.is_integer is not True or residue.is_integer is not True:
+                return False
+            m = abs(int(multiple))
+            if m == 0:
+                return False
+            residue_classes.append((m, int(residue) % m))
+
+        modulus = reduce(lambda left, right: left * right // gcd(left, right),
+                         (item[0] for item in residue_classes), 1)
+        return all(
+            any(index % step == residue for step, residue in residue_classes)
+            for index in range(modulus)
+        )
+    except Exception:
+        return False
+
+
+def _split_top_level_arguments(source: str) -> list[str]:
+    """Split a function argument list without breaking nested SymPy calls."""
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    for index, char in enumerate(source):
+        if char in "([{":
+            depth += 1
+        elif char in ")]}":
+            depth -= 1
+        elif char == "," and depth == 0:
+            parts.append(source[start:index].strip())
+            start = index + 1
+    tail = source[start:].strip()
+    if tail:
+        parts.append(tail)
+    return parts
+
+
+def _equation_from_sympy_evidence(sympy_string: str) -> Optional[Any]:
+    """Recover the equation that a solver wrapper was intended to solve.
+
+    Model evidence often contains ``solve(cos(x-pi), x)`` or
+    ``ConditionSet(x, Eq(...), ...)``.  Evaluating those forms first loses the
+    original equation and returns arbitrary periodic representatives.  This
+    helper extracts the equation before evaluation so the general-solution
+    proof can compare whole real solution sets.
+    """
+    raw = (sympy_string or "").strip()
+    try:
+        import sympy
+
+        direct = _parse_sympy_compatible_string(raw)
+        if getattr(direct, "is_Equality", False):
+            return direct
+
+        for name in ("solve", "solveset"):
+            prefix = f"{name}("
+            if raw.startswith(prefix) and raw.endswith(")"):
+                args = _split_top_level_arguments(raw[len(prefix):-1])
+                if not args:
+                    return None
+                subject = _parse_sympy_compatible_string(args[0])
+                if getattr(subject, "is_Equality", False):
+                    return subject
+                if getattr(subject, "free_symbols", set()):
+                    return sympy.Eq(subject, 0, evaluate=False)
+
+        prefix = "ConditionSet("
+        if raw.startswith(prefix) and raw.endswith(")"):
+            args = _split_top_level_arguments(raw[len(prefix):-1])
+            if len(args) >= 2:
+                condition = _parse_sympy_compatible_string(args[1])
+                if getattr(condition, "is_Equality", False):
+                    return condition
+    except Exception:
+        return None
+    return None
+
+
 def _normalize_sympy_relational_string(s: str) -> str:
     """Greater(20, 6) → 20 > 6; And(...) left as-is for answers_equivalent."""
     s = (s or "").strip()
@@ -1497,7 +2102,17 @@ def _gate_match(
     return False
 
 
-def sympy_gate(
+def _strip_units(s: str) -> str:
+    s = (s or "").strip()
+    s = re.sub(
+        r"(?<=\d)\s*(км/ч|км|м|ч|деталей|детали|деталь|страниц|страница|страницы|см³|кг|г|ц/га|ц|руб|рублей|рубля|кусков|куска|кусок|кв\.\s*м|м²)\b\.?",
+        "",
+        s,
+    )
+    return s.strip()
+
+
+def _sympy_gate_inner(
     sympy_string: str,
     absolute_answer: str,
     answer_type: str,
@@ -1512,12 +2127,47 @@ def sympy_gate(
     from src.pipeline.answer_verify import answers_equivalent, _coordinate_system_equivalent
     from src.pipeline.answer_sympy import try_validate_answer_for_question
 
-    absolute_answer = (absolute_answer or "").strip()
-    stored_answer = (stored_answer or "").strip()
+    absolute_answer = _strip_units(absolute_answer)
+    stored_answer = _strip_units(stored_answer)
     if not absolute_answer:
         return SympyGateResult(ok=False, reason="empty_absolute_answer")
 
     at = (answer_type or "").lower()
+
+    comparison_candidate = _comparison_answer_key(absolute_answer, question)
+    comparison_stored = _comparison_answer_key(stored_answer, question)
+    if comparison_candidate:
+        comparison_computed = _comparison_from_sympy_string(sympy_string)
+        if comparison_computed == comparison_candidate:
+            canonical = (
+                stored_answer
+                if comparison_stored == comparison_candidate
+                else comparison_candidate
+            )
+            return SympyGateResult(
+                ok=True,
+                computed_local=canonical,
+                reason="semantic_comparison_match",
+            )
+
+    place_candidate = _place_value_answer_key(absolute_answer, question)
+    place_stored = _place_value_answer_key(stored_answer, question)
+    if place_candidate:
+        place_computed = _place_value_from_sympy_string(sympy_string)
+        # A locally checkable place token is preferred.  Historical records
+        # used arbitrary arithmetic strings; for them, independent agreement
+        # between the hidden LLM answer and textbook answer is the safe fallback.
+        if place_computed == place_candidate or place_stored == place_candidate:
+            canonical = (
+                stored_answer
+                if place_stored == place_candidate
+                else _PLACE_VALUE_DISPLAY[place_candidate]
+            )
+            return SympyGateResult(
+                ok=True,
+                computed_local=canonical,
+                reason="semantic_place_value_match",
+            )
 
     if at == "multiple_choice":
         if answers_equivalent(stored_answer, absolute_answer, at, question=question):
@@ -1539,6 +2189,66 @@ def sympy_gate(
     computed = evaluate_sympy_string(sympy_string, answer_type, question=question)
     if computed is not None:
         computed = _normalize_sympy_relational_string(computed)
+
+    if computed in ("True", "False") and at in (
+        "exact_number",
+        "decimal",
+        "fraction",
+        "expression",
+        "equation_solution",
+    ):
+        selected_comparison_value = _comparison_value_from_true_relation(
+            sympy_string,
+            absolute_answer,
+            question,
+            at,
+        )
+        if selected_comparison_value is not None:
+            return SympyGateResult(
+                ok=True,
+                computed_local=selected_comparison_value,
+                reason="semantic_comparison_value_match",
+            )
+        return SympyGateResult(
+            ok=False,
+            computed_local=computed,
+            reason="invalid_boolean_result",
+        )
+
+    # SymPy's ``solve`` often returns only representative roots for periodic
+    # trigonometric equations. A listed pair is not comparable to the genuine
+    # general answer, so prove the declared k∈Z family directly against the
+    # original Eq instead of treating the partial solve output as a mismatch.
+    if at == "equation_solution":
+        equation = _equation_from_sympy_evidence(sympy_string)
+        if equation is not None:
+            for candidate in (absolute_answer, stored_answer):
+                if _equation_matches_general_integer_solution(equation, candidate):
+                    return SympyGateResult(
+                        ok=True,
+                        computed_local=candidate,
+                        reason="general_solution_substitution",
+                    )
+
+    # Keep the executable expression as the source of truth during the gate.
+    # Formatting it to school LaTeX before comparison used to create false
+    # mismatches against the same ASCII/SymPy expression returned by the LLM.
+    if computed is not None and at in ("expression", "fraction"):
+        raw_a = re.sub(r"\s+", "", (sympy_string or "").strip())
+        raw_b = re.sub(r"\s+", "", absolute_answer.strip())
+        raw_equivalent = raw_a == raw_b
+        if not raw_equivalent:
+            raw_equivalent = sympy_equivalent(
+                sympy_string,
+                absolute_answer,
+                answer_type,
+            ) is True
+        if raw_equivalent:
+            return SympyGateResult(
+                ok=True,
+                computed_local=absolute_answer,
+                reason="sympy_match_raw",
+            )
 
     if computed is not None and at == "multiple_choice":
         if _gate_match(
@@ -1857,6 +2567,140 @@ def sympy_gate(
     )
 
 
+def _sympy_gate_child(
+    result_queue: Any,
+    sympy_string: str,
+    absolute_answer: str,
+    answer_type: str,
+    question: str,
+    stored_answer: str,
+) -> None:
+    """Run one gate in an isolated process for a threaded coordinator.
+
+    ``SIGALRM`` is delivered only to Python's main thread.  Smart Verify uses
+    a thread pool for model concurrency, so a process boundary is necessary to
+    make the gate timeout real there as well.  The child receives only plain
+    strings and returns a small, picklable result.
+    """
+    try:
+        result = _sympy_gate_inner(
+            sympy_string,
+            absolute_answer,
+            answer_type,
+            question=question,
+            stored_answer=stored_answer,
+        )
+    except Exception:
+        result = SympyGateResult(ok=False, reason="eval_failed")
+    result_queue.put(result)
+
+
+def _sympy_gate_in_isolated_process(
+    sympy_string: str,
+    absolute_answer: str,
+    answer_type: str,
+    *,
+    question: str,
+    stored_answer: str,
+    timeout_seconds: int,
+) -> SympyGateResult:
+    """Hard timeout variant used when ``sympy_gate`` is called in a thread."""
+    context = mp.get_context("spawn")
+    result_queue = context.Queue(maxsize=1)
+    process = context.Process(
+        target=_sympy_gate_child,
+        args=(
+            result_queue,
+            sympy_string,
+            absolute_answer,
+            answer_type,
+            question,
+            stored_answer,
+        ),
+    )
+    process.daemon = True
+    try:
+        process.start()
+        process.join(timeout_seconds)
+        if process.is_alive():
+            log.warning(
+                "sympy_gate threaded TIMEOUT (%ds): sympy_string=%.120s | answer=%.60s",
+                timeout_seconds,
+                sympy_string,
+                absolute_answer,
+            )
+            process.terminate()
+            process.join()
+            return SympyGateResult(ok=False, reason="eval_failed")
+        try:
+            return result_queue.get(timeout=1)
+        except queue_module.Empty:
+            return SympyGateResult(ok=False, reason="eval_failed")
+    except Exception as exc:
+        log.debug("isolated sympy gate unexpected error: %s", exc)
+        return SympyGateResult(ok=False, reason="eval_failed")
+    finally:
+        if process.is_alive():
+            process.terminate()
+            process.join()
+        result_queue.close()
+        result_queue.join_thread()
+
+
+def sympy_gate(
+    sympy_string: str,
+    absolute_answer: str,
+    answer_type: str,
+    *,
+    question: str = "",
+    stored_answer: str = "",
+    timeout_seconds: Optional[int] = None,
+) -> SympyGateResult:
+    """
+    Public entry point for the SymPy gate.
+
+    Wraps ``_sympy_gate_inner`` with a hard SIGALRM timeout
+    (SYMPY_GATE_TIMEOUT seconds, default 55 s).  If SymPy hangs on a
+    pathological expression (e.g. complex trig identities), the alarm fires
+    and we return a ``eval_failed`` result immediately — the task is marked
+    ``failed_at_sympy`` and the process moves on to the next task.
+    """
+    timeout = max(1, int(timeout_seconds or SYMPY_GATE_TIMEOUT))
+    # Signals do not work in ThreadPoolExecutor workers.  Isolate the actual
+    # SymPy call there, so a pathological task cannot block the coordinator or
+    # leave a misleading in-progress claim forever.
+    if threading.current_thread() is not threading.main_thread():
+        return _sympy_gate_in_isolated_process(
+            sympy_string,
+            absolute_answer,
+            answer_type,
+            question=question,
+            stored_answer=stored_answer,
+            timeout_seconds=timeout,
+        )
+
+    try:
+        with _sympy_time_limit(timeout):
+            return _sympy_gate_inner(
+                sympy_string,
+                absolute_answer,
+                answer_type,
+                question=question,
+                stored_answer=stored_answer,
+            )
+    except _SymPyTimeout:
+        log.warning(
+            "sympy_gate TIMEOUT (%ds): sympy_string=%.120s | answer=%.60s",
+            timeout,
+            sympy_string,
+            absolute_answer,
+        )
+        return SympyGateResult(ok=False, reason="eval_failed")
+    except Exception as exc:
+        log.debug("sympy_gate unexpected error: %s", exc)
+        return SympyGateResult(ok=False, reason="eval_failed")
+
+
 def resolve_canonical_answer(
     gate: SympyGateResult,
     llm_answer: str,
@@ -1876,6 +2720,9 @@ def resolve_canonical_answer(
 
     if reason == "textbook_agrees_with_llm":
         return llm_answer, "llm_fallback"
+
+    if reason.startswith("semantic_") and gate.computed_local:
+        return gate.computed_local, "semantic_gate"
 
     if reason in CANONICAL_REASONS and gate.computed_local:
         return format_school_notation(gate.computed_local, at), "local_sympy"

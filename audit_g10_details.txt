@@ -1,0 +1,15 @@
+=== SymPy Leaks ===
+Task: G10_TB_§1_1_14_4 | Field: answer | Val: $\text{Функция } g(x) \text{ определена при } x^4 \neq 1, \text{ то есть } x \neq \pm 1. \text{ Проверим условие нечётности: } g(-x) = \frac{| -4x - 1| - | -4x + 1|}{(-x)^4 - 1} = \frac{| -(4x + 1)| - | -(4x - 1)|}{x^4 - 1} = \frac{|4x + 1| - |4x - 1|}{x^4 - 1} = -\frac{|4x - 1| - |4x + 1|}{x^4 - 1} = -g(x). \text{ Следовательно, } g(x) \text{ — нечётная функция.}$
+Task: G10_TB_§3_3_10_3 | Field: question | Val: y = \begin{cases} x, & \text{если } x \geqslant 0, \\ 2x, & \text{если } x < 0. \end{cases}
+Task: G10_TB_§3_3_10_3 | Field: answer | Val: $\text{Исходная функция: } y = \begin{cases} x, & x \ge 0 \\ 2x, & x < 0 \end{cases} \\ \text{Обратная функция: } y = \begin{cases} x, & x \ge 0 \\ \frac{x}{2}, & x < 0 \end{cases} \\ \text{Графики симметричны относительно прямой } y = x.$
+Task: G10_TB_§3_3_11_3 | Field: question | Val: y = \begin{cases} \sqrt{x}, & \text{если } x \geqslant 0, \\ \frac{1}{2}x, & \text{если } x < 0. \end{cases}
+Task: G10_TB_§3_3_11_3 | Field: answer | Val: $\text{Исходная функция: } y = \begin{cases} \sqrt{x}, & x \ge 0 \\ \frac{1}{2}x, & x < 0 \end{cases} \\ \text{Обратная функция: } y = \begin{cases} x^2, & x \ge 0 \\ 2x, & x < 0 \end{cases} \\ \text{Графики симметричны относительно прямой } y = x.$
+Task: G10_TB_§42_42_8 | Field: answer | Val: $f(x) = \begin{cases} -x + 2, & -2 \le x < 0 \\ 0, & x = 0 \\ -\frac{x}{2}, & 0 < x \le 1 \\ 0.7(x - 1) - 0.5, & 1 < x \le 6 \end{cases}$
+Task: G10_TB_•_5_25_2 | Field: answer | Val: $\begin{cases} x \in (3; +\infty), & \text{если } a \le 3 \\ x \in (3; a) \cup (a; +\infty), & \text{если } a > 3 \end{cases}$
+Task: G10_TB_§33_33_7_1 | Field: question | Val: f(x) = \begin{cases} x^2, & \text{если } x < 2, \\ x + 2, & \text{если } x \geqslant 2, \end{cases}, x_0 = 2
+Task: G10_TB_§33_33_7_2 | Field: question | Val: f(x) = \begin{cases} \dfrac{x}{x}, & \text{если } x \neq 0, \\ 1, & \text{если } x = 0, \end{cases}, x_0 = 0
+Task: G10_TB_§33_33_7_3 | Field: question | Val: f(x) = \begin{cases} x^2, & \text{если } x > 1, \\ x - 2, & \text{если } x \leqslant 1, \end{cases}, x_0 = 1
+Task: G10_TB_§34_33_8_1 | Field: question | Val: f(x) = \begin{cases} \dfrac{6}{x}, & \text{если } x < -2, \\ x - 1, & \text{если } x \geq -2, \end{cases}, x_0 = -2
+Task: G10_TB_§34_33_8_2 | Field: question | Val: f(x) = \begin{cases} 0,5x^2, & \text{если } x \leqslant -1, \\ x + 3, & \text{если } x > -1, \end{cases}, x_0 = -1
+
+=== Russian in Math Blocks ===

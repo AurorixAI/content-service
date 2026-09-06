@@ -54,10 +54,10 @@ PROMPT_TASKS = """\
 """
 
 
-def _call_gemini(prompt: str) -> str:
-    from src.pipeline.gemini_client import call_gemini, get_flash_model
-    return call_gemini(
-        prompt, model=get_flash_model(),
+def _call_deepseek(prompt: str) -> str:
+    from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model
+    return call_deepseek(
+        prompt, model=get_deepseek_model(),
         temperature=0.7, max_tokens=4096,
         thinking_budget=0, json_mode=False,
     )
@@ -86,7 +86,7 @@ def _generate_tasks(skill_name: str, diff: str, grade: int, n: int = 3) -> list[
     )
     for attempt in range(3):
         try:
-            raw = _call_gemini(prompt)
+            raw = _call_deepseek(prompt)
             tasks = _parse_tasks(raw)
             if tasks:
                 return tasks

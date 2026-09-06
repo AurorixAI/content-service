@@ -1,0 +1,44 @@
+{
+  "status": "VERIFIED_1_TO_1",
+  "timestamp": "20260814_103338",
+  "files": {
+    "sql_dump": {
+      "filename": "algo_content_full_dump_20260814_103338.sql",
+      "path": "/Users/arslan/Desktop/ALGO/content-service/backups/algo_content_full_dump_20260814_103338.sql",
+      "size_bytes": 205162767,
+      "sha256": "0dc6c9bba79236d2e5eb4ed52105e17798f0953eb304163336bb14d63e7fb58c"
+    },
+    "binary_dump": {
+      "filename": "algo_content_custom_20260814_103338.dump",
+      "path": "/Users/arslan/Desktop/ALGO/content-service/backups/algo_content_custom_20260814_103338.dump",
+      "size_bytes": 30173295,
+      "sha256": "5b8a3f3efee97b43c862ea01a34c6aef55690051ba6a7d2247881b59daf51772"
+    },
+    "json_dump": {
+      "filename": "algo_content_all_tables_20260814_103338.json",
+      "path": "/Users/arslan/Desktop/ALGO/content-service/backups/algo_content_all_tables_20260814_103338.json",
+      "size_bytes": 269652032,
+      "sha256": "e2f126e47adc96395c61f7b990717a8451b886ed0c5311627394f945a929f798"
+    }
+  },
+  "tables_summary": {
+    "alembic_version": 1,
+    "knowledge_hierarchy": 1374,
+    "review_queue": 8803,
+    "skill_prerequisites": 589,
+    "task_figure_refs": 976,
+    "task_figures": 491,
+    "tasks_master": 35198,
+    "textbook_skill_map": 0,
+    "textbook_tasks": 32104,
+    "textbook_toc": 846,
+    "textbooks": 15
+  },
+  "tasks_master_summary": {
+    "total_tasks": 35198,
+    "smartverify_verified": 35198,
+    "latex_verified": 35198,
+    "golden_fund": 35198
+  },
+  "mismatches": []
+}

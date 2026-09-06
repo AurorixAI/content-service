@@ -29,7 +29,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from src.pipeline.gemini_client import call_gemini, get_pro_model, parse_json_response
+from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model, parse_json_response
 
 log = logging.getLogger(__name__)
 
@@ -103,9 +103,9 @@ class CurriculumAnalyzer:
         prompt = self._build_prompt(cluster, children_l3, children_l4, all_l4_prev_grades)
 
         try:
-            raw = call_gemini(
+            raw = call_deepseek(
                 prompt,
-                model=get_pro_model(),
+                model=get_deepseek_model(),
                 temperature=0.1,
                 max_tokens=32768,
                 json_mode=True,

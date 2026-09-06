@@ -44,9 +44,12 @@ ALL_TEXTBOOKS = {
     "4b19752a-3d54-4538-b6a6-26ce1fbb48fd": ("Алгебра 7 класс — Школьное издание",    "G7_ALG"),
     "69fc47e1-7f72-4e79-9bf4-9ee6fb7e9b7f": ("Алгебра 7 класс — Макарычев",            "G7_TB"),
     "184640af-64e7-47af-a974-8b8112e6ffb2": ("Математика 5 класс — Виленкин",           "G5_TB"),
+    "5630a994-061d-4c20-9863-fe049c8059fb": ("Математика 5 класс — IDUM, часть 1",   "G5_TB"),
+    "47167115-5961-4405-bb55-1bda8ce1b687": ("Математика 5 класс — IDUM, часть 2",   "G5_TB"),
     "351a95c1-5208-4ae9-8323-6d7dd5e8bb82": ("Математика 6 класс — Виленкин",           "G6_TB"),
     "e8f3a1b2-7c4d-5e6f-8091-2345678abcde": ("Алгебра 8 класс — Школьное издание",     "G8_ALG"),
     "b8f4a2c1-3d5e-4f60-9182-3456789abcde": ("Алгебра 8 класс — Макарычев",            "G8_TB"),
+    "5a9f7fea-1394-4141-9d58-015972e83acc": ("Алгебра, 9 класс (Макарычев, 2023)",     "G9_TB"),
 }
 
 # ── MCQ-детектор: не разбивать если → тест/выбор ────────────────────────────
@@ -71,7 +74,7 @@ _ITEM_LETTER_RE = re.compile(
     re.DOTALL | re.IGNORECASE,
 )
 _ITEM_LETTER_MIXED_RE = re.compile(
-    r"(?:^|[:\n;|])\s*([a-zа-яё])\)\s+(.*?)(?=(?:(?:^|[:\n;|])\s*[a-zа-яё]\)|\Z))",
+    r"(?:^|[:\n;|])\s*([a-zа-яё])\)\s*(.*?)(?=(?:;\s*[a-zа-яё]\)|(?:^|[:\n;|])\s*[a-zа-яё]\)|\Z))",
     re.DOTALL | re.IGNORECASE,
 )
 _ANS_NUM_RE = re.compile(r"\d+\)\s*(.*?)(?=\s*[;,\n]\s*\d+\)|\Z)", re.DOTALL)
@@ -83,8 +86,13 @@ _ANS_LETTER_MIXED_RE = re.compile(
     r"([a-zа-яё])\)\s*(.*?)(?=\s*[;,\n]\s*[a-zа-яё]\)|\Z)",
     re.DOTALL | re.IGNORECASE,
 )
+_ANS_LETTER_BLOCK_RE = re.compile(
+    r"([а-яё])\)\s*(.*?)(?=\s+[а-яё]\)|\Z)",
+    re.I | re.S,
+)
 _CHILD_ANS_LABEL_RE = re.compile(r"^[абвгдежзи]\)\s*", re.I)
 _CHILD_Q_ORPHAN_RE = re.compile(r";\s*[а-яё]\)\s", re.I)
+_ORDERING_ANS_RE = re.compile(r"^[а-яё](?:\s*,\s*[а-яё])+$", re.I)
 
 
 def _extract_items(text: str, pattern: re.Pattern, *, first_token: str) -> tuple[str, list[str]]:
@@ -154,10 +162,114 @@ def _parse_answers_letter(ans: str) -> list[str]:
     if not ans or not ans.strip():
         return []
     s = ans.strip()
+    first = re.search(r"[а-яё]\)", s, re.I)
+    if first and first.start() > 0:
+        pre = s[: first.start()].strip().rstrip(";:")
+        if pre and not re.match(r"^\d+\)", pre):
+            s = s[first.start() :]
+    parts = [m.group(2).strip().rstrip(";., ") for m in _ANS_LETTER_BLOCK_RE.finditer(s)]
+    if len(parts) >= 2:
+        return parts
     parts = [m.group(2).strip().rstrip(";,") for m in _ANS_LETTER_MIXED_RE.finditer(s)]
     if len(parts) >= 2:
         return parts
     return [m.group(1).strip().rstrip(";,") for m in _ANS_LETTER_RE.finditer(s)]
+
+
+def _parse_labeled_qa_pairs(qtext: str, ans: str) -> list[tuple[str, str, str]] | None:
+    """Aligned (label, question, answer) when both sides use а) б) в)."""
+    ans_matches = list(_ANS_LETTER_BLOCK_RE.finditer((ans or "").strip()))
+    if len(ans_matches) < 2:
+        return None
+    q_base_m = re.match(r"^(.*?)(?=\s*[а-яё]\))", qtext.strip(), re.I | re.S)
+    q_base = (q_base_m.group(1).strip().rstrip(":") if q_base_m else "").strip()
+    pairs: list[tuple[str, str, str]] = []
+    for m in ans_matches:
+        label = m.group(1).lower()
+        aval = m.group(2).strip().rstrip(";., ")
+        qm = re.search(
+            rf"(?:^|[\s:]){re.escape(label)}\)\s*(.*?)(?=\s+[а-яё]\)|\Z)",
+            qtext,
+            re.I | re.S,
+        )
+        q_item = qm.group(1).strip().rstrip(";., ") if qm else ""
+        if q_base and q_item:
+            q_full = f"{q_base}\n{label}) {q_item}"
+        elif q_base:
+            q_full = f"{q_base}\n{label})"
+        elif q_item:
+            q_full = f"{label}) {q_item}"
+        else:
+            q_full = f"{label})"
+        pairs.append((label, q_full.strip(), aval))
+    return pairs if len(pairs) >= 2 else None
+
+
+def _is_ordering_compound(qtext: str, ans: str) -> bool:
+    """«Расположите в порядке…» с ответом «г, б, а, в, д» — одна задача, не split."""
+    if not _ORDERING_ANS_RE.match((ans or "").strip()):
+        return False
+    return bool(re.search(r"расположите|упорядоч", qtext, re.I))
+
+
+def _parse_numbered_section_compound(
+    qtext: str, ans: str
+) -> tuple[str, list[str], list[str]] | None:
+    """
+    «1) … а) … б) …  2) … а) …» — секции по 1)/2)/3) в ответе.
+    Каждая секция → один child (ответ = все а)б)в) секции).
+    """
+    if not re.search(r"\b1\)\s*а\)", ans, re.I):
+        return None
+    header_m = re.match(r"^([^\n]+)", qtext.strip())
+    header = header_m.group(1).strip() if header_m else ""
+    a_sections: list[tuple[str, str]] = []
+    for m in re.finditer(
+        r"(\d+)\)\s*((?:[а-яё]\)[^;]*(?:;\s*)?)+)",
+        ans,
+        re.I | re.S,
+    ):
+        a_sections.append((m.group(1), m.group(2).strip().rstrip("; ")))
+    if len(a_sections) < 2:
+        return None
+    q_sections: list[str] = []
+    body = qtext.strip()
+    if header and body.startswith(header):
+        body = body[len(header) :].strip()
+    for m in re.finditer(
+        r"(\d+)\)\s*(.*?)(?=\n\s*\d+\)|\Z)",
+        body,
+        re.S,
+    ):
+        q_sections.append(m.group(2).strip())
+    if len(q_sections) < len(a_sections):
+        q_sections = re.split(r"\n\s*(?=\d+\))", body)
+        q_sections = [re.sub(r"^\d+\)\s*", "", s).strip() for s in q_sections if s.strip()]
+    if len(q_sections) < len(a_sections):
+        return None
+    return header, q_sections[: len(a_sections)], [a for _n, a in a_sections]
+
+
+def _build_child_items(
+    tid: str,
+    parent_ex: str,
+    atype: str,
+    pairs: list[tuple[str, str, str]],
+) -> list[dict]:
+    items: list[dict] = []
+    for i, (_label, q_full, aval) in enumerate(pairs, 1):
+        sub_id = f"{tid}.{i}"
+        if len(sub_id) > 60:
+            sub_id = f"{tid[:55]}.{i}"
+        sub_ex = f"{parent_ex}.{i}" if parent_ex else str(i)
+        items.append({
+            "id": sub_id,
+            "question_text": q_full,
+            "correct_answer": _clean_child_answer(aval),
+            "exercise_number": sub_ex,
+            "answer_type": atype,
+        })
+    return items
 
 
 def _parse_answers(ans: str, *, letter_mode: bool) -> list[str]:
@@ -265,11 +377,15 @@ def _split_from_labeled_answer(
     atype: str,
     parent_ex: str,
 ) -> list[dict] | None:
-    """Answer has а) б) в) labels but question body has no subitems."""
-    matches = list(_ANS_LETTER_MIXED_RE.finditer((ans or "").strip()))
+    """Answer has а) б) в) labels — align with question labels when possible."""
+    pairs = _parse_labeled_qa_pairs(qtext, ans)
+    if pairs:
+        return _build_child_items(tid, parent_ex, atype, pairs)
+    matches = list(_ANS_LETTER_BLOCK_RE.finditer((ans or "").strip()))
     if len(matches) < 2:
         return None
-    header = (qtext or "").strip()
+    q_base_m = re.match(r"^(.*?)(?=\s*[а-яё]\))", (qtext or "").strip(), re.I | re.S)
+    q_base = (q_base_m.group(1).strip().rstrip(":") if q_base_m else (qtext or "").strip())
     split_items: list[dict] = []
     for i, m in enumerate(matches, 1):
         label = m.group(1)
@@ -277,7 +393,7 @@ def _split_from_labeled_answer(
         sub_id = f"{tid}.{i}"
         if len(sub_id) > 60:
             sub_id = f"{tid[:55]}.{i}"
-        q = f"{header}\n{label})" if header else f"{label})"
+        q = f"{q_base}\n{label})" if q_base else f"{label})"
         sub_ex = f"{parent_ex}.{i}" if parent_ex else str(i)
         split_items.append({
             "id": sub_id,
@@ -325,7 +441,11 @@ def _clean_child_answer(ans: str) -> str:
     return _CHILD_ANS_LABEL_RE.sub("", (ans or "").strip()).strip()
 
 
-def validate_split_quality(res: SplitResult) -> str | None:
+def validate_split_quality(
+    res: SplitResult,
+    *,
+    allow_empty_answers: bool = False,
+) -> str | None:
     """Return skip reason when split would produce low-quality children."""
     if len(res.items) < 2:
         return "too_few_items"
@@ -333,15 +453,23 @@ def validate_split_quality(res: SplitResult) -> str | None:
         i for i, it in enumerate(res.items)
         if not (it.get("correct_answer") or "").strip()
     ]
-    if len(empty_idxs) > 1 or (empty_idxs and empty_idxs[0] < len(res.items) - 1):
-        return "empty_answers"
+    if empty_idxs:
+        if allow_empty_answers and all(
+            (it.get("question_text") or "").strip() for it in res.items
+        ):
+            pass
+        elif len(empty_idxs) > 1 or (empty_idxs and empty_idxs[0] < len(res.items) - 1):
+            return "empty_answers"
     for it in res.items:
         ans = (it.get("correct_answer") or "").strip()
         if _CHILD_ANS_LABEL_RE.match(ans):
             return "labeled_answer"
         q = it.get("question_text") or ""
         if _CHILD_Q_ORPHAN_RE.search(q):
-            return "orphan_in_child_q"
+            ans = (it.get("correct_answer") or "").strip()
+            # Секция с несколькими а)б)в) в одном child — допустимо.
+            if not (re.search(r"[а-яё]\)", ans, re.I) and q.count(")") >= 3):
+                return "orphan_in_child_q"
     return None
 
 
@@ -354,6 +482,36 @@ def split_task(row: dict) -> SplitResult:
 
     if _is_mcq(qtext, atype, ans):
         return SplitResult(tid, [], skip_reason="MCQ")
+
+    if _is_ordering_compound(qtext, ans):
+        return SplitResult(tid, [], skip_reason="ordering_whole")
+
+    numbered = _parse_numbered_section_compound(qtext, ans)
+    if numbered:
+        header, q_items, a_items = numbered
+        child_atype = _infer_answer_type(header, qtext, atype)
+        split_items = []
+        for i, (item_text, item_ans) in enumerate(zip(q_items, a_items), 1):
+            sub_id = f"{tid}.{i}"
+            if len(sub_id) > 60:
+                sub_id = f"{tid[:55]}.{i}"
+            q = f"{header}\n{i}) {item_text}" if header else f"{i}) {item_text}"
+            sub_ex = f"{parent_ex}.{i}" if parent_ex else str(i)
+            split_items.append({
+                "id": sub_id,
+                "question_text": q.strip(),
+                "correct_answer": _clean_child_answer(item_ans),
+                "exercise_number": sub_ex,
+                "answer_type": child_atype,
+            })
+        return SplitResult(tid, split_items)
+
+    pairs = _parse_labeled_qa_pairs(qtext, ans)
+    if pairs:
+        return SplitResult(
+            tid,
+            _build_child_items(tid, parent_ex, atype, pairs),
+        )
 
     g8 = _parse_g8_multiline_compound(qtext, ans)
     if g8:
@@ -384,17 +542,30 @@ def split_task(row: dict) -> SplitResult:
         return SplitResult(tid, [], skip_reason="no_subitems")
 
     answers = _parse_answers(ans, letter_mode=letter_mode)
+    if len(answers) < len(items) and len(answers) >= 2:
+        if len(answers) == len(items) - 1:
+            answers = [""] + answers
+    if len(answers) < len(items) and ";" in (ans or ""):
+        semi = [p.strip() for p in (ans or "").split(";") if p.strip()]
+        if len(semi) == len(items):
+            answers = semi
 
     split_items = []
+    _LABELS = "абвгдежз"
     for i, item_text in enumerate(items, 1):
         sub_id = f"{tid}.{i}"
         if len(sub_id) > 60:
             sub_id = f"{tid[:55]}.{i}"
 
+        body = re.sub(r"^[a-zа-яё]\)\s*", "", item_text.strip(), flags=re.I)
+        m_label = re.match(r"^([a-zа-яё])\)", item_text.strip(), re.I)
+        label = m_label.group(1) if m_label else (
+            _LABELS[i - 1] if i <= len(_LABELS) else str(i)
+        )
         if header:
-            q = f"{header}\n{item_text}"
+            q = f"{header}\n{label}) {body}"
         else:
-            q = item_text
+            q = f"{label}) {body}"
 
         a = answers[i - 1] if i <= len(answers) else ""
         sub_ex = f"{parent_ex}.{i}" if parent_ex else str(i)
@@ -404,9 +575,19 @@ def split_task(row: dict) -> SplitResult:
             "question_text":  q.strip(),
             "correct_answer": _clean_child_answer(a),
             "exercise_number": sub_ex,
+            "answer_type":    atype,
         })
 
     return SplitResult(tid, split_items)
+
+
+def _parent_allows_empty_children(ans: str, qtext: str = "") -> bool:
+    a = (ans or "").strip()
+    if a in ("", "—", "-"):
+        return True
+    if re.search(r"придумайте|составьте", qtext or "", re.I):
+        return True
+    return False
 
 
 # ── БД ───────────────────────────────────────────────────────────────────────
@@ -477,6 +658,7 @@ def _child_tags(parent_tags: dict | None, original_id: str) -> dict:
         "distractor_regen_pending",
         "smart_verify_reason",
         "needs_compound_split",
+        "needs_content_repair",
         "compound_warning",
         "compound_pattern",
         "compound_subitems",
@@ -504,6 +686,13 @@ def apply_split(engine: Engine, textbook_id: str, results: list[SplitResult],
             continue
 
         with engine.begin() as conn:
+            # Query figure references of the parent task to copy to children
+            fig_res = conn.execute(
+                text("SELECT figure_id FROM task_figure_refs WHERE task_id = :parent_id"),
+                {"parent_id": res.original_id}
+            )
+            parent_figures = [fr[0] for fr in fig_res.all()]
+
             for item in res.items:
                 try:
                     conn.execute(
@@ -566,6 +755,14 @@ def apply_split(engine: Engine, textbook_id: str, results: list[SplitResult],
                             "ex":      item["exercise_number"],
                         },
                     )
+
+                    # Copy figure references to the child task
+                    for fig_id in parent_figures:
+                        conn.execute(
+                            text("INSERT INTO task_figure_refs (task_id, figure_id) VALUES (:child_id, :fig_id) ON CONFLICT DO NOTHING"),
+                            {"child_id": item["id"], "fig_id": fig_id}
+                        )
+                        
                     n_ins += 1
                 except Exception as exc:
                     log.error("Insert %s failed: %s", item["id"], exc)

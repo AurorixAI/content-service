@@ -18,7 +18,7 @@ import json
 import logging
 from collections import defaultdict, deque
 
-from src.pipeline.gemini_client import call_gemini, get_pro_model, parse_json_response
+from src.pipeline.deepseek_client import call_deepseek, get_deepseek_model, parse_json_response
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
@@ -180,9 +180,9 @@ def _gemini_review(prereq_data: dict, importance_data: dict) -> dict:
     log.info("Reviewing %d edges for class %d ...", len(edges), class_level)
 
     try:
-        raw = call_gemini(
+        raw = call_deepseek(
             _build_review_prompt(class_level, edges, subtopics_info),
-            model=get_pro_model(),
+            model=get_deepseek_model(),
             temperature=0.2,
             max_tokens=16384,
             json_mode=True,

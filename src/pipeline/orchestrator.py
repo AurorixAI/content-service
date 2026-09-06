@@ -31,7 +31,7 @@ from src.pipeline.exercise_ranges import (
 )
 from src.pipeline.figure_links import attach_figure_refs, is_figure_solvable_online
 from src.pipeline.models import ExtractedTask, Figure
-from src.pipeline.ocr import GeminiVisionOCR
+from src.pipeline.ocr import AzureMistralOCR
 from src.pipeline.ocr_utils import is_usable_ocr_text
 from src.pipeline.pipeline_mode import pipeline_mode
 from src.pipeline.quality import filter_quality_tasks
@@ -248,7 +248,54 @@ class DigitizationOrchestrator:
             "[%s] TOC: %d total, %d leaf paragraphs to process",
             self.job_id, len(toc_sorted), len(leaves),
         )
+
+        # ── Определяем реальную границу содержания (back-matter detection) ──
+        # Используем page_start последнего параграфа как точку отсчёта.
+        # detect_back_matter_start работает из кэша OCR — без лишних API-вызовов.
+        _bm_ocr = AzureMistralOCR()
+        _last_para_page_start = leaves[-1].get("page_start", 1) if leaves else 1
+
+        BACK_MATTER_OVERRIDES = {
+            "3aeaf6a8-3b03-4b74-beb6-9a282b6749f1": 442,  # Grade 11 Nikolsky answers start at page 442
+        }
+
+        if self.textbook_id in BACK_MATTER_OVERRIDES:
+            _back_matter_page = BACK_MATTER_OVERRIDES[self.textbook_id]
+            log.info(
+                "[%s] Textbook %s back-matter start page overridden to %d",
+                self.job_id, self.textbook_id, _back_matter_page,
+            )
+        else:
+            _back_matter_page = _bm_ocr.detect_back_matter_start(
+                pdf_path,
+                scan_from=_last_para_page_start,
+                total_pages=pdf_total_pages,
+            )
+        if _back_matter_page <= pdf_total_pages:
+            _content_end = _back_matter_page - 1
+            log.info(
+                "[%s] Back-matter begins at page %d → content_end=%d "
+                "(was pdf_total=%d). Clamping TOC page_end values.",
+                self.job_id, _back_matter_page, _content_end, pdf_total_pages,
+            )
+            clamped = 0
+            for entry in toc_sorted:
+                if (entry.get("page_end") or 0) > _content_end:
+                    entry["page_end"] = _content_end
+                    clamped += 1
+            if clamped:
+                log.info(
+                    "[%s] Clamped page_end for %d TOC entries to ≤%d",
+                    self.job_id, clamped, _content_end,
+                )
+        else:
+            log.info(
+                "[%s] No back-matter detected — all %d pages are real content.",
+                self.job_id, pdf_total_pages,
+            )
+
         self.state.set_paragraphs_total(self.job_id, len(leaves))
+
 
         # ── Legend: extract once from the first ~10 pages (lookup table) ──
         resume_from = get_settings().resume_from_paragraph
@@ -258,7 +305,7 @@ class DigitizationOrchestrator:
             legend = {}
         else:
             try:
-                ocr_first = GeminiVisionOCR()
+                ocr_first = AzureMistralOCR()
                 head_text = ocr_first.process_pages(
                     pdf_path, 1, min(10, pdf_total_pages),
                     figures_by_page={},
@@ -272,7 +319,7 @@ class DigitizationOrchestrator:
 
         # Reusable workers — created once, used per paragraph
         fig_extractor = FigureExtractor(self.textbook_id)
-        ocr_worker = GeminiVisionOCR()
+        ocr_worker = AzureMistralOCR()
         extractor = TaskExtractor(legend=legend)
         skills_json = self._load_skills_json()
         mapper = SkeletonTextbookMapper(skills_json=skills_json)
@@ -432,14 +479,14 @@ class DigitizationOrchestrator:
         self.state.set_step(self.job_id, PipelineStep.LEGEND)
         legend: dict = {}
         try:
-            ocr_head = GeminiVisionOCR()
+            ocr_head = AzureMistralOCR()
             head_text = ocr_head.process_pages(pdf_path, 1, min(10, pdf_total_pages), figures_by_page={})
             legend = LegendExtractor().extract_legend(head_text)
         except Exception as exc:
             log.warning("[%s] Legend extraction failed: %s", self.job_id, exc)
 
         fig_extractor = FigureExtractor(self.textbook_id)
-        ocr_worker = GeminiVisionOCR()
+        ocr_worker = AzureMistralOCR()
         extractor = TaskExtractor(legend=legend)
         skills_json = self._load_skills_json()
         mapper = SkeletonTextbookMapper(skills_json=skills_json)
@@ -560,7 +607,7 @@ class DigitizationOrchestrator:
         entry: dict,
         pdf_path: str,
         fig_extractor: FigureExtractor,
-        ocr_worker: GeminiVisionOCR,
+        ocr_worker: AzureMistralOCR,
         extractor: TaskExtractor,
         mapper: SkeletonTextbookMapper,
         only_exercises: list[int] | None = None,
@@ -600,6 +647,7 @@ class DigitizationOrchestrator:
             text_content = ocr_worker.process_pages(
                 pdf_path, p_start, p_end,
                 figures_by_page=fig_index,
+                ignore_back_matter=True,
             )
             if not is_usable_ocr_text(text_content):
                 log.warning(
@@ -611,6 +659,7 @@ class DigitizationOrchestrator:
                     pdf_path, p_start, p_end,
                     figures_by_page=fig_index,
                     force_refresh=True,
+                    ignore_back_matter=True,
                 )
 
         if not is_usable_ocr_text(text_content):
@@ -851,12 +900,19 @@ class DigitizationOrchestrator:
             self.state.increment_paragraph(self.job_id, 0)
             return 0, extracted_count
 
+        # Pre-write all extracted figures for this paragraph to prevent FK violations
+        if figures_map:
+            self.writer.write_figures(list(figures_map.values()), self.textbook_id)
+            log.info(
+                "[%s] §%s: pre-saved %d figures to DB",
+                self.job_id, number, len(figures_map),
+            )
+
         # ── Validate → Enrich → Distractors → Classify → Write (chunked) ──
         # Process in small chunks to avoid Gemini rate-limit bursts and write
         # partial results early (if something crashes later, earlier chunks survive).
         chunk_size = get_settings().enrich_chunk_size or len(tasks)
         total_written = 0
-        figures_written = False
 
         for chunk_start in range(0, len(tasks), chunk_size):
             chunk = tasks[chunk_start: chunk_start + chunk_size]
@@ -874,23 +930,6 @@ class DigitizationOrchestrator:
                 )
             if not chunk:
                 continue
-
-            # Write figures once (only on first chunk that survives quality gate)
-            if not figures_written and figures_map:
-                referenced_ids = {
-                    fid
-                    for task in chunk
-                    for fid in (task.figure_refs or [])
-                    if fid in figures_map
-                }
-                if referenced_ids:
-                    ref_figures = [figures_map[fid] for fid in referenced_ids]
-                    self.writer.write_figures(ref_figures, self.textbook_id)
-                    log.info(
-                        "[%s] §%s: figures saved %d/%d",
-                        self.job_id, number, len(ref_figures), len(figures_map),
-                    )
-                figures_written = True
 
             written_chunk = self.writer.write_batch(
                 chunk,

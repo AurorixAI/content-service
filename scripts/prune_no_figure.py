@@ -92,7 +92,7 @@ def delete_tasks(engine, task_ids: list[str]) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--class-level", type=int, required=True, choices=(6, 7, 8))
+    ap.add_argument("--class-level", type=int, required=True, choices=(5, 6, 7, 8))
     ap.add_argument("--dry-run", action="store_true", default=True)
     ap.add_argument("--execute", action="store_true")
     args = ap.parse_args()

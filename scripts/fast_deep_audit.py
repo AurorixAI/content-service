@@ -1,0 +1,143 @@
+import psycopg2
+import json
+import re
+import os
+
+pkill = os.system("pkill -f 'deep_global_quality_audit.py'")
+
+conn = psycopg2.connect(dbname='algo_content', user='algo', password='algo_password', host='127.0.0.1', port=5434)
+cur = conn.cursor()
+
+cur.execute("""
+    SELECT id, question_text, question_latex, correct_answer, correct_answer_latex,
+           distractor_meta, answer_options, answer_options_latex, answer_type
+    FROM tasks_master
+    ORDER BY id;
+""")
+rows = cur.fetchall()
+total = len(rows)
+
+stats = {
+    'total': total,
+    'missing_distractors': [],
+    'less_than_3_distractors': [],
+    'distractor_equals_answer': [],
+    'duplicate_distractors': [],
+    'short_error_logic': [],
+    'unbalanced_brackets_question': [],
+    'unbalanced_brackets_answer': [],
+    'unbalanced_brackets_distractor': [],
+    'unbraced_powers_distractor': [],
+    'clean_flawless': 0
+}
+
+BINARY_WORDS = {'да', 'нет', 'верно', 'неверно', 'true', 'false', 'является', 'не является', 'четная', 'нечетная'}
+
+for r in rows:
+    tid, qt, ql, ca, cal, dm_raw, ao, aol, at = r
+    
+    if isinstance(dm_raw, str):
+        try:
+            dm = json.loads(dm_raw)
+        except Exception:
+            dm = []
+    elif isinstance(dm_raw, list):
+        dm = dm_raw
+    else:
+        dm = []
+        
+    is_binary = str(ca).strip().lower() in BINARY_WORDS or str(cal).strip().lower().replace('$', '') in BINARY_WORDS
+    min_dist_count = 1 if is_binary else 3
+    
+    task_flawed = False
+    
+    # 1. Баланс скобок в вопросе
+    q_target = ql or qt or ''
+    if q_target.count('{') != q_target.count('}') or q_target.count('(') != q_target.count(')'):
+        stats['unbalanced_brackets_question'].append((tid, q_target))
+        task_flawed = True
+        
+    # 2. Баланс скобок в ответе
+    a_target = cal or ca or ''
+    if a_target.count('{') != a_target.count('}') or a_target.count('(') != a_target.count(')'):
+        stats['unbalanced_brackets_answer'].append((tid, a_target))
+        task_flawed = True
+
+    # 3. Наличие дистракторов
+    if not dm:
+        stats['missing_distractors'].append(tid)
+        task_flawed = True
+    elif len(dm) < min_dist_count:
+        stats['less_than_3_distractors'].append((tid, len(dm), min_dist_count))
+        task_flawed = True
+        
+    # 4. Проверка каждого дистрактора
+    ans_clean = a_target.strip().replace('$', '').lower()
+    seen_dist_vals = []
+    
+    for idx, d in enumerate(dm):
+        if not isinstance(d, dict):
+            task_flawed = True
+            continue
+        v = str(d.get('value') or '').strip()
+        vl = str(d.get('value_latex') or v).strip()
+        vl_clean = vl.replace('$', '').lower()
+        err = str(d.get('error_logic') or d.get('explanation') or '').strip()
+        
+        # Баланс скобок в дистракторе
+        if vl.count('{') != vl.count('}') or vl.count('(') != vl.count(')'):
+            stats['unbalanced_brackets_distractor'].append((tid, idx, vl))
+            task_flawed = True
+            
+        # Равенство ответу
+        if vl_clean == ans_clean or v.lower() == ans_clean:
+            stats['distractor_equals_answer'].append((tid, idx, vl_clean))
+            task_flawed = True
+            
+        # Длина логики ошибки
+        if len(err) < 25:
+            stats['short_error_logic'].append((tid, idx, err))
+            task_flawed = True
+            
+        # Неэкранированные степени
+        if re.search(r'\^[0-9a-zA-Z](?![0-9a-zA-Z{])', vl):
+            stats['unbraced_powers_distractor'].append((tid, idx, vl))
+            task_flawed = True
+            
+        seen_dist_vals.append(vl_clean)
+        
+    # Дубликаты дистракторов
+    if len(seen_dist_vals) != len(set(seen_dist_vals)) and len(seen_dist_vals) > 1:
+        stats['duplicate_distractors'].append((tid, seen_dist_vals))
+        task_flawed = True
+        
+    if not task_flawed:
+        stats['clean_flawless'] += 1
+
+print("==================================================================")
+print("📊 РЕЗУЛЬТАТЫ ГЛУБОКОГО АУДИТА ВСЕХ 35 198 ЗАДАЧ")
+print("==================================================================\n")
+print(f"✅ Абсолютно безупречных задач со 100% прохождением всех гейтов: {stats['clean_flawless']} ({stats['clean_flawless']*100/total:.2f}%)\n")
+
+print("--- ОБНАРУЖЕННЫЕ ДЕТАЛЬНЫЕ ДЕФЕКТЫ ДЛЯ ПОЛНОГО УСТРАНЕНИЯ ---")
+print(f"1. Несбалансированные скобки в вопросе     : {len(stats['unbalanced_brackets_question']):5d}")
+print(f"2. Несбалансированные скобки в ответе      : {len(stats['unbalanced_brackets_answer']):5d}")
+print(f"3. Несбалансированные скобки в дистракторе : {len(stats['unbalanced_brackets_distractor']):5d}")
+print(f"4. Дистрактор совпадает с ответом (D = A)  : {len(stats['distractor_equals_answer']):5d}")
+print(f"5. Дубликаты среди дистракторов (D_i=D_j)  : {len(stats['duplicate_distractors']):5d}")
+print(f"6. Короткое описание ошибки (< 25 симв.)   : {len(stats['short_error_logic']):5d}")
+print(f"7. Недостаточно дистракторов (< 3 шт.)     : {len(stats['less_than_3_distractors']):5d}")
+print(f"8. Неэкранированные степени в дистракторах : {len(stats['unbraced_powers_distractor']):5d}")
+
+with open('/tmp/flawed_tasks_audit.json', 'w', encoding='utf-8') as f:
+    json.dump({
+        'missing_distractors': stats['missing_distractors'],
+        'less_than_3_distractors': [x[0] for x in stats['less_than_3_distractors']],
+        'distractor_equals_answer': [x[0] for x in stats['distractor_equals_answer']],
+        'duplicate_distractors': [x[0] for x in stats['duplicate_distractors']],
+        'short_error_logic': [x[0] for x in stats['short_error_logic']],
+        'unbalanced_brackets_distractor': [x[0] for x in stats['unbalanced_brackets_distractor']],
+        'unbraced_powers_distractor': [x[0] for x in stats['unbraced_powers_distractor']]
+    }, f, ensure_ascii=False, indent=2)
+
+print("\n📦 Списки проблемных ID сохранены в /tmp/flawed_tasks_audit.json для автоматического устранения.")
