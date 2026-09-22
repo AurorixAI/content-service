@@ -41,7 +41,8 @@ _TASK_COLS = """
     tm.irt_discrimination, tm.irt_difficulty, tm.irt_guessing,
     tm.verification_status, tm.latex_status, tm.is_active,
     COALESCE(tm.tags->'content_quality', '{}'::jsonb) AS content_quality,
-    tm.question_image_url
+    tm.question_image_url,
+    COALESCE(tm.tags->'latex_attested_fields', tm.tags->'content_quality'->'latex_attested_fields', '[]'::jsonb) AS attested_fields
 """
 
 
@@ -62,6 +63,8 @@ def _task_row(r) -> dict:
 
 def _task_row_full(r) -> dict:
     """Same as _task_row but uses correct column offsets."""
+    quality = r[18] if len(r) > 18 and isinstance(r[18], dict) else {}
+    attested = quality.get("latex_attested_fields") or (r[20] if len(r) > 20 and isinstance(r[20], list) else [])
     return {
         "id": r[0],
         "task_id": r[0],
@@ -82,8 +85,9 @@ def _task_row_full(r) -> dict:
         "verification_status": r[15] or "pending",
         "latex_status": r[16],
         "is_active": bool(r[17]),
-        "content_quality": r[18] or {},
+        "content_quality": quality,
         "question_image_url": r[19],
+        "attested_fields": attested,
     }
 
 

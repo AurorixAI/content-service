@@ -123,16 +123,6 @@ def test_semantic_gate_accepts_latex_ellipsis_for_plain_ellipsis():
     ) == (True, "")
 
 
-def test_unambiguous_enumeration_marker_repair_changes_only_latex_boundary():
-    raw = r"Последовательность $(x_n)$, если: $b) x_n = n^{2}$?"
-    broken = r"Последовательность $(x_{n})$, если: $b) x_{n} = n^{2}$?"
-    repaired = r"Последовательность $(x_{n})$, если: b) $x_{n} = n^{2}$?"
-
-    assert backfill.repair_unambiguous_enumeration_marker_boundary(raw, broken) == repaired
-    assert backfill.validate_display_contract("question", raw, repaired) == (True, "")
-    assert backfill.semantic_preservation_check(raw, repaired, allow_legacy_markup_repair=True) == (True, "")
-
-
 def test_pure_math_value_contract_rejects_multiple_inline_blocks():
     ok, reason = backfill.validate_display_contract(
         "answer",
@@ -383,14 +373,15 @@ def test_each_display_field_gets_an_independent_request_with_full_task_context(m
 
     results, _seconds = asyncio.run(run_bundle())
 
-    assert len(prompts) == 2
-    assert all("ФИНАЛЬНАЯ LLM-САМОПРОВЕРКА" not in prompt for prompt in prompts)
+    assert len(prompts) == 4
+    assert sum("@@SECOND_PASS_INDEPENDENT_REVIEW:" in prompt for prompt in prompts) == 2
     assert set(results) == {"question", "answer"}
-    assert all(result["llm_self_check_used"] is False for result in results.values())
+    assert all(result["llm_self_check_used"] is True for result in results.values())
+    assert all(result["llm_self_review_ok"] is True for result in results.values())
     assert all(backfill.field_is_acceptable(result) for result in results.values())
 
 
-def test_invalid_field_remains_for_review_without_a_second_llm_call(monkeypatch):
+def test_invalid_field_remains_for_review_after_bounded_llm_repair_attempts(monkeypatch):
     prompts = []
 
     def llm(prompt: str) -> str:
@@ -412,13 +403,54 @@ def test_invalid_field_remains_for_review_without_a_second_llm_call(monkeypatch)
 
     results, _seconds = asyncio.run(run_bundle())
 
-    assert len(prompts) == 1
+    assert len(prompts) == 3
+    # A technical-only retry deliberately uses a compact, single-field prompt:
+    # the small formatter model is more reliable without the multi-field
+    # protocol.  It may return only the repaired display string.
+    assert "Верни только готовый русский display-текст" in prompts[1]
+    assert "SOURCE:\n3/4" in prompts[1]
+    assert "@@FIELD:" not in prompts[1]
+    assert "Верни только готовый русский display-текст" in prompts[2]
     assert results["answer"]["canonical"] == r"$3/4$"
     assert results["answer"]["llm_self_check_used"] is False
+    assert results["answer"]["llm_self_review_ok"] is False
+    assert results["answer"]["final_review"]["verdict"] == "repair_attempts_exhausted"
     assert backfill.field_is_acceptable(results["answer"]) is False
 
 
-def test_boundary_defect_remains_for_review_without_second_llm_call(monkeypatch):
+def test_second_model_review_is_the_contextual_authority_for_legacy_normalisation(monkeypatch):
+    calls = []
+
+    def llm(prompt: str) -> str:
+        calls.append(prompt)
+        rendered = r"Решите $x$." if len(calls) == 1 else r"Решите $y$."
+        return (
+            "@@FIELD: question\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+            f"@@REASON: NONE\n@@TEXT:\n{rendered}\n@@END_FIELD"
+        )
+
+    monkeypatch.setattr(backfill, "call_deepseek_task_bundle", llm)
+
+    async def run_bundle():
+        return await backfill.format_task_bundle(
+            {"question": "Решите x."}, {"question": ""},
+            {"question": {"raw": "Решите x.", "current": ""}},
+            asyncio.Semaphore(1),
+        )
+
+    results, _seconds = asyncio.run(run_bundle())
+
+    assert len(calls) == 2
+    assert results["question"]["llm_self_review_ok"] is True
+    assert results["question"]["semantic_ok"] is False
+    # The deterministic comparison remains diagnostic only: legacy/OCR source
+    # may require contextual normalisation. The required second model pass is
+    # the final authoring decision, while syntax, layout and house-style still
+    # have to pass independently.
+    assert backfill.field_is_acceptable(results["question"]) is True
+
+
+def test_boundary_defect_remains_for_review_after_bounded_llm_repair_attempts(monkeypatch):
     prompts = []
 
     def llm(prompt: str) -> str:
@@ -442,7 +474,11 @@ def test_boundary_defect_remains_for_review_without_second_llm_call(monkeypatch)
 
     results, _seconds = asyncio.run(run_bundle())
 
-    assert len(prompts) == 1
+    assert len(prompts) == 3
+    assert "Верни только готовый русский display-текст" in prompts[1]
+    assert "SOURCE:\nОшибка: (6+10 или 6+11-1)" in prompts[1]
+    assert "@@FIELD:" not in prompts[1]
+    assert "Верни только готовый русский display-текст" in prompts[2]
     assert results["dmeta[0].description"]["canonical"] == (
         r"Ошибка: $(6+10$ или $6+11-1)$"
     )
@@ -499,6 +535,29 @@ def test_task_bundle_parser_keeps_reason_separate_from_confidence():
 
     assert parsed["question"]["confidence"] == "high"
     assert parsed["question"]["ambiguity_reason"] == "malformed legacy delimiter"
+
+
+def test_focused_single_field_parser_treats_plain_model_text_as_unapproved_draft():
+    parsed = backfill.parse_task_bundle_response(
+        "Получено ($10$ л).",
+        {"question": {"raw": "Получено (10 л).", "current": ""}},
+        allow_bare_single_field=True,
+    )
+
+    assert parsed["question"] == {
+        "canonical": "Получено ($10$ л).",
+        "decision": "REPLACE",
+        "confidence": "low",
+        "ambiguity_reason": None,
+        "requires_explicit_final_review": True,
+        "response_protocol": "bare_repair_draft",
+    }
+    rejected = backfill.parse_task_bundle_response(
+        "@@TEXT:\nПолучено ($10$ л).",
+        {"question": {"raw": "Получено (10 л).", "current": ""}},
+        allow_bare_single_field=True,
+    )
+    assert rejected["question"]["decision"] == "REVIEW"
 
 
 def test_replace_can_repair_legacy_delimiters_without_changing_content():
@@ -662,6 +721,46 @@ def test_display_contract_accepts_parentheses_on_consistent_side_of_delimiters()
     ) == (True, "")
 
 
+def test_display_contract_accepts_enumeration_after_a_completed_sentence():
+    display = (
+        "Даны функции $f(x)=x^{2}$ и $g(x)=x-3$. "
+        "a) найдите $f(g(x))$; b) найдите $g(f(x))$."
+    )
+
+    assert backfill.validate_display_contract("question", display, display) == (True, "")
+
+
+def test_display_contract_does_not_treat_an_arbitrary_word_as_enumeration():
+    assert backfill.validate_display_contract(
+        "question", "Получили x)", "Получили x)",
+    ) == (False, "unbalanced_parentheses")
+
+
+def test_semantic_gate_accepts_indexed_root_as_unicode_root_projection():
+    source = "Решите $: ∛(2-x)=1-√(x-1)$"
+    display = r"Решите: $\sqrt[3]{2-x}=1-\sqrt{x-1}$"
+
+    assert backfill.semantic_preservation_check(
+        source, display, allow_legacy_markup_repair=True,
+    ) == (True, "")
+
+
+def test_semantic_gate_rejects_a_changed_indexed_root_degree():
+    source = "Решите ∛(2-x)=0"
+    display = r"Решите $\sqrt[4]{2-x}=0$"
+
+    assert backfill.semantic_preservation_check(
+        source, display, allow_legacy_markup_repair=True,
+    ) == (False, "semantic_number_sequence_changed")
+
+
+def test_semantic_gate_keeps_russian_source_spelling_immutable():
+    assert backfill.semantic_preservation_check(
+        "Выберите трех учеников.", "Выберите трёх учеников.",
+        allow_legacy_markup_repair=True,
+    ) == (False, "semantic_text_sequence_changed")
+
+
 def test_semantic_gate_accepts_slanted_inequality_command_normalization():
     assert backfill.semantic_preservation_check(
         r"$x\geqslant0$", r"$x \geq 0$", allow_legacy_markup_repair=True,
@@ -800,12 +899,12 @@ def test_deepseek_transport_timeout_gets_exactly_one_retry(monkeypatch):
     assert session.calls == 2
 
 
-def test_field_formatter_never_calls_second_llm_review(monkeypatch):
+def test_field_formatter_requires_second_llm_review_before_acceptance(monkeypatch):
     calls = []
 
     def fake_call(_prompt):
         calls.append(_prompt)
-        return "@@FIELD: answer\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n@@TEXT:\n$2$\n@@END_FIELD"
+        return "@@FIELD: answer\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n@@REASON: NONE\n@@TEXT:\n$2$\n@@END_FIELD"
 
     monkeypatch.setattr(backfill, "call_deepseek_task_bundle", fake_call)
 
@@ -817,11 +916,13 @@ def test_field_formatter_never_calls_second_llm_review(monkeypatch):
 
     result, _seconds = asyncio.run(run_bundle())
 
-    assert len(calls) == 1
-    assert result["answer"]["llm_self_check_used"] is False
+    assert len(calls) == 2
+    assert "@@SECOND_PASS_INDEPENDENT_REVIEW:" in calls[1]
+    assert result["answer"]["llm_self_check_used"] is True
+    assert result["answer"]["llm_self_review_ok"] is True
 
 
-def test_exact_duplicate_value_can_reuse_independently_valid_projection(monkeypatch):
+def test_exact_duplicate_value_cannot_bypass_a_final_model_review(monkeypatch):
     monkeypatch.setattr(backfill, "call_deepseek_task_bundle", lambda _prompt: "incomplete")
 
     async def process() -> dict:
@@ -839,9 +940,179 @@ def test_exact_duplicate_value_can_reuse_independently_valid_projection(monkeypa
     result = asyncio.run(process())
 
     copied = result["field_results"]["dmeta[0].value"]
-    assert backfill.field_is_acceptable(copied) is True
-    assert copied["canonical"] == r"$\dfrac{1}{3}$"
-    assert copied["projection_source"] == "exact_raw_duplicate"
+    assert backfill.field_is_acceptable(copied) is False
+    assert copied["decision"] == "REVIEW"
+
+
+def test_bare_repair_draft_requires_a_separate_explicit_final_review(monkeypatch):
+    calls = []
+
+    def llm(prompt: str) -> str:
+        calls.append(prompt)
+        if len(calls) == 1:
+            return (
+                "@@FIELD: answer\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+                "@@REASON: NONE\n@@TEXT:\n$3/4$\n@@END_FIELD"
+            )
+        if len(calls) == 2:
+            # The compact repair prompt may return a plain display draft.
+            return r"$\dfrac{3}{4}$"
+        return (
+            "@@FIELD: answer\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+            "@@REASON: NONE\n@@TEXT:\n$\\dfrac{3}{4}$\n@@END_FIELD"
+        )
+
+    monkeypatch.setattr(backfill, "call_deepseek_task_bundle", llm)
+
+    async def run_bundle():
+        return await backfill.format_task_bundle(
+            {"question": "Вычислите", "answer": "3/4"},
+            {"question": "Вычислите", "answer": ""},
+            {"answer": {"raw": "3/4", "current": ""}},
+            asyncio.Semaphore(1),
+        )
+
+    results, _seconds = asyncio.run(run_bundle())
+
+    result = results["answer"]
+    assert len(calls) == 3
+    assert "Верни только готовый русский display-текст" in calls[1]
+    assert "@@ОБЯЗАТЕЛЬНЫЙ_АЛГОРИТМ_ИСПРАВЛЕНИЯ:" in calls[1]
+    assert "professional_style_requires_dfrac" in calls[1]
+    assert "@@SECOND_PASS_INDEPENDENT_REVIEW:" in calls[2]
+    assert result["canonical"] == r"$\dfrac{3}{4}$"
+    assert result["llm_repair_attempts"] == 1
+    assert result["llm_self_review_attempts"] == 1
+    assert result["llm_self_review_ok"] is True
+    assert result["final_review"]["accepted"] is True
+    assert [event["stage"] for event in result["llm_trace"]] == [
+        "initial", "repair_1", "final_review_1",
+    ]
+    assert backfill.field_is_acceptable(result) is True
+
+
+def test_placeholder_asterisk_repair_is_explicit_and_requires_final_model_review(monkeypatch):
+    calls = []
+
+    def llm(prompt: str) -> str:
+        calls.append(prompt)
+        if len(calls) == 1:
+            return (
+                "@@FIELD: question\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+                "@@REASON: NONE\n@@TEXT:\n"
+                "Дано трёхзначное число $24*$.\n@@END_FIELD"
+            )
+        if len(calls) == 2:
+            return r"Дано трёхзначное число $24\ast$."
+        return (
+            "@@FIELD: question\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+            "@@REASON: NONE\n@@TEXT:\n"
+            "Дано трёхзначное число $24\\ast$.\n@@END_FIELD"
+        )
+
+    monkeypatch.setattr(backfill, "call_deepseek_task_bundle", llm)
+
+    async def run_bundle():
+        return await backfill.format_task_bundle(
+            {"question": "Дано трёхзначное число 24*."},
+            {"question": ""},
+            {"question": {"raw": "Дано трёхзначное число 24*.", "current": ""}},
+            asyncio.Semaphore(1),
+        )
+
+    results, _seconds = asyncio.run(run_bundle())
+
+    assert len(calls) == 3
+    assert "professional_style_requires_placeholder_asterisk" in calls[1]
+    assert "`24*` -> `$24\\ast$`" in calls[1]
+    assert "@@SECOND_PASS_INDEPENDENT_REVIEW:" in calls[2]
+    assert results["question"]["canonical"] == r"Дано трёхзначное число $24\ast$."
+    assert results["question"]["final_review"]["accepted"] is True
+
+
+def test_single_missing_parenthesis_is_only_a_model_repair_authorization(monkeypatch):
+    raw = "Пояснение (проверка $1$."
+    hint = backfill._single_missing_closing_parenthesis_hint(raw)
+    assert "ровно одну незакрытую `(`" in hint
+    assert "перед финальной пунктуацией" in hint
+
+    calls = []
+
+    def llm(prompt: str) -> str:
+        calls.append(prompt)
+        if len(calls) == 1:
+            return (
+                "@@FIELD: question\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+                "@@REASON: NONE\n@@TEXT:\n"
+                "Пояснение ($1$.\n@@END_FIELD"
+            )
+        if len(calls) == 2:
+            return r"Пояснение ($1$)."
+        return (
+            "@@FIELD: question\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
+            "@@REASON: NONE\n@@TEXT:\n"
+            "Пояснение ($1$).\n@@END_FIELD"
+        )
+
+    monkeypatch.setattr(backfill, "call_deepseek_task_bundle", llm)
+
+    async def run_bundle():
+        return await backfill.format_task_bundle(
+            {"question": raw}, {"question": ""},
+            {"question": {"raw": raw, "current": ""}}, asyncio.Semaphore(1),
+        )
+
+    results, _seconds = asyncio.run(run_bundle())
+
+    assert len(calls) == 3
+    assert "@@ДОПУСК_НА_ВОССТАНОВЛЕНИЕ_СКОБКИ:" in calls[1]
+    assert "ровно одну незакрытую `(`" in calls[1]
+    assert results["question"]["canonical"] == r"Пояснение ($1$)."
+    assert results["question"]["final_review"]["accepted"] is True
+
+
+def test_focused_dmeta_repair_keeps_task_and_variant_context(monkeypatch):
+    calls = []
+    raw = r"Ученик получил $(6+10$ или $6+11-1)$."
+
+    def llm(prompt: str) -> str:
+        calls.append(prompt)
+        if len(calls) == 1:
+            return (
+                "@@FIELD: dmeta[0].description\n@@DECISION: REPLACE\n"
+                "@@CONFIDENCE: high\n@@REASON: NONE\n@@TEXT:\n"
+                + raw + "\n@@END_FIELD"
+            )
+        if len(calls) == 2:
+            return r"Ученик получил ($6+10$ или $6+11-1$)."
+        return (
+            "@@FIELD: dmeta[0].description\n@@DECISION: REPLACE\n"
+            "@@CONFIDENCE: high\n@@REASON: NONE\n@@TEXT:\n"
+            r"Ученик получил ($6+10$ или $6+11-1$)." + "\n@@END_FIELD"
+        )
+
+    monkeypatch.setattr(backfill, "call_deepseek_task_bundle", llm)
+
+    async def run_bundle():
+        return await backfill.format_task_bundle(
+            {
+                "question": "Вычислите сумму.",
+                "answer": "16",
+                "dmeta[0].value": "17",
+                "dmeta[0].description": raw,
+            },
+            {"question": "", "answer": "", "dmeta[0].value": "", "dmeta[0].description": raw},
+            {"dmeta[0].description": {"raw": raw, "current": raw}},
+            asyncio.Semaphore(1),
+        )
+
+    results, _seconds = asyncio.run(run_bundle())
+
+    assert "@@IMMUTABLE_REFERENCE_CONTEXT:" in calls[1]
+    assert "@@CONTEXT_FIELD: question\nВычислите сумму." in calls[1]
+    assert "@@CONTEXT_FIELD: answer\n16" in calls[1]
+    assert "@@CONTEXT_FIELD: dmeta[0].value\n17" in calls[1]
+    assert results["dmeta[0].description"]["final_review"]["accepted"] is True
 
 
 @pytest.mark.parametrize(
@@ -850,6 +1121,7 @@ def test_exact_duplicate_value_can_reuse_independently_valid_projection(monkeypa
         r"$x^{2} + y_{1} = \dfrac{3}{4}$",
         r"$x^{\frac{1}{2}} + y_{\frac{2}{3}}$",
         r"Тогда $a \cdot b \leq 5$.",
+        r"Дано число $24\ast$.",
         r"$\sqrt{x} \neq \alpha$",
     ],
 )
@@ -863,14 +1135,26 @@ def test_professional_latex_gate_accepts_house_style(display):
         (r"$\frac{1}{2}$", "professional_style_requires_dfrac"),
         (r"$x^2 + y_1$", "professional_style_requires_braced_script"),
         (r"$a * b$", "professional_style_requires_cdot"),
+        (r"$24*$", "professional_style_requires_placeholder_asterisk"),
         (r"$a \times b$", "professional_style_requires_cdot"),
         (r"$x ≥ 2$", "professional_style_requires_latex_commands"),
         (r"$x \geqslant 2$", "professional_style_requires_standard_inequality_commands"),
         (r"$3/4$", "professional_style_requires_dfrac"),
+        (r"$10л$", "professional_style_requires_text_outside_math"),
     ],
 )
 def test_professional_latex_gate_rejects_non_house_style(display, reason):
     assert backfill.validate_professional_latex(display) == (False, reason)
+
+
+def test_masked_digit_asterisk_preserves_source_facts_without_becoming_multiplication():
+    source = "Дано трёхзначное число 24*."
+    rendered = r"Дано трёхзначное число $24\ast$."
+
+    assert backfill.validate_professional_latex(rendered) == (True, "")
+    assert backfill.semantic_preservation_check(
+        source, rendered, allow_legacy_markup_repair=True,
+    ) == (True, "")
 
 
 def test_bundle_prompt_reports_every_current_style_violation_to_llm():
@@ -929,7 +1213,10 @@ def test_bundle_prompt_forbids_review_for_merely_broken_current_display():
     assert "устранена КАЖДАЯ причина" in prompt_contract
     assert "арифметические `/`, `*`, `\\times` запрещены" in prompt_contract
     assert "не заменяй исходное арифметическое деление `/` двоеточием `:`" in prompt_contract
+    assert "`1/(3\\cdot4)` -> `\\dfrac{1}{3\\cdot4}`" in prompt_contract
+    assert "`'a'(...)`" in prompt_contract
     assert "`($6+10$ или $6+11-1$)`" in prompt_contract
+    assert "`($10$ л)`" in prompt_contract
     assert "Не решай задачу" in prompt_contract
     assert "@@AUDIT_STATUS" not in prompt_contract
     assert "mathematically_invalid" not in prompt_contract
@@ -1052,6 +1339,48 @@ def test_save_result_adds_display_fields_without_changing_raw_distractor_data():
     assert saved[0]["value_latex"] == "$1$"
     assert saved[0]["error_logic_latex"] == "Исходная логика с $2$"
     assert "explanation_latex" not in saved[0]
+
+
+def test_save_result_appends_a_durable_audit_revision_for_an_executed_run():
+    source = [{"value": "1", "explanation": "Исходное объяснение", "error_logic": "Исходная логика"}]
+    result = _result(source)
+    result["original"].update({"answer_options": [], "answer_options_latex": []})
+    result["run_context"] = {
+        "run_id": "d7d96a31-d0b0-4c5a-9e42-7c8f29911a08",
+        "model": backfill.LATEX_BACKFILL_MODEL,
+        "prompt_version": backfill.LATEX_BACKFILL_PROMPT_VERSION,
+        "policy_version": backfill.LATEX_BACKFILL_POLICY_VERSION,
+    }
+    result["field_results"]["question"]["final_review"] = {
+        "accepted": True,
+        "verdict": "accepted_after_independent_final_review",
+    }
+    result["field_results"]["question"]["llm_trace"] = [{
+        "stage": "final_review_1", "prompt_sha256": "a" * 64,
+        "response_sha256": "b" * 64, "error": None,
+    }]
+    conn = _Connection(("Найдите x", "2", source, [], "", "", [], None))
+
+    backfill.save_result(conn, result)
+
+    audit_writes = [
+        (sql, params) for sql, params in conn.writes
+        if "INSERT INTO task_latex_change_audit" in sql
+    ]
+    assert len(audit_writes) == 1
+    _sql, params = audit_writes[0]
+    assert params["run_id"] == result["run_context"]["run_id"]
+    assert params["task_id"] == "task-1"
+    assert params["event_type"] == "write"
+    assert params["source_fingerprint"] == result["canonical_fingerprint"]
+    before = json.loads(params["before_snapshot"])
+    after = json.loads(params["after_snapshot"])
+    assert before["question_latex"] == ""
+    assert after["question_latex"] == "Найдите $x$"
+    evidence = json.loads(params["validation"])
+    assert evidence["field_results"]["question"]["final_review"]["accepted"] is True
+    assert evidence["field_results"]["question"]["llm_trace"][0]["stage"] == "final_review_1"
+    assert result["audit_id"]
 
 
 def test_save_result_preserves_null_distractor_meta_exactly():
@@ -1225,3 +1554,110 @@ def test_fill_only_mode_does_not_resubmit_complete_display_fields_to_llm():
     assert result["field_results"] == {}
     assert result["original"]["question_latex"] == "Найдите $x$"
     assert result["original"]["correct_answer_latex"] == "$2$"
+
+
+def test_audit_queue_selection_includes_only_display_repairs(tmp_path):
+    queue = tmp_path / "display-audit.json"
+    queue.write_text(json.dumps({
+        "mode": "read_only",
+        "records": [
+            {"task_id": "task-display-1", "kind": "display_repair"},
+            {"task_id": "task-status-only", "kind": "status_only"},
+            {"task_id": "task-display-2", "kind": "display_repair"},
+            {"task_id": "task-display-1", "kind": "display_repair"},
+        ],
+    }), encoding="utf-8")
+
+    assert backfill.load_audit_display_ids(str(queue)) == [
+        "task-display-1", "task-display-2",
+    ]
+
+
+def test_audit_queue_selection_retains_source_fingerprints_and_file_hash(tmp_path):
+    queue = tmp_path / "display-audit.json"
+    first = "a" * 64
+    queue.write_text(json.dumps({
+        "mode": "read_only",
+        "records": [
+            {
+                "task_id": "task-display-1", "kind": "display_repair",
+                "canonical_fingerprint_sha256": first,
+            },
+            {"task_id": "task-status-only", "kind": "status_only"},
+        ],
+    }), encoding="utf-8")
+
+    ids, fingerprints, file_hash = backfill.load_audit_display_selection(str(queue))
+
+    assert ids == ["task-display-1"]
+    assert fingerprints == {"task-display-1": first}
+    assert len(file_hash) == 64
+
+
+def test_audit_queue_selection_rejects_non_audit_document(tmp_path):
+    queue = tmp_path / "not-an-audit.json"
+    queue.write_text(json.dumps({"mode": "write", "records": []}), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="read-only audit"):
+        backfill.load_audit_display_ids(str(queue))
+
+
+def test_save_result_records_attestation_and_updates_tags_for_independently_reviewed_fields():
+    source = [{"value": "1", "explanation": "Исходное объяснение", "error_logic": "Исходная логика"}]
+    result = _result(source)
+    result["original"].update({"answer_options": [], "answer_options_latex": []})
+    result["run_context"] = {
+        "run_id": "d7d96a31-d0b0-4c5a-9e42-7c8f29911a08",
+        "model": backfill.LATEX_BACKFILL_MODEL,
+        "prompt_version": backfill.LATEX_BACKFILL_PROMPT_VERSION,
+        "policy_version": backfill.LATEX_BACKFILL_POLICY_VERSION,
+    }
+    result["field_results"]["question"]["final_review"] = {
+        "required": True,
+        "completed": True,
+        "accepted": True,
+        "verdict": "accepted_after_independent_final_review",
+    }
+    result["field_results"]["answer"]["final_review"] = {
+        "required": True,
+        "completed": True,
+        "accepted": True,
+        "verdict": "accepted_after_independent_final_review",
+    }
+    conn = _Connection(("Найдите x", "2", source, [], "", "", [], None))
+
+    backfill.save_result(conn, result)
+
+    attestation_writes = [
+        (sql, params) for sql, params in conn.writes
+        if "INSERT INTO task_latex_display_attestations" in sql
+    ]
+    assert len(attestation_writes) == 2
+    q_att = next(p for s, p in attestation_writes if p["field_key"] == "question")
+    assert q_att["task_id"] == "task-1"
+    assert q_att["source_value"] == "Найдите x"
+    assert q_att["display_value"] == "Найдите $x$"
+    assert len(q_att["source_sha256"]) == 64
+    assert len(q_att["display_sha256"]) == 64
+
+    tags_updates = [
+        (sql, params) for sql, params in conn.writes
+        if "UPDATE tasks_master" in sql and "latex_attested_fields" in sql
+    ]
+    assert len(tags_updates) == 1
+    attested_labels = json.loads(tags_updates[0][1]["attested_json"])
+    assert "question" in attested_labels
+    assert "answer" in attested_labels
+
+
+def test_task_row_full_exposes_attested_fields():
+    from src.api.content_router import _task_row_full
+    row = (
+        "task-1", "skill-1", "Навык", "B", "Условие", "Условие $x$",
+        "mcq", "2", "$2$", ["2", "1"], ["$2$", "$1$"], [{"value": "1"}],
+        1.2, -0.3, 0.25, "verified", "verified", True,
+        {"latex_attested_fields": ["question", "answer"]}, None,
+    )
+    task = _task_row_full(row)
+    assert task["attested_fields"] == ["question", "answer"]
+

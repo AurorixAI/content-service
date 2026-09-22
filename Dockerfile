@@ -5,20 +5,48 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# ── Test tooling ────────────────────────────────────────────────────────────
+# Kept separate from the production runtime.  The offline LaTeX audit invokes
+# KaTeX through Node, so a CI-equivalent test target needs both Python and
+# Node.  Production requests never load this stage.
+FROM deps AS test
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nodejs \
+    npm \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir pytest
+
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+COPY src/ ./src/
+COPY scripts/ ./scripts/
+COPY tests/ ./tests/
+COPY pytest.ini .
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app
+
 # ── Stage 2: runtime ─────────────────────────────────────────────────────────
 FROM python:3.12-slim AS runtime
 
 WORKDIR /app
 
-# System libs for psycopg2 + curl for the Docker healthcheck
+# System libs for psycopg2 + curl for the Docker healthcheck + nodejs for KaTeX validation
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     gosu \
     curl \
+    nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=deps /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=deps /usr/local/bin /usr/local/bin
+COPY --from=test /app/node_modules /app/node_modules
 COPY src/ ./src/
 COPY data/ ./data/
 COPY alembic/ ./alembic/

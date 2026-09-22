@@ -34,6 +34,7 @@ import os
 import shutil
 import time
 import unicodedata
+import uuid
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('APP_ENV', 'production')
@@ -46,6 +47,13 @@ from src.pipeline.deepseek_client import call_deepseek as _call_deepseek
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("backfill_latex_deepseek")
+
+# Persisted in the audit journal with every material display change.  A version
+# is deliberately explicit: a future prompt change must be traceable to the
+# exact group of fields it authored.
+LATEX_BACKFILL_MODEL = "deepseek-v4-flash"
+LATEX_BACKFILL_PROMPT_VERSION = "latex-display-v4.2-final-review"
+LATEX_BACKFILL_POLICY_VERSION = "raw-immutable-model-final-review-v1"
 
 # ═══════════════════════════════════════════════════════════════
 # ПРОМПТ v3: house style + формат БЕЗ JSON (обходим проблему
@@ -199,10 +207,15 @@ LEGACY-РАЗМЕТКА:
   `x & y \\\\ \\hline 1 & 2 \\\\ 2 & 4`. KEEP для исходной формы запрещён.
 - Старая система `\\left\\{\\begin{array}{l}x=1, \\\\ y=2\\end{array}\\right.`
   ВСЕГДА заменяется на `\\begin{cases}...\\end{cases}` без изменения уравнений.
-- В полях question и dmeta[n].description системы, интегралы и пределы
-  являются крупными конструкциями и обязаны находиться внутри `$$...$$` с
-  новой строки. Вариант `$\\begin{cases}...$` или
-  `$\\displaystyle\\int...$` в этих текстовых полях запрещён.
+- В поле question системы, крупные интегралы и пределы являются выносными
+  конструкциями и обязаны находиться внутри `$$...$$` с новой строки. В полях
+  dmeta[n].description и кратких пояснениях инлайн-формулы с `\\lim` и `\\int`
+  допустимы внутри `$...$` для сохранения связности текста фразы.
+- МАРКЕРЫ ПУНКТОВ (СПИСКОВ): Если в RAW маркер пункта задачи (например `$а)$`,
+  `$б)$`, `$1)$`, `$2)$`, `$a)$`, `$b)$` или `$: 1) ...$`) оказался внутри
+  знаков `$ ... $`, ты ОБЯЗАН вынести маркер пункта наружу в обычный текст перед
+  формулой: например `а) $f(x)$` вместо `$а) f(x)$`, `1) $x=2$` вместо `$1) x=2$`.
+  Внутри математических знаков `$ ... $` НЕ должно оставаться закрывающей круглой скобки пункта.
 - В чистых компактных значениях answer, dmeta[n].value и option[n] действует
   правило одной внешней пары `$...$` даже для системы, интеграла или предела:
   кнопки/карточки ответа не превращай в выносные блоки `$$...$$`.
@@ -212,14 +225,16 @@ LEGACY-РАЗМЕТКА:
   `$149\\$,$597\\$,$870$` -> `$149\\,597\\,870$`.
 
 ОБЯЗАТЕЛЬНАЯ РЕАКЦИЯ НА @@CURRENT_VALIDATION:
-- `pure_math_value_must_be_one_inline_formula` -> ровно одна внешняя пара `$`;
+- `pure_math_value_must_be_one_inline_formula` -> всё математическое значение целиком
+  (включая запятые и точки с запятой между координатами/корнями) должно находиться
+  внутри ровно одной внешней пары `$ ... $`; не разрывай формулу на части;
 - `professional_style_requires_dfrac` -> удали КАЖДЫЙ арифметический `/` из
   математических фрагментов: собери его операнды в `\\dfrac{...}{...}`; если
   это единица или разделитель слов, вынеси `/` из `$...$` как обычный текст;
 - `professional_style_requires_cases_for_system` -> `\\begin{cases}` в `$$`;
-- `professional_style_requires_display_system` -> в question/description
+- `professional_style_requires_display_system` -> в question
   перенеси всю систему в `$$`;
-- `professional_style_requires_display_operator` -> в question/description
+- `professional_style_requires_display_operator` -> в question
   перенеси весь интеграл или предел в `$$`, не маскируй нарушение через
   `\\displaystyle` внутри `$`;
 - `semantic_number_sequence_changed` у legacy-разрядов -> используй `\\,`,
@@ -319,9 +334,13 @@ SINGLE_FIELD_PROMPT_PREFIX = r"""Ты — профессиональный LaTeX
    Если дан `@@LEGACY_PUNCTUATION_ONLY_MATH`, legacy-фрагмент вроде `$.$` или
    `$,$` не является формулой. Удали только его `$`-границы и верни исходный
    знак пунктуации в обычном тексте. Не удаляй сам знак и не меняй слова рядом.
-3. Не добавляй и не удаляй круглые/квадратные скобки RAW. Разрешено переносить
-   `$` через существующую скобку: `$(0x=18$` -> `($0x=18$), а
-   `(значение $0)` -> `(значение $0$)`. Это исправление границы, не содержания.
+3. Круглые/квадратные скобки RAW — факты: не добавляй и не удаляй их по
+   умолчанию. Разрешено переносить `$` через существующую скобку:
+   `$(0x=18$` -> `($0x=18$), а `(значение $0)` -> `(значение $0$)`.
+   Единственное исключение: если в RAW явно потеряна РОВНО ОДНА парная
+   скобка и у неё есть единственная однозначная позиция в конце той же фразы
+   или перечисления, восстанови только эту скобку. Если вариантов позиции два
+   или больше — верни REVIEW, не угадывай.
 4. CURRENT_LATEX — только черновик. Если он пуст или нарушает
    CURRENT_VALIDATION, обязательно REPLACE. REVIEW допустим только при двух
    реально разных математических прочтениях RAW, а не из-за сломанного LaTeX.
@@ -331,13 +350,27 @@ HOUSE STYLE:
   — отдельный `$$...$$`; чистое значение ответа — одна пара `$...$`;
 - основные дроби `\dfrac{a}{b}`, компактный `\frac` только внутри степени или
   индекса; арифметические `/`, `*`, `\times` запрещены, используй `\dfrac` и
-  `\cdot` без изменения операции;
+  `\cdot` без изменения операции. Но `*` как маска неизвестной цифры в записи
+  числа — НЕ умножение: `24*` нужно показать как `$24\ast$`, а не
+  `$24\cdot$`; контекст задачи определяет этот редкий случай;
+- если RAW содержит дробь-группу `A/(B)`, круглые скобки здесь задают полный
+  знаменатель: покажи ровно `\dfrac{A}{B}`, например
+  `1/(3\cdot4)` -> `\dfrac{1}{3\cdot4}`. Не оставляй `/` и не превращай
+  группу в умножение;
 - никогда не заменяй исходное арифметическое деление `/` двоеточием `:`.
   Оформи те же операнды через `\dfrac`; двоеточие допустимо только тогда,
   когда оно уже было в RAW;
 - `\sqrt{x}`, `x^{2}`, `x_{1}`, стандартные `\alpha`, `\leq`, `\geq`,
   `\neq`, `\infty`; Unicode-математические символы запрещены;
 - русский текст остаётся вне математики либо оформляется `\text{...}`;
+- единицы и слова после числа всегда остаются вне inline-формулы: пиши
+  `$10$ л`, `$9{,}8$ литров`, `$40$ см`, а не `$10л$`, `$9{,}8литров$`
+  или `$40см$`. Если скобка охватывает число с единицей, пиши
+  `($10$ л)`: закрывающая скобка следует после единицы и вне формулы;
+- одинарные кавычки вокруг единственной латинской переменной непосредственно
+  перед формулой (`'a'(...)`) могут быть старым повреждённым разделителем.
+  Только если полный контекст однозначно подтверждает переменную, покажи
+  `$a$ (` без этих кавычек; если это может быть обычная цитата — REVIEW;
 - системы оформляй `\begin{cases}...\end{cases}`.
 
 ОБЯЗАТЕЛЬНАЯ ФИНАЛЬНАЯ ПРОВЕРКА ИМЕННО ВОЗВРАЩАЕМОГО TEXT:
@@ -348,7 +381,8 @@ HOUSE STYLE:
   обе скобки обязаны быть снаружи: `($6+10$ или $6+11-1$)`. Варианты
   `$(6+10$ или $6+11-1)$` и `$(6+10$ или `$6+11-1)$` запрещены;
 - внутри математики нет арифметических `/`, `*`, `\times`, основной `\frac`,
-  Unicode-знаков и степеней/индексов без `{}`;
+  Unicode-знаков, русских слов/единиц и степеней/индексов без `{}`; допустим
+  только `\ast`, когда RAW однозначно обозначает неизвестную цифру;
 - устранена КАЖДАЯ причина из CURRENT_VALIDATION, не только первая;
 - все слова, буквы, числа, операции и обычная пунктуация RAW сохранились.
 
@@ -390,8 +424,229 @@ def parse_llm_response(raw: str, fallback: str) -> dict:
     }
 
 
-def parse_task_bundle_response(raw: str, expected_fields: dict[str, dict]) -> dict[str, dict]:
-    """Parse an unescaped multi-field response while retaining every backslash."""
+_GARBLED_LEGACY_DOLLAR_SOUP_RE = re.compile(r"\$\s*\$\s*\$|\${3,}")
+
+
+def _is_garbled_legacy_dollar_soup(value: object) -> bool:
+    """Detect a stored display value that is empty math shells, not content.
+
+    A handful of legacy rows carry values such as
+    ``"$1) $ $ $ $\\log_{3}5 < \\log_{3}7$$; 2) $$...$$$$$"`` — three or more
+    ``$`` in a row, or ``$`` separated only by whitespace, cannot come from a
+    balanced ``$...$``/``$$...$$`` pair with real content inside every pair.
+    Repeated backfill passes stalled on these exact fields because the model
+    was asked to *repair* this shell instead of replacing it outright.  This
+    check only ever widens ``needs_display_repair`` to treat the field as
+    empty (a full, clean regeneration from the immutable raw source); it
+    never invents or discards raw content itself.
+    """
+    text = str(value or "")
+    return bool(text) and bool(_GARBLED_LEGACY_DOLLAR_SOUP_RE.search(text))
+
+
+def _normalize_candidate_markup(label: str, text: str) -> str:
+    """Standardize surface LaTeX markup patterns produced by LLM candidates or legacy storage.
+
+    1. Moves trapped list markers (e.g. `$а)$`, `$1)$`, `$a) $`, `$10) -`) outside math delimiters.
+    2. Cleans up broken unit delimiters such as `м $ / $ с` -> `м/с`.
+    3. Wraps naked Cyrillic variable symbols inside math mode in `\\text{...}`.
+    4. Merges multi-part pure math values and broken intervals (`$(A$; $B)$` -> `$(A; B)$`).
+    5. Normalizes systems: `\\left\\{\\begin{array}` -> `\\begin{cases}`.
+    6. Normalizes exponent fractions: `^{4/7}` -> `^{\\frac{4}{7}}`.
+    7. Normalizes unbraced single-character scripts: `^2` -> `^{2}`, `_1` -> `_{1}`.
+    8. Normalizes main-formula fractions: `\\frac` -> `\\dfrac`.
+    9. Normalizes binary `*` and `\\times` to `\\cdot` inside math fragments.
+    10. Wraps pure math values in `$ ... $` if missing outer delimiters.
+    """
+    if not text:
+        return text
+    val = text.strip()
+
+    # 0. Collapse repeated dollars and strip empty math: "$ $ $ $" or "$$$$$"
+    val = re.sub(r"\$\s*\$\s*\$+", "$", val)
+    val = re.sub(r"(?<!\$)\$\s*\$(?!\$)", "", val)
+
+    # 0b. List markers followed by dot outside math: $1$. -> 1.
+    val = re.sub(r"(?<!\\)\$([0-9A-Za-zА-Яа-яЁё*]{1,2})\.\s*\$", r"\1. $", val)
+
+    # 0c. Trapped intervals across math boundaries: ($-4$; 0) -> $(-4; 0)$
+    val = re.sub(r"\(\s*\$([^$]+)\$\s*;\s*([^$)]+)\s*\)", r"$(\1; \2)$", val)
+    val = re.sub(r"\[\s*\$([^$]+)\$\s*;\s*([^$\]]+)\s*\]", r"$[\1; \2]$", val)
+    val = re.sub(r"\[\s*\$([^$]+)\$\s*;\s*([^$)]+)\s*\)", r"$[\1; \2)$", val)
+    val = re.sub(r"\(\s*\$([^$]+)\$\s*;\s*([^$\]]+)\s*\]", r"$(\1; \2]$", val)
+
+    # 1. Systems: \left\{\begin{array}{l}...\end{array}\right. -> \begin{cases}...\end{cases}
+    val = re.sub(r"\\left\s*\\\{\s*\\begin\{array\}\s*(?:\{[a-z]*\})?", r"\\begin{cases}", val)
+    val = re.sub(r"\\end\{array\}\s*\\right\.?", r"\\end{cases}", val)
+
+    # 2. Exponent fraction: ^{4/7} -> ^{\frac{4}{7}}
+    val = re.sub(r"\^\{([0-9A-Za-zА-Яа-яЁё\\]+)/([0-9A-Za-zА-Яа-яЁё\\]+)\}", r"^{\\frac{\1}{\2}}", val)
+
+    # 3. Exponent bare scripts: x^2 -> x^{2}, x_1 -> x_{1}, ^\circ -> ^{\circ}
+    val = re.sub(r"\^([A-Za-z0-9])(?=[^A-Za-z0-9]|$)", r"^{\1}", val)
+    val = re.sub(r"_([A-Za-z0-9])(?=[^A-Za-z0-9]|$)", r"_{\1}", val)
+    val = re.sub(r"\^(\\[A-Za-z]+)(?=[^A-Za-z{]|$)", r"^{\1}", val)
+    val = re.sub(r"_(\\[A-Za-z]+)(?=[^A-Za-z{]|$)", r"_{\1}", val)
+
+    # 4. Bare \frac -> \dfrac
+    val = re.sub(r"\\frac\b", r"\\dfrac", val)
+
+    # 5. Intervals split across math boundaries: $(A$; $B)$ -> $(A; B)$
+    val = re.sub(r"(?<!\\)\$\s*;\s*(?<!\\)\$", "; ", val)
+    val = re.sub(r"(?<!\\)\$\s*,\s*(?<!\\)\$", ", ", val)
+
+    # 5b. Split decimal math boundaries: $1$.$2$ -> $1.2$, $1{,} $2 -> $1{,}2$
+    val = re.sub(r"([0-9]+)\$\.\$([0-9]+)", r"\1.\2", val)
+    val = re.sub(r"\$([0-9]+)\$\.\$([0-9]+)\$", r"$\1.\2$", val)
+    val = re.sub(r"\$([0-9]+)\s*\{?,\}?\s*\$([0-9]+)\$", r"$\1{,}\2$", val)
+
+    # 6. Trapped list markers inside math
+    val = re.sub(r"(?<!\\)\$([0-9A-Za-zА-Яа-яЁё*]{1,2})\)\$", r"\1)", val)
+    val = re.sub(r"(?<!\\)\$([0-9A-Za-zА-Яа-яЁё*]{1,2})\$(?=\))", r"\1", val)
+    val = re.sub(r"(?<!\\)\$([0-9A-Za-zА-Яа-яЁё*]{1,2})\)\s*(?!\$)", r"\1) $", val)
+    val = re.sub(r"\$\s*:\s*\n\s*([0-9A-Za-zА-Яа-яЁё*]{1,2})\)\s*", r":\n\1) $", val)
+    def _split_trapped_markers(m):
+        content = m.group(1)
+        fixed = re.sub(r";\s*([0-9A-Za-zА-Яа-яЁё*]{1,2})\)\s*", r"$; \1) $", content)
+        return "$" + fixed + "$"
+    val = re.sub(r"(?<!\$)\$(?!\$)([^$]+)(?<!\$)\$(?!\$)", _split_trapped_markers, val)
+
+    # 6b. Inline \tag{...} -> \qquad (...)
+    val = re.sub(r"\\tag\*?\{([^}]+)\}", r"\\qquad (\1)", val)
+
+    # 6d. Normalize trapped opening paren in math: $VAR(NUM$ -> $VAR$ ($NUM$
+    val = re.sub(r"(?<!\\)\$([A-Za-zА-Яа-яЁё0-9]+)\(([0-9A-Za-zА-Яа-яЁё\.,]+)\$", r"$\1$ ($\2$", val)
+    # $(NUM$ -> ($NUM$
+    val = re.sub(r"(?<!\\)\$\(([0-9A-Za-zА-Яа-яЁё\.,]+)\$", r"($\1$", val)
+    # Formula starts with ( but has no closing ) inside math: $(...$ -> ($...$
+    def _fix_open_paren(m):
+        inner = m.group(1)
+        if inner.startswith("(") and ")" not in inner:
+            return "($" + inner[1:] + "$"
+        return "$" + inner + "$"
+    val = re.sub(r"(?<!\$)\$(?!\$)([^$]+)(?<!\$)\$(?!\$)", _fix_open_paren, val)
+
+    # 6e. Trapped parentheses in words: $(x+2 \neq 0$, но...) -> ($x+2 \neq 0$, но...)
+    val = re.sub(r"(?<!\\)\$\(([^$]+),\s*([А-Яа-яЁё]+)", r"($\1$, \2", val)
+    val = re.sub(r"(?<!\\)\$\(([0-9A-Za-zА-Яа-яЁё\.\,\-]+)\$", r"($\1$", val)
+    val = re.sub(r"(?<!\\)\$([0-9A-Za-zА-Яа-яЁё\.\,\-]+)\)\$", r"$\1$)", val)
+
+    # 7. Units: м $ / $ с -> м/с
+    val = re.sub(r"([А-Яа-яЁё]+)\s*\$\s*/\s*\$\s*([А-Яа-яЁё]+)", r"\1/\2", val)
+    # 7a. Trapped slashes at math boundaries: $/60$ -> /$60$, $60/$ -> $60$/, $4^{\circ}/$ -> $4^{\circ}$/
+    val = re.sub(r"(?<!\\)\$\s*/\s*(?<!\\)\$", "/", val)
+    val = re.sub(r"(?<!\\)/\s*\$(?!\$)", "$/", val)
+    val = re.sub(r"(?<!\$)\$(?!\$)\s*/(?!\s*\$)", "/$", val)
+
+    # 7b. Convert \dots / \ldots outside math to typographic ellipsis …
+    math_split = re.split(r"((?<!\$)\$(?!\$)[^$]+(?<!\$)\$(?!\$))", val)
+    for i in range(0, len(math_split), 2):
+        math_split[i] = re.sub(r"\\(?:l?dots)\b", "…", math_split[i])
+    val = "".join(math_split)
+
+    # 7c. Standard inequality commands
+    val = re.sub(r"\\(?:geqslant|geq\s*slant)\b", r"\\ge", val)
+    val = re.sub(r"\\(?:leqslant|leq\s*slant)\b", r"\\le", val)
+
+    # 8. Math-mode normalization (* -> \cdot, \times -> \cdot, division / -> \dfrac, Cyrillic -> \text{...})
+    def clean_math_fragment(m):
+        inner = m.group(1)
+
+        # 1. Asterisks / masks of unknown digits / placeholders
+        inner = re.sub(r"\*{2,}", lambda sm: r"\ast" * len(sm.group(0)), inner)
+        inner = re.sub(r"(?<=\d)\*(?=\s*($|[)\],.;:!?]))", r"\\ast", inner)
+        inner = re.sub(r"(?<![A-Za-zА-Яа-яЁё0-9])\*(?=\s*\d)", r"\\ast", inner)
+        inner = re.sub(r"\(\*\)", r"(\\ast)", inner)
+        inner = re.sub(r"^(\s*)\*(\s*)$", r"\1\\ast\2", inner)
+        inner = re.sub(r"\*\s*([=><])", r"\\ast \1", inner)
+        inner = re.sub(r"([=><])\s*\*", r"\1 \\ast", inner)
+        inner = re.sub(r"(?:^|(?<=[(]))\s*\*\s*(?=[+–-])", r"\\ast ", inner)
+        inner = re.sub(r"(?<=[+–-])\s*\*\s*(?:$|(?=[)]))", r" \\ast", inner)
+        inner = re.sub(r"(?<=[0-9A-Za-zА-Яа-яЁё_\^\{\}])\s*\*\s*(?=[+–-])", r"\\ast ", inner)
+        inner = re.sub(r"(?<=[+–-])\s*\*\s*(?=[0-9A-Za-zА-Яа-яЁё_\^\{\}])", r" \\ast", inner)
+        inner = re.sub(r"(?<=[+–-])\s*\*\s*(?=[+–-])", r" \\ast", inner)
+        inner = re.sub(r"\\dfrac\{\*\}", r"\\dfrac{\\ast}", inner)
+        inner = re.sub(r"\\dfrac\{([^{}]+)\}\{\*\}", r"\\dfrac{\1}{\\ast}", inner)
+
+        # 2. Binary multiplication * -> \cdot
+        inner = re.sub(r"(?<=[a-zA-Z0-9_\}\)])\s*\*\s*(?=[a-zA-Z0-9_\{\\])", r" \\cdot ", inner)
+        inner = re.sub(r"(?<![A-Za-z0-9_\\])\*\s*([a-zA-Z])\b", r"\\cdot \1", inner)
+        inner = re.sub(r"\\times\b", r"\\cdot", inner)
+        inner = re.sub(r"\\leqslant\b", r"\\le", inner)
+        inner = re.sub(r"\\geqslant\b", r"\\ge", inner)
+
+        # 3. Unicode greek in math fragments
+        _GREEK = {
+            "α": r"\alpha", "β": r"\beta", "γ": r"\gamma", "δ": r"\delta",
+            "ε": r"\varepsilon", "θ": r"\theta", "λ": r"\lambda", "μ": r"\mu",
+            "π": r"\pi", "ρ": r"\rho", "σ": r"\sigma", "τ": r"\tau",
+            "φ": r"\varphi", "ω": r"\omega",
+        }
+        for g_c, g_cmd in _GREEK.items():
+            inner = inner.replace(g_c, g_cmd)
+
+        # 4. Convert division slashes inside math into \dfrac
+        inner = re.sub(r"\\left\((.*?)\\right\)\s*/\s*\\left\((.*?)\\right\)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"\\left\((.*?)\\right\)\s*/\s*([0-9A-Za-zА-Яа-яЁё\\_^{}-]+)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"([0-9A-Za-zА-Яа-яЁё\\_^{}-]+)\s*/\s*\\left\((.*?)\\right\)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"\(([^()]+)\)\s*/\s*\(([^()]+)\)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"\(([^()]+)\)\s*/\s*([0-9A-Za-zА-Яа-яЁё\\_^{}-]+)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"([0-9A-Za-zА-Яа-яЁё\\_^{}-]+)\s*/\s*\(([^()]+)\)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"([0-9A-Za-z_^{}\\]+(?:\([^\)]+\))+)\s*/\s*([0-9A-Za-z_^{}\\]+)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"(-?\\dfrac\{[^{}]*\}\{[^{}]*\})\s*/\s*([0-9]+)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"(-?\\dfrac\{[^{}]*\}\{[^{}]*\})\s*/\s*(-?\\dfrac\{[^{}]*\}\{[^{}]*\})", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"(-?\\pi|[0-9A-Za-z_^{}-]+)\s*/\s*([0-9]+)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"([0-9]+)\s*/\s*(\\sqrt\{[^{}]*\})", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"\b([a-zA-Z0-9_\^\{\}]+)\s*/\s*\(([^\)]+)\)", r"\\dfrac{\1}{\2}", inner)
+        inner = re.sub(r"(?<![a-zA-Z0-9_\\])([a-zA-Z0-9_\^\{\}']+)\s*/\s*([a-zA-Z0-9_\^\{\}']+)(?![a-zA-Z0-9_\^\{\}'])", r"\\dfrac{\1}{\2}", inner)
+        parts = re.split(r"(\\text\{[^{}]*\})", inner)
+        for i in range(0, len(parts), 2):
+            parts[i] = re.sub(r"([А-Яа-яЁё]+)", r"\\text{\1}", parts[i])
+        return "$" + "".join(parts) + "$"
+    val = re.sub(r"(?<!\$)\$(?!\$)([^$]+)(?<!\$)\$(?!\$)", clean_math_fragment, val)
+
+    # 8b. Systems: if \begin{cases} is anywhere inside single $, promote to $$...$$ display block
+    val = re.sub(r"(?<!\$)\$(?!\$)([^$]*?\\begin\{cases\}[\s\S]*?\\end\{cases\}[^$]*?)(?<!\$)\$(?!\$)", r"\n$$\1$$\n", val)
+    val = re.sub(r"\n{3,}", r"\n\n", val).strip()
+
+    # 8b2. Unicode superscripts outside/inside math
+    val = re.sub(r"²", r"^2", val)
+    val = re.sub(r"³", r"^3", val)
+
+    # 8c. Display operators in questions: promote inline \lim and \int to $$...$$
+    if label == "question":
+        val = re.sub(
+            r"(?<!\$)\$\s*([^$]*?\\(?:int|lim)(?![A-Za-z])[^$]*?)\s*\$(?!\$)",
+            r"\n$$\1$$\n",
+            val,
+        )
+        val = re.sub(r"\n{3,}", r"\n\n", val).strip()
+
+    # 9. Pure math values
+    if _MATH_VALUE_LABEL_RE.fullmatch(label):
+        if not _CYRILLIC_RE.search(val) and "$" not in val and not re.match(r"^[\s—–-]*[0-9A-Za-zА-Яа-яЁё]+[.)]\s*", val) and "°" not in val and not re.fullmatch(r"[:—\s]+", val):
+            val = f"${val}$"
+        elif not _CYRILLIC_RE.search(val) and val.count("$") >= 2:
+            val = re.sub(r"(?<!\\)\$\s*([,;])\s*(?<!\\)\$", r"\1 ", val)
+            if not (val.startswith("$") and val.endswith("$")):
+                val = f"${val}$"
+    elif (val.startswith(r"\text{") or val.startswith(r"\begin{cases}") or r"\mathbb" in val or r"\ctg" in val or r"\left(" in val) and "$" not in val:
+        val = f"${val}$"
+
+    return val
+
+
+def parse_task_bundle_response(
+    raw: str, expected_fields: dict[str, dict], *, allow_bare_single_field: bool = False,
+) -> dict[str, dict]:
+    """Parse an unescaped multi-field response while retaining every backslash.
+
+    A focused repair has exactly one target field. Some small formatter models
+    obey its substantive request but return the requested display text without
+    protocol markers. Such a response is a *draft*, never a final approval:
+    it must go through a later explicit structured final-review response before
+    it can be saved.
+    """
     block_re = re.compile(
         r"@@FIELD:\s*([^\n]+)\n"
         r"@@DECISION:\s*(KEEP|REPLACE|REVIEW)\s*\n"
@@ -411,12 +666,35 @@ def parse_task_bundle_response(raw: str, expected_fields: dict[str, dict]) -> di
             continue
         reason_raw = match.group(4).strip()
         parsed[label] = {
-            "canonical": match.group(5).strip(),
+            "canonical": _normalize_candidate_markup(label, match.group(5).strip()),
             "decision": match.group(2).upper(),
             "confidence": match.group(3).lower(),
             "ambiguity_reason": None if reason_raw.upper() == "NONE" else reason_raw,
         }
     result: dict[str, dict] = {}
+    bare_response = raw.strip()
+    if (
+        allow_bare_single_field
+        and len(expected_fields) == 1
+        and not parsed
+        and bare_response
+        and "@@" not in bare_response
+        and "```" not in bare_response
+    ):
+        label = next(iter(expected_fields))
+        return {
+            label: {
+                "canonical": _normalize_candidate_markup(label, bare_response),
+                "decision": "REPLACE",
+                # Never manufacture model confidence in Python. This remains
+                # usable as a repair draft only; the final independent model
+                # review must return an explicit high/medium confidence block.
+                "confidence": "low",
+                "ambiguity_reason": None,
+                "requires_explicit_final_review": True,
+                "response_protocol": "bare_repair_draft",
+            }
+        }
     for label, field in expected_fields.items():
         if label not in parsed or label in duplicates:
             result[label] = {
@@ -525,6 +803,15 @@ def _is_pure_math_value(label: str, source: str) -> bool:
     raw = str(source or "").strip()
     if not (_MATH_VALUE_LABEL_RE.fullmatch(label) and raw) or _CYRILLIC_RE.search(raw):
         return False
+    if "°" in raw:
+        return False
+    clean_raw = re.sub(r"^\$|\$$", "", raw).strip()
+    if re.fullmatch(r"[:—\s]+", clean_raw):
+        return False
+    if re.match(r"^[\s—–-]*[0-9A-Za-zА-Яа-яЁё]+[.)]\s*", clean_raw):
+        return False
+    if "*" in raw and not any(c.isalnum() for c in raw.replace("*", "")):
+        return False
 
     # RAW answers sometimes contain English prose from historical imports
     # (for example ``example: 2, 4, 8``).  Treating it as one mathematical
@@ -537,8 +824,10 @@ def _is_pure_math_value(label: str, source: str) -> bool:
     # A textbook answer can be an enumerated mixed display such as
     # ``1) $x=1$; 2) $x=2$``. Each mathematical item must be delimited, but
     # wrapping the entire numbered list into one math block is not correct.
-    list_markers = re.findall(r"(?:^|[;\n]\s*)\$?[0-9A-Za-zА-Яа-яЁё]+[.)]", raw)
+    list_markers = re.findall(r"(?:^|[,;\n]\s*)\$?[0-9A-Za-zА-Яа-яЁё]+[.)]", raw)
     if len(list_markers) >= 2 or len(_math_fragments(raw)) >= 2:
+        return False
+    if raw.count(";") >= 2:
         return False
     return True
 
@@ -577,7 +866,10 @@ def validate_display_contract(label: str, source: str, display: str) -> tuple[bo
             inline_fragment = inline_match.group(1)
             if r"\begin{cases}" in inline_fragment:
                 return False, "professional_style_requires_display_system"
-            if re.search(r"\\(?:int|lim)(?![A-Za-z])", inline_fragment):
+            # In explanations and distractors (dmeta), short inline limits and integrals
+            # are standard prose math and do not warrant breaking sentences into blocks.
+            # Enforce display block only in question statements.
+            if label == "question" and re.search(r"\\(?:int|lim)(?![A-Za-z])", inline_fragment):
                 return False, "professional_style_requires_display_operator"
     return True, ""
 
@@ -588,6 +880,13 @@ _UNICODE_MATH_STYLE_RE = re.compile(
 _UNBRACED_SCRIPT_RE = re.compile(r"(?:\^|_)(?:[A-Za-z0-9]|\\[A-Za-z]+)")
 _BARE_MATH_SLASH_RE = re.compile(r"(?<!\\)/")
 _TEXT_COMMAND_RE = re.compile(r"\\(?:text|textrm|textsf|texttt)\{[^{}]*\}")
+# A literal asterisk can mean multiplication or a masked digit.  The edge
+# forms below are objectively a number template (`24*`, `*24`), not a binary
+# operation.  Ambiguous inner forms such as `2*4` are deliberately left to the
+# model's full task context, never guessed by this deterministic gate.
+_PLACEHOLDER_ASTERISK_RE = re.compile(
+    r"(?:(?<=\d)\*(?=\s*(?:$|[)\],.;:!?]))|(?<![A-Za-zА-Яа-яЁё0-9])\*(?=\s*\d))"
+)
 _SPLIT_DECIMAL_MATH_BOUNDARY_RE = re.compile(
     # The left side must be its own integer math fragment. Looking only at the
     # characters touching ``$`` falsely matched a correct decimal followed by
@@ -670,6 +969,16 @@ def _bare_math_slash_examples(fragment: str) -> list[str]:
     return examples or (["/"] if _BARE_MATH_SLASH_RE.search(without_text) else [])
 
 
+def _placeholder_asterisk_positions(fragment: str) -> set[int]:
+    """Return literal `*` positions that unambiguously mask a digit.
+
+    This is a classification aid for a formatting instruction, not an authoring
+    mechanism.  The LLM still chooses the rendered expression from immutable
+    source and may return REVIEW for a semantically ambiguous inner asterisk.
+    """
+    return {match.start() for match in _PLACEHOLDER_ASTERISK_RE.finditer(str(fragment or ""))}
+
+
 def _has_main_style_frac(fragment: str) -> bool:
     r"""Return True when \frac occurs outside a braced script context.
 
@@ -721,6 +1030,13 @@ def validate_professional_latex(display: str) -> tuple[bool, str]:
     representation from being certified as ``verified``.
     """
     for fragment in _math_fragments(display):
+        # Units and Russian prose must remain ordinary text around an inline
+        # formula (or live explicitly in \text{...}).  Letting them leak into
+        # math makes broken legacy delimiters look parseable to KaTeX while
+        # rendering an unprofessional and often visually ambiguous result.
+        math_without_text = _TEXT_COMMAND_RE.sub("", fragment)
+        if re.search(r"[А-Яа-яЁё]", math_without_text):
+            return False, "professional_style_requires_text_outside_math"
         # A left brace plus ``array`` is a legacy way of drawing a system.  It
         # renders, but is not our semantic/typographic representation; the LLM
         # must rewrite it as ``cases`` without changing any equation.
@@ -730,6 +1046,8 @@ def validate_professional_latex(display: str) -> tuple[bool, str]:
             return False, "professional_style_requires_dfrac"
         if _UNBRACED_SCRIPT_RE.search(fragment):
             return False, "professional_style_requires_braced_script"
+        if _placeholder_asterisk_positions(fragment):
+            return False, "professional_style_requires_placeholder_asterisk"
         if "*" in fragment:
             return False, "professional_style_requires_cdot"
         if r"\times" in fragment:
@@ -744,6 +1062,30 @@ def validate_professional_latex(display: str) -> tuple[bool, str]:
     return True, ""
 
 
+_LIST_MARKER_CONTEXT_RE = re.compile(
+    r"(?:^|[.:;,?!\$\n—–-]\s*|\s+)"
+    # A Cyrillic letter is never a math variable in this corpus (variables
+    # are always Latin), so the full alphabet is a safe marker token: this
+    # corpus enumerates sub-items past `а-г` into `и, к, л, м, н...` and even
+    # `с`, not only the first few letters. Latin stays the narrow `a-j`
+    # (`x, y, z, n, m, t, v...` are common variable names here) plus the
+    # single Roman-numeral sub-item marker `v` this corpus also uses.
+    r"(?:[0-9]{1,3}|[a-jA-Jv]|[а-яёА-ЯЁ])\*?$"
+)
+
+
+def _list_marker_close_positions(text_value: str) -> set[int]:
+    """Indices of ``)`` that read as a list marker (``a)``, ``б)``, ``12)``)
+    purely from the token immediately before them, independent of bracket
+    nesting.  A caller decides *whether* nesting state still lets such a
+    position be skipped; this only says the token itself looks like a marker.
+    """
+    return {
+        index for index, char in enumerate(text_value)
+        if char == ")" and _LIST_MARKER_CONTEXT_RE.search(text_value[:index])
+    }
+
+
 def _validate_parenthesis_math_boundaries(display: str) -> tuple[bool, str]:
     """Reject parentheses whose two sides live on opposite sides of ``$``.
 
@@ -752,10 +1094,37 @@ def _validate_parenthesis_math_boundaries(display: str) -> tuple[bool, str]:
     even though the formula fragment itself parses. This scanner is only a
     safety gate; the LLM remains responsible for producing the repair.
     """
+    text_value = str(display or "")
+
+    # A list marker can sit *inside* an already-open real parenthetical, e.g.
+    # ``(например: 1) решения ...; 2) когда ...равными)``: only the final
+    # ``)`` closes the ``(``, and ``1)``/``2)`` are nested markers.  The
+    # marker check below only fires when nothing is open, which handles a
+    # marker at the top level but would wrongly consume the outer ``(`` on
+    # the first nested ``1)`` here.  A blind "markers never count" rule is
+    # just as wrong the other way: in ordinary math like ``(2x-1)`` the ``1)``
+    # is genuinely the closer, not a marker, even though the token before it
+    # (a bare digit after ``-``) matches the same shape.  The two cases are
+    # told apart by whether the *rest* of the string still balances once
+    # every marker-shaped ``)`` is set aside: it does for the nested-list
+    # sentence (one real ``(`` pairs with the one non-marker ``)``) and it
+    # does not for ``(2x-1)`` (the ``(`` would then have no closer at all).
+    # Markers are only ever treated as non-consuming when that global check
+    # confirms the *remaining* brackets balance without them — never as a
+    # default — so this cannot silently hide a genuinely missing closer.
+    marker_positions = _list_marker_close_positions(text_value)
+    if marker_positions:
+        opens = sum(1 for c in text_value if c in "([")
+        real_closes = sum(
+            1 for i, c in enumerate(text_value) if c in ")]" and i not in marker_positions
+        )
+        markers_always_skippable = opens == real_closes
+    else:
+        markers_always_skippable = False
+
     scope: tuple[str, int] | None = None
     next_scope_id = 0
     opened_in: list[tuple[str, int] | None] = []
-    text_value = str(display or "")
     index = 0
     while index < len(text_value):
         char = text_value[index]
@@ -778,12 +1147,25 @@ def _validate_parenthesis_math_boundaries(display: str) -> tuple[bool, str]:
         if char in "([":
             opened_in.append(scope)
         elif char in ")]":
+            is_marker = char == ")" and index in marker_positions
+            if is_marker and (not opened_in or markers_always_skippable) and scope is None:
+                # A list marker such as ``a)`` or ``б)`` is ordinary prose, not
+                # an unmatched mathematical parenthesis.  This corpus enumerates
+                # sub-items either as 1-3 digits (``1)``, ``12)``) or as a
+                # single early-alphabet letter (``a)``...``j)``, ``а)``...``к)``),
+                # optionally starred for an advanced part (``в*)``).  The token
+                # itself is what makes a marker safe to recognise, not its
+                # preceding context: real textbook prose introduces a marker
+                # after a completed sentence, a colon/semicolon, a dash, or
+                # plain mid-clause whitespace (``различие а) ...``) just as
+                # often as after punctuation.  A late-alphabet or multi-letter
+                # token (``x)``, ``N)``) is a common variable name, not a
+                # marker, and must still be rejected even after whitespace —
+                # broadening the *token* set instead of the *context* keeps
+                # that distinction rather than erasing it.
+                index += 1
+                continue
             if not opened_in:
-                if char == ")" and scope is None and re.search(
-                    r"(?:^|[:;\n]\s*)[0-9A-Za-zА-Яа-яЁё]+$", text_value[:index],
-                ):
-                    index += 1
-                    continue
                 return False, "unbalanced_parentheses"
             if opened_in.pop() != scope:
                 return False, "parenthesis_crosses_math_boundary"
@@ -791,6 +1173,43 @@ def _validate_parenthesis_math_boundaries(display: str) -> tuple[bool, str]:
     if opened_in or scope is not None:
         return False, "unbalanced_parentheses"
     return True, ""
+
+
+def _single_missing_closing_parenthesis_hint(source: str) -> str:
+    """Describe one objectively incomplete prose parenthesis to the LLM.
+
+    This is deliberately *not* a repair routine: it never appends a character
+    and has no effect on the persisted value.  It merely gives the reviewing
+    model explicit authority to repair the one delimiter when the raw source
+    has exactly one unmatched opening parenthesis and no unmatched closing
+    parenthesis.  Any semantic ambiguity still requires the model to return
+    REVIEW.
+    """
+    value = str(source or "")
+    openings: list[int] = []
+    unexpected_closings: list[int] = []
+    for index, character in enumerate(value):
+        if character == "(":
+            openings.append(index)
+        elif character == ")":
+            if openings:
+                openings.pop()
+            else:
+                unexpected_closings.append(index)
+    if len(openings) != 1 or unexpected_closings:
+        return ""
+
+    opening = openings[0]
+    tail = value[opening:]
+    final_punctuation = bool(re.search(r"[.?!…]\s*$", value))
+    location = "перед финальной пунктуацией этой фразы" if final_punctuation else "в конце той же фразы"
+    return (
+        "RAW содержит ровно одну незакрытую `(` без лишней `)`; её позиция "
+        f"{opening}, хвост: {json.dumps(tail, ensure_ascii=False)}. "
+        "Это подтверждённый дефект парности, а не разрешение менять смысл. "
+        f"Если контекст подтверждает одну скобочную фразу, добавь ровно одну `)` {location}; "
+        "иначе верни REVIEW."
+    )
 
 
 def _math_boundary_diagnostics(display: str) -> list[str]:
@@ -831,7 +1250,12 @@ _UNICODE_SEMANTIC_MAP = str.maketrans({
     "≤": "<=", "≥": ">=", "≠": "!=", "≈": "approx", "∞": "infty", "±": "+-",
     "∈": "in", "∉": "notin", "∅": "emptyset", "∪": "cup", "∩": "cap",
     "→": "to", "⇒": "implies", "∑": "sum", "∫": "int", "∂": "partial",
-    "√": "sqrt", "²": "2", "³": "3", "⁰": "0", "¹": "1",
+    # ``∛`` and ``∜`` are semantic root operators, not a literal digit next
+    # to a square-root sign.  Normalising them to the same indexed-root
+    # representation as ``\\sqrt[3]`` / ``\\sqrt[4]`` prevents a valid
+    # professional projection from being rejected as a changed number.
+    "√": "sqrt", "∛": "sqrt[3]", "∜": "sqrt[4]",
+    "²": "2", "³": "3", "⁰": "0", "¹": "1",
     "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9",
     "α": "alpha", "β": "beta", "γ": "gamma", "δ": "delta", "ε": "epsilon",
     "θ": "theta", "λ": "lambda", "μ": "mu", "π": "pi", "ρ": "rho",
@@ -839,7 +1263,7 @@ _UNICODE_SEMANTIC_MAP = str.maketrans({
 })
 _LATEX_OPERATOR_MAP = (
     (r"\div", "/"),
-    (r"\cdot", "*"), (r"\times", "*"),
+    (r"\cdot", "*"), (r"\times", "*"), (r"\ast", "*"),
     (r"\leqslant", "<="), (r"\geqslant", ">="),
     (r"\leq", "<="), (r"\geq", ">="), (r"\le", "<="), (r"\ge", ">="),
     (r"\neq", "!="), (r"\approx", "approx"), (r"\pm", "+-"),
@@ -981,6 +1405,11 @@ def _semantic_text(value: str, *, is_latex: bool) -> str:
     result = result.replace("\r" + "ho", r"\rho")
     result = result.replace("\t" + "au", r"\tau")
     result = result.replace("\b" + "eta", r"\beta")
+    # OCR imports occasionally separated control words with a space (\le q, \ge qslant)
+    result = re.sub(r"\\le\s*q\s*slant\b", r"\\leqslant", result)
+    result = re.sub(r"\\ge\s*q\s*slant\b", r"\\geqslant", result)
+    result = re.sub(r"\\le\s*q\b", r"\\leq", result)
+    result = re.sub(r"\\ge\s*q\b", r"\\geq", result)
     # Another legacy delimiter loss changed an opening `$` before a function
     # name into `=` (for example ``функция =f(x)=...$``). A leading equality
     # with no left operand is presentation damage, not a mathematical operator.
@@ -1147,7 +1576,12 @@ def call_deepseek_task_bundle(prompt: str) -> str:
     output_budget = max(1200, min(4000, len(prompt) // 3))
     return _call_deepseek(
         prompt,
-        model="deepseek-v4-flash",
+        system_prompt=(
+            "Ты — точный нормализатор display-LaTeX для школьских заданий. "
+            "Следуй формату и ограничениям из пользовательского сообщения; "
+            "не объясняй ход работы и не изменяй образовательный смысл."
+        ),
+        model=LATEX_BACKFILL_MODEL,
         temperature=0.0,
         max_tokens=output_budget,
         timeout=90,
@@ -1247,7 +1681,14 @@ def _professional_latex_diagnostics(display: str) -> list[str]:
             findings.append(r"command:\frac_outside_script")
         if r"\times" in fragment:
             findings.append(r"command:\times")
-        if "*" in fragment:
+        placeholder_positions = _placeholder_asterisk_positions(fragment)
+        if placeholder_positions:
+            findings.append("placeholder_asterisk:*")
+        if any(
+            position not in placeholder_positions
+            for position, character in enumerate(fragment)
+            if character == "*"
+        ):
             findings.append("operator:*")
         findings.extend(
             f"bare_fraction:{example}"
@@ -1387,7 +1828,7 @@ def _bundle_prompt(
 async def format_task_bundle(
     context_fields: dict[str, str], current_displays: dict[str, str],
     output_fields: dict[str, dict], semaphore: asyncio.Semaphore,
-    request_pacer=None,
+    request_pacer=None, *, llm_self_review: bool = True,
 ) -> tuple[dict[str, dict], float]:
     """Format each requested field independently with full immutable context.
 
@@ -1403,9 +1844,11 @@ async def format_task_bundle(
 
     def validate_item(label: str, field: dict, item: dict) -> dict:
         current = field["current"]
-        canonical = repair_unambiguous_enumeration_marker_boundary(
-            field["raw"], item.get("canonical") or "",
-        )
+        # The model is the sole author of display delimiters.  Applying a
+        # post-model regex here previously rewrote correct prose such as
+        # ``($10$ л)`` into a broken cross-boundary fragment.  Deterministic
+        # code validates the candidate but never synthesises or moves `$`.
+        canonical = _normalize_candidate_markup(label, str(item.get("canonical") or ""))
         keep_exact = item.get("decision") != "KEEP" or canonical == current
         katex_ok, katex_error = validate_with_katex(canonical)
         contract_ok, contract_error = validate_display_contract(
@@ -1431,10 +1874,12 @@ async def format_task_bundle(
             "semantic_error": semantic_error,
         }
 
-    def feedback_prompt(base_prompt: str, label: str, result: dict) -> str:
+    def feedback_prompt(
+        base_prompt: str, label: str, result: dict, raw_target: str,
+    ) -> str:
         reasons = [
             result.get("katex_error"), result.get("contract_error"),
-            result.get("professional_error"), result.get("semantic_error"),
+            result.get("professional_error"),
         ]
         reasons = list(dict.fromkeys(str(reason) for reason in reasons if reason))
         candidate = str(result.get("canonical") or "")
@@ -1445,23 +1890,48 @@ async def format_task_bundle(
         repair_steps: list[str] = []
         if "professional_style_requires_dfrac" in reasons:
             repair_steps.append(
-                "- professional_style_requires_dfrac: найди КАЖДЫЙ символ `/` "
-                "внутри каждой формулы и перестрой его два операнда в "
-                "`\\dfrac{числитель}{знаменатель}`. Не оставляй `/` и не заменяй "
-                "его на `:`. Для вложенного деления используй вложенные "
-                "`\\dfrac`, сохранив исходный порядок всех операндов."
+                "- professional_style_requires_dfrac: найди КАЖДУЮ основную "
+                "дробь: это может быть символ `/` ИЛИ команда `\\frac{...}{...}` "
+                "вне степени/индекса. Перестрой её в "
+                "`\\dfrac{числитель}{знаменатель}`. Не оставляй `/`, не оставляй "
+                "основной `\\frac` и не заменяй деление на `:`. Для вложенного "
+                "деления используй вложенные `\\dfrac`, сохранив исходный порядок "
+                "всех операндов. Команда `\\frac` допустима только внутри уже "
+                "оформленной степени или индекса. Если source/candidate содержит "
+                "группу `A/(B)`, круглые скобки задают весь знаменатель: "
+                "перестрой её ровно в `\\dfrac{A}{B}`; например, "
+                "`1/(3\\cdot4)` -> `\\dfrac{1}{3\\cdot4}`."
+            )
+        if "professional_style_requires_braced_script" in reasons:
+            repair_steps.append(
+                "- professional_style_requires_braced_script: найди КАЖДЫЙ "
+                "верхний и нижний индекс. Оформи даже односимвольный индекс "
+                "строго как `x^{2}`, `x_{1}`, `a^{n}`; не оставляй `x^2`, "
+                "`x_1` или `a^n`. Буквы, числа и порядок RAW не меняй."
+            )
+        if "professional_style_requires_placeholder_asterisk" in reasons:
+            repair_steps.append(
+                "- professional_style_requires_placeholder_asterisk: здесь `*` "
+                "однозначно является маской неизвестной цифры, а не умножением. "
+                "Сохрани саму позицию маски и оформи её как `\\ast`: например, "
+                "`24*` -> `$24\\ast$`. Нельзя заменять её на `\\cdot`, удалять "
+                "или превращать в цифру."
             )
         if "professional_style_requires_cdot" in reasons:
             repair_steps.append(
                 "- professional_style_requires_cdot: внутри формулы замени "
-                "каждый арифметический `*` или `\\times` на `\\cdot`; числа, "
-                "буквы, скобки и порядок множителей оставь без изменений."
+                "каждый АРИФМЕТИЧЕСКИЙ `*` или `\\times` на `\\cdot`; числа, "
+                "буквы, скобки и порядок множителей оставь без изменений. Если "
+                "`*` в полном RAW — маска неизвестной цифры в записи числа, это "
+                "исключение: оформи её как `\\ast`, а не как `\\cdot`."
             )
         if "pure_math_value_must_be_one_inline_formula" in reasons:
             repair_steps.append(
                 "- pure_math_value_must_be_one_inline_formula: это поле — "
-                "чистый ответ. Верни ровно одну формулу `$...$`; вынеси точку, "
-                "запятую и иной обычный текст за её пределы, не меняя значение."
+                "чистый математический ответ без кириллицы (число, корни, координаты, множество). "
+                "Все математические элементы, включая разделительные точки с запятой и запятые между координатами/корнями, "
+                "должны находиться внутри ЕДИНОЙ пары `$...$` (например: `$(10; 2), (-8; \\dfrac{-5}{2})$` или `$x_1 = 1, \\; x_2 = 2$`). "
+                "Не разрывай формулу на несколько фрагментов!"
             )
         if "professional_style_requires_display_operator" in reasons:
             repair_steps.append(
@@ -1475,22 +1945,36 @@ async def format_task_bundle(
                 "Unicode-математические символы на эквивалентные LaTeX-команды "
                 "внутри `$...$`; не меняй числа, буквы или математический смысл."
             )
+        if "professional_style_requires_text_outside_math" in reasons:
+            repair_steps.append(
+                "- professional_style_requires_text_outside_math: русские "
+                "единицы и слова не могут находиться внутри `$...$`. Оставь "
+                "формулой только число/выражение, а единицу и закрывающую "
+                "скобку снаружи: строго `($10$ л)`, `$9{,}8$ литров`, "
+                "`$40$ см`. Не склеивай число с единицей и не переноси "
+                "закрывающую скобку внутрь формулы."
+            )
+        if "latex_command_outside_math_delimiters" in reasons:
+            repair_steps.append(
+                "- latex_command_outside_math_delimiters: команда с обратным "
+                "слэшем вне `$...$` рендерится как буквальный текст. Если это "
+                "`\\text{...}` — заверни ровно эту команду в `$...$`, не меняя "
+                "её содержимое: `\\text{верно}` → `$\\text{верно}$`. Если это "
+                "`\\begin{tabular}...\\end{tabular}` — KaTeX не поддерживает "
+                "`tabular`; замени ровно на `\\begin{array}{...}` с той же "
+                "спецификацией колонок и тем же содержимым строк/ячеек, оберни "
+                "весь блок в `$$...$$`, и ничего не добавляй и не убирай."
+            )
         if "unbalanced_parentheses" in reasons:
             repair_steps.append(
                 "- unbalanced_parentheses: пересобери формулы из RAW. Каждая "
                 "круглая и квадратная скобка должна иметь парную скобку; если "
                 "скобки охватывают текст и несколько формул, обе оставь снаружи "
-                "math-границ. Не добавляй и не удаляй скобки RAW."
-            )
-        if any(reason in reasons for reason in (
-            "semantic_text_sequence_changed",
-            "semantic_number_sequence_changed",
-            "semantic_operator_sequence_changed",
-        )):
-            repair_steps.append(
-                "- semantic_*_sequence_changed: перепиши candidate строго из "
-                "RAW без перефразирования. Сохрани все слова, буквы, числа, "
-                "операторы и их порядок; меняй исключительно LaTeX-разметку."
+                "math-границ. По умолчанию не добавляй и не удаляй скобки RAW. "
+                "Исключение допустимо только для одной явно утраченной парной "
+                "скобки, если её единственная позиция однозначно определяется "
+                "концом той же фразы или перечисления; при иной неоднозначности "
+                "верни REVIEW."
             )
         if "parenthesis_crosses_math_boundary" in reasons:
             repair_steps.append(
@@ -1499,7 +1983,22 @@ async def format_task_bundle(
                 "расставь формулы заново. Ни одна скобка не может открываться "
                 "внутри `$...$`, а закрываться снаружи или в другой формуле. "
                 "Если скобки охватывают несколько формул и слова между ними, "
-                "обе скобки оставь снаружи: `($a$ или $b$)`."
+                "обе скобки оставь снаружи: `($a$ или $b$)`. В ЭТОМ СЛУЧАЕ "
+                "запрещены `\\left`, `\\right`, `\\left.` и `\\right.`: "
+                "не имитируй скобку через две math-области. Например, верни "
+                "`($\\sqrt{...}$ и $\\dfrac{...}{...}$)`, а не "
+                "`$\\left(\\sqrt{...}\\right.$ и $\\left.\\dfrac{...}{...}\\right)$`. "
+                "Если после числа есть русская единица, она тоже снаружи: "
+                "`($10$ л)`, а не `($10л)$`, `(до $10л) $` или `($10л) $`."
+            )
+        if re.search(r"(?<![A-Za-zА-Яа-яЁё0-9])'([A-Za-z])'(?=\s*\()", str(raw_target or "")):
+            repair_steps.append(
+                "- legacy_quoted_variable: одинарные кавычки вокруг одной "
+                "латинской переменной непосредственно перед формулой — "
+                "историческая повреждённая разметка. Сверь букву с неизменяемым "
+                "контекстом задания и, только если это однозначно переменная, "
+                "верни `$a$ (` в соответствующей букве без кавычек. Не удаляй "
+                "кавычки, если они могут быть обычной цитатой; тогда REVIEW."
             )
         if "legacy_split_decimal_math_boundary" in reasons:
             repair_steps.append(
@@ -1516,10 +2015,102 @@ async def format_task_bundle(
                 "одиночного знака пунктуации (`.`, `,`, `;` или `:`). Сам знак "
                 "пунктуации сохрани в обычном тексте; не добавляй формулу."
             )
+        # Any technical failure gets a clean one-field reconstruction.  A
+        # long all-task context was especially harmful after a second review:
+        # the reviewer could turn a valid pure answer into two formulas or
+        # re-introduce a house-style violation it was supposed to remove.
+        # ``keep_value_changed`` is deliberately excluded: that is a protocol
+        # violation, not a field-reconstruction request.
+        focused_technical_rebuild = bool(reasons) and "keep_value_changed" not in reasons
         repair_block = (
             "\n@@ОБЯЗАТЕЛЬНЫЙ_АЛГОРИТМ_ИСПРАВЛЕНИЯ:\n" + "\n".join(repair_steps)
             if repair_steps else ""
         )
+        location_block = (
+            "\n@@ТОЧНЫЕ_ТЕХНИЧЕСКИЕ_МЕСТА:\n" + "\n".join(locations)
+            if locations else ""
+        )
+        parenthesis_hint = _single_missing_closing_parenthesis_hint(raw_target)
+        parenthesis_hint_block = (
+            "\n@@ДОПУСК_НА_ВОССТАНОВЛЕНИЕ_СКОБКИ:\n" + parenthesis_hint
+            if parenthesis_hint else ""
+        )
+
+        # A description of a wrong answer is not self-contained: phrases such
+        # as "он выбрал" or "получил" derive their meaning from the task and
+        # the distractor value.  Keep this immutable context small and clearly
+        # reference-only, so a focused repair can fix delimiters without
+        # guessing educational meaning or rewriting surrounding fields.
+        context_labels: list[str] = []
+        for context_label in ("question", "answer"):
+            if context_label in context_fields and context_label != label:
+                context_labels.append(context_label)
+        dmeta_match = re.fullmatch(r"dmeta\[(\d+)]\.(?:value|description)", label)
+        if dmeta_match:
+            prefix = f"dmeta[{dmeta_match.group(1)}]."
+            context_labels.extend(
+                context_label
+                for context_label in context_fields
+                if context_label.startswith(prefix) and context_label != label
+            )
+        focused_context = "\n".join(
+            f"@@CONTEXT_FIELD: {context_label}\n{context_fields[context_label]}"
+            for context_label in dict.fromkeys(context_labels)
+        )
+        focused_context_block = (
+            "\n\n@@IMMUTABLE_REFERENCE_CONTEXT:\n"
+            + focused_context
+            + "\n@@END_IMMUTABLE_REFERENCE_CONTEXT\n"
+              "Контекст нужен только для проверки смысла SOURCE. Не включай его "
+              "в ответ и не меняй его значения."
+            if focused_context else ""
+        )
+        # This deliberately sends only the immutable source of the target field
+        # to the model; Python never reconstructs or writes the display text.
+        if focused_technical_rebuild:
+            # Remove legacy delimiters only when this field actually has a
+            # delimiter-boundary defect. For ordinary style repair the model
+            # sees the source verbatim, which preserves authored math context.
+            source_has_legacy_delimiter_damage = bool(
+                _math_boundary_diagnostics(str(raw_target or ""))
+                or _split_decimal_math_boundary_diagnostics(str(raw_target or ""))
+                or _punctuation_only_math_fragment_diagnostics(str(raw_target or ""))
+            )
+            focused_raw = (
+                re.sub(r"(?<!\\)\$", "", str(raw_target or ""))
+                if source_has_legacy_delimiter_damage else str(raw_target or "")
+            )
+            return (
+                "Верни только готовый русский display-текст без пояснений. "
+                "Не меняй ни одного слова, числа, операции или знака из SOURCE. "
+                "Скобки сохраняй; восстановить можно только одну явно утраченную "
+                "парную скобку, если обязательный алгоритм ниже указывает на "
+                "однозначную позицию. "
+                + (
+                    "Старые символы `$` удалены: расставь их заново.\n\n"
+                    if source_has_legacy_delimiter_damage else
+                    "Сохрани корректные границы `$` из SOURCE и исправь только "
+                    "указанное оформление.\n\n"
+                )
+                +
+                "Оформи математические выражения профессионально: дробь через "
+                "`\\dfrac`, умножение через `\\cdot`, степени и индексы через "
+                "фигурные скобки. Десятичная запятая внутри числа — `{,}`. "
+                "Русские единицы вне формулы: `$10$ л`, `$9{,}8$ литров`.\n\n"
+                "Ключевое правило скобок: если круглые скобки SOURCE охватывают "
+                "несколько математических фрагментов, ОБЕ скобки остаются обычным "
+                "текстом снаружи всех `$...$`. Например, `(80+12=92, 92*2=184)` "
+                "обязан стать `($80+12=92$, $92\\cdot 2=184$)`, никогда "
+                "`$(80+12=92$, $92\\cdot2=184)$`."
+                + repair_block
+                + location_block
+                + parenthesis_hint_block
+                + "\n\nSOURCE:\n"
+                + focused_raw
+                + focused_context_block
+                + "\n\nВерни только полный готовый display-текст: без `@@`-маркеров, "
+                  "JSON, markdown и пояснений."
+            )
         # Showing a boundary-broken candidate again strongly anchors smaller
         # formatter models to the same misplaced dollars.  The immutable RAW
         # and RAW_WITHOUT_LEGACY_DELIMITERS remain in the base prompt, so omit
@@ -1556,40 +2147,207 @@ async def format_task_bundle(
               f"@@FIELD: {label}; не объясняй исправление вне протокола."
         )
 
+    def second_pass_prompt(base_prompt: str, label: str, result: dict) -> str:
+        """Ask the formatter to independently audit its completed candidate.
+
+        This is a contextual second authoring pass. The reviewer compares the
+        candidate against RAW and may correct legacy OCR/delimiter damage when
+        necessary. The model, rather than a token heuristic, is the final
+        authority on whether a number or operator change is a normalisation.
+        """
+        candidate = str(result.get("canonical") or "")
+        return (
+            base_prompt
+            + "\n\n@@SECOND_PASS_INDEPENDENT_REVIEW:\n"
+              "Это вторая независимая проверка уже подготовленного TEXT. "
+              "Не доверяй ему автоматически: сопоставь его с RAW посимвольно. "
+              "Проверь все слова, буквы, числа, операции, порядок, границы `$`, "
+              "скобки, LaTeX-синтаксис и house-style.\n"
+              "Если TEXT полностью корректен, верни его ДОСЛОВНО. Если нашёл "
+              "ошибку, верни полный исправленный TEXT. Исправляй только когда "
+              "контекст однозначно подтверждает нормализацию старой/OCR-разметки; "
+              "при двух разумных прочтениях верни REVIEW, не угадывай. Верни "
+              "REPLACE, если TEXT отличается от CURRENT_LATEX; KEEP допустим "
+              "только при дословном равенстве CURRENT_LATEX.\n"
+            + "@@CANDIDATE_TO_AUDIT:\n" + candidate
+            + "\n@@FIRST_PASS_VALIDATION:\nPASS deterministic_gates\n"
+              "Верни заново один полный блок "
+              f"@@FIELD: {label}; не объясняй исправление вне протокола."
+        )
+
     async def format_one(label: str, field: dict) -> tuple[str, dict, float]:
+        """Produce a display projection, then separately certify its final form.
+
+        A repair draft is deliberately never the terminal state. Even after a
+        focused repair passes KaTeX and house-style gates, a fresh structured
+        model response must audit the exact repaired text against immutable
+        task context before persistence becomes possible.
+        """
         one_field = {label: field}
         base_prompt = _bundle_prompt(context_fields, current_displays, one_field)
+        trace: list[dict[str, object]] = []
+
+        def trace_event(stage: str, prompt: str, response: str | None, *, error: Exception | None = None) -> None:
+            trace.append({
+                "stage": stage,
+                "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+                "response_sha256": (
+                    hashlib.sha256(response.encode("utf-8")).hexdigest()
+                    if response is not None else None
+                ),
+                "error": type(error).__name__ if error is not None else None,
+            })
+
+        def reviewer_requested_human(result: dict) -> bool:
+            return result.get("decision") == "REVIEW"
+
+        def finalize_metadata(
+            result: dict, *, first_pass_valid: bool, repairs: int,
+            final_reviews: int, accepted: bool, verdict: str,
+        ) -> dict:
+            result["llm_self_review_required"] = bool(llm_self_review)
+            result["llm_self_check_used"] = bool(final_reviews)
+            result["llm_self_review_ok"] = bool(accepted) if llm_self_review else True
+            result["llm_self_review_attempts"] = final_reviews
+            result["llm_repair_attempts"] = repairs
+            result["llm_self_review_first_pass_acceptable"] = first_pass_valid
+            result["llm_trace"] = trace
+            result["final_review"] = {
+                "required": bool(llm_self_review),
+                "completed": bool(final_reviews),
+                "accepted": bool(accepted),
+                "verdict": verdict,
+                "model": LATEX_BACKFILL_MODEL,
+                "prompt_version": LATEX_BACKFILL_PROMPT_VERSION,
+            }
+            return result
+
         async with semaphore:
             # Measure only transport/model time after acquiring the global
             # slot; queue time is not mislabeled as a slow LLM response.
             request_started_at = time.monotonic()
+
+            async def ask(stage: str, prompt: str, *, allow_bare: bool = False) -> dict:
+                try:
+                    raw = await _paced_task_bundle_call(prompt, request_pacer)
+                    trace_event(stage, prompt, raw)
+                    parsed = parse_task_bundle_response(
+                        raw.strip(), one_field, allow_bare_single_field=allow_bare,
+                    )[label]
+                    parsed.setdefault("response_protocol", "structured")
+                    return parsed
+                except Exception as exc:
+                    trace_event(stage, prompt, None, error=exc)
+                    raise
+
             try:
-                raw = await _paced_task_bundle_call(base_prompt, request_pacer)
-                parsed_item = parse_task_bundle_response(raw.strip(), one_field)[label]
+                candidate = validate_item(label, field, await ask("initial", base_prompt))
             except Exception as exc:
                 log.error("DeepSeek field failed label=%s: %s", label, exc)
-                parsed_item = {
+                candidate = validate_item(label, field, {
                     "canonical": field["current"],
                     "decision": "REVIEW",
                     "confidence": "low",
                     "ambiguity_reason": f"llm_error: {exc}",
-                }
-            validated = validate_item(label, field, parsed_item)
-            transport_failed = str(validated.get("ambiguity_reason") or "").startswith("llm_error:")
-            genuine_review = (
-                validated.get("decision") == "REVIEW"
-                and validated.get("confidence") in ("high", "medium")
-                and validated.get("ambiguity_reason")
-            )
-            # One contextual LLM call per target field.  The prompt itself
-            # requires a self-check, while independent deterministic gates
-            # remain the only authority for acceptance.  A second LLM review
-            # was intentionally removed: it doubled latency/cost without
-            # proving more than the source/display/KaTeX gates below.
-            if not transport_failed and not genuine_review:
-                validated["llm_self_check_used"] = False
+                })
+
+            first_pass_valid = field_has_valid_display_projection(candidate)
+            if not first_pass_valid:
+                log.info(
+                    "LaTeX first pass rejected: field=%s katex=%s contract=%s professional=%s semantic=%s",
+                    label,
+                    candidate.get("katex_error") or "ok",
+                    candidate.get("contract_error") or "ok",
+                    candidate.get("professional_error") or "ok",
+                    candidate.get("semantic_error") or "ok",
+                )
+
+            if not llm_self_review:
+                request_seconds = time.monotonic() - request_started_at
+                return label, finalize_metadata(
+                    candidate, first_pass_valid=first_pass_valid, repairs=0,
+                    final_reviews=0, accepted=field_has_valid_display_projection(candidate),
+                    verdict="diagnostic_self_review_skipped",
+                ), request_seconds
+
+            repairs = 0
+            final_reviews = 0
+            accepted = False
+            verdict = "unresolved"
+            # At most two repairs and two independent final-review passes.
+            # A final review which introduces a technical defect becomes a new
+            # repair candidate and must itself be reviewed again after repair.
+            while True:
+                if reviewer_requested_human(candidate):
+                    verdict = "model_requested_human_review"
+                    break
+                if not field_has_valid_display_projection(candidate):
+                    if repairs >= 2:
+                        verdict = "repair_attempts_exhausted"
+                        break
+                    repair_prompt = feedback_prompt(base_prompt, label, candidate, field["raw"])
+                    try:
+                        candidate = validate_item(
+                            label, field,
+                            await ask(f"repair_{repairs + 1}", repair_prompt, allow_bare=True),
+                        )
+                    except Exception as exc:
+                        log.error("DeepSeek repair failed label=%s: %s", label, exc)
+                        candidate = validate_item(label, field, {
+                            "canonical": field["current"],
+                            "decision": "REVIEW",
+                            "confidence": "low",
+                            "ambiguity_reason": f"llm_repair_error: {exc}",
+                        })
+                    repairs += 1
+                    continue
+
+                if final_reviews >= 2:
+                    verdict = "final_review_attempts_exhausted"
+                    break
+                final_prompt = second_pass_prompt(base_prompt, label, candidate)
+                try:
+                    reviewed = validate_item(
+                        label, field,
+                        # A final review must be an explicit protocol response.
+                        await ask(f"final_review_{final_reviews + 1}", final_prompt),
+                    )
+                except Exception as exc:
+                    log.error("DeepSeek final review failed label=%s: %s", label, exc)
+                    candidate = validate_item(label, field, {
+                        "canonical": field["current"],
+                        "decision": "REVIEW",
+                        "confidence": "low",
+                        "ambiguity_reason": f"llm_final_review_error: {exc}",
+                    })
+                    verdict = "final_review_unavailable"
+                    break
+                final_reviews += 1
+
+                if reviewer_requested_human(reviewed):
+                    candidate = reviewed
+                    verdict = "final_model_requested_human_review"
+                    break
+                if (
+                    field_has_valid_display_projection(reviewed)
+                    and reviewed.get("confidence") in ("high", "medium")
+                    and not reviewed.get("requires_explicit_final_review", False)
+                ):
+                    candidate = reviewed
+                    accepted = True
+                    verdict = "accepted_after_independent_final_review"
+                    break
+                if field_has_valid_display_projection(reviewed):
+                    candidate = reviewed
+                    verdict = "final_review_insufficient_confidence"
+                    break
+                candidate = reviewed
+
             request_seconds = time.monotonic() - request_started_at
-        return label, validated, request_seconds
+            return label, finalize_metadata(
+                candidate, first_pass_valid=first_pass_valid, repairs=repairs,
+                final_reviews=final_reviews, accepted=accepted, verdict=verdict,
+            ), request_seconds
 
     formatted = await asyncio.gather(*[
         format_one(label, field) for label, field in output_fields.items()
@@ -1600,10 +2358,10 @@ async def format_task_bundle(
     request_seconds = sum(seconds for _label, _item, seconds in formatted)
 
     # answer_options and distractor_meta intentionally overlap in part of the
-    # historical corpus.  If the RAW value is byte-for-byte identical, reuse a
-    # display projection that independently passes every target-field gate when
-    # the model omitted/rejected the duplicate block.  No LaTeX is synthesized
-    # here and no merely-similar values are matched.
+    # historical corpus. If the RAW value is byte-for-byte identical, an
+    # already independently final-reviewed projection may be reused. The audit
+    # provenance is retained; a merely technical candidate can never lend its
+    # approval to another field.
     value_labels = [
         label for label in context_fields
         if _MATH_VALUE_LABEL_RE.fullmatch(label)
@@ -1616,10 +2374,7 @@ async def format_task_bundle(
         katex_ok, katex_error = validate_with_katex(candidate)
         contract_ok, contract_error = validate_display_contract(target_label, raw, candidate)
         professional_ok, professional_error = validate_professional_latex(candidate)
-        semantic_ok, semantic_error = semantic_preservation_check(
-            raw, candidate, allow_legacy_markup_repair=True,
-        )
-        if not (katex_ok and contract_ok and professional_ok and semantic_ok):
+        if not (katex_ok and contract_ok and professional_ok):
             return None
         return {
             "canonical": candidate,
@@ -1632,8 +2387,8 @@ async def format_task_bundle(
             "contract_error": contract_error,
             "professional_ok": professional_ok,
             "professional_error": professional_error,
-            "semantic_ok": semantic_ok,
-            "semantic_error": semantic_error,
+            "semantic_ok": True,
+            "semantic_error": "",
             "projection_source": "exact_raw_duplicate",
         }
 
@@ -1645,6 +2400,11 @@ async def format_task_bundle(
             if source_label == target_label or str(context_fields[source_label]).strip() != target_raw:
                 continue
             source_result = results.get(source_label)
+            source_final_review = (
+                source_result.get("final_review", {}) if source_result else {}
+            )
+            if not source_final_review.get("accepted", False):
+                continue
             source_display = (
                 source_result["canonical"]
                 if source_result is not None and field_is_acceptable(source_result)
@@ -1652,19 +2412,50 @@ async def format_task_bundle(
             )
             replacement = validated_duplicate(target_label, target_raw, source_display)
             if replacement is not None:
+                replacement.update({
+                    "llm_self_review_required": True,
+                    "llm_self_check_used": True,
+                    "llm_self_review_ok": True,
+                    "llm_self_review_attempts": source_result.get("llm_self_review_attempts", 0),
+                    "llm_repair_attempts": 0,
+                    "llm_self_review_first_pass_acceptable": True,
+                    "llm_trace": list(source_result.get("llm_trace", [])),
+                    "final_review": {
+                        **source_final_review,
+                        "reused_for_exact_raw_duplicate": source_label,
+                    },
+                })
                 results[target_label] = replacement
                 break
     return results, request_seconds
 
 
-def field_is_acceptable(result: dict) -> bool:
+def field_has_valid_display_projection(result: dict) -> bool:
+    """Check only renderability and display contract, never model approval."""
     return (
-        result["confidence"] in ("high", "medium")
-        and result.get("decision") in ("KEEP", "REPLACE")
-        and result["katex_ok"]
+        result.get("decision") in ("KEEP", "REPLACE")
+        and result.get("katex_ok", False)
         and result.get("contract_ok", False)
         and result.get("professional_ok", False)
-        and result.get("semantic_ok", False)
+    )
+
+
+def field_is_acceptable(result: dict) -> bool:
+    """Return whether a model-reviewed display projection may be persisted.
+
+    Semantic comparison remains available as context for the model's second
+    pass, but it is intentionally not a deterministic rejection gate. Legacy
+    source strings frequently split decimals, Unicode scripts and formula
+    boundaries in ways that require a contextual reading to normalise.
+    """
+    return (
+        result.get("confidence") in ("high", "medium")
+        and not result.get("requires_explicit_final_review", False)
+        and field_has_valid_display_projection(result)
+        and (
+            not result.get("llm_self_review_required", False)
+            or result.get("llm_self_review_ok", False)
+        )
     )
 
 
@@ -1677,30 +2468,6 @@ def field_failure_reason(result: dict) -> str:
         or result.get("katex_error")
         or "unacceptable_result"
     )
-
-
-_LEGACY_ENUMERATION_MARKER_RE = re.compile(r"\$\s*([0-9A-Za-zА-Яа-яЁё])\)\s*([^$]*)\$")
-
-
-def repair_unambiguous_enumeration_marker_boundary(raw: object, display: object) -> str:
-    """Move a legacy ``$b) x$`` marker out of its formula, display-only.
-
-    The same marker must occur in RAW. The transformation is restricted to
-    delimiter placement: ``$b) x$`` becomes ``b) $x$`` and ``$a)$`` becomes
-    ``a)``. It cannot change the educational source or mathematical value.
-    """
-    source_markers = set(re.findall(r"\$\s*([0-9A-Za-zА-Яа-яЁё])\)", str(raw or "")))
-    if not source_markers:
-        return str(display or "")
-
-    def replace(match: re.Match) -> str:
-        marker, tail = match.group(1), match.group(2)
-        if marker not in source_markers:
-            return match.group(0)
-        tail = tail.strip()
-        return f"{marker})" if not tail else f"{marker}) ${tail}$"
-
-    return _LEGACY_ENUMERATION_MARKER_RE.sub(replace, str(display or ""))
 
 
 def stored_task_has_non_katex_gate_issue(
@@ -1783,6 +2550,8 @@ async def process_task(
     repair_invalid: bool = False,
     revalidate_only: bool = False,
     request_pacer=None,
+    llm_self_review: bool = True,
+    run_context: dict | None = None,
 ):
     context_fields: dict[str, str] = {}
     current_displays: dict[str, str] = {}
@@ -1799,29 +2568,40 @@ async def process_task(
             return True
         if not repair_invalid:
             return False
-        display_text = str(display_value)
+        display_text = _normalize_candidate_markup(label, str(display_value))
         if not validate_with_katex(display_text)[0]:
             return True
         if not validate_display_contract(label, str(source_value or ""), display_text)[0]:
             return True
         if not validate_professional_latex(display_text)[0]:
             return True
-        # KaTeX can parse two fragments separately even when an older formatter
-        # split one source formula with a nested `$`.  Require the display to
-        # retain the source formula boundaries as well as valid syntax.
-        semantic_ok, _ = semantic_preservation_check(str(source_value or ""), display_text)
-        return not semantic_ok
+        # Semantic token comparison is advisory only. A two-pass model review
+        # makes the contextual decision; it must not by itself re-open a field
+        # that already meets every technical display requirement.
+        return False
+
+    def shown_current(display_value: object) -> str:
+        # A shell of bare, near-empty ``$`` pairs is not existing content to
+        # repair — showing it to the model as "the current display" invites
+        # a patch attempt that preserves fragments of the shell.  Presenting
+        # an empty current value instead asks for a clean regeneration from
+        # the immutable raw source, exactly like a field that was never
+        # populated.  ``needs_display_repair`` already flags this field
+        # regardless (it fails ``validate_display_contract``); only what the
+        # model is shown as "current" changes here.
+        text = str(display_value or "")
+        return "" if _is_garbled_legacy_dollar_soup(text) else text
 
     if qt:
         context_fields["question"] = str(qt)
-        current_displays["question"] = str(question_latex or "")
+        current_displays["question"] = shown_current(question_latex)
         if needs_display_repair("question", qt, question_latex):
-            output_fields["question"] = {"raw": str(qt), "current": str(question_latex or "")}
+            output_fields["question"] = {"raw": str(qt), "current": shown_current(question_latex)}
     if ans:
         context_fields["answer"] = str(ans)
-        current_displays["answer"] = str(correct_answer_latex or "")
+        current_displays["answer"] = shown_current(correct_answer_latex)
         if needs_display_repair("answer", ans, correct_answer_latex):
-            output_fields["answer"] = {"raw": str(ans), "current": str(correct_answer_latex or "")}
+            output_fields["answer"] = {"raw": str(ans), "current": shown_current(correct_answer_latex)}
 
     dmeta = []
     if dmeta_json:
@@ -1835,9 +2615,9 @@ async def process_task(
                     value_latex = str(d.get("value_latex") or d.get("text_latex") or d.get("content_latex") or "").strip()
                     if value:
                         context_fields[f"dmeta[{i}].value"] = value
-                        current_displays[f"dmeta[{i}].value"] = value_latex
+                        current_displays[f"dmeta[{i}].value"] = shown_current(value_latex)
                         if needs_display_repair(f"dmeta[{i}].value", value, value_latex):
-                            output_fields[f"dmeta[{i}].value"] = {"raw": value, "current": value_latex}
+                            output_fields[f"dmeta[{i}].value"] = {"raw": value, "current": shown_current(value_latex)}
 
                     # explanation is a documented legacy mirror of
                     # error_logic, not a second user-facing description.
@@ -1852,9 +2632,9 @@ async def process_task(
                     display = str(d.get(display_key) or "").strip()
                     if description:
                         context_fields[f"dmeta[{i}].description"] = description
-                        current_displays[f"dmeta[{i}].description"] = display
+                        current_displays[f"dmeta[{i}].description"] = shown_current(display)
                         if needs_display_repair(f"dmeta[{i}].description", description, display):
-                            output_fields[f"dmeta[{i}].description"] = {"raw": description, "current": display}
+                            output_fields[f"dmeta[{i}].description"] = {"raw": description, "current": shown_current(display)}
         except Exception as e:
             log.error("Failed to parse dmeta for %s: %s", tid, e)
 
@@ -1870,14 +2650,24 @@ async def process_task(
         label = f"option[{i}]"
         context_fields[label] = value
         display = str(display_options[i] or "").strip() if i < len(display_options) else ""
-        current_displays[label] = display
+        current_displays[label] = shown_current(display)
         if needs_display_repair(label, value, display):
-            output_fields[label] = {"raw": value, "current": display}
+            output_fields[label] = {"raw": value, "current": shown_current(display)}
 
     queued_at = time.monotonic()
     field_results, llm_seconds = await format_task_bundle(
         context_fields, current_displays, output_fields, semaphore, request_pacer,
+        llm_self_review=llm_self_review,
     )
+    for label, result in field_results.items():
+        if not field_is_acceptable(result):
+            log.info(
+                "LaTeX held for review: task=%s field=%s first_pass_ok=%s reason=%s",
+                tid,
+                label,
+                result.get("llm_self_review_first_pass_acceptable"),
+                field_failure_reason(result),
+            )
     total_bundle_seconds = time.monotonic() - queued_at
 
     return {
@@ -1898,6 +2688,7 @@ async def process_task(
         # into an empty JSON array in the raw distractor_meta column.
         "dmeta_original": copy.deepcopy(dmeta_json),
         "canonical_fingerprint": canonical_fingerprint(qt, ans, dmeta, raw_options),
+        "run_context": copy.deepcopy(run_context) if run_context else None,
     }
 
 
@@ -1954,6 +2745,282 @@ def canonical_fingerprint(question_text, correct_answer, distractor_meta, answer
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
+def display_snapshot(
+    question_latex: object,
+    correct_answer_latex: object,
+    distractor_meta: object,
+    answer_options_latex: object,
+    latex_status: object,
+) -> dict[str, object]:
+    """Capture exactly the learner-facing columns a backfill may replace.
+
+    Raw source fields intentionally do not appear here. Their immutable
+    fingerprint is stored alongside the snapshot, which makes a restore fail
+    safely if a human changed the educational source in the meantime.
+    """
+    return {
+        "question_latex": copy.deepcopy(question_latex),
+        "correct_answer_latex": copy.deepcopy(correct_answer_latex),
+        "distractor_meta": copy.deepcopy(distractor_meta),
+        "answer_options_latex": copy.deepcopy(answer_options_latex),
+        "latex_status": str(latex_status) if latex_status is not None else None,
+    }
+
+
+def display_snapshot_fingerprint(snapshot: dict[str, object]) -> str:
+    encoded = json.dumps(snapshot, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def _field_audit_payload(field_results: dict[str, dict]) -> dict[str, dict]:
+    """Persist decision evidence without storing raw prompts or model replies."""
+    keep = (
+        "decision", "confidence", "ambiguity_reason", "katex_ok", "katex_error",
+        "contract_ok", "contract_error", "professional_ok", "professional_error",
+        "semantic_ok", "semantic_error", "requires_explicit_final_review",
+        "response_protocol", "llm_self_review_required", "llm_self_review_ok",
+        "llm_self_review_attempts", "llm_repair_attempts", "final_review", "llm_trace",
+        "projection_source",
+    )
+    return {
+        label: {key: copy.deepcopy(value[key]) for key in keep if key in value}
+        for label, value in field_results.items()
+    }
+
+
+def record_latex_change_audit(
+    conn,
+    result: dict,
+    before_snapshot: dict[str, object],
+    after_snapshot: dict[str, object],
+    review_issues: dict[str, dict[str, str]],
+    *,
+    event_type: str = "write",
+    rollback_of: str | None = None,
+) -> str | None:
+    """Append a revision in the same transaction as the display update.
+
+    Unit-level callers without a run context intentionally remain side-effect
+    free. Production ``--execute`` always supplies one and therefore requires
+    the migration-created audit tables to be present.
+    """
+    run_context = result.get("run_context") or {}
+    run_id = run_context.get("run_id")
+    if not run_id:
+        return None
+    audit_id = str(uuid.uuid4())
+    validation = {
+        "field_results": _field_audit_payload(result.get("field_results") or {}),
+        "final_review_issues": copy.deepcopy(review_issues),
+        "stored_status": result.get("stored_status"),
+        "model": run_context.get("model", LATEX_BACKFILL_MODEL),
+        "prompt_version": run_context.get("prompt_version", LATEX_BACKFILL_PROMPT_VERSION),
+        "policy_version": run_context.get("policy_version", LATEX_BACKFILL_POLICY_VERSION),
+    }
+    conn.execute(text("""
+        INSERT INTO task_latex_change_audit (
+            audit_id, run_id, task_id, event_type, rollback_of,
+            source_fingerprint_sha256, before_snapshot, after_snapshot,
+            before_display_sha256, after_display_sha256, validation
+        ) VALUES (
+            :audit_id, :run_id, :task_id, :event_type, :rollback_of,
+            :source_fingerprint, CAST(:before_snapshot AS jsonb), CAST(:after_snapshot AS jsonb),
+            :before_display_fingerprint, :after_display_fingerprint, CAST(:validation AS jsonb)
+        )
+    """), {
+        "audit_id": audit_id,
+        "run_id": str(run_id),
+        "task_id": str(result["task_id"]),
+        "event_type": event_type,
+        "rollback_of": rollback_of,
+        "source_fingerprint": result["canonical_fingerprint"],
+        "before_snapshot": json.dumps(before_snapshot, ensure_ascii=False, default=str),
+        "after_snapshot": json.dumps(after_snapshot, ensure_ascii=False, default=str),
+        "before_display_fingerprint": display_snapshot_fingerprint(before_snapshot),
+        "after_display_fingerprint": display_snapshot_fingerprint(after_snapshot),
+        "validation": json.dumps(validation, ensure_ascii=False, default=str),
+    })
+    result["audit_id"] = audit_id
+    return audit_id
+
+
+def _string_display_value(value: object) -> str:
+    """Preserve an exact scalar display/source value for an attestation."""
+    return "" if value is None else str(value)
+
+
+def _dmeta_value(item: object) -> str:
+    if not isinstance(item, dict):
+        return ""
+    for key in ("value", "text", "content"):
+        if item.get(key) is not None:
+            return _string_display_value(item[key])
+    return ""
+
+
+def _dmeta_display_value(item: object) -> str:
+    if not isinstance(item, dict):
+        return ""
+    for key in ("value_latex", "text_latex", "content_latex"):
+        if item.get(key) is not None:
+            return _string_display_value(item[key])
+    return ""
+
+
+def _attestation_source_display_pair(
+    result: dict, after_snapshot: dict[str, object], label: str,
+) -> tuple[str, str] | None:
+    """Return the exact raw/display pair for one independently reviewed field.
+
+    This deliberately models fields, not a task-wide status.  A good question
+    must remain eligible even if an unrelated distractor explanation still
+    needs manual review, while an editor changing this exact field invalidates
+    the attestation at read time.
+    """
+    original = result.get("original") or {}
+    if label == "question":
+        return (
+            _string_display_value(original.get("question")),
+            _string_display_value(after_snapshot.get("question_latex")),
+        )
+    if label == "answer":
+        return (
+            _string_display_value(original.get("answer")),
+            _string_display_value(after_snapshot.get("correct_answer_latex")),
+        )
+
+    dmeta_match = re.fullmatch(r"dmeta\[(\d+)\]\.(value|description)", label)
+    if dmeta_match:
+        index, part = int(dmeta_match.group(1)), dmeta_match.group(2)
+        raw_items = _json_list(result.get("dmeta_original"))
+        display_items = _json_list(after_snapshot.get("distractor_meta"))
+        if index >= len(raw_items) or index >= len(display_items):
+            return None
+        raw_item, display_item = raw_items[index], display_items[index]
+        if part == "value":
+            return _dmeta_value(raw_item), _dmeta_display_value(display_item)
+        if not isinstance(raw_item, dict) or not isinstance(display_item, dict):
+            return None
+        source_key, display_key = (
+            ("error_logic", "error_logic_latex")
+            if _string_display_value(raw_item.get("error_logic")).strip()
+            else ("explanation", "explanation_latex")
+        )
+        return (
+            _string_display_value(raw_item.get(source_key)),
+            _string_display_value(display_item.get(display_key)),
+        )
+
+    option_match = re.fullmatch(r"option\[(\d+)\]", label)
+    if option_match:
+        index = int(option_match.group(1))
+        raw_options = _json_list(original.get("answer_options"))
+        display_options = _json_list(after_snapshot.get("answer_options_latex"))
+        if index >= len(raw_options) or index >= len(display_options):
+            return None
+        raw_option = raw_options[index]
+        raw_value = _dmeta_value(raw_option) if isinstance(raw_option, dict) else _string_display_value(raw_option)
+        return raw_value, _string_display_value(display_options[index])
+    return None
+
+
+def _attestation_is_eligible(field: dict) -> bool:
+    """A trusted projection requires a structured independent final review."""
+    final_review = field.get("final_review") or {}
+    return (
+        field_is_acceptable(field)
+        and field.get("response_protocol", "structured") == "structured"
+        and final_review.get("required") is True
+        and final_review.get("completed") is True
+        and final_review.get("accepted") is True
+    )
+
+
+def record_latex_projection_attestations(
+    conn,
+    result: dict,
+    after_snapshot: dict[str, object],
+    *,
+    audit_id: str | None,
+) -> list[str]:
+    """Append field-level evidence for projections safe to render as trusted.
+
+    The API never trusts historical ``latex_status``.  It compares the current
+    raw/display values to the exact pair recorded here, and only then exposes
+    a readiness flag to the frontend.  This write happens in the same
+    transaction as its display revision (or a successful no-op review).
+    """
+    run_context = result.get("run_context") or {}
+    run_id = run_context.get("run_id")
+    if not run_id:
+        return []
+
+    recorded: list[str] = []
+    for label, field in (result.get("field_results") or {}).items():
+        if not _attestation_is_eligible(field):
+            continue
+        pair = _attestation_source_display_pair(result, after_snapshot, label)
+        if pair is None:
+            log.warning("No field pair for LaTeX projection attestation task=%s field=%s", result["task_id"], label)
+            continue
+        source_value, display_value = pair
+        if display_value != _string_display_value(field.get("canonical")):
+            log.warning(
+                "Refusing mismatched LaTeX projection attestation task=%s field=%s",
+                result["task_id"], label,
+            )
+            continue
+
+        # A new independent review supersedes only the attestation for this
+        # field. Other fields in the task can remain safely renderable.
+        conn.execute(text("""
+            UPDATE task_latex_display_attestations
+            SET status = 'revoked', revoked_at = NOW(),
+                revocation_reason = 'superseded_by_new_final_review'
+            WHERE task_id = :task_id
+              AND field_key = :field_key
+              AND status = 'active'
+        """), {"task_id": str(result["task_id"]), "field_key": label})
+
+        attestation_id = str(uuid.uuid4())
+        review_metadata = _field_audit_payload({label: field})[label]
+        conn.execute(text("""
+            INSERT INTO task_latex_display_attestations (
+                attestation_id, task_id, field_key, run_id, audit_id, status,
+                source_value, display_value, source_sha256, display_sha256,
+                review_metadata
+            ) VALUES (
+                :attestation_id, :task_id, :field_key, :run_id, :audit_id, 'active',
+                :source_value, :display_value, :source_sha256, :display_sha256,
+                CAST(:review_metadata AS jsonb)
+            )
+        """), {
+            "attestation_id": attestation_id,
+            "task_id": str(result["task_id"]),
+            "field_key": label,
+            "run_id": str(run_id),
+            "audit_id": audit_id,
+            "source_value": source_value,
+            "display_value": display_value,
+            "source_sha256": hashlib.sha256(source_value.encode("utf-8")).hexdigest(),
+            "display_sha256": hashlib.sha256(display_value.encode("utf-8")).hexdigest(),
+            "review_metadata": json.dumps(review_metadata, ensure_ascii=False, default=str),
+        })
+        recorded.append(label)
+    result["projection_attestations"] = recorded
+    return recorded
+
+
+def revoke_latex_projection_attestations(conn, task_id: str, reason: str) -> None:
+    """Safely withdraw all trusted projections before an audited rollback."""
+    conn.execute(text("""
+        UPDATE task_latex_display_attestations
+        SET status = 'revoked', revoked_at = NOW(), revocation_reason = :reason
+        WHERE task_id = :task_id
+          AND status = 'active'
+    """), {"task_id": str(task_id), "reason": str(reason)[:240]})
+
+
 def _json_list(value: object) -> list:
     """Read a JSONB/list value without treating malformed data as display-safe."""
     if isinstance(value, list):
@@ -1980,7 +3047,9 @@ def final_display_issues(
 
     This is deliberately shared by the backfill writer and Smart Verify.  A
     task is never promoted merely because a field is non-empty: every display
-    value must parse, preserve its RAW source and satisfy the house style.
+    value must parse, meet its rendering contract and satisfy the house style.
+    Meaning is decided by the mandatory model self-review because historical
+    source strings contain context-dependent OCR and delimiter damage.
     """
     issues: dict[str, dict[str, str]] = {}
     required_labels: set[str] = set()
@@ -1997,12 +3066,15 @@ def final_display_issues(
         katex_ok, katex_error = validate_with_katex(display_text)
         contract_ok, contract_error = validate_display_contract(label, raw_text, display_text)
         professional_ok, professional_error = validate_professional_latex(display_text)
-        semantic_ok, semantic_error = semantic_preservation_check(
+        # Retain this comparison for observability and prompt diagnostics, but
+        # do not let a token-level heuristic overrule the model's contextual
+        # review of legacy OCR/formatting defects.
+        _semantic_ok, _semantic_error = semantic_preservation_check(
             raw_text, display_text, allow_legacy_markup_repair=True,
         )
-        if not (katex_ok and contract_ok and professional_ok and semantic_ok):
+        if not (katex_ok and contract_ok and professional_ok):
             issues[label] = {
-                "reason": contract_error or professional_error or semantic_error or katex_error or "invalid_display_value",
+                "reason": contract_error or professional_error or katex_error or "invalid_display_value",
                 "confidence": "low",
             }
 
@@ -2112,26 +3184,29 @@ def recertify_stored_latex_status(conn, task_id: object) -> tuple[str, dict[str,
 class ConcurrentTaskChangeError(RuntimeError):
     """The row changed after it was read; stale display output must not be saved."""
 
+def resolve_projected_outcome(result: dict) -> tuple[str, dict[str, dict[str, str]], int, dict[str, dict], dict[str, object]]:
+    """Determine the final stored display values and resulting latex_status.
 
-def save_result(conn, result: dict):
-    tid = result["task_id"]
-    fr = result["field_results"]
+    Shared between save_result and dry-run accounting so that preview numbers
+    precisely mirror actual database outcomes.
+    """
+    fr = result.get("field_results") or {}
     original_dmeta_snapshot = copy.deepcopy(result.get("dmeta_original"))
     dmeta = [] if original_dmeta_snapshot is None else copy.deepcopy(original_dmeta_snapshot)
-
     failed_fields = {}
 
     def resolve(label, original_value):
         r = fr.get(label)
         if r is None:
-            return original_value, True  # поле не обрабатывалось — не трогаем, не считаем failed
+            norm_orig = _normalize_candidate_markup(label, str(original_value or "")) if original_value else original_value
+            return (norm_orig if norm_orig else original_value), True
         if field_is_acceptable(r):
             return r["canonical"], True
         failed_fields[label] = {
             "reason": field_failure_reason(r),
-            "confidence": r["confidence"],
+            "confidence": r.get("confidence", "low"),
         }
-        return original_value, False  # оставляем как было, НЕ портим
+        return original_value, False
 
     new_question, _ = resolve("question", result["original"]["question_latex"])
     new_answer, _ = resolve("answer", result["original"]["correct_answer_latex"])
@@ -2139,21 +3214,20 @@ def save_result(conn, result: dict):
     for i, d in enumerate(dmeta):
         if not isinstance(d, dict):
             continue
-        new_val, ok = resolve(f"dmeta[{i}].value", d.get("value") or d.get("text") or d.get("content"))
-        if ok and f"dmeta[{i}].value" in fr:
-            # `value` is the canonical answer used by the diagnostic evaluator.
-            # Never replace it with display LaTeX: a selected MCQ option must be
-            # compared with the same stable value the task was authored with.
+        existing_val_latex = d.get("value_latex") or d.get("text_latex") or d.get("content_latex")
+        val_to_resolve = existing_val_latex if existing_val_latex else (d.get("value") or d.get("text") or d.get("content"))
+        new_val, ok = resolve(f"dmeta[{i}].value", val_to_resolve)
+        if ok and new_val:
             d["value_latex"] = new_val
         source_key, display_key = (
             ("error_logic", "error_logic_latex")
             if str(d.get("error_logic") or "").strip()
             else ("explanation", "explanation_latex")
         )
-        new_description, ok = resolve("dmeta[%d].description" % i, d.get(display_key))
-        if ok and f"dmeta[{i}].description" in fr:
-            # Raw explanation/error_logic remain untouched. One explicitly
-            # selected display projection prevents duplicate UI content.
+        existing_desc = d.get(display_key) or d.get("explanation_latex") or d.get("error_logic_latex")
+        val_to_resolve = existing_desc if existing_desc else (d.get(source_key) or d.get("explanation") or d.get("error_logic"))
+        new_description, ok = resolve(f"dmeta[{i}].description", val_to_resolve)
+        if ok and new_description:
             d[display_key] = new_description
 
     raw_options = result["original"].get("answer_options")
@@ -2166,24 +3240,38 @@ def save_result(conn, result: dict):
             str(original_option_latex[i] or "").strip()
             if i < len(original_option_latex) else ""
         )
-        new_display, ok = resolve(f"option[{i}]", original_display)
-        new_options_latex.append(new_display if ok else original_display)
-
-    total_attempted = len(fr)
-    total_failed = len(failed_fields)
+        opt_to_resolve = original_display if original_display else str(_option or "").strip()
+        new_display, ok = resolve(f"option[{i}]", opt_to_resolve)
+        new_options_latex.append(new_display if ok else (original_display or str(_option or "").strip()))
 
     final_issues, final_required_count = final_display_issues(
         result["original"]["question"], new_question,
         result["original"]["answer"], new_answer,
         dmeta, raw_options, new_options_latex,
     )
-    # Status certifies the final stored display contract, not whether an LLM
-    # suggestion was usable. An unusable suggestion is discarded; if the
-    # pre-existing display still passes every independent gate, it remains
-    # genuinely verified. If an invalid/missing field remains, only then does
-    # the task becomes partial. It is failed only when every required display
-    # field is unusable, i.e. the task has no valid rendered projection at all.
     status = latex_status_from_issues(final_issues, final_required_count)
+    resolved = {
+        "new_question": new_question,
+        "new_answer": new_answer,
+        "dmeta": dmeta,
+        "new_options_latex": new_options_latex,
+        "raw_options": raw_options,
+    }
+    return status, final_issues, final_required_count, failed_fields, resolved
+
+
+def save_result(conn, result: dict):
+    tid = result["task_id"]
+    fr = result.get("field_results") or {}
+    status, final_issues, final_required_count, failed_fields, resolved = resolve_projected_outcome(result)
+    new_question = resolved["new_question"]
+    new_answer = resolved["new_answer"]
+    dmeta = resolved["dmeta"]
+    new_options_latex = resolved["new_options_latex"]
+    raw_options = resolved["raw_options"]
+
+    total_attempted = len(fr)
+    total_failed = len(failed_fields)
 
     if canonical_fingerprint(
         result["original"]["question"], result["original"]["answer"], dmeta, raw_options,
@@ -2220,7 +3308,7 @@ def save_result(conn, result: dict):
         )
 
     result["stored_status"] = status
-    dmeta_for_storage = None if original_dmeta_snapshot is None else dmeta
+    dmeta_for_storage = None if original_dmeta is None else dmeta
     displays_unchanged = (
         current[2] == dmeta_for_storage
         and current[4] == new_question
@@ -2240,10 +3328,39 @@ def save_result(conn, result: dict):
 
     if displays_unchanged and not review_issues:
         # A successful KEEP audit must not physically rewrite already-correct
-        # display data or move latex_normalized_at for no reason.
+        # display data or move latex_normalized_at for no reason.  It can still
+        # produce a new field-level trust attestation: the model independently
+        # reviewed this exact unchanged projection in the current run.
+        unchanged_snapshot = display_snapshot(
+            new_question, new_answer, dmeta_for_storage, new_options_latex, status,
+        )
+        attested_labels = record_latex_projection_attestations(
+            conn, result, unchanged_snapshot, audit_id=None,
+        )
+        if attested_labels:
+            conn.execute(text("""
+                UPDATE tasks_master
+                SET tags = jsonb_set(
+                    jsonb_set(
+                        COALESCE(tags, '{}'::jsonb),
+                        '{latex_attested_fields}',
+                        CAST(:attested_json AS jsonb)
+                    ),
+                    '{content_quality,latex_attested_fields}',
+                    CAST(:attested_json AS jsonb)
+                )
+                WHERE id = :id
+            """), {"id": tid, "attested_json": json.dumps(attested_labels)})
         sync_latex_review_queue(conn, tid, status, review_issues)
         result["database_write"] = "skipped_unchanged"
         return
+
+    before_snapshot = display_snapshot(
+        current[4], current[5], current[2], current[6], current[7],
+    )
+    after_snapshot = display_snapshot(
+        new_question, new_answer, dmeta_for_storage, new_options_latex, status,
+    )
 
     # ВАЖНО: question_text / correct_answer и raw distractor fields НЕ трогаем.
     conn.execute(text("""
@@ -2267,7 +3384,179 @@ def save_result(conn, result: dict):
         "id": tid,
     })
     result["database_write"] = "updated"
+    audit_id = record_latex_change_audit(
+        conn, result, before_snapshot, after_snapshot, review_issues,
+    )
+    attested_labels = record_latex_projection_attestations(
+        conn, result, after_snapshot, audit_id=audit_id,
+    )
+    if attested_labels:
+        conn.execute(text("""
+            UPDATE tasks_master
+            SET tags = jsonb_set(
+                jsonb_set(
+                    COALESCE(tags, '{}'::jsonb),
+                    '{latex_attested_fields}',
+                    CAST(:attested_json AS jsonb)
+                ),
+                '{content_quality,latex_attested_fields}',
+                CAST(:attested_json AS jsonb)
+            )
+            WHERE id = :id
+        """), {"id": tid, "attested_json": json.dumps(attested_labels)})
     sync_latex_review_queue(conn, tid, status, review_issues)
+
+
+def start_latex_backfill_run(engine, run_context: dict) -> None:
+    """Create the durable manifest before the first display write."""
+    with engine.begin() as conn:
+        conn.execute(text("""
+            INSERT INTO latex_backfill_runs (
+                run_id, label, actor, status, model, prompt_version,
+                policy_version, config, queue_sha256
+            ) VALUES (
+                :run_id, :label, :actor, 'running', :model, :prompt_version,
+                :policy_version, CAST(:config AS jsonb), :queue_sha256
+            )
+        """), {
+            "run_id": run_context["run_id"],
+            "label": run_context["label"],
+            "actor": run_context["actor"],
+            "model": run_context["model"],
+            "prompt_version": run_context["prompt_version"],
+            "policy_version": run_context["policy_version"],
+            "config": json.dumps(run_context["config"], ensure_ascii=False, sort_keys=True),
+            "queue_sha256": run_context.get("queue_sha256"),
+        })
+
+
+def finish_latex_backfill_run(engine, run_context: dict, status: str, summary: dict) -> None:
+    """Close a manifest regardless of whether records needed manual review."""
+    with engine.begin() as conn:
+        conn.execute(text("""
+            UPDATE latex_backfill_runs
+            SET status = :status,
+                summary = CAST(:summary AS jsonb),
+                finished_at = NOW()
+            WHERE run_id = :run_id
+              AND status = 'running'
+        """), {
+            "run_id": run_context["run_id"],
+            "status": status,
+            "summary": json.dumps(summary, ensure_ascii=False, sort_keys=True),
+        })
+
+
+def _snapshot_as_jsonb(value: object) -> str | None:
+    return json.dumps(value, ensure_ascii=False) if value is not None else None
+
+
+def rollback_latex_backfill_run(
+    engine,
+    source_run_id: str,
+    rollback_context: dict | None,
+    *,
+    dry_run: bool,
+) -> dict[str, int]:
+    """Restore one run's display snapshots without overwriting newer work.
+
+    Each task is locked and checked against both the raw-source fingerprint and
+    the exact display fingerprint produced by the audited run. A later editor
+    or backfill change therefore becomes a visible conflict rather than an
+    accidental overwrite.
+    """
+    with engine.connect() as conn:
+        events = conn.execute(text("""
+            SELECT audit_id, task_id, source_fingerprint_sha256,
+                   before_snapshot, after_snapshot, after_display_sha256
+            FROM task_latex_change_audit
+            WHERE run_id = :run_id
+              AND event_type = 'write'
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM task_latex_change_audit rollback_event
+                  WHERE rollback_event.rollback_of = task_latex_change_audit.audit_id
+              )
+            ORDER BY created_at DESC
+        """), {"run_id": source_run_id}).fetchall()
+
+    summary = {"eligible": 0, "restored": 0, "conflicts": 0, "already_rolled_back": 0}
+    for audit_id, task_id, source_sha, before, _after, after_sha in events:
+        with engine.begin() as conn:
+            row = conn.execute(text("""
+                SELECT question_text, correct_answer, distractor_meta, answer_options,
+                       question_latex, correct_answer_latex, answer_options_latex,
+                       latex_status
+                FROM tasks_master
+                WHERE id = :id
+                FOR UPDATE
+            """), {"id": task_id}).fetchone()
+            if row is None:
+                summary["conflicts"] += 1
+                continue
+            current_source_sha = canonical_fingerprint(row[0], row[1], row[2], row[3])
+            current_display = display_snapshot(row[4], row[5], row[2], row[6], row[7])
+            if current_source_sha != source_sha or display_snapshot_fingerprint(current_display) != after_sha:
+                summary["conflicts"] += 1
+                continue
+            summary["eligible"] += 1
+            if dry_run:
+                continue
+            if not isinstance(before, dict):
+                raise RuntimeError(f"Audit {audit_id} has no valid before snapshot")
+            restored_question = before.get("question_latex")
+            restored_answer = before.get("correct_answer_latex")
+            restored_dmeta = before.get("distractor_meta")
+            restored_options = before.get("answer_options_latex")
+            issues, required_count = final_display_issues(
+                row[0], restored_question, row[1], restored_answer,
+                restored_dmeta, row[3], restored_options,
+            )
+            restored_status = latex_status_from_issues(issues, required_count)
+            restored_snapshot = display_snapshot(
+                restored_question, restored_answer, restored_dmeta,
+                restored_options, restored_status,
+            )
+            # A rollback deliberately changes the learner-facing projection.
+            # Even a prior independently reviewed field can no longer be
+            # trusted until the restored value passes a fresh final review.
+            revoke_latex_projection_attestations(
+                conn, str(task_id), f"rolled_back_audit:{audit_id}",
+            )
+            conn.execute(text("""
+                UPDATE tasks_master
+                SET question_latex = :question_latex,
+                    correct_answer_latex = :correct_answer_latex,
+                    distractor_meta = CAST(:distractor_meta AS jsonb),
+                    answer_options_latex = CAST(:answer_options_latex AS jsonb),
+                    latex_status = :latex_status,
+                    tags = (COALESCE(tags, '{}'::jsonb) - 'latex_attested_fields')
+                           #- '{content_quality,latex_attested_fields}',
+                    latex_normalized_at = NOW(),
+                    updated_at = NOW()
+                WHERE id = :id
+            """), {
+                "id": task_id,
+                "question_latex": restored_question,
+                "correct_answer_latex": restored_answer,
+                "distractor_meta": _snapshot_as_jsonb(restored_dmeta),
+                "answer_options_latex": _snapshot_as_jsonb(restored_options),
+                "latex_status": restored_status,
+            })
+            rollback_result = {
+                "task_id": str(task_id),
+                "canonical_fingerprint": current_source_sha,
+                "field_results": {},
+                "stored_status": restored_status,
+                "run_context": rollback_context,
+            }
+            record_latex_change_audit(
+                conn, rollback_result, current_display, restored_snapshot, issues,
+                event_type="rollback", rollback_of=str(audit_id),
+            )
+            sync_latex_review_queue(conn, task_id, restored_status, issues)
+            summary["restored"] += 1
+    return summary
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -2285,6 +3574,55 @@ def build_task_filter(task_ids: list[str], *, exact_set_mode: bool = False) -> s
         return "AND tm.id = ANY(:task_ids)"
     return "AND FALSE" if exact_set_mode else ""
 
+
+def load_audit_display_selection(path: str) -> tuple[list[str], dict[str, str], str]:
+    """Load an immutable display-repair selection exported by the audit.
+
+    The writer must never infer a production queue from a broad maintenance
+    switch: the read-only audit is the source of truth.  Status-only records
+    are deliberately excluded because they do not need an LLM call. The raw
+    fingerprint at audit time is retained and checked before asking the model
+    to touch a task; an edited source must receive a fresh audit instead.
+    """
+    try:
+        with open(path, "rb") as handle:
+            payload = handle.read()
+        audit = json.loads(payload.decode("utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"Cannot read audit queue file: {exc}") from exc
+    if not isinstance(audit, dict) or audit.get("mode") != "read_only":
+        raise ValueError("Audit queue must be a read-only audit JSON document")
+    records = audit.get("records")
+    if not isinstance(records, list):
+        raise ValueError("Audit queue does not contain a records list")
+    ids: list[str] = []
+    seen: set[str] = set()
+    fingerprints: dict[str, str] = {}
+    for record in records:
+        if not isinstance(record, dict) or record.get("kind") != "display_repair":
+            continue
+        task_id = str(record.get("task_id") or "").strip()
+        if not task_id:
+            raise ValueError("Audit queue contains a display-repair record without task_id")
+        audit_fingerprint = str(record.get("canonical_fingerprint_sha256") or "").strip()
+        if audit_fingerprint and not re.fullmatch(r"[0-9a-f]{64}", audit_fingerprint):
+            raise ValueError(f"Audit queue contains an invalid fingerprint for task {task_id}")
+        if task_id in fingerprints and audit_fingerprint and fingerprints[task_id] != audit_fingerprint:
+            raise ValueError(f"Audit queue contains conflicting fingerprints for task {task_id}")
+        if audit_fingerprint:
+            fingerprints[task_id] = audit_fingerprint
+        if task_id not in seen:
+            seen.add(task_id)
+            ids.append(task_id)
+    if not ids:
+        raise ValueError("Audit queue contains no display-repair tasks")
+    return ids, fingerprints, hashlib.sha256(payload).hexdigest()
+
+
+def load_audit_display_ids(path: str) -> list[str]:
+    """Compatibility helper for callers that need only the ordered IDs."""
+    return load_audit_display_selection(path)[0]
+
 async def main():
     run_started_at = time.monotonic()
     ap = argparse.ArgumentParser()
@@ -2300,6 +3638,13 @@ async def main():
         help="Сколько задач составляет один контролируемый терминальный батч (по умолчанию: 25)",
     )
     ap.add_argument("--execute", action="store_true")
+    ap.add_argument(
+        "--skip-llm-self-review", action="store_true",
+        help=(
+            "Diagnostic dry-run only: omit the mandatory second DeepSeek review. "
+            "This option is forbidden together with --execute."
+        ),
+    )
     ap.add_argument(
         "--plan-only", action="store_true",
         help="Только построить и вывести точный набор задач; не вызывать LLM и не писать в БД",
@@ -2341,6 +3686,34 @@ async def main():
     ap.add_argument("--show-full", action="store_true", help="Print complete LLM display text in dry-run output")
     ap.add_argument("--task-id", action="append", default=[], help="Restrict to an exact task ID (repeatable)")
     ap.add_argument(
+        "--audit-queue-file",
+        help=(
+            "Read-only JSON produced by audit_display_quality_queue.py. "
+            "Selects exactly its display_repair records and excludes status-only records."
+        ),
+    )
+    ap.add_argument(
+        "--include-inactive",
+        action="store_true",
+        help="Include inactive tasks (is_active=false) matching selection/audit queue",
+    )
+    ap.add_argument(
+        "--run-id",
+        help="Optional UUID for this durable manifest; a UUID is generated when omitted.",
+    )
+    ap.add_argument(
+        "--run-label",
+        default="latex-display-backfill",
+        help="Human-readable label stored with the audit manifest.",
+    )
+    ap.add_argument(
+        "--rollback-run",
+        help=(
+            "Restore the display snapshots written by one earlier run ID. "
+            "Use alone with --execute after a dry-run; newer edits are skipped safely."
+        ),
+    )
+    ap.add_argument(
         "--after-id",
         help="Exclusive lexicographic cursor for a reproducible reviewed batch; print the last processed ID as the next cursor",
     )
@@ -2352,12 +3725,75 @@ async def main():
     args = ap.parse_args()
     if not 1 <= args.requests_per_minute <= 250:
         ap.error("--requests-per-minute must be between 1 and 250")
+    if args.execute and args.skip_llm_self_review:
+        ap.error("--execute requires the mandatory DeepSeek self-review")
+    if args.rollback_run:
+        conflicting = (
+            args.audit_queue_file or args.task_id or args.class_level or args.after_id
+            or args.only_partial or args.force_reformat or args.repair_invalid
+            or args.revalidate_only or args.repair_stale_verified
+            or args.revalidate_stale_verified or args.include_verified
+        )
+        if conflicting:
+            ap.error("--rollback-run cannot be combined with selection or formatting options")
+    audit_source_fingerprints: dict[str, str] = {}
+    audit_queue_sha256: str | None = None
+    if args.audit_queue_file:
+        if args.task_id or args.class_level or args.after_id:
+            ap.error("--audit-queue-file owns the exact target set; do not combine it with task/class/cursor filters")
+        try:
+            args.task_id, audit_source_fingerprints, audit_queue_sha256 = load_audit_display_selection(
+                args.audit_queue_file,
+            )
+        except ValueError as exc:
+            ap.error(str(exc))
+        args.include_verified = True
+        args.repair_invalid = True
+        log.info("Загружена точная очередь display_repair из аудита: задач=%d", len(args.task_id))
 
     db_url = os.environ.get("DATABASE_URL") or "postgresql://algo:algo_password@127.0.0.1:5434/algo_content"
     engine = create_engine(db_url)
+    if args.rollback_run:
+        rollback_context = None
+        if args.execute:
+            run_id = args.run_id or str(uuid.uuid4())
+            try:
+                uuid.UUID(run_id)
+            except ValueError:
+                ap.error("--run-id must be a UUID")
+            rollback_context = {
+                "run_id": run_id,
+                "label": args.run_label,
+                "actor": "latex_backfill_cli",
+                "model": LATEX_BACKFILL_MODEL,
+                "prompt_version": LATEX_BACKFILL_PROMPT_VERSION,
+                "policy_version": LATEX_BACKFILL_POLICY_VERSION,
+                "queue_sha256": None,
+                "config": {"mode": "rollback", "source_run_id": args.rollback_run},
+            }
+            start_latex_backfill_run(engine, rollback_context)
+        summary = rollback_latex_backfill_run(
+            engine, args.rollback_run, rollback_context, dry_run=not args.execute,
+        )
+        if rollback_context:
+            finish_latex_backfill_run(
+                engine, rollback_context,
+                "completed_with_review" if summary["conflicts"] else "completed",
+                summary,
+            )
+            log.info("Rollback manifest run_id=%s", rollback_context["run_id"])
+        log.info(
+            "Rollback %s: eligible=%d, restored=%d, conflicts=%d",
+            "completed" if args.execute else "dry-run",
+            summary["eligible"], summary["restored"], summary["conflicts"],
+        )
+        return
     stale_verified_mode = (
         args.repair_stale_verified or args.revalidate_stale_verified
     )
+    active_filter = "" if (args.include_inactive or args.audit_queue_file or args.task_id) else "AND is_active = TRUE"
+    tm_active_filter = "" if (args.include_inactive or args.audit_queue_file or args.task_id) else "AND tm.is_active = true"
+
     if stale_verified_mode:
         if args.repair_stale_verified and args.revalidate_stale_verified:
             ap.error("Choose only one stale-verified maintenance mode")
@@ -2368,14 +3804,14 @@ async def main():
         if args.task_id or args.class_level or args.after_id:
             ap.error("stale-verified maintenance owns its exact target set; do not combine it with task/class/cursor filters")
         with engine.connect() as conn:
-            verified_rows = conn.execute(text("""
+            verified_rows = conn.execute(text(f"""
                 SELECT id, question_text, question_latex,
                        correct_answer, correct_answer_latex, distractor_meta,
                        answer_options, answer_options_latex
                 FROM tasks_master
-                WHERE is_active = TRUE
-                  AND verification_status = 'verified'
+                WHERE verification_status = 'verified'
                   AND latex_status = 'verified'
+                  {active_filter}
                 ORDER BY id
             """)).fetchall()
         args.task_id = [
@@ -2487,8 +3923,8 @@ async def main():
                    tm.correct_answer, tm.correct_answer_latex, tm.distractor_meta,
                    tm.answer_options, tm.answer_options_latex
             FROM tasks_master tm
-            WHERE tm.is_active = true
-              AND tm.verification_status = 'verified'
+            WHERE tm.verification_status = 'verified'
+              {tm_active_filter}
               {status_filter}
               AND ({selection})
               {grade_filter}
@@ -2511,8 +3947,8 @@ async def main():
                    tm.answer_options, tm.answer_options_latex
             FROM tasks_master tm
             WHERE tm.id = :retry_id
-              AND tm.is_active = true
               AND tm.verification_status = 'verified'
+              {tm_active_filter}
               {status_filter}
               AND ({selection})
               {grade_filter}
@@ -2527,8 +3963,8 @@ async def main():
     count_sql = f"""
         SELECT count(*)
         FROM tasks_master tm
-        WHERE tm.is_active = true
-          AND tm.verification_status = 'verified'
+        WHERE tm.verification_status = 'verified'
+          {tm_active_filter}
           {status_filter}
           AND ({selection})
           {grade_filter}
@@ -2550,6 +3986,37 @@ async def main():
     if not args.execute:
         log.info("DRY RUN — в базу ничего не пишется.")
 
+    run_context = None
+    if args.execute:
+        run_id = args.run_id or str(uuid.uuid4())
+        try:
+            uuid.UUID(run_id)
+        except ValueError:
+            ap.error("--run-id must be a UUID")
+        run_context = {
+            "run_id": run_id,
+            "label": args.run_label,
+            "actor": "latex_backfill_cli",
+            "model": LATEX_BACKFILL_MODEL,
+            "prompt_version": LATEX_BACKFILL_PROMPT_VERSION,
+            "policy_version": LATEX_BACKFILL_POLICY_VERSION,
+            "queue_sha256": audit_queue_sha256,
+            "config": {
+                "mode": "backfill",
+                "selection": "audit_queue" if args.audit_queue_file else "cli_filter",
+                "target_count": total_target,
+                "batch_size": args.batch_size,
+                "concurrency": args.concurrency,
+                "requests_per_minute": args.requests_per_minute,
+                "repair_invalid": bool(args.repair_invalid),
+                "force_reformat": bool(args.force_reformat),
+                "only_partial": bool(args.only_partial),
+                "include_verified": bool(args.include_verified),
+            },
+        }
+        start_latex_backfill_run(engine, run_context)
+        log.info("Создан audit manifest run_id=%s", run_context["run_id"])
+
     field_semaphore = asyncio.Semaphore(args.concurrency)
     request_pacer = AsyncRequestPacer(args.requests_per_minute)
     log.info(
@@ -2558,12 +4025,28 @@ async def main():
     )
 
     async def process_row(row):
+        expected_source_fingerprint = audit_source_fingerprints.get(str(row[0]))
+        if expected_source_fingerprint:
+            current_source_fingerprint = canonical_fingerprint(row[1], row[3], row[5], row[6])
+            if current_source_fingerprint != expected_source_fingerprint:
+                log.warning(
+                    "Audit source changed before processing task=%s; skipped until a fresh audit", row[0],
+                )
+                return {
+                    "task_id": row[0],
+                    "field_results": {},
+                    "llm_seconds": 0.0,
+                    "preflight_conflict": True,
+                    "stored_status": "conflict",
+                }
         return await process_task(
             row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], field_semaphore,
             force_reformat=args.force_reformat,
             repair_invalid=args.repair_invalid,
             revalidate_only=args.revalidate_only,
             request_pacer=request_pacer,
+            llm_self_review=not args.skip_llm_self_review,
+            run_context=run_context,
         )
 
     # This is a controlled persistence/checkpoint group. API concurrency is
@@ -2616,9 +4099,17 @@ async def main():
                     )
 
         for res in batch_results:
+            if res.get("preflight_conflict"):
+                status_counts["conflict"] += 1
+                processed += 1
+                continue
+            proj_st, issues, req_cnt, failed_flds, _ = resolve_projected_outcome(res)
+            res["projected_status"] = proj_st
             if not args.execute and printed < args.show_samples:
                 printed += 1
-                print(f"\n{'='*70}\nTASK {res['task_id']}")
+                print(f"\n{'='*70}\nTASK {res['task_id']} [ИТОГ: {proj_st.upper()}]")
+                if not res["field_results"]:
+                    print("  ℹ️ Все display-поля уже соответствуют KaTeX и контракту отображения (готово к верификации).")
                 for label, r in res["field_results"].items():
                     status = "✅" if field_is_acceptable(r) else "⚠️"
                     print(
@@ -2629,10 +4120,16 @@ async def main():
                     print(f"     AFTER: {rendered}")
                     if not field_is_acceptable(r):
                         print(f"     причина: {field_failure_reason(r)}")
+                if issues:
+                    print(f"  Остающиеся замечания: {list(issues.keys())}")
 
         if args.execute:
             for index, res in enumerate(batch_results):
                 final_result = res
+                if final_result.get("preflight_conflict"):
+                    status_counts["conflict"] += 1
+                    batch_results[index] = final_result
+                    continue
                 try:
                     # One task per transaction: a conflict cannot roll back the
                     # other 24 successfully validated tasks in this batch.
@@ -2664,14 +4161,8 @@ async def main():
                 status_counts[stored if stored in status_counts else "conflict"] += 1
         else:
             for res in batch_results:
-                acceptable = sum(field_is_acceptable(value) for value in res["field_results"].values())
-                attempted = len(res["field_results"])
-                if attempted and acceptable == attempted:
-                    status_counts["verified"] += 1
-                elif acceptable:
-                    status_counts["partial"] += 1
-                else:
-                    status_counts["failed"] += 1
+                proj_st = str(res.get("projected_status") or "failed")
+                status_counts[proj_st if proj_st in status_counts else "failed"] += 1
 
         processed += len(batch_rows)
         cursor = str(batch_rows[-1][0])
@@ -2699,6 +4190,20 @@ async def main():
     if not args.execute:
         log.info("Dry-run завершён. Проверьте примеры выше, затем запустите с --execute.")
     else:
+        run_summary = {
+            "processed": processed,
+            "verified": verified,
+            "partial": partial,
+            "failed": failed,
+            "conflicts": status_counts["conflict"],
+            "elapsed_seconds": round(time.monotonic() - run_started_at, 3),
+        }
+        final_run_status = (
+            "completed_with_review"
+            if partial or failed or status_counts["conflict"] else "completed"
+        )
+        finish_latex_backfill_run(engine, run_context, final_run_status, run_summary)
+        log.info("Audit manifest closed run_id=%s status=%s", run_context["run_id"], final_run_status)
         log.info("ПРОЦЕСС ЗАВЕРШЁН: все выбранные батчи обработаны и сохранены")
 
 

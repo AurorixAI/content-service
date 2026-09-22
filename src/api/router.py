@@ -11,6 +11,7 @@ Endpoints:
 """
 from __future__ import annotations
 
+import os
 import uuid
 from pathlib import Path
 
@@ -36,6 +37,19 @@ from src.schemas.job_schemas import (
 router = APIRouter(prefix="/api/v1", tags=["Jobs"])
 
 _state = JobStateManager()
+
+
+@router.get("/version", tags=["System"], summary="Deployed release metadata")
+def release_version() -> dict[str, str]:
+    """Return non-secret metadata for the exact deployed content release."""
+    settings = get_settings()
+    return {
+        "service": "content-service",
+        "app_version": settings.app_version,
+        "release_sha": os.getenv("RELEASE_SHA", "unknown"),
+        "release_ref": os.getenv("RELEASE_REF", "unknown"),
+        "released_at": os.getenv("RELEASED_AT", "unknown"),
+    }
 
 
 # ── Textbook Registration ─────────────────────────────────────────────────────
