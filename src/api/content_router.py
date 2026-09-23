@@ -4,23 +4,63 @@ Content Service — Read API
 Exposes content-DB data (skills, tasks, textbooks) to other microservices
 via HTTP so they never need a direct Postgres connection to content-db.
 
-All routes are read-only (SELECT only).  No auth required — network-level
-isolation (Docker internal network) is the access control.
+All routes are read-only (SELECT only), but several return the full answer
+key (correct_answer, correct_answer_latex, distractor_meta) — e.g. every
+non-textbook-filtered /tasks* query.  Docker-network placement is not access
+control on its own (a public nginx route to this prefix existed by mistake
+before this router had authentication of its own), so every route here
+requires the same shared-secret internal-service token that auth-service and
+exam-service already enforce on their own internal routes: only
+diagnostic-service and exam-service call this API, and both are
+backend-to-backend callers that can trivially attach the header — no browser
+client ever reaches this prefix directly.
 
 Prefix: /api/v1/content
 """
 from __future__ import annotations
 
+import secrets
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy import text
 from sqlalchemy.engine import Connection
 
+from src.core.config import get_settings
 from src.core.database import get_db
 
-router = APIRouter(prefix="/api/v1/content", tags=["Content Read API"])
+
+def require_internal_service_token(
+    x_internal_service_token: Optional[str] = Header(None, alias="X-Internal-Service-Token"),
+) -> None:
+    """Authenticate only first-party service-to-service calls.
+
+    This API returns the full answer key for every task; it must never be
+    reachable merely by virtue of Docker-network placement.  A missing
+    server-side secret fails closed so a production misconfiguration cannot
+    silently expose the answer key.
+    """
+    expected = get_settings().internal_service_token
+    if not expected:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Внутренняя связка сервисов не настроена",
+        )
+    if not x_internal_service_token or not secrets.compare_digest(
+        x_internal_service_token, expected
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Недействительный внутренний токен сервиса",
+        )
+
+
+router = APIRouter(
+    prefix="/api/v1/content",
+    tags=["Content Read API"],
+    dependencies=[Depends(require_internal_service_token)],
+)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers

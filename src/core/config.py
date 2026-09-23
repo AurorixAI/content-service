@@ -89,6 +89,11 @@ class Settings(BaseSettings):
     # ARQ worker concurrency
     worker_concurrency: int = 5
 
+    # Internal service-to-service auth (diagnostic-service, exam-service).
+    # Same shared secret already used by auth-service/exam-service for their
+    # own inbound internal routes — see X-Internal-Service-Token elsewhere.
+    internal_service_token: str = ""
+
     @property
     def is_development(self) -> bool:
         return self.app_env == "development"

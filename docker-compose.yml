@@ -23,6 +23,7 @@ services:
       AZURE_DEEPSEEK_ENDPOINT: ${AZURE_DEEPSEEK_ENDPOINT}
       AZURE_MISTRAL_API_KEY: ${AZURE_MISTRAL_API_KEY}
       AZURE_MISTRAL_ENDPOINT: ${AZURE_MISTRAL_ENDPOINT}
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:-local-internal-service-token-change-in-production}
     volumes:
       # Mount textbook files from host so the pipeline can read them
       - .:/app

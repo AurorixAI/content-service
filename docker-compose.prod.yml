@@ -26,6 +26,7 @@ services:
       MATHPIX_APP_KEY: ${MATHPIX_APP_KEY}
       APP_ENV: production
       GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/gcp-credentials.json
+      INTERNAL_SERVICE_TOKEN: ${INTERNAL_SERVICE_TOKEN:?INTERNAL_SERVICE_TOKEN is required}
     volumes:
       - ${TEXTBOOKS_DIR:/textbooks}:/textbooks:ro
       - ${GOOGLE_CREDENTIALS_PATH}:/run/secrets/gcp-credentials.json:ro
