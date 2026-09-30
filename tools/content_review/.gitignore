@@ -1,0 +1,12 @@
+# generated per-run outputs
+restore_J_*.json
+kx*.json
+*_dry.json
+*_applied.json
+*.txt
+!rq_defects.txt
+# local caches / scratch copies (specs/ is the source of truth for fix specs)
+__pycache__/
+*.pyc
+*.bak
+/fix_ctrl*.py

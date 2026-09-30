@@ -1,0 +1,13 @@
+from sympy import *
+x, y = symbols('x y', real=True)
+ok = lambda s, c: print("OK " if c else "BAD", s)
+ok("521.4", solveset((2 - x)*(x + 3*x**2) >= 0, x, Reals) == Union(Interval(-oo, -Rational(1, 3)), Interval(0, 2)))
+ok("197.4", set(solve([x + y - 8, x**2 + y**2 - 16 - 2*x*y], [x, y])) == {(6, 2), (2, 6)})
+ok("200.4", set(solve([1/x - 1/y + Rational(5, 4), x + y - 3], [x, y])) == {(-1, 4), (Rational(12, 5), Rational(3, 5))})
+ok("4.2", [v for v in [-2, 0, 1, sqrt(3)] if simplify(v**2 + v) == 0] == [0])
+ok("4.3", [v for v in [-2, 0, 1, sqrt(3)] if simplify(v**2 - 3) == 0] == [sqrt(3)])
+ok("155.1", set(solve([x**2 + x*y - 2, y - 3*x - 7], [x, y])) == {(-2, 1), (Rational(1, 4), Rational(31, 4))})
+ok("173.2", set(solve([x*y**2 + x*y**3 - 10, x + x*y - 10], [x, y])) == {(5, 1)})
+h = symbols('h', positive=True); ok("523", solve(2*h**2 - Rational(1922, 100), h) == [Rational(31, 10)])
+ok("194.2", set(solve([x**2 - 3*y - 13, x - y - 3], [x, y])) == {(4, 1), (-1, -4)})
+ok("163.1", set(solve([(x - y)**2 - 4, x + y - 6], [x, y])) == {(4, 2), (2, 4)})

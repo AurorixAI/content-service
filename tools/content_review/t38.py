@@ -1,0 +1,30 @@
+from sympy import *
+x=symbols('x'); R=Rational
+def I(name,rel,key):
+    s=solve_univariate_inequality(rel,x,relational=False) if not isinstance(rel,list) else None
+    print(name,s,"| key",key)
+def Q(t): return nsimplify(t,rational=True)
+r=lambda s: Rational(s)
+I(9680,Rational(3,10)*(2*x-3)<3*(Rational(3,5)*x+Rational(13,10)),"m>-4")
+I(9681,Rational(11,10)*(5*x-4)>Rational(1,5)*(10*x-43),"x>-6/5")
+I(9682,10-5*(Rational(3,10)*x-Rational(1,5))>=5-10*(Rational(1,10)*x+Rational(1,5)),"a<=16")
+I(9683,Rational(16,5)*(2*x+1)+Rational(57,10)<=Rational(73,10)-Rational(8,5)*(3-5*x),"b>=4")
+I(9684,Rational(43,10)*x-Rational(1,2)*(Rational(28,10)*x-Rational(6,10))>Rational(1,3)*(3*x+Rational(6,10))+Rational(29,10)*x,"x<0.1")
+I(9685,Rational(2,5)*(Rational(55,10)*x-2)-Rational(8,10)*x<Rational(46,10)*x-Rational(3,4)*(Rational(36,10)*x-Rational(16,10)),"m>-4")
+I(9686,(Rational(21,10)*x+2)*(Rational(2,10)*x-3)-(Rational(7,10)*x-1)*(Rational(6,10)*x+4)>=-83,"y<=10")
+I(9687,(1-Rational(36,10)*x)*(Rational(2,10)*x+3)+(4+Rational(9,10)*x)*(Rational(8,10)*x+10)<=Rational(422,10),"a<=-0.5")
+I(9688,(Rational(42,10)+2*x)/3>Rational(15,10)*x-Rational(11,10),"x<3")
+I(9689,Rational(23,10)*x+Rational(8,10)<(Rational(58,10)*x+Rational(34,10))/2,"a>-1.5")
+I(9690,(Rational(5,10)-5*x)/6>=(Rational(6,10)-5*x)/4,"[0.16,oo)")
+I(9691,(Rational(6,10)*x+Rational(12,10))/12<=(Rational(15,10)*x-Rational(25,10))/15,"[16/3,oo)")
+I(9692,(Rational(13,10)*x-Rational(7,10))/4-(Rational(9,10)*x+Rational(3,10))/3>0,"a>11")
+I(9693,(Rational(16,10)-Rational(3,10)*x)/2+(Rational(44,10)+Rational(15,10)*x)/5<-Rational(405,100)*x,"y<-0.4")
+def S(name,rels,key):
+    ss=reduce_inequalities(rels,x)
+    print(name,ss,"| key",key)
+S(9694,[2*x-3*(x+1)<x+8,6*x*(x-1)-(2*x+2)*(3*x-3)>0],"-5.5<x<1")
+S(9695,[10*(x-1)-5*(x+1)>4*x-11,x**2-(x+2)*(x-2)<3*x],"(4,oo)")
+S(9696,[7-3*x-4*(3-Rational(3,2)*x)<0,-6*(1+Rational(5,2)*x)-10*x-4>0],"x<-2/5")
+S(9697,[2*(Rational(3,2)*x-1)-(x+4)*(x+4)>=0,-(2-x)-Rational(3,4)*x<=0],"none")
+S(9698,[x-(4*x-1)/3<10,4*x-1-x/3<10],"(-29,3)")
+S(9699,[3*x-(2*x+1)/2>4-(2-x)/3-x,(5*x-1)/3-(x-1)>3*x],"none")

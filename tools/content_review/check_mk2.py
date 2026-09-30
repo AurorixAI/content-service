@@ -1,0 +1,26 @@
+from sympy import *
+x, y, a, p, t, S = symbols('x y a p t S', real=True)
+ok = lambda s, c: print("OK " if c else "BAD", s)
+p1, p2, p3 = symbols('p1 p2 p3'); r = solve([48*p3 + 10*p1 - 1, 48*p3 + 15*p2 - 1, p3 - (p1 + p2)/2], [p1, p2, p3]); ok("863", (1/r[p1], 1/r[p2], 1/r[p3]) == (50, 75, 60))
+sols = set()
+for b in range(-100, 101):
+    for num in range(-20, 21):
+        for den in range(1, 21):
+            q = Rational(num, den)
+            if b != 0 and q not in (0, 1) and (b*q).is_integer and (b*q*q).is_integer and b + b*q + b*q*q == -3 and len({b, b*q, b*q*q}) == 3: sols.add((b, b*q, b*q*q))
+ok("873", sols == {(-1, 2, -4), (-4, 2, -1)})
+ok("337", set(solve(a**3 + 1/a**3 - Rational(13, 4)*(a + 1/a), a)) == {-2, -Rational(1, 2), Rational(1, 2), 2})
+ok("394а", solve([x**2 + y**2 - 36, y - x**2 - 6], [x, y]) == [(0, 6)])
+f = x**4 - 5*x**3 - 10*x**2 + 80*x - 96; ok("305", f.subs(x, 4) == 0 and set(solve(f, x)) == {-4, 2, 3, 4})
+ok("303а", set(solve(p**3 - p**2 - 8*p + 12, p)) == {-3, 2})
+ok("215", [s for s in solve((x + 3)**3 - x**3 - 513, x) if s > 0] == [6])
+ok("405б", len(solve([x**2 + y**2 - 7, y - 4*x - 2], [x, y])) == 2)
+ok("387б", set(solve([p + 5*t - 2*(p + t), p*t - t - 10], [p, t])) == {(6, 2), (-5, -Rational(5, 3))})
+ok("434", [s for s in solve(30/S + 1 - 28/(S - 1), S) if s > 1] == [5])
+ok("885", [n*n*(n + 1) for n in range(1, 20) if 100 <= n*n*(n + 1) <= 999 and n*n*(n + 1) % 5 == 0] == [150, 810])
+ok("859", [f"{n}/{n*n - 1}" for n in range(-30, 30) if n*n - 1 > 0 and n*n - 4 != 0 and Rational(n + 2, n*n + 1) > Rational(1, 4) and Rational(n - 3, n*n - 4) < Rational(1, 10)] == ["3/8", "4/15", "5/24"])
+ok("390а", set(solve([x**2 + x*y - y**2 - 11, x - 2*y - 1], [x, y])) == {(3, 1), (-3, -2)})
+ok("241б", set(solve((2 - 18*a**2 - a)/(3*a) + 3*a**2, a)) == {-Rational(1, 3), Rational(1, 3), 2})
+ok("403б", len(solve([(x - 3)**2 + (y - 2)**2 - 9, x - 7], [x, y])) == 0)
+ok("507", sorted(Rational(s[0], s[1]) for s in solve([x**2 - 2*(y - 1), 4*(x - 1) - (y + 1)], [x, y])) == [Rational(6, 19), Rational(2, 3)])
+ok("339е", solveset(-9*x**2 < 1 - 6*x, x, Reals) == Union(Interval.open(-oo, Rational(1, 3)), Interval.open(Rational(1, 3), oo)))

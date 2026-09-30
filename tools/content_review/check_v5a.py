@@ -1,0 +1,10 @@
+from sympy import *
+k = symbols('k')
+ok = lambda s, c: print("OK " if c else "BAD", s)
+ok("1114", Rational(883336, 218) + 2967*305 == 908987)
+t = solve(2 + Rational(24, 10) + k + Rational(3, 2)*k - Rational(268, 10), k)[0]; ok("1551", (t, Rational(3, 2)*t) == (Rational(896, 100), Rational(1344, 100)))
+ok("1260", Rational(483, 10) + Rational(325, 10) + (Rational(808, 10) - Rational(243, 10)) == Rational(1373, 10))
+ok("1003", 6*48 + 5*82 - 650 == 48 and 2*48 + 82 == 178 and 650 - 178 == 472)
+ok("1209", 1260*(28 - 18) == 12600)
+ok("1517", solve((Rational(83, 10) - k)*Rational(47, 10) - Rational(564, 100), k) == [Rational(71, 10)] and solve((Rational(92, 10) - k)*Rational(32, 10) - 16, k) == [Rational(42, 10)])
+ok("1442", 16*Rational(1, 1000) == Rational(16, 1000))

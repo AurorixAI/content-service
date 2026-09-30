@@ -1,0 +1,11 @@
+from sympy import *
+x, y, v, m = symbols('x y v m')
+ok = lambda s, c: print("OK " if c else "BAD", s)
+ok("1511б", (-8*(Rational(1, 8) - y/4) - 3*(1 - Rational(8, 3)*y)).subs(y, -Rational(13, 5)) == -30)
+ok("1351", (Rational(1, 15) + Rational(1, 12), 3*(Rational(1, 15) + Rational(1, 12))) == (Rational(3, 20), Rational(9, 20)))
+t = solve(13*x - (12 + 4*x), x)[0]; ok("1540", 13*t == Rational(52, 3))
+ok("1438", solve(Rational(5, 2)*x + 5 - 3*(x - 5), x) == [40])
+ok("1517г", solve(5 - (Rational(3, 2)*v + Rational(1, 3))*6 - (Rational(7, 3)*v - Rational(11, 2)), v) == [Rational(3, 4)])
+e = -(Rational(47, 10)*m + Rational(28, 10)*m - Rational(57, 10)*m) - Rational(37, 10)*m; ok("1564в", (e.subs(m, -Rational(1, 100)), e.subs(m, Rational(1, 10))) == (Rational(55, 1000), -Rational(55, 100)))
+ok("1517а", solve(Rational(2, 3)*x + x/2 - Rational(3, 4) - (2 - x/3 + Rational(9, 4)*x), x) == [-Rational(11, 3)])
+ok("1308г", solve(Rational(54, 10)*(3*y - 2) - Rational(72, 10)*(2*y - 3) - Rational(12, 10), y) == [-Rational(16, 3)])

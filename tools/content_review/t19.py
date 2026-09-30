@@ -1,0 +1,27 @@
+from math import *
+ct=lambda x:1/tan(x); r=radians
+def val(n,v,e): print('OK ' if abs(v-e)<1e-9 else 'BAD',n,round(v,6),round(e,6))
+val('8120',cos(r(7230))+sin(r(900)),sqrt(3)/2)
+val('8121',sin(r(300))+tan(r(150)),-5*sqrt(3)/6)
+val('8122',2*sin(6.5*pi)-sqrt(3)*sin(19*pi/3),0.5)
+val('8123',sqrt(2)*cos(4.25*pi)-ct(1)*0 - (1/sqrt(3))*cos(61*pi/6),0.5)
+try: val('8124',(sin(-6.5*pi)+tan(-7*pi))/(cos(-7*pi)+ct(-16.25*pi)),0.5)
+except Exception as e: print('8124 err',e)
+val('8125',(cos(r(-540))+sin(r(480)))/(tan(r(405))-ct(r(330))),(5-3*sqrt(3))/4)
+for a in (0.4,0.9):
+    val('8126',(sin(pi/2-a)+sin(pi-a))/(cos(pi-a)+sin(2*pi-a)),-1)
+    val('8127',(cos(pi-a)+cos(pi/2-a))/(sin(pi-a)-sin(pi/2-a)),1)
+    val('8128',sin(a-pi)/tan(a+pi)*tan(pi-a)/cos(pi/2-a),1)
+    val('8129',(sin(pi-a)**2+sin(pi/2-a)**2)/sin(pi-a)*tan(pi-a),-1/cos(a))
+    val('8150',sin(pi/3+a)+sin(pi/3-a),sqrt(3)*cos(a))
+    val('8151',cos(pi/4-a)-cos(pi/4+a),sqrt(2)*sin(a))
+    val('8152',sin(pi/4+a)**2-sin(pi/4-a)**2,sin(2*a))
+    val('8157',1+2*sin(a),4*sin(a/2+pi/12)*cos(a/2-pi/12))
+    val('8158',1-2*sin(a),4*sin(pi/12-a/2)*cos(pi/12+a/2))
+    val('8159',1+2*cos(a),4*cos(a/2+pi/6)*cos(a/2-pi/6))
+    val('8160',1+sin(a),2*sin(a/2+pi/4)**2)
+    val('8161',1-cos(a),2*sin(a/2)**2); val('8162',1+cos(a),2*cos(a/2)**2)
+val('8131',tan(11*pi/3),-sqrt(3))
+val('8153',sin(r(105))-sin(r(75)),0); val('8154',cos(11*pi/12)-cos(5*pi/12),-sqrt(6)/2)
+val('8155',sin(7*pi/12)-cos(pi/12),0); val('8156',sin(r(105))+sin(r(165)),sqrt(6)/2)
+val('8145',cos(pi/2-(pi/2)),0+0) if False else None

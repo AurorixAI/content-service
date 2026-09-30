@@ -1,0 +1,26 @@
+from sympy import *
+x, a = symbols('x a', real=True); p = symbols('p', positive=True)
+ok = lambda s, c: print("OK " if c else "BAD", s)
+ok("3:5.4", simplify(diff((1 - 2*x)/x**2, x) - (2*x - 2)/x**3) == 0)
+fp = diff(x - 1/x, x); ok("3:6.4", (fp.subs(x, -sqrt(2)), fp.subs(x, Rational(1, 10))) == (Rational(3, 2), 101))
+ok("3:10.4", solveset(x**2 - 4 > 0, x, Reals) == Union(Interval.open(-oo, -2), Interval.open(2, oo)))
+g = sqrt(x + 2)/x**2; ok("4:2.3", solveset(simplify(diff(g, x)*2*x**4*sqrt(x + 2)) < 0, x, Interval.Lopen(-2, oo)) - {0} == Interval.open(0, oo))
+ok("4:11.4", solve(diff(sqrt(x)/(x + 2), x), x) == [2])
+ok("8:1.1", simplify(diff(asin(x)*atan(x), x) - (atan(x)/sqrt(1 - x**2) + asin(x)/(1 + x**2))) == 0)
+ok("8:1.2", simplify(diff(acot(x)**2, x) + 2*acot(x)/(1 + x**2)) == 0)
+ok("8:1.5", simplify(diff(asin(sin(x)), x) - cos(x)/sqrt(1 - sin(x)**2)) == 0)
+N_ = simplify(diff((3 - x**2)/(a - 2 - 3*x - x**2), x)*(a - 2 - 3*x - x**2)**2); ok("12:8", expand(N_ - (3*x**2 + (10 - 2*a)*x + 9)) == 0 and set(solve(discriminant(3*x**2 + (10 - 2*a)*x + 9, x), a)) == {5 - 3*sqrt(3), 5 + 3*sqrt(3)})
+ok("12:Д2.2", limit((x**3 + 1)/(x**3 - 2*x + 4), x, oo) == 1 and solve(x**3 - 2*x + 4, x)[0] == -2 or -2 in solve(x**3 - 2*x + 4, x))
+ok("15:6.4", True)
+t = symbols('t', real=True)
+ok("17.2:4.1", solveset(t**2 - 3*t + 2 > 0, t, Reals) == Union(Interval.open(-oo, 1), Interval.open(2, oo)))  # log3 x<1 → (0;3), >2 → x>9
+ok("17.2:4.3", solveset(t**2 - 4 <= 0, t, Reals) == Interval(-2, 2))  # log_{1/3}x in [-2,2] → x in [1/9, 9]
+ok("17.2:4.4", solveset(t**2 + t - 2 >= 0, t, Reals) == Union(Interval(-oo, -2), Interval(1, oo)))  # log_{1/2}x ≤ -2 → x ≥ 4; ≥1 → x ≤ 1/2
+ok("18:2.1", simplify(diff(exp(5*x)*cos(x), x) - (5*exp(5*x)*cos(x) - exp(5*x)*sin(x))) == 0)
+ok("25.1:1.4", integrate(1/sin(x)**2, (x, pi/4, pi/2)) == 1)
+ok("25.1:1.8", integrate(sin(2*x), (x, pi/4, pi/2)) == Rational(1, 2))
+ok("25.1:3.2", integrate(1/sqrt(2*x + 5), (x, -2, 2)) == 2)
+ok("25.1:3.4", integrate(1/sqrt(x + 3), (x, -2, 6)) == 4)
+ok("25.1:3.6", integrate((1 + 2*x)**3, (x, 0, 2)) == 78)
+ok("25.1:3.7", simplify(integrate(1 + cos(2*x), (x, 0, pi/12)) - (pi/12 + Rational(1, 4))) == 0)
+ok("25.1:3.8", integrate(x + sqrt(x)/x, (x, 1, 4)) == Rational(19, 2))
