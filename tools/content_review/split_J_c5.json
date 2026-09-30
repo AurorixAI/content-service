@@ -1,0 +1,1462 @@
+{
+ "new": {
+  "G11_TB_4_2_4_8_1.1": {
+   "parent": "G11_TB_4_2_4_8_1",
+   "fields": {
+    "question_text": "Найдите производную функции $f(x)=3x+8$ в любой точке $x$.",
+    "question_latex": "Найдите производную функции $f(x)=3x+8$ в любой точке $x$.",
+    "correct_answer": "$f'(x)=3$",
+    "correct_answer_latex": "$f'(x)=3$",
+    "distractor_meta": [
+     {
+      "value": "$f'(x)=3x$",
+      "value_latex": "$f'(x)=3x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик оставил переменную: производная $kx$ равна $k$, а не $kx$.",
+      "error_logic_latex": "Ученик оставил переменную: производная $kx$ равна $k$, а не $kx$.",
+      "explanation": "Ученик оставил переменную: производная $kx$ равна $k$, а не $kx$.",
+      "explanation_latex": "Ученик оставил переменную: производная $kx$ равна $k$, а не $kx$."
+     },
+     {
+      "value": "$f'(x)=8$",
+      "value_latex": "$f'(x)=8$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик продифференцировал только свободный член; производная постоянной равна $0$, а $(3x)'=3$.",
+      "error_logic_latex": "Ученик продифференцировал только свободный член; производная постоянной равна $0$, а $(3x)'=3$.",
+      "explanation": "Ученик продифференцировал только свободный член; производная постоянной равна $0$, а $(3x)'=3$.",
+      "explanation_latex": "Ученик продифференцировал только свободный член; производная постоянной равна $0$, а $(3x)'=3$."
+     },
+     {
+      "value": "$f'(x)=11$",
+      "value_latex": "$f'(x)=11$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил коэффициенты $3+8$; производная линейной функции равна угловому коэффициенту $3$.",
+      "error_logic_latex": "Ученик сложил коэффициенты $3+8$; производная линейной функции равна угловому коэффициенту $3$.",
+      "explanation": "Ученик сложил коэффициенты $3+8$; производная линейной функции равна угловому коэффициенту $3$.",
+      "explanation_latex": "Ученик сложил коэффициенты $3+8$; производная линейной функции равна угловому коэффициенту $3$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.1",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_1",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_1.2": {
+   "parent": "G11_TB_4_2_4_8_1",
+   "fields": {
+    "question_text": "Найдите значение производной функции $f(x)=3x+8$ в точке $x=2$.",
+    "question_latex": "Найдите значение производной функции $f(x)=3x+8$ в точке $x=2$.",
+    "correct_answer": "$3$",
+    "correct_answer_latex": "$3$",
+    "distractor_meta": [
+     {
+      "value": "$14$",
+      "value_latex": "$14$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(2)=3\\cdot2+8$, а не производной.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(2)=3\\cdot2+8$, а не производной.",
+      "explanation": "Ученик вычислил значение функции $f(2)=3\\cdot2+8$, а не производной.",
+      "explanation_latex": "Ученик вычислил значение функции $f(2)=3\\cdot2+8$, а не производной."
+     },
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил производную на $x$: $3\\cdot2$; производная $f'(x)=3$ от $x$ не зависит.",
+      "error_logic_latex": "Ученик умножил производную на $x$: $3\\cdot2$; производная $f'(x)=3$ от $x$ не зависит.",
+      "explanation": "Ученик умножил производную на $x$: $3\\cdot2$; производная $f'(x)=3$ от $x$ не зависит.",
+      "explanation_latex": "Ученик умножил производную на $x$: $3\\cdot2$; производная $f'(x)=3$ от $x$ не зависит."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что производная постоянной функции равна нулю; но $f(x)=3x+8$ не постоянна, $f'(x)=3$.",
+      "error_logic_latex": "Ученик решил, что производная постоянной функции равна нулю; но $f(x)=3x+8$ не постоянна, $f'(x)=3$.",
+      "explanation": "Ученик решил, что производная постоянной функции равна нулю; но $f(x)=3x+8$ не постоянна, $f'(x)=3$.",
+      "explanation_latex": "Ученик решил, что производная постоянной функции равна нулю; но $f(x)=3x+8$ не постоянна, $f'(x)=3$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.1",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_1",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_1.3": {
+   "parent": "G11_TB_4_2_4_8_1",
+   "fields": {
+    "question_text": "При каком значении $x$ производная функции $f(x)=3x+8$ равна $3$?",
+    "question_latex": "При каком значении $x$ производная функции $f(x)=3x+8$ равна $3$?",
+    "correct_answer": "при любом $x$",
+    "correct_answer_latex": "при любом $x$",
+    "distractor_meta": [
+     {
+      "value": "ни при каком $x$",
+      "value_latex": "ни при каком $x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал с функцией $8x-11$; здесь $f'(x)=3$ при всех $x$.",
+      "error_logic_latex": "Ученик перепутал с функцией $8x-11$; здесь $f'(x)=3$ при всех $x$.",
+      "explanation": "Ученик перепутал с функцией $8x-11$; здесь $f'(x)=3$ при всех $x$.",
+      "explanation_latex": "Ученик перепутал с функцией $8x-11$; здесь $f'(x)=3$ при всех $x$."
+     },
+     {
+      "value": "при $x=1$",
+      "value_latex": "при $x=1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $3x=3$; но производная равна $3$ при любом $x$, от $x$ она не зависит.",
+      "error_logic_latex": "Ученик решил уравнение $3x=3$; но производная равна $3$ при любом $x$, от $x$ она не зависит.",
+      "explanation": "Ученик решил уравнение $3x=3$; но производная равна $3$ при любом $x$, от $x$ она не зависит.",
+      "explanation_latex": "Ученик решил уравнение $3x=3$; но производная равна $3$ при любом $x$, от $x$ она не зависит."
+     },
+     {
+      "value": "при $x=-\\dfrac{5}{3}$",
+      "value_latex": "при $x=-\\dfrac{5}{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $3x+8=3$ для самой функции, а не для производной.",
+      "error_logic_latex": "Ученик решил уравнение $3x+8=3$ для самой функции, а не для производной.",
+      "explanation": "Ученик решил уравнение $3x+8=3$ для самой функции, а не для производной.",
+      "explanation_latex": "Ученик решил уравнение $3x+8=3$ для самой функции, а не для производной."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.1",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_1",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_2.1": {
+   "parent": "G11_TB_4_2_4_8_2",
+   "fields": {
+    "question_text": "Найдите производную функции $f(x)=8x-11$ в любой точке $x$.",
+    "question_latex": "Найдите производную функции $f(x)=8x-11$ в любой точке $x$.",
+    "correct_answer": "$f'(x)=8$",
+    "correct_answer_latex": "$f'(x)=8$",
+    "distractor_meta": [
+     {
+      "value": "$f'(x)=8x$",
+      "value_latex": "$f'(x)=8x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик оставил переменную: производная $kx$ равна $k$.",
+      "error_logic_latex": "Ученик оставил переменную: производная $kx$ равна $k$.",
+      "explanation": "Ученик оставил переменную: производная $kx$ равна $k$.",
+      "explanation_latex": "Ученик оставил переменную: производная $kx$ равна $k$."
+     },
+     {
+      "value": "$f'(x)=-11$",
+      "value_latex": "$f'(x)=-11$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик продифференцировал только свободный член; производная постоянной равна $0$.",
+      "error_logic_latex": "Ученик продифференцировал только свободный член; производная постоянной равна $0$.",
+      "explanation": "Ученик продифференцировал только свободный член; производная постоянной равна $0$.",
+      "explanation_latex": "Ученик продифференцировал только свободный член; производная постоянной равна $0$."
+     },
+     {
+      "value": "$f'(x)=-3$",
+      "value_latex": "$f'(x)=-3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил коэффициенты $8-11$; производная линейной функции равна $8$.",
+      "error_logic_latex": "Ученик сложил коэффициенты $8-11$; производная линейной функции равна $8$.",
+      "explanation": "Ученик сложил коэффициенты $8-11$; производная линейной функции равна $8$.",
+      "explanation_latex": "Ученик сложил коэффициенты $8-11$; производная линейной функции равна $8$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_2",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_2.2": {
+   "parent": "G11_TB_4_2_4_8_2",
+   "fields": {
+    "question_text": "Найдите значение производной функции $f(x)=8x-11$ в точке $x=2$.",
+    "question_latex": "Найдите значение производной функции $f(x)=8x-11$ в точке $x=2$.",
+    "correct_answer": "$8$",
+    "correct_answer_latex": "$8$",
+    "distractor_meta": [
+     {
+      "value": "$5$",
+      "value_latex": "$5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(2)=16-11$, а не производной.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(2)=16-11$, а не производной.",
+      "explanation": "Ученик вычислил значение функции $f(2)=16-11$, а не производной.",
+      "explanation_latex": "Ученик вычислил значение функции $f(2)=16-11$, а не производной."
+     },
+     {
+      "value": "$16$",
+      "value_latex": "$16$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил производную на $x$: $8\\cdot2$; производная $f'(x)=8$ от $x$ не зависит.",
+      "error_logic_latex": "Ученик умножил производную на $x$: $8\\cdot2$; производная $f'(x)=8$ от $x$ не зависит.",
+      "explanation": "Ученик умножил производную на $x$: $8\\cdot2$; производная $f'(x)=8$ от $x$ не зависит.",
+      "explanation_latex": "Ученик умножил производную на $x$: $8\\cdot2$; производная $f'(x)=8$ от $x$ не зависит."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что производная равна нулю; но $f'(x)=8$.",
+      "error_logic_latex": "Ученик решил, что производная равна нулю; но $f'(x)=8$.",
+      "explanation": "Ученик решил, что производная равна нулю; но $f'(x)=8$.",
+      "explanation_latex": "Ученик решил, что производная равна нулю; но $f'(x)=8$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_2",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_2.3": {
+   "parent": "G11_TB_4_2_4_8_2",
+   "fields": {
+    "question_text": "При каком значении $x$ производная функции $f(x)=8x-11$ равна $3$?",
+    "question_latex": "При каком значении $x$ производная функции $f(x)=8x-11$ равна $3$?",
+    "correct_answer": "ни при каком $x$",
+    "correct_answer_latex": "ни при каком $x$",
+    "distractor_meta": [
+     {
+      "value": "при любом $x$",
+      "value_latex": "при любом $x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал с функцией $3x+8$; здесь $f'(x)=8\\ne3$ при всех $x$.",
+      "error_logic_latex": "Ученик перепутал с функцией $3x+8$; здесь $f'(x)=8\\ne3$ при всех $x$.",
+      "explanation": "Ученик перепутал с функцией $3x+8$; здесь $f'(x)=8\\ne3$ при всех $x$.",
+      "explanation_latex": "Ученик перепутал с функцией $3x+8$; здесь $f'(x)=8\\ne3$ при всех $x$."
+     },
+     {
+      "value": "при $x=\\dfrac{3}{8}$",
+      "value_latex": "при $x=\\dfrac{3}{8}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $8x=3$; но производная равна $8$ при любом $x$.",
+      "error_logic_latex": "Ученик решил уравнение $8x=3$; но производная равна $8$ при любом $x$.",
+      "explanation": "Ученик решил уравнение $8x=3$; но производная равна $8$ при любом $x$.",
+      "explanation_latex": "Ученик решил уравнение $8x=3$; но производная равна $8$ при любом $x$."
+     },
+     {
+      "value": "при $x=\\dfrac{7}{4}$",
+      "value_latex": "при $x=\\dfrac{7}{4}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $8x-11=3$ для самой функции, а не для производной.",
+      "error_logic_latex": "Ученик решил уравнение $8x-11=3$ для самой функции, а не для производной.",
+      "explanation": "Ученик решил уравнение $8x-11=3$ для самой функции, а не для производной.",
+      "explanation_latex": "Ученик решил уравнение $8x-11=3$ для самой функции, а не для производной."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_2",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_3.1": {
+   "parent": "G11_TB_4_2_4_8_3",
+   "fields": {
+    "question_text": "Найдите производную функции $f(x)=kx+b$ в любой точке $x$.",
+    "question_latex": "Найдите производную функции $f(x)=kx+b$ в любой точке $x$.",
+    "correct_answer": "$f'(x)=k$",
+    "correct_answer_latex": "$f'(x)=k$",
+    "distractor_meta": [
+     {
+      "value": "$f'(x)=kx$",
+      "value_latex": "$f'(x)=kx$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик оставил переменную: производная $kx$ равна $k$.",
+      "error_logic_latex": "Ученик оставил переменную: производная $kx$ равна $k$.",
+      "explanation": "Ученик оставил переменную: производная $kx$ равна $k$.",
+      "explanation_latex": "Ученик оставил переменную: производная $kx$ равна $k$."
+     },
+     {
+      "value": "$f'(x)=b$",
+      "value_latex": "$f'(x)=b$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик продифференцировал только свободный член; производная постоянной равна $0$.",
+      "error_logic_latex": "Ученик продифференцировал только свободный член; производная постоянной равна $0$.",
+      "explanation": "Ученик продифференцировал только свободный член; производная постоянной равна $0$.",
+      "explanation_latex": "Ученик продифференцировал только свободный член; производная постоянной равна $0$."
+     },
+     {
+      "value": "$f'(x)=k+b$",
+      "value_latex": "$f'(x)=k+b$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил коэффициенты; производная линейной функции равна $k$.",
+      "error_logic_latex": "Ученик сложил коэффициенты; производная линейной функции равна $k$.",
+      "explanation": "Ученик сложил коэффициенты; производная линейной функции равна $k$.",
+      "explanation_latex": "Ученик сложил коэффициенты; производная линейной функции равна $k$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_3",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_3.2": {
+   "parent": "G11_TB_4_2_4_8_3",
+   "fields": {
+    "question_text": "Найдите значение производной функции $f(x)=kx+b$ в точке $x=2$.",
+    "question_latex": "Найдите значение производной функции $f(x)=kx+b$ в точке $x=2$.",
+    "correct_answer": "$k$",
+    "correct_answer_latex": "$k$",
+    "distractor_meta": [
+     {
+      "value": "$2k+b$",
+      "value_latex": "$2k+b$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(2)$, а не производной.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(2)$, а не производной.",
+      "explanation": "Ученик вычислил значение функции $f(2)$, а не производной.",
+      "explanation_latex": "Ученик вычислил значение функции $f(2)$, а не производной."
+     },
+     {
+      "value": "$2k$",
+      "value_latex": "$2k$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил производную на $x$; производная $f'(x)=k$ от $x$ не зависит.",
+      "error_logic_latex": "Ученик умножил производную на $x$; производная $f'(x)=k$ от $x$ не зависит.",
+      "explanation": "Ученик умножил производную на $x$; производная $f'(x)=k$ от $x$ не зависит.",
+      "explanation_latex": "Ученик умножил производную на $x$; производная $f'(x)=k$ от $x$ не зависит."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что производная равна нулю; но $f'(x)=k$.",
+      "error_logic_latex": "Ученик решил, что производная равна нулю; но $f'(x)=k$.",
+      "explanation": "Ученик решил, что производная равна нулю; но $f'(x)=k$.",
+      "explanation_latex": "Ученик решил, что производная равна нулю; но $f'(x)=k$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_3",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_3.3": {
+   "parent": "G11_TB_4_2_4_8_3",
+   "fields": {
+    "question_text": "При каком значении $x$ производная функции $f(x)=kx+b$ равна $3$?",
+    "question_latex": "При каком значении $x$ производная функции $f(x)=kx+b$ равна $3$?",
+    "correct_answer": "при $k=3$ — при любом $x$; при $k\\ne3$ — ни при каком $x$",
+    "correct_answer_latex": "при $k=3$ — при любом $x$; при $k\\ne3$ — ни при каком $x$",
+    "distractor_meta": [
+     {
+      "value": "при $x=\\dfrac{3}{k}$",
+      "value_latex": "при $x=\\dfrac{3}{k}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $kx=3$; но производная равна $k$ при любом $x$, поэтому ответ зависит только от $k$.",
+      "error_logic_latex": "Ученик решил уравнение $kx=3$; но производная равна $k$ при любом $x$, поэтому ответ зависит только от $k$.",
+      "explanation": "Ученик решил уравнение $kx=3$; но производная равна $k$ при любом $x$, поэтому ответ зависит только от $k$.",
+      "explanation_latex": "Ученик решил уравнение $kx=3$; но производная равна $k$ при любом $x$, поэтому ответ зависит только от $k$."
+     },
+     {
+      "value": "при $x=\\dfrac{3-b}{k}$",
+      "value_latex": "при $x=\\dfrac{3-b}{k}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $kx+b=3$ для самой функции, а не для производной.",
+      "error_logic_latex": "Ученик решил уравнение $kx+b=3$ для самой функции, а не для производной.",
+      "explanation": "Ученик решил уравнение $kx+b=3$ для самой функции, а не для производной.",
+      "explanation_latex": "Ученик решил уравнение $kx+b=3$ для самой функции, а не для производной."
+     },
+     {
+      "value": "при любом $x$",
+      "value_latex": "при любом $x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл, что при $k\\ne3$ производная не равна $3$ ни в одной точке.",
+      "error_logic_latex": "Ученик не учёл, что при $k\\ne3$ производная не равна $3$ ни в одной точке.",
+      "explanation": "Ученик не учёл, что при $k\\ne3$ производная не равна $3$ ни в одной точке.",
+      "explanation_latex": "Ученик не учёл, что при $k\\ne3$ производная не равна $3$ ни в одной точке."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_3",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_4.1": {
+   "parent": "G11_TB_4_2_4_8_4",
+   "fields": {
+    "question_text": "Найдите производную функции $f(x)=x^{2}-x+5$ в любой точке $x$.",
+    "question_latex": "Найдите производную функции $f(x)=x^{2}-x+5$ в любой точке $x$.",
+    "correct_answer": "$f'(x)=2x-1$",
+    "correct_answer_latex": "$f'(x)=2x-1$",
+    "distractor_meta": [
+     {
+      "value": "$f'(x)=2x-1+5$",
+      "value_latex": "$f'(x)=2x-1+5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не обнулил производную постоянной: $(5)'=0$.",
+      "error_logic_latex": "Ученик не обнулил производную постоянной: $(5)'=0$.",
+      "explanation": "Ученик не обнулил производную постоянной: $(5)'=0$.",
+      "explanation_latex": "Ученик не обнулил производную постоянной: $(5)'=0$."
+     },
+     {
+      "value": "$f'(x)=x^{2}-1$",
+      "value_latex": "$f'(x)=x^{2}-1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик продифференцировал только слагаемое $-x$; $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик продифференцировал только слагаемое $-x$; $(x^{2})'=2x$.",
+      "explanation": "Ученик продифференцировал только слагаемое $-x$; $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик продифференцировал только слагаемое $-x$; $(x^{2})'=2x$."
+     },
+     {
+      "value": "$f'(x)=2x+1$",
+      "value_latex": "$f'(x)=2x+1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: $(-x)'=-1$.",
+      "error_logic_latex": "Ученик ошибся в знаке: $(-x)'=-1$.",
+      "explanation": "Ученик ошибся в знаке: $(-x)'=-1$.",
+      "explanation_latex": "Ученик ошибся в знаке: $(-x)'=-1$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.4",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_4",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_4.2": {
+   "parent": "G11_TB_4_2_4_8_4",
+   "fields": {
+    "question_text": "Найдите значение производной функции $f(x)=x^{2}-x+5$ в точке $x=2$.",
+    "question_latex": "Найдите значение производной функции $f(x)=x^{2}-x+5$ в точке $x=2$.",
+    "correct_answer": "$3$",
+    "correct_answer_latex": "$3$",
+    "distractor_meta": [
+     {
+      "value": "$7$",
+      "value_latex": "$7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(2)=4-2+5$, а не производной $f'(2)=2\\cdot2-1$.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(2)=4-2+5$, а не производной $f'(2)=2\\cdot2-1$.",
+      "explanation": "Ученик вычислил значение функции $f(2)=4-2+5$, а не производной $f'(2)=2\\cdot2-1$.",
+      "explanation_latex": "Ученик вычислил значение функции $f(2)=4-2+5$, а не производной $f'(2)=2\\cdot2-1$."
+     },
+     {
+      "value": "$5$",
+      "value_latex": "$5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял $f'(x)=2x+1$ с неверным знаком; верно $f'(2)=3$.",
+      "error_logic_latex": "Ученик взял $f'(x)=2x+1$ с неверным знаком; верно $f'(2)=3$.",
+      "explanation": "Ученик взял $f'(x)=2x+1$ с неверным знаком; верно $f'(2)=3$.",
+      "explanation_latex": "Ученик взял $f'(x)=2x+1$ с неверным знаком; верно $f'(2)=3$."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $-1$.",
+      "error_logic_latex": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $-1$.",
+      "explanation": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $-1$.",
+      "explanation_latex": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $-1$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.4",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_4",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_4.3": {
+   "parent": "G11_TB_4_2_4_8_4",
+   "fields": {
+    "question_text": "При каком значении $x$ производная функции $f(x)=x^{2}-x+5$ равна $3$?",
+    "question_latex": "При каком значении $x$ производная функции $f(x)=x^{2}-x+5$ равна $3$?",
+    "correct_answer": "при $x=2$",
+    "correct_answer_latex": "при $x=2$",
+    "distractor_meta": [
+     {
+      "value": "при $x=1$",
+      "value_latex": "при $x=1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $2x=3-1$; верно $2x-1=3$, $x=2$.",
+      "error_logic_latex": "Ученик решил уравнение $2x=3-1$; верно $2x-1=3$, $x=2$.",
+      "explanation": "Ученик решил уравнение $2x=3-1$; верно $2x-1=3$, $x=2$.",
+      "explanation_latex": "Ученик решил уравнение $2x=3-1$; верно $2x-1=3$, $x=2$."
+     },
+     {
+      "value": "при $x=\\dfrac{3}{2}$",
+      "value_latex": "при $x=\\dfrac{3}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял слагаемое $-1$ и решил $2x=3$.",
+      "error_logic_latex": "Ученик потерял слагаемое $-1$ и решил $2x=3$.",
+      "explanation": "Ученик потерял слагаемое $-1$ и решил $2x=3$.",
+      "explanation_latex": "Ученик потерял слагаемое $-1$ и решил $2x=3$."
+     },
+     {
+      "value": "при $x=-1$ и $x=2$",
+      "value_latex": "при $x=-1$ и $x=2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $x^{2}-x+5=7$ для функции, а не для производной.",
+      "error_logic_latex": "Ученик решил уравнение $x^{2}-x+5=7$ для функции, а не для производной.",
+      "explanation": "Ученик решил уравнение $x^{2}-x+5=7$ для функции, а не для производной.",
+      "explanation_latex": "Ученик решил уравнение $x^{2}-x+5=7$ для функции, а не для производной."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.4",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_4",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_5.1": {
+   "parent": "G11_TB_4_2_4_8_5",
+   "fields": {
+    "question_text": "Найдите производную функции $f(x)=x^{2}+3x-1$ в любой точке $x$.",
+    "question_latex": "Найдите производную функции $f(x)=x^{2}+3x-1$ в любой точке $x$.",
+    "correct_answer": "$f'(x)=2x+3$",
+    "correct_answer_latex": "$f'(x)=2x+3$",
+    "distractor_meta": [
+     {
+      "value": "$f'(x)=2x+3-1$",
+      "value_latex": "$f'(x)=2x+3-1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не обнулил производную постоянной: $(-1)'=0$.",
+      "error_logic_latex": "Ученик не обнулил производную постоянной: $(-1)'=0$.",
+      "explanation": "Ученик не обнулил производную постоянной: $(-1)'=0$.",
+      "explanation_latex": "Ученик не обнулил производную постоянной: $(-1)'=0$."
+     },
+     {
+      "value": "$f'(x)=x^{2}+3$",
+      "value_latex": "$f'(x)=x^{2}+3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик продифференцировал только слагаемое $3x$; $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик продифференцировал только слагаемое $3x$; $(x^{2})'=2x$.",
+      "explanation": "Ученик продифференцировал только слагаемое $3x$; $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик продифференцировал только слагаемое $3x$; $(x^{2})'=2x$."
+     },
+     {
+      "value": "$f'(x)=2x-3$",
+      "value_latex": "$f'(x)=2x-3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: $(3x)'=3$.",
+      "error_logic_latex": "Ученик ошибся в знаке: $(3x)'=3$.",
+      "explanation": "Ученик ошибся в знаке: $(3x)'=3$.",
+      "explanation_latex": "Ученик ошибся в знаке: $(3x)'=3$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.5",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_5",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_5.2": {
+   "parent": "G11_TB_4_2_4_8_5",
+   "fields": {
+    "question_text": "Найдите значение производной функции $f(x)=x^{2}+3x-1$ в точке $x=2$.",
+    "question_latex": "Найдите значение производной функции $f(x)=x^{2}+3x-1$ в точке $x=2$.",
+    "correct_answer": "$7$",
+    "correct_answer_latex": "$7$",
+    "distractor_meta": [
+     {
+      "value": "$9$",
+      "value_latex": "$9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(2)=4+6-1$, а не производной $f'(2)=2\\cdot2+3$.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(2)=4+6-1$, а не производной $f'(2)=2\\cdot2+3$.",
+      "explanation": "Ученик вычислил значение функции $f(2)=4+6-1$, а не производной $f'(2)=2\\cdot2+3$.",
+      "explanation_latex": "Ученик вычислил значение функции $f(2)=4+6-1$, а не производной $f'(2)=2\\cdot2+3$."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $3$.",
+      "error_logic_latex": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $3$.",
+      "explanation": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $3$.",
+      "explanation_latex": "Ученик нашёл только $(x^{2})'=2x$ при $x=2$ и забыл слагаемое $3$."
+     },
+     {
+      "value": "$1$",
+      "value_latex": "$1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял $f'(x)=2x-3$ с неверным знаком; верно $f'(2)=7$.",
+      "error_logic_latex": "Ученик взял $f'(x)=2x-3$ с неверным знаком; верно $f'(2)=7$.",
+      "explanation": "Ученик взял $f'(x)=2x-3$ с неверным знаком; верно $f'(2)=7$.",
+      "explanation_latex": "Ученик взял $f'(x)=2x-3$ с неверным знаком; верно $f'(2)=7$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.5",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_5",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_5.3": {
+   "parent": "G11_TB_4_2_4_8_5",
+   "fields": {
+    "question_text": "При каком значении $x$ производная функции $f(x)=x^{2}+3x-1$ равна $3$?",
+    "question_latex": "При каком значении $x$ производная функции $f(x)=x^{2}+3x-1$ равна $3$?",
+    "correct_answer": "при $x=0$",
+    "correct_answer_latex": "при $x=0$",
+    "distractor_meta": [
+     {
+      "value": "при $x=3$",
+      "value_latex": "при $x=3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $2x-3=3$ с неверным знаком производной; верно $2x+3=3$, $x=0$.",
+      "error_logic_latex": "Ученик решил уравнение $2x-3=3$ с неверным знаком производной; верно $2x+3=3$, $x=0$.",
+      "explanation": "Ученик решил уравнение $2x-3=3$ с неверным знаком производной; верно $2x+3=3$, $x=0$.",
+      "explanation_latex": "Ученик решил уравнение $2x-3=3$ с неверным знаком производной; верно $2x+3=3$, $x=0$."
+     },
+     {
+      "value": "при $x=\\dfrac{3}{2}$",
+      "value_latex": "при $x=\\dfrac{3}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял слагаемое $3$ и решил $2x=3$.",
+      "error_logic_latex": "Ученик потерял слагаемое $3$ и решил $2x=3$.",
+      "explanation": "Ученик потерял слагаемое $3$ и решил $2x=3$.",
+      "explanation_latex": "Ученик потерял слагаемое $3$ и решил $2x=3$."
+     },
+     {
+      "value": "ни при каком $x$",
+      "value_latex": "ни при каком $x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не заметил, что $2x+3=3$ при $x=0$.",
+      "error_logic_latex": "Ученик не заметил, что $2x+3=3$ при $x=0$.",
+      "explanation": "Ученик не заметил, что $2x+3=3$ при $x=0$.",
+      "explanation_latex": "Ученик не заметил, что $2x+3=3$ при $x=0$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.5",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_5",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_6.1": {
+   "parent": "G11_TB_4_2_4_8_6",
+   "fields": {
+    "question_text": "Найдите производную функции $f(x)=ax^{2}+bx+c$ в любой точке $x$.",
+    "question_latex": "Найдите производную функции $f(x)=ax^{2}+bx+c$ в любой точке $x$.",
+    "correct_answer": "$f'(x)=2ax+b$",
+    "correct_answer_latex": "$f'(x)=2ax+b$",
+    "distractor_meta": [
+     {
+      "value": "$f'(x)=2ax+b+c$",
+      "value_latex": "$f'(x)=2ax+b+c$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не обнулил производную постоянной: $c'=0$.",
+      "error_logic_latex": "Ученик не обнулил производную постоянной: $c'=0$.",
+      "explanation": "Ученик не обнулил производную постоянной: $c'=0$.",
+      "explanation_latex": "Ученик не обнулил производную постоянной: $c'=0$."
+     },
+     {
+      "value": "$f'(x)=ax+b$",
+      "value_latex": "$f'(x)=ax+b$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл множитель $2$: $(ax^{2})'=2ax$.",
+      "error_logic_latex": "Ученик забыл множитель $2$: $(ax^{2})'=2ax$.",
+      "explanation": "Ученик забыл множитель $2$: $(ax^{2})'=2ax$.",
+      "explanation_latex": "Ученик забыл множитель $2$: $(ax^{2})'=2ax$."
+     },
+     {
+      "value": "$f'(x)=2ax$",
+      "value_latex": "$f'(x)=2ax$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял производную слагаемого $bx$, равную $b$.",
+      "error_logic_latex": "Ученик потерял производную слагаемого $bx$, равную $b$.",
+      "explanation": "Ученик потерял производную слагаемого $bx$, равную $b$.",
+      "explanation_latex": "Ученик потерял производную слагаемого $bx$, равную $b$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.6",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_6",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_6.2": {
+   "parent": "G11_TB_4_2_4_8_6",
+   "fields": {
+    "question_text": "Найдите значение производной функции $f(x)=ax^{2}+bx+c$ в точке $x=2$.",
+    "question_latex": "Найдите значение производной функции $f(x)=ax^{2}+bx+c$ в точке $x=2$.",
+    "correct_answer": "$4a+b$",
+    "correct_answer_latex": "$4a+b$",
+    "distractor_meta": [
+     {
+      "value": "$4a+2b+c$",
+      "value_latex": "$4a+2b+c$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(2)$, а не производной.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(2)$, а не производной.",
+      "explanation": "Ученик вычислил значение функции $f(2)$, а не производной.",
+      "explanation_latex": "Ученик вычислил значение функции $f(2)$, а не производной."
+     },
+     {
+      "value": "$2a+b$",
+      "value_latex": "$2a+b$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик подставил $x=1$ вместо $x=2$.",
+      "error_logic_latex": "Ученик подставил $x=1$ вместо $x=2$.",
+      "explanation": "Ученик подставил $x=1$ вместо $x=2$.",
+      "explanation_latex": "Ученик подставил $x=1$ вместо $x=2$."
+     },
+     {
+      "value": "$4a$",
+      "value_latex": "$4a$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял слагаемое $b$: $f'(2)=2a\\cdot2+b$.",
+      "error_logic_latex": "Ученик потерял слагаемое $b$: $f'(2)=2a\\cdot2+b$.",
+      "explanation": "Ученик потерял слагаемое $b$: $f'(2)=2a\\cdot2+b$.",
+      "explanation_latex": "Ученик потерял слагаемое $b$: $f'(2)=2a\\cdot2+b$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.6",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_6",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_8_6.3": {
+   "parent": "G11_TB_4_2_4_8_6",
+   "fields": {
+    "question_text": "При каком значении $x$ производная функции $f(x)=ax^{2}+bx+c$ равна $3$?",
+    "question_latex": "При каком значении $x$ производная функции $f(x)=ax^{2}+bx+c$ равна $3$?",
+    "correct_answer": "при $x=\\dfrac{3-b}{2a}$ ($a\\ne0$)",
+    "correct_answer_latex": "при $x=\\dfrac{3-b}{2a}$ ($a\\ne0$)",
+    "distractor_meta": [
+     {
+      "value": "при $x=\\dfrac{3}{2a}$",
+      "value_latex": "при $x=\\dfrac{3}{2a}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял слагаемое $b$ и решил $2ax=3$.",
+      "error_logic_latex": "Ученик потерял слагаемое $b$ и решил $2ax=3$.",
+      "explanation": "Ученик потерял слагаемое $b$ и решил $2ax=3$.",
+      "explanation_latex": "Ученик потерял слагаемое $b$ и решил $2ax=3$."
+     },
+     {
+      "value": "при $x=\\dfrac{3+b}{2a}$",
+      "value_latex": "при $x=\\dfrac{3+b}{2a}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке при переносе $b$: из $2ax+b=3$ получается $x=\\dfrac{3-b}{2a}$.",
+      "error_logic_latex": "Ученик ошибся в знаке при переносе $b$: из $2ax+b=3$ получается $x=\\dfrac{3-b}{2a}$.",
+      "explanation": "Ученик ошибся в знаке при переносе $b$: из $2ax+b=3$ получается $x=\\dfrac{3-b}{2a}$.",
+      "explanation_latex": "Ученик ошибся в знаке при переносе $b$: из $2ax+b=3$ получается $x=\\dfrac{3-b}{2a}$."
+     },
+     {
+      "value": "при $x=\\dfrac{3-b}{a}$",
+      "value_latex": "при $x=\\dfrac{3-b}{a}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл множитель $2$ в производной $(ax^{2})'=2ax$.",
+      "error_logic_latex": "Ученик забыл множитель $2$ в производной $(ax^{2})'=2ax$.",
+      "explanation": "Ученик забыл множитель $2$ в производной $(ax^{2})'=2ax$.",
+      "explanation_latex": "Ученик забыл множитель $2$ в производной $(ax^{2})'=2ax$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.8.6",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_8_6",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_7_2.1": {
+   "parent": "G11_TB_4_2_4_7_2",
+   "fields": {
+    "question_text": "Дана функция $f(x)=x^{2}$. Найдите значение её производной в точке $x=1$.",
+    "question_latex": "Дана функция $f(x)=x^{2}$. Найдите значение её производной в точке $x=1$.",
+    "correct_answer": "$2$",
+    "correct_answer_latex": "$2$",
+    "distractor_meta": [
+     {
+      "value": "$1$",
+      "value_latex": "$1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(1)=1$, а не производной $f'(1)=2\\cdot1$.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(1)=1$, а не производной $f'(1)=2\\cdot1$.",
+      "explanation": "Ученик вычислил значение функции $f(1)=1$, а не производной $f'(1)=2\\cdot1$.",
+      "explanation_latex": "Ученик вычислил значение функции $f(1)=1$, а не производной $f'(1)=2\\cdot1$."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что производная $x^{2}$ равна $0$; $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик решил, что производная $x^{2}$ равна $0$; $(x^{2})'=2x$.",
+      "explanation": "Ученик решил, что производная $x^{2}$ равна $0$; $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик решил, что производная $x^{2}$ равна $0$; $(x^{2})'=2x$."
+     },
+     {
+      "value": "$3$",
+      "value_latex": "$3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик применил формулу $(x^{n})'=nx^{n+1}$; верно $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик применил формулу $(x^{n})'=nx^{n+1}$; верно $(x^{2})'=2x$.",
+      "explanation": "Ученик применил формулу $(x^{n})'=nx^{n+1}$; верно $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик применил формулу $(x^{n})'=nx^{n+1}$; верно $(x^{2})'=2x$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.7.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P16",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти значение производной функции f(x)=x^2 в различных точках, что напрямую связано с вычислением углового коэффициента касательной. Навык G11_S16_01 описывает именно это: нахождение у",
+     "split_from": "G11_TB_4_2_4_7_2",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_7_2.2": {
+   "parent": "G11_TB_4_2_4_7_2",
+   "fields": {
+    "question_text": "Дана функция $f(x)=x^{2}$. Найдите значение её производной в точке $x=-2$.",
+    "question_latex": "Дана функция $f(x)=x^{2}$. Найдите значение её производной в точке $x=-2$.",
+    "correct_answer": "$-4$",
+    "correct_answer_latex": "$-4$",
+    "distractor_meta": [
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял знак: $f'(-2)=2\\cdot(-2)=-4$; значение $4$ — это $f(-2)$.",
+      "error_logic_latex": "Ученик потерял знак: $f'(-2)=2\\cdot(-2)=-4$; значение $4$ — это $f(-2)$.",
+      "explanation": "Ученик потерял знак: $f'(-2)=2\\cdot(-2)=-4$; значение $4$ — это $f(-2)$.",
+      "explanation_latex": "Ученик потерял знак: $f'(-2)=2\\cdot(-2)=-4$; значение $4$ — это $f(-2)$."
+     },
+     {
+      "value": "$-2$",
+      "value_latex": "$-2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не умножил на $2$: $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик не умножил на $2$: $(x^{2})'=2x$.",
+      "explanation": "Ученик не умножил на $2$: $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик не умножил на $2$: $(x^{2})'=2x$."
+     },
+     {
+      "value": "$-1$",
+      "value_latex": "$-1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил на $2$ вместо умножения: $f'(-2)=2\\cdot(-2)=-4$.",
+      "error_logic_latex": "Ученик разделил на $2$ вместо умножения: $f'(-2)=2\\cdot(-2)=-4$.",
+      "explanation": "Ученик разделил на $2$ вместо умножения: $f'(-2)=2\\cdot(-2)=-4$.",
+      "explanation_latex": "Ученик разделил на $2$ вместо умножения: $f'(-2)=2\\cdot(-2)=-4$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.7.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P16",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти значение производной функции f(x)=x^2 в различных точках, что напрямую связано с вычислением углового коэффициента касательной. Навык G11_S16_01 описывает именно это: нахождение у",
+     "split_from": "G11_TB_4_2_4_7_2",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_7_2.3": {
+   "parent": "G11_TB_4_2_4_7_2",
+   "fields": {
+    "question_text": "Дана функция $f(x)=x^{2}$. Найдите значение её производной в точке $x=3$.",
+    "question_latex": "Дана функция $f(x)=x^{2}$. Найдите значение её производной в точке $x=3$.",
+    "correct_answer": "$6$",
+    "correct_answer_latex": "$6$",
+    "distractor_meta": [
+     {
+      "value": "$9$",
+      "value_latex": "$9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил значение функции $f(3)=9$, а не производной.",
+      "error_logic_latex": "Ученик вычислил значение функции $f(3)=9$, а не производной.",
+      "explanation": "Ученик вычислил значение функции $f(3)=9$, а не производной.",
+      "explanation_latex": "Ученик вычислил значение функции $f(3)=9$, а не производной."
+     },
+     {
+      "value": "$3$",
+      "value_latex": "$3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не умножил на $2$: $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик не умножил на $2$: $(x^{2})'=2x$.",
+      "explanation": "Ученик не умножил на $2$: $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик не умножил на $2$: $(x^{2})'=2x$."
+     },
+     {
+      "value": "$27$",
+      "value_latex": "$27$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик применил формулу $(x^{n})'=nx^{n+1}$: $3^{3}$; верно $2\\cdot3=6$.",
+      "error_logic_latex": "Ученик применил формулу $(x^{n})'=nx^{n+1}$: $3^{3}$; верно $2\\cdot3=6$.",
+      "explanation": "Ученик применил формулу $(x^{n})'=nx^{n+1}$: $3^{3}$; верно $2\\cdot3=6$.",
+      "explanation_latex": "Ученик применил формулу $(x^{n})'=nx^{n+1}$: $3^{3}$; верно $2\\cdot3=6$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.7.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P16",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти значение производной функции f(x)=x^2 в различных точках, что напрямую связано с вычислением углового коэффициента касательной. Навык G11_S16_01 описывает именно это: нахождение у",
+     "split_from": "G11_TB_4_2_4_7_2",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_7_3.1": {
+   "parent": "G11_TB_4_2_4_7_3",
+   "fields": {
+    "question_text": "Дана функция $f(x)=x^{2}$. При каком значении $x$ её производная равна $0$?",
+    "question_latex": "Дана функция $f(x)=x^{2}$. При каком значении $x$ её производная равна $0$?",
+    "correct_answer": "$x=0$",
+    "correct_answer_latex": "$x=0$",
+    "distractor_meta": [
+     {
+      "value": "$x=1$",
+      "value_latex": "$x=1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил уравнение $x^{2}=1$; производная $f'(x)=2x$ равна нулю при $x=0$.",
+      "error_logic_latex": "Ученик решил уравнение $x^{2}=1$; производная $f'(x)=2x$ равна нулю при $x=0$.",
+      "explanation": "Ученик решил уравнение $x^{2}=1$; производная $f'(x)=2x$ равна нулю при $x=0$.",
+      "explanation_latex": "Ученик решил уравнение $x^{2}=1$; производная $f'(x)=2x$ равна нулю при $x=0$."
+     },
+     {
+      "value": "ни при каком $x$",
+      "value_latex": "ни при каком $x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не заметил, что $2x=0$ при $x=0$.",
+      "error_logic_latex": "Ученик не заметил, что $2x=0$ при $x=0$.",
+      "explanation": "Ученик не заметил, что $2x=0$ при $x=0$.",
+      "explanation_latex": "Ученик не заметил, что $2x=0$ при $x=0$."
+     },
+     {
+      "value": "$x=2$",
+      "value_latex": "$x=2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик подставил показатель степени вместо решения $2x=0$.",
+      "error_logic_latex": "Ученик подставил показатель степени вместо решения $2x=0$.",
+      "explanation": "Ученик подставил показатель степени вместо решения $2x=0$.",
+      "explanation_latex": "Ученик подставил показатель степени вместо решения $2x=0$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.7.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_7_3",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_7_3.2": {
+   "parent": "G11_TB_4_2_4_7_3",
+   "fields": {
+    "question_text": "Дана функция $f(x)=x^{2}$. При каком значении $x$ её производная равна $1$?",
+    "question_latex": "Дана функция $f(x)=x^{2}$. При каком значении $x$ её производная равна $1$?",
+    "correct_answer": "$x=\\dfrac{1}{2}$",
+    "correct_answer_latex": "$x=\\dfrac{1}{2}$",
+    "distractor_meta": [
+     {
+      "value": "$x=1$",
+      "value_latex": "$x=1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной.",
+      "error_logic_latex": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной.",
+      "explanation": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной.",
+      "explanation_latex": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной."
+     },
+     {
+      "value": "$x=2$",
+      "value_latex": "$x=2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил вместо деления: из $2x=1$ следует $x=\\dfrac{1}{2}$.",
+      "error_logic_latex": "Ученик умножил вместо деления: из $2x=1$ следует $x=\\dfrac{1}{2}$.",
+      "explanation": "Ученик умножил вместо деления: из $2x=1$ следует $x=\\dfrac{1}{2}$.",
+      "explanation_latex": "Ученик умножил вместо деления: из $2x=1$ следует $x=\\dfrac{1}{2}$."
+     },
+     {
+      "value": "$x=\\pm1$",
+      "value_latex": "$x=\\pm1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной.",
+      "error_logic_latex": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной.",
+      "explanation": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной.",
+      "explanation_latex": "Ученик решил $x^{2}=1$ для функции, а не $2x=1$ для производной."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.7.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_7_3",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_4_2_4_7_3.3": {
+   "parent": "G11_TB_4_2_4_7_3",
+   "fields": {
+    "question_text": "Дана функция $f(x)=x^{2}$. При каком значении $x$ её производная равна $3$?",
+    "question_latex": "Дана функция $f(x)=x^{2}$. При каком значении $x$ её производная равна $3$?",
+    "correct_answer": "$x=\\dfrac{3}{2}$",
+    "correct_answer_latex": "$x=\\dfrac{3}{2}$",
+    "distractor_meta": [
+     {
+      "value": "$x=\\sqrt{3}$",
+      "value_latex": "$x=\\sqrt{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил $x^{2}=3$ для функции, а не $2x=3$ для производной.",
+      "error_logic_latex": "Ученик решил $x^{2}=3$ для функции, а не $2x=3$ для производной.",
+      "explanation": "Ученик решил $x^{2}=3$ для функции, а не $2x=3$ для производной.",
+      "explanation_latex": "Ученик решил $x^{2}=3$ для функции, а не $2x=3$ для производной."
+     },
+     {
+      "value": "$x=6$",
+      "value_latex": "$x=6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил вместо деления: из $2x=3$ следует $x=\\dfrac{3}{2}$.",
+      "error_logic_latex": "Ученик умножил вместо деления: из $2x=3$ следует $x=\\dfrac{3}{2}$.",
+      "explanation": "Ученик умножил вместо деления: из $2x=3$ следует $x=\\dfrac{3}{2}$.",
+      "explanation_latex": "Ученик умножил вместо деления: из $2x=3$ следует $x=\\dfrac{3}{2}$."
+     },
+     {
+      "value": "$x=3$",
+      "value_latex": "$x=3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл множитель $2$ в производной $(x^{2})'=2x$.",
+      "error_logic_latex": "Ученик не учёл множитель $2$ в производной $(x^{2})'=2x$.",
+      "explanation": "Ученик не учёл множитель $2$ в производной $(x^{2})'=2x$.",
+      "explanation_latex": "Ученик не учёл множитель $2$ в производной $(x^{2})'=2x$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "4.2",
+     "exercise": "4.7.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "single_l4_candidate",
+     "split_from": "G11_TB_4_2_4_7_3",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "c5",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G11_TB_4_2_4_8_1": {
+   "why": "в одной задаче с выбором ответа были производная, семь её значений и три уравнения (ответ угадывался сравнением вариантов), условие ссылалось на «задание 4.7», которого ученик не видит",
+   "children": [
+    "G11_TB_4_2_4_8_1.1",
+    "G11_TB_4_2_4_8_1.2",
+    "G11_TB_4_2_4_8_1.3"
+   ]
+  },
+  "G11_TB_4_2_4_8_2": {
+   "why": "в одной задаче с выбором ответа были производная, семь её значений и три уравнения (ответ угадывался сравнением вариантов), условие ссылалось на «задание 4.7», которого ученик не видит",
+   "children": [
+    "G11_TB_4_2_4_8_2.1",
+    "G11_TB_4_2_4_8_2.2",
+    "G11_TB_4_2_4_8_2.3"
+   ]
+  },
+  "G11_TB_4_2_4_8_3": {
+   "why": "в одной задаче с выбором ответа были производная, семь её значений и три уравнения (ответ угадывался сравнением вариантов), условие ссылалось на «задание 4.7», которого ученик не видит",
+   "children": [
+    "G11_TB_4_2_4_8_3.1",
+    "G11_TB_4_2_4_8_3.2",
+    "G11_TB_4_2_4_8_3.3"
+   ]
+  },
+  "G11_TB_4_2_4_8_4": {
+   "why": "в одной задаче с выбором ответа были производная, семь её значений и три уравнения (ответ угадывался сравнением вариантов), условие ссылалось на «задание 4.7», которого ученик не видит",
+   "children": [
+    "G11_TB_4_2_4_8_4.1",
+    "G11_TB_4_2_4_8_4.2",
+    "G11_TB_4_2_4_8_4.3"
+   ]
+  },
+  "G11_TB_4_2_4_8_5": {
+   "why": "в одной задаче с выбором ответа были производная, семь её значений и три уравнения (ответ угадывался сравнением вариантов), условие ссылалось на «задание 4.7», которого ученик не видит",
+   "children": [
+    "G11_TB_4_2_4_8_5.1",
+    "G11_TB_4_2_4_8_5.2",
+    "G11_TB_4_2_4_8_5.3"
+   ]
+  },
+  "G11_TB_4_2_4_8_6": {
+   "why": "в одной задаче с выбором ответа были производная, семь её значений и три уравнения (ответ угадывался сравнением вариантов), условие ссылалось на «задание 4.7», которого ученик не видит",
+   "children": [
+    "G11_TB_4_2_4_8_6.1",
+    "G11_TB_4_2_4_8_6.2",
+    "G11_TB_4_2_4_8_6.3"
+   ]
+  },
+  "G11_TB_4_2_4_7_2": {
+   "why": "семь значений производной в одной задаче с выбором ответа: ответ угадывался сравнением вариантов; оставлены три характерные точки",
+   "children": [
+    "G11_TB_4_2_4_7_2.1",
+    "G11_TB_4_2_4_7_2.2",
+    "G11_TB_4_2_4_7_2.3"
+   ]
+  },
+  "G11_TB_4_2_4_7_3": {
+   "why": "три уравнения в одной задаче с выбором ответа: ответ угадывался сравнением вариантов",
+   "children": [
+    "G11_TB_4_2_4_7_3.1",
+    "G11_TB_4_2_4_7_3.2",
+    "G11_TB_4_2_4_7_3.3"
+   ]
+  }
+ }
+}
