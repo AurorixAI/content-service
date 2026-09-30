@@ -1,0 +1,808 @@
+{
+ "new": {
+  "G6_TB_1–2_34.1": {
+   "parent": "G6_TB_1–2_34",
+   "fields": {
+    "question_text": "Из чисел $1$, $2$, $3$, $4$, $5$, $6$, $9$, $10$, $12$, $15$, $18$, $20$ выпишите все делители числа $18$.",
+    "question_latex": "Из чисел $1$, $2$, $3$, $4$, $5$, $6$, $9$, $10$, $12$, $15$, $18$, $20$ выпишите все делители числа $18$.",
+    "correct_answer": "$1$, $2$, $3$, $6$, $9$, $18$",
+    "correct_answer_latex": "$1$, $2$, $3$, $6$, $9$, $18$",
+    "distractor_meta": [
+     {
+      "value": "$2$, $3$, $6$, $9$",
+      "value_latex": "$2$, $3$, $6$, $9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл делители $1$ и само число.",
+      "error_logic_latex": "Ученик забыл делители $1$ и само число.",
+      "explanation": "Ученик забыл делители $1$ и само число.",
+      "explanation_latex": "Ученик забыл делители $1$ и само число."
+     },
+     {
+      "value": "$1$, $2$, $3$, $6$, $18$",
+      "value_latex": "$1$, $2$, $3$, $6$, $18$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил делитель $9$.",
+      "error_logic_latex": "Ученик пропустил делитель $9$.",
+      "explanation": "Ученик пропустил делитель $9$.",
+      "explanation_latex": "Ученик пропустил делитель $9$."
+     },
+     {
+      "value": "$1$, $2$, $3$, $4$, $6$, $9$, $18$",
+      "value_latex": "$1$, $2$, $3$, $4$, $6$, $9$, $18$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил $4$, но $18$ на $4$ не делится.",
+      "error_logic_latex": "Ученик включил $4$, но $18$ на $4$ не делится.",
+      "explanation": "Ученик включил $4$, но $18$ на $4$ не делится.",
+      "explanation_latex": "Ученик включил $4$, но $18$ на $4$ не делится."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "1–2",
+     "exercise": "34",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "В задаче требуется найти делители для заданных чисел (9, 10, 12, 15, 18, 20) среди предложенного списка чисел. Это напрямую соответствует навыку G6_S01_01 (Нахождение делителей числа — Определение чис",
+     "split_from": "G6_TB_1–2_34",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_1–2_34.2": {
+   "parent": "G6_TB_1–2_34",
+   "fields": {
+    "question_text": "Из чисел $1$, $2$, $3$, $4$, $5$, $6$, $9$, $10$, $12$, $15$, $18$, $20$ выпишите все делители числа $20$.",
+    "question_latex": "Из чисел $1$, $2$, $3$, $4$, $5$, $6$, $9$, $10$, $12$, $15$, $18$, $20$ выпишите все делители числа $20$.",
+    "correct_answer": "$1$, $2$, $4$, $5$, $10$, $20$",
+    "correct_answer_latex": "$1$, $2$, $4$, $5$, $10$, $20$",
+    "distractor_meta": [
+     {
+      "value": "$2$, $4$, $5$, $10$",
+      "value_latex": "$2$, $4$, $5$, $10$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл делители $1$ и само число.",
+      "error_logic_latex": "Ученик забыл делители $1$ и само число.",
+      "explanation": "Ученик забыл делители $1$ и само число.",
+      "explanation_latex": "Ученик забыл делители $1$ и само число."
+     },
+     {
+      "value": "$1$, $2$, $5$, $10$, $20$",
+      "value_latex": "$1$, $2$, $5$, $10$, $20$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил делитель $4$.",
+      "error_logic_latex": "Ученик пропустил делитель $4$.",
+      "explanation": "Ученик пропустил делитель $4$.",
+      "explanation_latex": "Ученик пропустил делитель $4$."
+     },
+     {
+      "value": "$1$, $2$, $4$, $5$, $6$, $10$, $20$",
+      "value_latex": "$1$, $2$, $4$, $5$, $6$, $10$, $20$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил $6$, но $20$ на $6$ не делится.",
+      "error_logic_latex": "Ученик включил $6$, но $20$ на $6$ не делится.",
+      "explanation": "Ученик включил $6$, но $20$ на $6$ не делится.",
+      "explanation_latex": "Ученик включил $6$, но $20$ на $6$ не делится."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "1–2",
+     "exercise": "34",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "В задаче требуется найти делители для заданных чисел (9, 10, 12, 15, 18, 20) среди предложенного списка чисел. Это напрямую соответствует навыку G6_S01_01 (Нахождение делителей числа — Определение чис",
+     "split_from": "G6_TB_1–2_34",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_3_118.1": {
+   "parent": "G6_TB_3_118",
+   "fields": {
+    "question_text": "Разложите число $99$ на два множителя всеми возможными способами (способы, отличающиеся только порядком множителей, считаются одинаковыми).",
+    "question_latex": "Разложите число $99$ на два множителя всеми возможными способами (способы, отличающиеся только порядком множителей, считаются одинаковыми).",
+    "correct_answer": "$1\\cdot99$, $3\\cdot33$, $9\\cdot11$",
+    "correct_answer_latex": "$1\\cdot99$, $3\\cdot33$, $9\\cdot11$",
+    "distractor_meta": [
+     {
+      "value": "$3\\cdot33$, $9\\cdot11$",
+      "value_latex": "$3\\cdot33$, $9\\cdot11$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл разложение $1\\cdot99$.",
+      "error_logic_latex": "Ученик забыл разложение $1\\cdot99$.",
+      "explanation": "Ученик забыл разложение $1\\cdot99$.",
+      "explanation_latex": "Ученик забыл разложение $1\\cdot99$."
+     },
+     {
+      "value": "$1\\cdot99$, $9\\cdot11$",
+      "value_latex": "$1\\cdot99$, $9\\cdot11$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил разложение $3\\cdot33$.",
+      "error_logic_latex": "Ученик пропустил разложение $3\\cdot33$.",
+      "explanation": "Ученик пропустил разложение $3\\cdot33$.",
+      "explanation_latex": "Ученик пропустил разложение $3\\cdot33$."
+     },
+     {
+      "value": "$1\\cdot99$, $3\\cdot33$, $9\\cdot11$, $11\\cdot9$",
+      "value_latex": "$1\\cdot99$, $3\\cdot33$, $9\\cdot11$, $11\\cdot9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал одно разложение дважды, изменив порядок множителей.",
+      "error_logic_latex": "Ученик посчитал одно разложение дважды, изменив порядок множителей.",
+      "explanation": "Ученик посчитал одно разложение дважды, изменив порядок множителей.",
+      "explanation_latex": "Ученик посчитал одно разложение дважды, изменив порядок множителей."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "3",
+     "exercise": 118,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует разложить числа на два множителя всеми возможными способами. Это эквивалентно нахождению всех пар делителей для каждого из чисел (30, 33, 42, 99). Таким образом, задача напрямую проверя",
+     "split_from": "G6_TB_3_118",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_3_118.2": {
+   "parent": "G6_TB_3_118",
+   "fields": {
+    "question_text": "Разложите число $42$ на два множителя всеми возможными способами (способы, отличающиеся только порядком множителей, считаются одинаковыми).",
+    "question_latex": "Разложите число $42$ на два множителя всеми возможными способами (способы, отличающиеся только порядком множителей, считаются одинаковыми).",
+    "correct_answer": "$1\\cdot42$, $2\\cdot21$, $3\\cdot14$, $6\\cdot7$",
+    "correct_answer_latex": "$1\\cdot42$, $2\\cdot21$, $3\\cdot14$, $6\\cdot7$",
+    "distractor_meta": [
+     {
+      "value": "$2\\cdot21$, $3\\cdot14$, $6\\cdot7$",
+      "value_latex": "$2\\cdot21$, $3\\cdot14$, $6\\cdot7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл разложение $1\\cdot42$.",
+      "error_logic_latex": "Ученик забыл разложение $1\\cdot42$.",
+      "explanation": "Ученик забыл разложение $1\\cdot42$.",
+      "explanation_latex": "Ученик забыл разложение $1\\cdot42$."
+     },
+     {
+      "value": "$1\\cdot42$, $2\\cdot21$, $6\\cdot7$",
+      "value_latex": "$1\\cdot42$, $2\\cdot21$, $6\\cdot7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил разложение $3\\cdot14$.",
+      "error_logic_latex": "Ученик пропустил разложение $3\\cdot14$.",
+      "explanation": "Ученик пропустил разложение $3\\cdot14$.",
+      "explanation_latex": "Ученик пропустил разложение $3\\cdot14$."
+     },
+     {
+      "value": "$1\\cdot42$, $2\\cdot21$, $3\\cdot14$, $4\\cdot10{,}5$",
+      "value_latex": "$1\\cdot42$, $2\\cdot21$, $3\\cdot14$, $4\\cdot10{,}5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял нецелый множитель.",
+      "error_logic_latex": "Ученик взял нецелый множитель.",
+      "explanation": "Ученик взял нецелый множитель.",
+      "explanation_latex": "Ученик взял нецелый множитель."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "3",
+     "exercise": 118,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует разложить числа на два множителя всеми возможными способами. Это эквивалентно нахождению всех пар делителей для каждого из чисел (30, 33, 42, 99). Таким образом, задача напрямую проверя",
+     "split_from": "G6_TB_3_118",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_42_1477.1": {
+   "parent": "G6_TB_42_1477",
+   "fields": {
+    "question_text": "Какие из чисел $3572$, $81\\,375$, $158\\,457$, $237\\,583$, $67\\,932$, $2\\,487\\,960$ делятся нацело на $9$?",
+    "question_latex": "Какие из чисел $3572$, $81\\,375$, $158\\,457$, $237\\,583$, $67\\,932$, $2\\,487\\,960$ делятся нацело на $9$?",
+    "correct_answer": "$67\\,932$ и $2\\,487\\,960$",
+    "correct_answer_latex": "$67\\,932$ и $2\\,487\\,960$",
+    "distractor_meta": [
+     {
+      "value": "$158\\,457$, $67\\,932$ и $2\\,487\\,960$",
+      "value_latex": "$158\\,457$, $67\\,932$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не проверил сумму цифр $158\\,457$: $30$ делится на $3$, но не на $9$.",
+      "error_logic_latex": "Ученик не проверил сумму цифр $158\\,457$: $30$ делится на $3$, но не на $9$.",
+      "explanation": "Ученик не проверил сумму цифр $158\\,457$: $30$ делится на $3$, но не на $9$.",
+      "explanation_latex": "Ученик не проверил сумму цифр $158\\,457$: $30$ делится на $3$, но не на $9$."
+     },
+     {
+      "value": "$81\\,375$, $158\\,457$, $67\\,932$ и $2\\,487\\,960$",
+      "value_latex": "$81\\,375$, $158\\,457$, $67\\,932$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перечислил числа, делящиеся на $3$.",
+      "error_logic_latex": "Ученик перечислил числа, делящиеся на $3$.",
+      "explanation": "Ученик перечислил числа, делящиеся на $3$.",
+      "explanation_latex": "Ученик перечислил числа, делящиеся на $3$."
+     },
+     {
+      "value": "только $2\\,487\\,960$",
+      "value_latex": "только $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил $67\\,932$: сумма цифр $27$ делится на $9$.",
+      "error_logic_latex": "Ученик пропустил $67\\,932$: сумма цифр $27$ делится на $9$.",
+      "explanation": "Ученик пропустил $67\\,932$: сумма цифр $27$ делится на $9$.",
+      "explanation_latex": "Ученик пропустил $67\\,932$: сумма цифр $27$ делится на $9$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "42",
+     "exercise": 1477,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P03",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует проверить делимость нескольких чисел на 3, 9, 5 и 15. Проверка делимости на 9 и на 15 (которая включает в себя делимость на 3 и на 5) опирается на сумму цифр. Навык G6_S03_02 (Делимость",
+     "split_from": "G6_TB_42_1477",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_42_1477.2": {
+   "parent": "G6_TB_42_1477",
+   "fields": {
+    "question_text": "Какие из чисел $3572$, $81\\,375$, $158\\,457$, $237\\,583$, $67\\,932$, $2\\,487\\,960$ делятся нацело на $15$?",
+    "question_latex": "Какие из чисел $3572$, $81\\,375$, $158\\,457$, $237\\,583$, $67\\,932$, $2\\,487\\,960$ делятся нацело на $15$?",
+    "correct_answer": "$81\\,375$ и $2\\,487\\,960$",
+    "correct_answer_latex": "$81\\,375$ и $2\\,487\\,960$",
+    "distractor_meta": [
+     {
+      "value": "только $81\\,375$",
+      "value_latex": "только $81\\,375$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил $2\\,487\\,960$: оно делится и на $3$, и на $5$.",
+      "error_logic_latex": "Ученик пропустил $2\\,487\\,960$: оно делится и на $3$, и на $5$.",
+      "explanation": "Ученик пропустил $2\\,487\\,960$: оно делится и на $3$, и на $5$.",
+      "explanation_latex": "Ученик пропустил $2\\,487\\,960$: оно делится и на $3$, и на $5$."
+     },
+     {
+      "value": "$81\\,375$, $158\\,457$ и $2\\,487\\,960$",
+      "value_latex": "$81\\,375$, $158\\,457$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил $158\\,457$, которое не делится на $5$.",
+      "error_logic_latex": "Ученик включил $158\\,457$, которое не делится на $5$.",
+      "explanation": "Ученик включил $158\\,457$, которое не делится на $5$.",
+      "explanation_latex": "Ученик включил $158\\,457$, которое не делится на $5$."
+     },
+     {
+      "value": "$81\\,375$, $67\\,932$ и $2\\,487\\,960$",
+      "value_latex": "$81\\,375$, $67\\,932$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил $67\\,932$, которое не делится на $5$.",
+      "error_logic_latex": "Ученик включил $67\\,932$, которое не делится на $5$.",
+      "explanation": "Ученик включил $67\\,932$, которое не делится на $5$.",
+      "explanation_latex": "Ученик включил $67\\,932$, которое не делится на $5$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "42",
+     "exercise": 1477,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P03",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует проверить делимость нескольких чисел на 3, 9, 5 и 15. Проверка делимости на 9 и на 15 (которая включает в себя делимость на 3 и на 5) опирается на сумму цифр. Навык G6_S03_02 (Делимость",
+     "split_from": "G6_TB_42_1477",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_42_1477.3": {
+   "parent": "G6_TB_42_1477",
+   "fields": {
+    "question_text": "Какие из чисел $3572$, $81\\,375$, $158\\,457$, $237\\,583$, $67\\,932$, $2\\,487\\,960$ делятся нацело на $3$?",
+    "question_latex": "Какие из чисел $3572$, $81\\,375$, $158\\,457$, $237\\,583$, $67\\,932$, $2\\,487\\,960$ делятся нацело на $3$?",
+    "correct_answer": "$81\\,375$, $158\\,457$, $67\\,932$ и $2\\,487\\,960$",
+    "correct_answer_latex": "$81\\,375$, $158\\,457$, $67\\,932$ и $2\\,487\\,960$",
+    "distractor_meta": [
+     {
+      "value": "$67\\,932$ и $2\\,487\\,960$",
+      "value_latex": "$67\\,932$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перечислил только числа, делящиеся на $9$.",
+      "error_logic_latex": "Ученик перечислил только числа, делящиеся на $9$.",
+      "explanation": "Ученик перечислил только числа, делящиеся на $9$.",
+      "explanation_latex": "Ученик перечислил только числа, делящиеся на $9$."
+     },
+     {
+      "value": "$3572$, $81\\,375$, $67\\,932$ и $2\\,487\\,960$",
+      "value_latex": "$3572$, $81\\,375$, $67\\,932$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не проверил сумму цифр $3572$: $17$ не делится на $3$.",
+      "error_logic_latex": "Ученик не проверил сумму цифр $3572$: $17$ не делится на $3$.",
+      "explanation": "Ученик не проверил сумму цифр $3572$: $17$ не делится на $3$.",
+      "explanation_latex": "Ученик не проверил сумму цифр $3572$: $17$ не делится на $3$."
+     },
+     {
+      "value": "$81\\,375$ и $2\\,487\\,960$",
+      "value_latex": "$81\\,375$ и $2\\,487\\,960$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перечислил числа, делящиеся на $15$.",
+      "error_logic_latex": "Ученик перечислил числа, делящиеся на $15$.",
+      "explanation": "Ученик перечислил числа, делящиеся на $15$.",
+      "explanation_latex": "Ученик перечислил числа, делящиеся на $15$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "42",
+     "exercise": 1477,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P03",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует проверить делимость нескольких чисел на 3, 9, 5 и 15. Проверка делимости на 9 и на 15 (которая включает в себя делимость на 3 и на 5) опирается на сумму цифр. Навык G6_S03_02 (Делимость",
+     "split_from": "G6_TB_42_1477",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_26_526.1": {
+   "parent": "G9_TB_26_526",
+   "fields": {
+    "question_text": "Все члены последовательности $(c_{n})$ с нечётными номерами равны $-1$, а с чётными равны $0$. Найдите $c_{253}$.",
+    "question_latex": "Все члены последовательности $(c_{n})$ с нечётными номерами равны $-1$, а с чётными равны $0$. Найдите $c_{253}$.",
+    "correct_answer": "$-1$",
+    "correct_answer_latex": "$-1$",
+    "distractor_meta": [
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся с чётностью номера: $253$ — нечётное число.",
+      "error_logic_latex": "Ученик ошибся с чётностью номера: $253$ — нечётное число.",
+      "explanation": "Ученик ошибся с чётностью номера: $253$ — нечётное число.",
+      "explanation_latex": "Ученик ошибся с чётностью номера: $253$ — нечётное число."
+     },
+     {
+      "value": "$253$",
+      "value_latex": "$253$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал номер члена.",
+      "error_logic_latex": "Ученик назвал номер члена.",
+      "explanation": "Ученик назвал номер члена.",
+      "explanation_latex": "Ученик назвал номер члена."
+     },
+     {
+      "value": "$1$",
+      "value_latex": "$1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял знак.",
+      "error_logic_latex": "Ученик потерял знак.",
+      "explanation": "Ученик потерял знак.",
+      "explanation_latex": "Ученик потерял знак."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "526",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P28",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует найти конкретные члены последовательности (c_10, c_25 и т.д.) по заданному правилу, что соответствует навыку нахождения конкретного члена последовательности.",
+     "split_from": "G9_TB_26_526",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_26_526.2": {
+   "parent": "G9_TB_26_526",
+   "fields": {
+    "question_text": "Все члены последовательности $(c_{n})$ с нечётными номерами равны $-1$, а с чётными равны $0$. Найдите $c_{2k}$.",
+    "question_latex": "Все члены последовательности $(c_{n})$ с нечётными номерами равны $-1$, а с чётными равны $0$. Найдите $c_{2k}$.",
+    "correct_answer": "$0$",
+    "correct_answer_latex": "$0$",
+    "distractor_meta": [
+     {
+      "value": "$-1$",
+      "value_latex": "$-1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся с чётностью: номер $2k$ чётный.",
+      "error_logic_latex": "Ученик ошибся с чётностью: номер $2k$ чётный.",
+      "explanation": "Ученик ошибся с чётностью: номер $2k$ чётный.",
+      "explanation_latex": "Ученик ошибся с чётностью: номер $2k$ чётный."
+     },
+     {
+      "value": "$2k$",
+      "value_latex": "$2k$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал номер члена.",
+      "error_logic_latex": "Ученик назвал номер члена.",
+      "explanation": "Ученик назвал номер члена.",
+      "explanation_latex": "Ученик назвал номер члена."
+     },
+     {
+      "value": "$(-1)^{k}$",
+      "value_latex": "$(-1)^{k}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что знак зависит от $k$.",
+      "error_logic_latex": "Ученик решил, что знак зависит от $k$.",
+      "explanation": "Ученик решил, что знак зависит от $k$.",
+      "explanation_latex": "Ученик решил, что знак зависит от $k$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "526",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P28",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует найти конкретные члены последовательности (c_10, c_25 и т.д.) по заданному правилу, что соответствует навыку нахождения конкретного члена последовательности.",
+     "split_from": "G9_TB_26_526",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_27_540_3.1": {
+   "parent": "G9_TB_27_540_3",
+   "fields": {
+    "question_text": "Арифметическая прогрессия: $a_{1}=1{,}7$, $d=-0{,}2$. Найдите $a_{5}$.",
+    "question_latex": "Арифметическая прогрессия: $a_{1}=1{,}7$, $d=-0{,}2$. Найдите $a_{5}$.",
+    "correct_answer": "$0{,}9$",
+    "correct_answer_latex": "$0{,}9$",
+    "distractor_meta": [
+     {
+      "value": "$0{,}7$",
+      "value_latex": "$0{,}7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх.",
+      "error_logic_latex": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх.",
+      "explanation": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх.",
+      "explanation_latex": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх."
+     },
+     {
+      "value": "$1{,}1$",
+      "value_latex": "$1{,}1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $a_{4}$.",
+      "error_logic_latex": "Ученик нашёл $a_{4}$.",
+      "explanation": "Ученик нашёл $a_{4}$.",
+      "explanation_latex": "Ученик нашёл $a_{4}$."
+     },
+     {
+      "value": "$2{,}5$",
+      "value_latex": "$2{,}5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик прибавлял $0{,}2$, не учтя знак разности.",
+      "error_logic_latex": "Ученик прибавлял $0{,}2$, не учтя знак разности.",
+      "explanation": "Ученик прибавлял $0{,}2$, не учтя знак разности.",
+      "explanation_latex": "Ученик прибавлял $0{,}2$, не учтя знак разности."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "27",
+     "exercise": "540.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P29",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует вычислить первые пять членов арифметической прогрессии по заданным первому члену и разности, что напрямую связано с нахождением n-го члена прогрессии.",
+     "split_from": "G9_TB_27_540_3",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_27_540_4.1": {
+   "parent": "G9_TB_27_540_4",
+   "fields": {
+    "question_text": "Арифметическая прогрессия: $a_{1}=-3{,}5$, $d=0{,}6$. Найдите $a_{5}$.",
+    "question_latex": "Арифметическая прогрессия: $a_{1}=-3{,}5$, $d=0{,}6$. Найдите $a_{5}$.",
+    "correct_answer": "$-1{,}1$",
+    "correct_answer_latex": "$-1{,}1$",
+    "distractor_meta": [
+     {
+      "value": "$-0{,}5$",
+      "value_latex": "$-0{,}5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх.",
+      "error_logic_latex": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх.",
+      "explanation": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх.",
+      "explanation_latex": "Ученик нашёл $a_{6}$: прибавил разность пять раз вместо четырёх."
+     },
+     {
+      "value": "$-1{,}7$",
+      "value_latex": "$-1{,}7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $a_{4}$.",
+      "error_logic_latex": "Ученик нашёл $a_{4}$.",
+      "explanation": "Ученик нашёл $a_{4}$.",
+      "explanation_latex": "Ученик нашёл $a_{4}$."
+     },
+     {
+      "value": "$-5{,}9$",
+      "value_latex": "$-5{,}9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычитал разность вместо прибавления.",
+      "error_logic_latex": "Ученик вычитал разность вместо прибавления.",
+      "explanation": "Ученик вычитал разность вместо прибавления.",
+      "explanation_latex": "Ученик вычитал разность вместо прибавления."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "27",
+     "exercise": "540.4",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P29",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует вычислить первые пять членов арифметической прогрессии по заданным первому члену и разности, что является прямым применением формулы n-го члена (a_n = a_1 + (n-1)d). Это соответствует н",
+     "split_from": "G9_TB_27_540_4",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_28_349_2.1": {
+   "parent": "G9_TB_28_349_2",
+   "fields": {
+    "question_text": "Дана последовательность квадратов натуральных чисел $1$, $4$, $9$, $16$, $25$, … Укажите номер члена, равного $25$.",
+    "question_latex": "Дана последовательность квадратов натуральных чисел $1$, $4$, $9$, $16$, $25$, … Укажите номер члена, равного $25$.",
+    "correct_answer": "$5$",
+    "correct_answer_latex": "$5$",
+    "distractor_meta": [
+     {
+      "value": "$25$",
+      "value_latex": "$25$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал сам член, а не его номер.",
+      "error_logic_latex": "Ученик назвал сам член, а не его номер.",
+      "explanation": "Ученик назвал сам член, а не его номер.",
+      "explanation_latex": "Ученик назвал сам член, а не его номер."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся на единицу при счёте.",
+      "error_logic_latex": "Ученик ошибся на единицу при счёте.",
+      "explanation": "Ученик ошибся на единицу при счёте.",
+      "explanation_latex": "Ученик ошибся на единицу при счёте."
+     },
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся на единицу при счёте.",
+      "error_logic_latex": "Ученик ошибся на единицу при счёте.",
+      "explanation": "Ученик ошибся на единицу при счёте.",
+      "explanation_latex": "Ученик ошибся на единицу при счёте."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "28",
+     "exercise": "349.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P28",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует определить номер члена последовательности квадратов натуральных чисел по заданному значению (4, 25, n², (n+1)²). Это обратная задача к нахождению формулы n-го члена: зная формулу a_n = ",
+     "split_from": "G9_TB_28_349_2",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_28_349_2.2": {
+   "parent": "G9_TB_28_349_2",
+   "fields": {
+    "question_text": "Дана последовательность квадратов натуральных чисел $1$, $4$, $9$, $16$, $25$, … Укажите номер члена, равного $(n+1)^{2}$.",
+    "question_latex": "Дана последовательность квадратов натуральных чисел $1$, $4$, $9$, $16$, $25$, … Укажите номер члена, равного $(n+1)^{2}$.",
+    "correct_answer": "$n+1$",
+    "correct_answer_latex": "$n+1$",
+    "distractor_meta": [
+     {
+      "value": "$n$",
+      "value_latex": "$n$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся на единицу: $n$-й член равен $n^{2}$.",
+      "error_logic_latex": "Ученик ошибся на единицу: $n$-й член равен $n^{2}$.",
+      "explanation": "Ученик ошибся на единицу: $n$-й член равен $n^{2}$.",
+      "explanation_latex": "Ученик ошибся на единицу: $n$-й член равен $n^{2}$."
+     },
+     {
+      "value": "$(n+1)^{2}$",
+      "value_latex": "$(n+1)^{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал сам член, а не его номер.",
+      "error_logic_latex": "Ученик назвал сам член, а не его номер.",
+      "explanation": "Ученик назвал сам член, а не его номер.",
+      "explanation_latex": "Ученик назвал сам член, а не его номер."
+     },
+     {
+      "value": "$2n+1$",
+      "value_latex": "$2n+1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл разность соседних квадратов.",
+      "error_logic_latex": "Ученик нашёл разность соседних квадратов.",
+      "explanation": "Ученик нашёл разность соседних квадратов.",
+      "explanation_latex": "Ученик нашёл разность соседних квадратов."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "28",
+     "exercise": "349.2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P28",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует определить номер члена последовательности квадратов натуральных чисел по заданному значению (4, 25, n², (n+1)²). Это обратная задача к нахождению формулы n-го члена: зная формулу a_n = ",
+     "split_from": "G9_TB_28_349_2",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n2",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G6_TB_1–2_34": {
+   "why": "несколько чисел в одной задаче с выбором ответа (ответ сверялся по всем спискам); каждое число — отдельная задача",
+   "children": [
+    "G6_TB_1–2_34.1",
+    "G6_TB_1–2_34.2"
+   ]
+  },
+  "G6_TB_3_118": {
+   "why": "несколько чисел в одной задаче с выбором ответа (ответ сверялся по всем спискам); каждое число — отдельная задача",
+   "children": [
+    "G6_TB_3_118.1",
+    "G6_TB_3_118.2"
+   ]
+  },
+  "G6_TB_42_1477": {
+   "why": "несколько чисел в одной задаче с выбором ответа (ответ сверялся по всем спискам); каждое число — отдельная задача; в ключе число $158\\,457$ отнесено к делящимся на $9$ — неверно: сумма цифр $30$ не делится на $9$",
+   "children": [
+    "G6_TB_42_1477.1",
+    "G6_TB_42_1477.2",
+    "G6_TB_42_1477.3"
+   ]
+  },
+  "G9_TB_26_526": {
+   "why": "несколько членов последовательности в одной задаче с выбором ответа; каждая задача — вычисление одного члена",
+   "children": [
+    "G9_TB_26_526.1",
+    "G9_TB_26_526.2"
+   ]
+  },
+  "G9_TB_27_540_3": {
+   "why": "несколько членов последовательности в одной задаче с выбором ответа; каждая задача — вычисление одного члена",
+   "children": [
+    "G9_TB_27_540_3.1"
+   ]
+  },
+  "G9_TB_27_540_4": {
+   "why": "несколько членов последовательности в одной задаче с выбором ответа; каждая задача — вычисление одного члена",
+   "children": [
+    "G9_TB_27_540_4.1"
+   ]
+  },
+  "G9_TB_28_349_2": {
+   "why": "несколько членов последовательности в одной задаче с выбором ответа; каждая задача — вычисление одного члена",
+   "children": [
+    "G9_TB_28_349_2.1",
+    "G9_TB_28_349_2.2"
+   ]
+  }
+ }
+}

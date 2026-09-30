@@ -1,0 +1,188 @@
+{
+ "new": {
+  "G5_TB_30_1154.1": {
+   "parent": "G5_TB_30_1154",
+   "fields": {
+    "question_text": "Замените дробью или смешанным числом частное $9:2$.",
+    "question_latex": "Замените дробью или смешанным числом частное $9:2$.",
+    "correct_answer": "$4\\dfrac{1}{2}$",
+    "correct_answer_latex": "$4\\dfrac{1}{2}$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{2}{9}$",
+      "value_latex": "$\\dfrac{2}{9}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил делимое и делитель.",
+      "error_logic_latex": "Ученик переставил делимое и делитель.",
+      "explanation": "Ученик переставил делимое и делитель.",
+      "explanation_latex": "Ученик переставил делимое и делитель."
+     },
+     {
+      "value": "$4\\dfrac{1}{9}$",
+      "value_latex": "$4\\dfrac{1}{9}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик записал остаток над делимым; знаменатель — делитель $2$.",
+      "error_logic_latex": "Ученик записал остаток над делимым; знаменатель — делитель $2$.",
+      "explanation": "Ученик записал остаток над делимым; знаменатель — делитель $2$.",
+      "explanation_latex": "Ученик записал остаток над делимым; знаменатель — делитель $2$."
+     },
+     {
+      "value": "$9\\dfrac{1}{2}$",
+      "value_latex": "$9\\dfrac{1}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик записал делимое целой частью, не выполнив деление.",
+      "error_logic_latex": "Ученик записал делимое целой частью, не выполнив деление.",
+      "explanation": "Ученик записал делимое целой частью, не выполнив деление.",
+      "explanation_latex": "Ученик записал делимое целой частью, не выполнив деление."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "30",
+     "exercise": "1154",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P29",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует от учащегося записать операцию деления (частное) в виде обыкновенной дроби или смешанного числа (например, 9 : 2 = 9/2 = 4 1/2). Это напрямую соответствует навыку G5_S29_02 'Запись деле",
+     "split_from": "G5_TB_30_1154",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "d8",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_30_1154.2": {
+   "parent": "G5_TB_30_1154",
+   "fields": {
+    "question_text": "Замените дробью или смешанным числом частное $5:11$.",
+    "question_latex": "Замените дробью или смешанным числом частное $5:11$.",
+    "correct_answer": "$\\dfrac{5}{11}$",
+    "correct_answer_latex": "$\\dfrac{5}{11}$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{11}{5}$",
+      "value_latex": "$\\dfrac{11}{5}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил делимое и делитель.",
+      "error_logic_latex": "Ученик переставил делимое и делитель.",
+      "explanation": "Ученик переставил делимое и делитель.",
+      "explanation_latex": "Ученик переставил делимое и делитель."
+     },
+     {
+      "value": "$2\\dfrac{1}{5}$",
+      "value_latex": "$2\\dfrac{1}{5}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил делитель на делимое.",
+      "error_logic_latex": "Ученик разделил делитель на делимое.",
+      "explanation": "Ученик разделил делитель на делимое.",
+      "explanation_latex": "Ученик разделил делитель на делимое."
+     },
+     {
+      "value": "$5\\dfrac{1}{11}$",
+      "value_latex": "$5\\dfrac{1}{11}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик записал делимое целой частью.",
+      "error_logic_latex": "Ученик записал делимое целой частью.",
+      "explanation": "Ученик записал делимое целой частью.",
+      "explanation_latex": "Ученик записал делимое целой частью."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "30",
+     "exercise": "1154",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P29",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует от учащегося записать операцию деления (частное) в виде обыкновенной дроби или смешанного числа (например, 9 : 2 = 9/2 = 4 1/2). Это напрямую соответствует навыку G5_S29_02 'Запись деле",
+     "split_from": "G5_TB_30_1154",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "d8",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_30_1154.3": {
+   "parent": "G5_TB_30_1154",
+   "fields": {
+    "question_text": "Замените дробью или смешанным числом частное $15:10$.",
+    "question_latex": "Замените дробью или смешанным числом частное $15:10$.",
+    "correct_answer": "$1\\dfrac{5}{10}$",
+    "correct_answer_latex": "$1\\dfrac{5}{10}$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{10}{15}$",
+      "value_latex": "$\\dfrac{10}{15}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил делимое и делитель.",
+      "error_logic_latex": "Ученик переставил делимое и делитель.",
+      "explanation": "Ученик переставил делимое и делитель.",
+      "explanation_latex": "Ученик переставил делимое и делитель."
+     },
+     {
+      "value": "$1\\dfrac{5}{15}$",
+      "value_latex": "$1\\dfrac{5}{15}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик записал остаток над делимым; знаменатель — делитель $10$.",
+      "error_logic_latex": "Ученик записал остаток над делимым; знаменатель — делитель $10$.",
+      "explanation": "Ученик записал остаток над делимым; знаменатель — делитель $10$.",
+      "explanation_latex": "Ученик записал остаток над делимым; знаменатель — делитель $10$."
+     },
+     {
+      "value": "$5\\dfrac{1}{10}$",
+      "value_latex": "$5\\dfrac{1}{10}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик поменял местами остаток и неполное частное.",
+      "error_logic_latex": "Ученик поменял местами остаток и неполное частное.",
+      "explanation": "Ученик поменял местами остаток и неполное частное.",
+      "explanation_latex": "Ученик поменял местами остаток и неполное частное."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "30",
+     "exercise": "1154",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P29",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует от учащегося записать операцию деления (частное) в виде обыкновенной дроби или смешанного числа (например, 9 : 2 = 9/2 = 4 1/2). Это напрямую соответствует навыку G5_S29_02 'Запись деле",
+     "split_from": "G5_TB_30_1154",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "d8",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G5_TB_30_1154": {
+   "why": "пачка из нескольких однотипных вычислений в одной задаче с выбором ответа (ответ угадывался сравнением вариантов, время ученика — на все пункты сразу); оставлены характерные пункты, каждый — отдельная задача",
+   "children": [
+    "G5_TB_30_1154.1",
+    "G5_TB_30_1154.2",
+    "G5_TB_30_1154.3"
+   ]
+  }
+ }
+}

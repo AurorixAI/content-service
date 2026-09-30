@@ -1,0 +1,616 @@
+{
+ "new": {
+  "G10_TB_§29_2.1": {
+   "parent": "G10_TB_§29_2",
+   "fields": {
+    "question_text": "Какова область значений функции $y=\\arccos x$?",
+    "question_latex": "Какова область значений функции $y=\\arccos x$?",
+    "correct_answer": "$[0;\\,\\pi]$",
+    "correct_answer_latex": "$[0;\\,\\pi]$",
+    "distractor_meta": [
+     {
+      "value": "$\\left[-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right]$",
+      "value_latex": "$\\left[-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область значений арксинуса.",
+      "error_logic_latex": "Ученик назвал область значений арксинуса.",
+      "explanation": "Ученик назвал область значений арксинуса.",
+      "explanation_latex": "Ученик назвал область значений арксинуса."
+     },
+     {
+      "value": "$[-1;\\,1]$",
+      "value_latex": "$[-1;\\,1]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область определения.",
+      "error_logic_latex": "Ученик назвал область определения.",
+      "explanation": "Ученик назвал область определения.",
+      "explanation_latex": "Ученик назвал область определения."
+     },
+     {
+      "value": "$(0;\\,\\pi)$",
+      "value_latex": "$(0;\\,\\pi)$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик исключил концы; $\\arccos1=0$, $\\arccos(-1)=\\pi$.",
+      "error_logic_latex": "Ученик исключил концы; $\\arccos1=0$, $\\arccos(-1)=\\pi$.",
+      "explanation": "Ученик исключил концы; $\\arccos1=0$, $\\arccos(-1)=\\pi$.",
+      "explanation_latex": "Ученик исключил концы; $\\arccos1=0$, $\\arccos(-1)=\\pi$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "§ 29",
+     "exercise": "2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G10_P23",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача спрашивает об области значений (множестве значений) обратных тригонометрических функций, что напрямую связано с их областью определения и свойствами. Навык G10_S23_02 охватывает нахождение обла",
+     "split_from": "G10_TB_§29_2",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G10_TB_§29_2.2": {
+   "parent": "G10_TB_§29_2",
+   "fields": {
+    "question_text": "Какова область значений функции $y=\\operatorname{arctg} x$?",
+    "question_latex": "Какова область значений функции $y=\\operatorname{arctg} x$?",
+    "correct_answer": "$\\left(-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right)$",
+    "correct_answer_latex": "$\\left(-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right)$",
+    "distractor_meta": [
+     {
+      "value": "$\\left[-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right]$",
+      "value_latex": "$\\left[-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил концы; тангенс в точках $\\pm\\dfrac{\\pi}{2}$ не определён.",
+      "error_logic_latex": "Ученик включил концы; тангенс в точках $\\pm\\dfrac{\\pi}{2}$ не определён.",
+      "explanation": "Ученик включил концы; тангенс в точках $\\pm\\dfrac{\\pi}{2}$ не определён.",
+      "explanation_latex": "Ученик включил концы; тангенс в точках $\\pm\\dfrac{\\pi}{2}$ не определён."
+     },
+     {
+      "value": "$(0;\\,\\pi)$",
+      "value_latex": "$(0;\\,\\pi)$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область значений арккотангенса.",
+      "error_logic_latex": "Ученик назвал область значений арккотангенса.",
+      "explanation": "Ученик назвал область значений арккотангенса.",
+      "explanation_latex": "Ученик назвал область значений арккотангенса."
+     },
+     {
+      "value": "$\\mathbb{R}$",
+      "value_latex": "$\\mathbb{R}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область определения.",
+      "error_logic_latex": "Ученик назвал область определения.",
+      "explanation": "Ученик назвал область определения.",
+      "explanation_latex": "Ученик назвал область определения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "§ 29",
+     "exercise": "2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G10_P23",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача спрашивает об области значений (множестве значений) обратных тригонометрических функций, что напрямую связано с их областью определения и свойствами. Навык G10_S23_02 охватывает нахождение обла",
+     "split_from": "G10_TB_§29_2",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G10_TB_§29_2.3": {
+   "parent": "G10_TB_§29_2",
+   "fields": {
+    "question_text": "Какова область значений функции $y=\\operatorname{arcctg} x$?",
+    "question_latex": "Какова область значений функции $y=\\operatorname{arcctg} x$?",
+    "correct_answer": "$(0;\\,\\pi)$",
+    "correct_answer_latex": "$(0;\\,\\pi)$",
+    "distractor_meta": [
+     {
+      "value": "$[0;\\,\\pi]$",
+      "value_latex": "$[0;\\,\\pi]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил концы; котангенс в точках $0$ и $\\pi$ не определён.",
+      "error_logic_latex": "Ученик включил концы; котангенс в точках $0$ и $\\pi$ не определён.",
+      "explanation": "Ученик включил концы; котангенс в точках $0$ и $\\pi$ не определён.",
+      "explanation_latex": "Ученик включил концы; котангенс в точках $0$ и $\\pi$ не определён."
+     },
+     {
+      "value": "$\\left(-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right)$",
+      "value_latex": "$\\left(-\\dfrac{\\pi}{2};\\,\\dfrac{\\pi}{2}\\right)$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область значений арктангенса.",
+      "error_logic_latex": "Ученик назвал область значений арктангенса.",
+      "explanation": "Ученик назвал область значений арктангенса.",
+      "explanation_latex": "Ученик назвал область значений арктангенса."
+     },
+     {
+      "value": "$\\mathbb{R}$",
+      "value_latex": "$\\mathbb{R}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область определения.",
+      "error_logic_latex": "Ученик назвал область определения.",
+      "explanation": "Ученик назвал область определения.",
+      "explanation_latex": "Ученик назвал область определения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "§ 29",
+     "exercise": "2",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G10_P23",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача спрашивает об области значений (множестве значений) обратных тригонометрических функций, что напрямую связано с их областью определения и свойствами. Навык G10_S23_02 охватывает нахождение обла",
+     "split_from": "G10_TB_§29_2",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_42_1084.1": {
+   "parent": "G8_TB_42_1084",
+   "fields": {
+    "question_text": "Периметр равнобедренного треугольника с основанием $20$ см зависит от длины $x$ (см) боковой стороны; периметр не превосходит $100$ см. Задайте формулой эту зависимость.",
+    "question_latex": "Периметр равнобедренного треугольника с основанием $20$ см зависит от длины $x$ (см) боковой стороны; периметр не превосходит $100$ см. Задайте формулой эту зависимость.",
+    "correct_answer": "$P(x)=2x+20$",
+    "correct_answer_latex": "$P(x)=2x+20$",
+    "distractor_meta": [
+     {
+      "value": "$P(x)=x+20$",
+      "value_latex": "$P(x)=x+20$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик учёл только одну боковую сторону.",
+      "error_logic_latex": "Ученик учёл только одну боковую сторону.",
+      "explanation": "Ученик учёл только одну боковую сторону.",
+      "explanation_latex": "Ученик учёл только одну боковую сторону."
+     },
+     {
+      "value": "$P(x)=2x+40$",
+      "value_latex": "$P(x)=2x+40$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик удвоил основание.",
+      "error_logic_latex": "Ученик удвоил основание.",
+      "explanation": "Ученик удвоил основание.",
+      "explanation_latex": "Ученик удвоил основание."
+     },
+     {
+      "value": "$P(x)=3x$",
+      "value_latex": "$P(x)=3x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик считал треугольник равносторонним.",
+      "error_logic_latex": "Ученик считал треугольник равносторонним.",
+      "explanation": "Ученик считал треугольник равносторонним.",
+      "explanation_latex": "Ученик считал треугольник равносторонним."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "42",
+     "exercise": "1084",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P16",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Для решения задачи необходимо составить формулу периметра P(x) = 2x + 20. Из геометрических свойств треугольника (неравенство треугольника) боковая сторона x должна быть больше 10 см (x > 10). По усло",
+     "split_from": "G8_TB_42_1084",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_42_1084.2": {
+   "parent": "G8_TB_42_1084",
+   "fields": {
+    "question_text": "Периметр равнобедренного треугольника с основанием $20$ см зависит от длины $x$ (см) боковой стороны; периметр не превосходит $100$ см. Укажите область определения этой функции.",
+    "question_latex": "Периметр равнобедренного треугольника с основанием $20$ см зависит от длины $x$ (см) боковой стороны; периметр не превосходит $100$ см. Укажите область определения этой функции.",
+    "correct_answer": "$(10;\\,40]$",
+    "correct_answer_latex": "$(10;\\,40]$",
+    "distractor_meta": [
+     {
+      "value": "$(0;\\,40]$",
+      "value_latex": "$(0;\\,40]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл неравенство треугольника: $2x>20$.",
+      "error_logic_latex": "Ученик не учёл неравенство треугольника: $2x>20$.",
+      "explanation": "Ученик не учёл неравенство треугольника: $2x>20$.",
+      "explanation_latex": "Ученик не учёл неравенство треугольника: $2x>20$."
+     },
+     {
+      "value": "$(10;\\,50]$",
+      "value_latex": "$(10;\\,50]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил $2x+20\\le100$ как $x\\le50$.",
+      "error_logic_latex": "Ученик решил $2x+20\\le100$ как $x\\le50$.",
+      "explanation": "Ученик решил $2x+20\\le100$ как $x\\le50$.",
+      "explanation_latex": "Ученик решил $2x+20\\le100$ как $x\\le50$."
+     },
+     {
+      "value": "$(40;\\,100]$",
+      "value_latex": "$(40;\\,100]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал множество значений.",
+      "error_logic_latex": "Ученик назвал множество значений.",
+      "explanation": "Ученик назвал множество значений.",
+      "explanation_latex": "Ученик назвал множество значений."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "42",
+     "exercise": "1084",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P16",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Для решения задачи необходимо составить формулу периметра P(x) = 2x + 20. Из геометрических свойств треугольника (неравенство треугольника) боковая сторона x должна быть больше 10 см (x > 10). По усло",
+     "split_from": "G8_TB_42_1084",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_42_1084.3": {
+   "parent": "G8_TB_42_1084",
+   "fields": {
+    "question_text": "Периметр равнобедренного треугольника с основанием $20$ см зависит от длины $x$ (см) боковой стороны; периметр не превосходит $100$ см. Укажите множество значений этой функции.",
+    "question_latex": "Периметр равнобедренного треугольника с основанием $20$ см зависит от длины $x$ (см) боковой стороны; периметр не превосходит $100$ см. Укажите множество значений этой функции.",
+    "correct_answer": "$(40;\\,100]$",
+    "correct_answer_latex": "$(40;\\,100]$",
+    "distractor_meta": [
+     {
+      "value": "$(20;\\,100]$",
+      "value_latex": "$(20;\\,100]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл неравенство треугольника.",
+      "error_logic_latex": "Ученик не учёл неравенство треугольника.",
+      "explanation": "Ученик не учёл неравенство треугольника.",
+      "explanation_latex": "Ученик не учёл неравенство треугольника."
+     },
+     {
+      "value": "$(10;\\,40]$",
+      "value_latex": "$(10;\\,40]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал область определения.",
+      "error_logic_latex": "Ученик назвал область определения.",
+      "explanation": "Ученик назвал область определения.",
+      "explanation_latex": "Ученик назвал область определения."
+     },
+     {
+      "value": "$[40;\\,100]$",
+      "value_latex": "$[40;\\,100]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик включил $40$, хотя $x>10$.",
+      "error_logic_latex": "Ученик включил $40$, хотя $x>10$.",
+      "explanation": "Ученик включил $40$, хотя $x>10$.",
+      "explanation_latex": "Ученик включил $40$, хотя $x>10$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "42",
+     "exercise": "1084",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P16",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Для решения задачи необходимо составить формулу периметра P(x) = 2x + 20. Из геометрических свойств треугольника (неравенство треугольника) боковая сторона x должна быть больше 10 см (x > 10). По усло",
+     "split_from": "G8_TB_42_1084",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_8_181.1": {
+   "parent": "G8_TB_8_181",
+   "fields": {
+    "question_text": "Функция задана формулой $y=\\dfrac{8}{x}$. Найдите $y$ при $x=-0{,}25$.",
+    "question_latex": "Функция задана формулой $y=\\dfrac{8}{x}$. Найдите $y$ при $x=-0{,}25$.",
+    "correct_answer": "$-32$",
+    "correct_answer_latex": "$-32$",
+    "distractor_meta": [
+     {
+      "value": "$-2$",
+      "value_latex": "$-2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил вместо деления.",
+      "error_logic_latex": "Ученик умножил вместо деления.",
+      "explanation": "Ученик умножил вместо деления.",
+      "explanation_latex": "Ученик умножил вместо деления."
+     },
+     {
+      "value": "$32$",
+      "value_latex": "$32$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял знак.",
+      "error_logic_latex": "Ученик потерял знак.",
+      "explanation": "Ученик потерял знак.",
+      "explanation_latex": "Ученик потерял знак."
+     },
+     {
+      "value": "$-0{,}03125$",
+      "value_latex": "$-0{,}03125$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил $x$ на $8$.",
+      "error_logic_latex": "Ученик разделил $x$ на $8$.",
+      "explanation": "Ученик разделил $x$ на $8$.",
+      "explanation_latex": "Ученик разделил $x$ на $8$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "8",
+     "exercise": "181",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P07",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует заполнить таблицу значений функции y = 8/x для различных значений аргумента x. Это напрямую соответствует навыку вычисления значения функции при заданных значениях переменной (G8_S07_01",
+     "split_from": "G8_TB_8_181",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_8_181.2": {
+   "parent": "G8_TB_8_181",
+   "fields": {
+    "question_text": "Функция задана формулой $y=\\dfrac{8}{x}$. Найдите $y$ при $x=5$.",
+    "question_latex": "Функция задана формулой $y=\\dfrac{8}{x}$. Найдите $y$ при $x=5$.",
+    "correct_answer": "$1{,}6$",
+    "correct_answer_latex": "$1{,}6$",
+    "distractor_meta": [
+     {
+      "value": "$40$",
+      "value_latex": "$40$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил вместо деления.",
+      "error_logic_latex": "Ученик умножил вместо деления.",
+      "explanation": "Ученик умножил вместо деления.",
+      "explanation_latex": "Ученик умножил вместо деления."
+     },
+     {
+      "value": "$0{,}625$",
+      "value_latex": "$0{,}625$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил $x$ на $8$.",
+      "error_logic_latex": "Ученик разделил $x$ на $8$.",
+      "explanation": "Ученик разделил $x$ на $8$.",
+      "explanation_latex": "Ученик разделил $x$ на $8$."
+     },
+     {
+      "value": "$3$",
+      "value_latex": "$3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел вместо деления.",
+      "error_logic_latex": "Ученик вычел вместо деления.",
+      "explanation": "Ученик вычел вместо деления.",
+      "explanation_latex": "Ученик вычел вместо деления."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "8",
+     "exercise": "181",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P07",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует заполнить таблицу значений функции y = 8/x для различных значений аргумента x. Это напрямую соответствует навыку вычисления значения функции при заданных значениях переменной (G8_S07_01",
+     "split_from": "G8_TB_8_181",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_8_181.3": {
+   "parent": "G8_TB_8_181",
+   "fields": {
+    "question_text": "Функция задана формулой $y=\\dfrac{8}{x}$. При каком $x$ значение функции равно $0{,}5$?",
+    "question_latex": "Функция задана формулой $y=\\dfrac{8}{x}$. При каком $x$ значение функции равно $0{,}5$?",
+    "correct_answer": "$16$",
+    "correct_answer_latex": "$16$",
+    "distractor_meta": [
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил $8$ на $0{,}5$ вместо деления.",
+      "error_logic_latex": "Ученик умножил $8$ на $0{,}5$ вместо деления.",
+      "explanation": "Ученик умножил $8$ на $0{,}5$ вместо деления.",
+      "explanation_latex": "Ученик умножил $8$ на $0{,}5$ вместо деления."
+     },
+     {
+      "value": "$0{,}0625$",
+      "value_latex": "$0{,}0625$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил $0{,}5$ на $8$.",
+      "error_logic_latex": "Ученик разделил $0{,}5$ на $8$.",
+      "explanation": "Ученик разделил $0{,}5$ на $8$.",
+      "explanation_latex": "Ученик разделил $0{,}5$ на $8$."
+     },
+     {
+      "value": "$7{,}5$",
+      "value_latex": "$7{,}5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел вместо деления.",
+      "error_logic_latex": "Ученик вычел вместо деления.",
+      "explanation": "Ученик вычел вместо деления.",
+      "explanation_latex": "Ученик вычел вместо деления."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "8",
+     "exercise": "181",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P07",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует заполнить таблицу значений функции y = 8/x для различных значений аргумента x. Это напрямую соответствует навыку вычисления значения функции при заданных значениях переменной (G8_S07_01",
+     "split_from": "G8_TB_8_181",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G9_TB_27_534_3.1": {
+   "parent": "G9_TB_27_534_3",
+   "fields": {
+    "question_text": "Последовательность задана условиями $a_{1}=1000$, $a_{n+1}=0{,}1a_{n}$. Найдите $a_{5}$.",
+    "question_latex": "Последовательность задана условиями $a_{1}=1000$, $a_{n+1}=0{,}1a_{n}$. Найдите $a_{5}$.",
+    "correct_answer": "$0{,}1$",
+    "correct_answer_latex": "$0{,}1$",
+    "distractor_meta": [
+     {
+      "value": "$1$",
+      "value_latex": "$1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $a_{4}$.",
+      "error_logic_latex": "Ученик нашёл $a_{4}$.",
+      "explanation": "Ученик нашёл $a_{4}$.",
+      "explanation_latex": "Ученик нашёл $a_{4}$."
+     },
+     {
+      "value": "$0{,}01$",
+      "value_latex": "$0{,}01$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $a_{6}$.",
+      "error_logic_latex": "Ученик нашёл $a_{6}$.",
+      "explanation": "Ученик нашёл $a_{6}$.",
+      "explanation_latex": "Ученик нашёл $a_{6}$."
+     },
+     {
+      "value": "$10\\,000\\,000$",
+      "value_latex": "$10\\,000\\,000$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножал на $10$ вместо деления.",
+      "error_logic_latex": "Ученик умножал на $10$ вместо деления.",
+      "explanation": "Ученик умножал на $10$ вместо деления.",
+      "explanation_latex": "Ученик умножал на $10$ вместо деления."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "27",
+     "exercise": "534.3",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G9_P28",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует вычислить первые пять членов последовательности, заданной рекуррентным соотношением a_{n+1} = 0,1a_n и начальным значением a_1 = 1000. Это прямо соответствует навыку G9_S28_03 (Рекуррен",
+     "split_from": "G9_TB_27_534_3",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n3",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G10_TB_§29_2": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G10_TB_§29_2.1",
+    "G10_TB_§29_2.2",
+    "G10_TB_§29_2.3"
+   ]
+  },
+  "G8_TB_42_1084": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G8_TB_42_1084.1",
+    "G8_TB_42_1084.2",
+    "G8_TB_42_1084.3"
+   ]
+  },
+  "G8_TB_8_181": {
+   "why": "заполнение таблицы в одной задаче с выбором ответа (сама таблица в условии отсутствовала); подзадачи составлены по формуле",
+   "children": [
+    "G8_TB_8_181.1",
+    "G8_TB_8_181.2",
+    "G8_TB_8_181.3"
+   ]
+  },
+  "G9_TB_27_534_3": {
+   "why": "пять членов последовательности в одной задаче с выбором ответа; каждая задача — вычисление одного члена",
+   "children": [
+    "G9_TB_27_534_3.1"
+   ]
+  }
+ }
+}

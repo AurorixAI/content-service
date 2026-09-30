@@ -1,0 +1,3018 @@
+{
+ "new": {
+  "G11_TB_§16_16_14.1": {
+   "parent": "G11_TB_§16_16_14",
+   "fields": {
+    "question_text": "Решите уравнение $\\log_{2}(x-1)=3$.",
+    "question_latex": "Решите уравнение $\\log_{2}(x-1)=3$.",
+    "correct_answer": "$9$",
+    "correct_answer_latex": "$9$",
+    "distractor_meta": [
+     {
+      "value": "$8$",
+      "value_latex": "$8$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл $x-1=8$ и забыл прибавить $1$.",
+      "error_logic_latex": "Ученик нашёл $x-1=8$ и забыл прибавить $1$.",
+      "explanation": "Ученик нашёл $x-1=8$ и забыл прибавить $1$.",
+      "explanation_latex": "Ученик нашёл $x-1=8$ и забыл прибавить $1$."
+     },
+     {
+      "value": "$7$",
+      "value_latex": "$7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил основание на показатель: $x-1=6$.",
+      "error_logic_latex": "Ученик умножил основание на показатель: $x-1=6$.",
+      "explanation": "Ученик умножил основание на показатель: $x-1=6$.",
+      "explanation_latex": "Ученик умножил основание на показатель: $x-1=6$."
+     },
+     {
+      "value": "$10$",
+      "value_latex": "$10$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал основание и показатель: $x-1=3^{2}$.",
+      "error_logic_latex": "Ученик перепутал основание и показатель: $x-1=3^{2}$.",
+      "explanation": "Ученик перепутал основание и показатель: $x-1=3^{2}$.",
+      "explanation_latex": "Ученик перепутал основание и показатель: $x-1=3^{2}$."
+     }
+    ],
+    "answer_options": [
+     "$9$",
+     "$8$",
+     "$7$",
+     "$10$"
+    ],
+    "answer_options_latex": [
+     "$9$",
+     "$8$",
+     "$7$",
+     "$10$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.14",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P13",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует решения логарифмических уравнений, что по сути является нахождением значения обратной функции (логарифм — обратная к показательной). Например, log₃ x = 2 означает x = 3² = 9, то есть на",
+     "split_from": "G11_TB_§16_16_14",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_14.2": {
+   "parent": "G11_TB_§16_16_14",
+   "fields": {
+    "question_text": "Решите уравнение $\\log_{\\frac{1}{3}}(x+2)=-2$.",
+    "question_latex": "Решите уравнение $\\log_{\\frac{1}{3}}(x+2)=-2$.",
+    "correct_answer": "$7$",
+    "correct_answer_latex": "$7$",
+    "distractor_meta": [
+     {
+      "value": "$-\\dfrac{17}{9}$",
+      "value_latex": "$-\\dfrac{17}{9}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил $\\left(\\dfrac{1}{3}\\right)^{-2}$ как $\\dfrac{1}{9}$; верно $9$.",
+      "error_logic_latex": "Ученик вычислил $\\left(\\dfrac{1}{3}\\right)^{-2}$ как $\\dfrac{1}{9}$; верно $9$.",
+      "explanation": "Ученик вычислил $\\left(\\dfrac{1}{3}\\right)^{-2}$ как $\\dfrac{1}{9}$; верно $9$.",
+      "explanation_latex": "Ученик вычислил $\\left(\\dfrac{1}{3}\\right)^{-2}$ как $\\dfrac{1}{9}$; верно $9$."
+     },
+     {
+      "value": "$11$",
+      "value_latex": "$11$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик прибавил $2$ вместо вычитания: $x=9+2$.",
+      "error_logic_latex": "Ученик прибавил $2$ вместо вычитания: $x=9+2$.",
+      "explanation": "Ученик прибавил $2$ вместо вычитания: $x=9+2$.",
+      "explanation_latex": "Ученик прибавил $2$ вместо вычитания: $x=9+2$."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил $-2$ на $-3$ вместо возведения в степень.",
+      "error_logic_latex": "Ученик умножил $-2$ на $-3$ вместо возведения в степень.",
+      "explanation": "Ученик умножил $-2$ на $-3$ вместо возведения в степень.",
+      "explanation_latex": "Ученик умножил $-2$ на $-3$ вместо возведения в степень."
+     }
+    ],
+    "answer_options": [
+     "$7$",
+     "$-\\dfrac{17}{9}$",
+     "$11$",
+     "$4$"
+    ],
+    "answer_options_latex": [
+     "$7$",
+     "$-\\dfrac{17}{9}$",
+     "$11$",
+     "$4$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.14",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P13",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует решения логарифмических уравнений, что по сути является нахождением значения обратной функции (логарифм — обратная к показательной). Например, log₃ x = 2 означает x = 3² = 9, то есть на",
+     "split_from": "G11_TB_§16_16_14",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_15.1": {
+   "parent": "G11_TB_§16_16_15",
+   "fields": {
+    "question_text": "Решите неравенство $\\log_{0{,}5}x<-2$.",
+    "question_latex": "Решите неравенство $\\log_{0{,}5}x<-2$.",
+    "correct_answer": "$x>4$",
+    "correct_answer_latex": "$x>4$",
+    "distractor_meta": [
+     {
+      "value": "$0<x<4$",
+      "value_latex": "$0<x<4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не изменил знак неравенства: основание $0{,}5<1$, функция убывает.",
+      "error_logic_latex": "Ученик не изменил знак неравенства: основание $0{,}5<1$, функция убывает.",
+      "explanation": "Ученик не изменил знак неравенства: основание $0{,}5<1$, функция убывает.",
+      "explanation_latex": "Ученик не изменил знак неравенства: основание $0{,}5<1$, функция убывает."
+     },
+     {
+      "value": "$x<4$",
+      "value_latex": "$x<4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не изменил знак неравенства и забыл про область определения.",
+      "error_logic_latex": "Ученик не изменил знак неравенства и забыл про область определения.",
+      "explanation": "Ученик не изменил знак неравенства и забыл про область определения.",
+      "explanation_latex": "Ученик не изменил знак неравенства и забыл про область определения."
+     },
+     {
+      "value": "$x>\\dfrac{1}{4}$",
+      "value_latex": "$x>\\dfrac{1}{4}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил $0{,}5^{-2}$ как $\\dfrac{1}{4}$; верно $4$.",
+      "error_logic_latex": "Ученик вычислил $0{,}5^{-2}$ как $\\dfrac{1}{4}$; верно $4$.",
+      "explanation": "Ученик вычислил $0{,}5^{-2}$ как $\\dfrac{1}{4}$; верно $4$.",
+      "explanation_latex": "Ученик вычислил $0{,}5^{-2}$ как $\\dfrac{1}{4}$; верно $4$."
+     }
+    ],
+    "answer_options": [
+     "$x>4$",
+     "$0<x<4$",
+     "$x<4$",
+     "$x>\\dfrac{1}{4}$"
+    ],
+    "answer_options_latex": [
+     "$x>4$",
+     "$0<x<4$",
+     "$x<4$",
+     "$x>\\dfrac{1}{4}$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.15",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует решения логарифмических неравенств, что напрямую связано с нахождением области определения логарифмической функции (аргумент логарифма должен быть положительным). Навык G11_S02_01 касае",
+     "split_from": "G11_TB_§16_16_15",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_15.2": {
+   "parent": "G11_TB_§16_16_15",
+   "fields": {
+    "question_text": "Решите неравенство $\\log_{\\frac{1}{2}}(x+1)\\ge-1$.",
+    "question_latex": "Решите неравенство $\\log_{\\frac{1}{2}}(x+1)\\ge-1$.",
+    "correct_answer": "$-1<x\\le1$",
+    "correct_answer_latex": "$-1<x\\le1$",
+    "distractor_meta": [
+     {
+      "value": "$x\\ge1$",
+      "value_latex": "$x\\ge1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$.",
+      "error_logic_latex": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$.",
+      "explanation": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$.",
+      "explanation_latex": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$."
+     },
+     {
+      "value": "$x\\le1$",
+      "value_latex": "$x\\le1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл про область определения: $x+1>0$.",
+      "error_logic_latex": "Ученик забыл про область определения: $x+1>0$.",
+      "explanation": "Ученик забыл про область определения: $x+1>0$.",
+      "explanation_latex": "Ученик забыл про область определения: $x+1>0$."
+     },
+     {
+      "value": "$-1<x\\le-\\dfrac{1}{2}$",
+      "value_latex": "$-1<x\\le-\\dfrac{1}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил $\\left(\\dfrac{1}{2}\\right)^{-1}$ как $\\dfrac{1}{2}$; верно $2$.",
+      "error_logic_latex": "Ученик вычислил $\\left(\\dfrac{1}{2}\\right)^{-1}$ как $\\dfrac{1}{2}$; верно $2$.",
+      "explanation": "Ученик вычислил $\\left(\\dfrac{1}{2}\\right)^{-1}$ как $\\dfrac{1}{2}$; верно $2$.",
+      "explanation_latex": "Ученик вычислил $\\left(\\dfrac{1}{2}\\right)^{-1}$ как $\\dfrac{1}{2}$; верно $2$."
+     }
+    ],
+    "answer_options": [
+     "$-1<x\\le1$",
+     "$x\\ge1$",
+     "$x\\le1$",
+     "$-1<x\\le-\\dfrac{1}{2}$"
+    ],
+    "answer_options_latex": [
+     "$-1<x\\le1$",
+     "$x\\ge1$",
+     "$x\\le1$",
+     "$-1<x\\le-\\dfrac{1}{2}$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.15",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует решения логарифмических неравенств, что напрямую связано с нахождением области определения логарифмической функции (аргумент логарифма должен быть положительным). Навык G11_S02_01 касае",
+     "split_from": "G11_TB_§16_16_15",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_25.1": {
+   "parent": "G11_TB_§16_16_25",
+   "fields": {
+    "question_text": "Решите уравнение $\\log_{5}(x^{2}-4x+1)=0$.",
+    "question_latex": "Решите уравнение $\\log_{5}(x^{2}-4x+1)=0$.",
+    "correct_answer": "$x=0$ или $x=4$",
+    "correct_answer_latex": "$x=0$ или $x=4$",
+    "distractor_meta": [
+     {
+      "value": "только $x=4$",
+      "value_latex": "только $x=4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял корень $x=0$; при $x=0$ аргумент равен $1>0$.",
+      "error_logic_latex": "Ученик потерял корень $x=0$; при $x=0$ аргумент равен $1>0$.",
+      "explanation": "Ученик потерял корень $x=0$; при $x=0$ аргумент равен $1>0$.",
+      "explanation_latex": "Ученик потерял корень $x=0$; при $x=0$ аргумент равен $1>0$."
+     },
+     {
+      "value": "$x=2\\pm2\\sqrt{2}$",
+      "value_latex": "$x=2\\pm2\\sqrt{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик приравнял аргумент к основанию $5$; при логарифме, равном $0$, аргумент равен $1$.",
+      "error_logic_latex": "Ученик приравнял аргумент к основанию $5$; при логарифме, равном $0$, аргумент равен $1$.",
+      "explanation": "Ученик приравнял аргумент к основанию $5$; при логарифме, равном $0$, аргумент равен $1$.",
+      "explanation_latex": "Ученик приравнял аргумент к основанию $5$; при логарифме, равном $0$, аргумент равен $1$."
+     },
+     {
+      "value": "$x=2\\pm\\sqrt{3}$",
+      "value_latex": "$x=2\\pm\\sqrt{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик приравнял аргумент к нулю.",
+      "error_logic_latex": "Ученик приравнял аргумент к нулю.",
+      "explanation": "Ученик приравнял аргумент к нулю.",
+      "explanation_latex": "Ученик приравнял аргумент к нулю."
+     }
+    ],
+    "answer_options": [
+     "$x=0$ или $x=4$",
+     "только $x=4$",
+     "$x=2\\pm2\\sqrt{2}$",
+     "$x=2\\pm\\sqrt{3}$"
+    ],
+    "answer_options_latex": [
+     "$x=0$ или $x=4$",
+     "только $x=4$",
+     "$x=2\\pm2\\sqrt{2}$",
+     "$x=2\\pm\\sqrt{3}$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.25",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Все уравнения требуют нахождения аргумента x по заданному значению логарифмической функции, что соответствует навыку нахождения аргумента по значению функции.",
+     "split_from": "G11_TB_§16_16_25",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_25.2": {
+   "parent": "G11_TB_§16_16_25",
+   "fields": {
+    "question_text": "Решите уравнение $\\log_{0{,}5}(x^{2}+x-2)=-1$.",
+    "question_latex": "Решите уравнение $\\log_{0{,}5}(x^{2}+x-2)=-1$.",
+    "correct_answer": "$x=\\dfrac{-1\\pm\\sqrt{17}}{2}$",
+    "correct_answer_latex": "$x=\\dfrac{-1\\pm\\sqrt{17}}{2}$",
+    "distractor_meta": [
+     {
+      "value": "$x=\\dfrac{-1\\pm\\sqrt{11}}{2}$",
+      "value_latex": "$x=\\dfrac{-1\\pm\\sqrt{11}}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычислил $0{,}5^{-1}$ как $0{,}5$; верно $2$.",
+      "error_logic_latex": "Ученик вычислил $0{,}5^{-1}$ как $0{,}5$; верно $2$.",
+      "explanation": "Ученик вычислил $0{,}5^{-1}$ как $0{,}5$; верно $2$.",
+      "explanation_latex": "Ученик вычислил $0{,}5^{-1}$ как $0{,}5$; верно $2$."
+     },
+     {
+      "value": "$x=1$ или $x=-2$",
+      "value_latex": "$x=1$ или $x=-2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик приравнял аргумент к нулю.",
+      "error_logic_latex": "Ученик приравнял аргумент к нулю.",
+      "explanation": "Ученик приравнял аргумент к нулю.",
+      "explanation_latex": "Ученик приравнял аргумент к нулю."
+     },
+     {
+      "value": "$x=\\dfrac{-1+\\sqrt{17}}{2}$",
+      "value_latex": "$x=\\dfrac{-1+\\sqrt{17}}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял корень; оба корня дают аргумент $2>0$.",
+      "error_logic_latex": "Ученик потерял корень; оба корня дают аргумент $2>0$.",
+      "explanation": "Ученик потерял корень; оба корня дают аргумент $2>0$.",
+      "explanation_latex": "Ученик потерял корень; оба корня дают аргумент $2>0$."
+     }
+    ],
+    "answer_options": [
+     "$x=\\dfrac{-1\\pm\\sqrt{17}}{2}$",
+     "$x=\\dfrac{-1\\pm\\sqrt{11}}{2}$",
+     "$x=1$ или $x=-2$",
+     "$x=\\dfrac{-1+\\sqrt{17}}{2}$"
+    ],
+    "answer_options_latex": [
+     "$x=\\dfrac{-1\\pm\\sqrt{17}}{2}$",
+     "$x=\\dfrac{-1\\pm\\sqrt{11}}{2}$",
+     "$x=1$ или $x=-2$",
+     "$x=\\dfrac{-1+\\sqrt{17}}{2}$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.25",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Все уравнения требуют нахождения аргумента x по заданному значению логарифмической функции, что соответствует навыку нахождения аргумента по значению функции.",
+     "split_from": "G11_TB_§16_16_25",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_26.1": {
+   "parent": "G11_TB_§16_16_26",
+   "fields": {
+    "question_text": "Решите неравенство $\\log_{0{,}5}(x^{2}-3x)\\ge-2$.",
+    "question_latex": "Решите неравенство $\\log_{0{,}5}(x^{2}-3x)\\ge-2$.",
+    "correct_answer": "$[-1;\\,0)\\cup(3;\\,4]$",
+    "correct_answer_latex": "$[-1;\\,0)\\cup(3;\\,4]$",
+    "distractor_meta": [
+     {
+      "value": "$[-1;\\,4]$",
+      "value_latex": "$[-1;\\,4]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл про область определения: $x^{2}-3x>0$.",
+      "error_logic_latex": "Ученик забыл про область определения: $x^{2}-3x>0$.",
+      "explanation": "Ученик забыл про область определения: $x^{2}-3x>0$.",
+      "explanation_latex": "Ученик забыл про область определения: $x^{2}-3x>0$."
+     },
+     {
+      "value": "$(-\\infty;\\,-1]\\cup[4;+\\infty)$",
+      "value_latex": "$(-\\infty;\\,-1]\\cup[4;+\\infty)$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не изменил знак неравенства: основание $0{,}5<1$.",
+      "error_logic_latex": "Ученик не изменил знак неравенства: основание $0{,}5<1$.",
+      "explanation": "Ученик не изменил знак неравенства: основание $0{,}5<1$.",
+      "explanation_latex": "Ученик не изменил знак неравенства: основание $0{,}5<1$."
+     },
+     {
+      "value": "$(3;\\,4]$",
+      "value_latex": "$(3;\\,4]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял промежуток $[-1;\\,0)$.",
+      "error_logic_latex": "Ученик потерял промежуток $[-1;\\,0)$.",
+      "explanation": "Ученик потерял промежуток $[-1;\\,0)$.",
+      "explanation_latex": "Ученик потерял промежуток $[-1;\\,0)$."
+     }
+    ],
+    "answer_options": [
+     "$[-1;\\,0)\\cup(3;\\,4]$",
+     "$[-1;\\,4]$",
+     "$(-\\infty;\\,-1]\\cup[4;+\\infty)$",
+     "$(3;\\,4]$"
+    ],
+    "answer_options_latex": [
+     "$[-1;\\,0)\\cup(3;\\,4]$",
+     "$[-1;\\,4]$",
+     "$(-\\infty;\\,-1]\\cup[4;+\\infty)$",
+     "$(3;\\,4]$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.26",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Все четыре неравенства требуют нахождения области определения логарифмической функции (аргумент логарифма > 0) и последующего решения неравенства с учетом ограничений. Это соответствует комбинированно",
+     "split_from": "G11_TB_§16_16_26",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_26.2": {
+   "parent": "G11_TB_§16_16_26",
+   "fields": {
+    "question_text": "Решите неравенство $\\log_{2}(x^{2}-2x)\\le3$.",
+    "question_latex": "Решите неравенство $\\log_{2}(x^{2}-2x)\\le3$.",
+    "correct_answer": "$[-2;\\,0)\\cup(2;\\,4]$",
+    "correct_answer_latex": "$[-2;\\,0)\\cup(2;\\,4]$",
+    "distractor_meta": [
+     {
+      "value": "$[-2;\\,4]$",
+      "value_latex": "$[-2;\\,4]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл про область определения: $x^{2}-2x>0$.",
+      "error_logic_latex": "Ученик забыл про область определения: $x^{2}-2x>0$.",
+      "explanation": "Ученик забыл про область определения: $x^{2}-2x>0$.",
+      "explanation_latex": "Ученик забыл про область определения: $x^{2}-2x>0$."
+     },
+     {
+      "value": "$(-\\infty;\\,-2]\\cup[4;+\\infty)$",
+      "value_latex": "$(-\\infty;\\,-2]\\cup[4;+\\infty)$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик изменил знак неравенства, хотя основание $2>1$.",
+      "error_logic_latex": "Ученик изменил знак неравенства, хотя основание $2>1$.",
+      "explanation": "Ученик изменил знак неравенства, хотя основание $2>1$.",
+      "explanation_latex": "Ученик изменил знак неравенства, хотя основание $2>1$."
+     },
+     {
+      "value": "$(2;\\,4]$",
+      "value_latex": "$(2;\\,4]$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял промежуток $[-2;\\,0)$.",
+      "error_logic_latex": "Ученик потерял промежуток $[-2;\\,0)$.",
+      "explanation": "Ученик потерял промежуток $[-2;\\,0)$.",
+      "explanation_latex": "Ученик потерял промежуток $[-2;\\,0)$."
+     }
+    ],
+    "answer_options": [
+     "$[-2;\\,0)\\cup(2;\\,4]$",
+     "$[-2;\\,4]$",
+     "$(-\\infty;\\,-2]\\cup[4;+\\infty)$",
+     "$(2;\\,4]$"
+    ],
+    "answer_options_latex": [
+     "$[-2;\\,0)\\cup(2;\\,4]$",
+     "$[-2;\\,4]$",
+     "$(-\\infty;\\,-2]\\cup[4;+\\infty)$",
+     "$(2;\\,4]$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.26",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Все четыре неравенства требуют нахождения области определения логарифмической функции (аргумент логарифма > 0) и последующего решения неравенства с учетом ограничений. Это соответствует комбинированно",
+     "split_from": "G11_TB_§16_16_26",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_29.1": {
+   "parent": "G11_TB_§16_16_29",
+   "fields": {
+    "question_text": "Решите уравнение $\\log_{3}(x+2)+\\log_{3}(x-2)=2$.",
+    "question_latex": "Решите уравнение $\\log_{3}(x+2)+\\log_{3}(x-2)=2$.",
+    "correct_answer": "$\\sqrt{13}$",
+    "correct_answer_latex": "$\\sqrt{13}$",
+    "distractor_meta": [
+     {
+      "value": "$\\pm\\sqrt{13}$",
+      "value_latex": "$\\pm\\sqrt{13}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл область определения: $x>2$.",
+      "error_logic_latex": "Ученик не учёл область определения: $x>2$.",
+      "explanation": "Ученик не учёл область определения: $x>2$.",
+      "explanation_latex": "Ученик не учёл область определения: $x>2$."
+     },
+     {
+      "value": "$13$",
+      "value_latex": "$13$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не извлёк корень из $x^{2}=13$.",
+      "error_logic_latex": "Ученик не извлёк корень из $x^{2}=13$.",
+      "explanation": "Ученик не извлёк корень из $x^{2}=13$.",
+      "explanation_latex": "Ученик не извлёк корень из $x^{2}=13$."
+     },
+     {
+      "value": "$\\sqrt{10}$",
+      "value_latex": "$\\sqrt{10}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил основание на $2$: $x^{2}-4=6$.",
+      "error_logic_latex": "Ученик умножил основание на $2$: $x^{2}-4=6$.",
+      "explanation": "Ученик умножил основание на $2$: $x^{2}-4=6$.",
+      "explanation_latex": "Ученик умножил основание на $2$: $x^{2}-4=6$."
+     }
+    ],
+    "answer_options": [
+     "$\\sqrt{13}$",
+     "$\\pm\\sqrt{13}$",
+     "$13$",
+     "$\\sqrt{10}$"
+    ],
+    "answer_options_latex": [
+     "$\\sqrt{13}$",
+     "$\\pm\\sqrt{13}$",
+     "$13$",
+     "$\\sqrt{10}$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.29",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Все уравнения требуют нахождения области допустимых значений (ОДЗ) логарифмических выражений, что включает решение неравенств вида x+1>0, x-1>0 и т.д. Это соответствует комбинированной ОДЗ, так как в ",
+     "split_from": "G11_TB_§16_16_29",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_29.2": {
+   "parent": "G11_TB_§16_16_29",
+   "fields": {
+    "question_text": "Решите уравнение $\\log_{5}(x+3)+\\log_{5}(x-2)=\\log_{5}6$.",
+    "question_latex": "Решите уравнение $\\log_{5}(x+3)+\\log_{5}(x-2)=\\log_{5}6$.",
+    "correct_answer": "$3$",
+    "correct_answer_latex": "$3$",
+    "distractor_meta": [
+     {
+      "value": "$3$ или $-4$",
+      "value_latex": "$3$ или $-4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл область определения: при $x=-4$ аргументы отрицательны.",
+      "error_logic_latex": "Ученик не учёл область определения: при $x=-4$ аргументы отрицательны.",
+      "explanation": "Ученик не учёл область определения: при $x=-4$ аргументы отрицательны.",
+      "explanation_latex": "Ученик не учёл область определения: при $x=-4$ аргументы отрицательны."
+     },
+     {
+      "value": "$-4$",
+      "value_latex": "$-4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик выбрал посторонний корень.",
+      "error_logic_latex": "Ученик выбрал посторонний корень.",
+      "explanation": "Ученик выбрал посторонний корень.",
+      "explanation_latex": "Ученик выбрал посторонний корень."
+     },
+     {
+      "value": "$2{,}5$",
+      "value_latex": "$2{,}5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик заменил сумму логарифмов логарифмом суммы: $(x+3)+(x-2)=6$.",
+      "error_logic_latex": "Ученик заменил сумму логарифмов логарифмом суммы: $(x+3)+(x-2)=6$.",
+      "explanation": "Ученик заменил сумму логарифмов логарифмом суммы: $(x+3)+(x-2)=6$.",
+      "explanation_latex": "Ученик заменил сумму логарифмов логарифмом суммы: $(x+3)+(x-2)=6$."
+     }
+    ],
+    "answer_options": [
+     "$3$",
+     "$3$ или $-4$",
+     "$-4$",
+     "$2{,}5$"
+    ],
+    "answer_options_latex": [
+     "$3$",
+     "$3$ или $-4$",
+     "$-4$",
+     "$2{,}5$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.29",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Все уравнения требуют нахождения области допустимых значений (ОДЗ) логарифмических выражений, что включает решение неравенств вида x+1>0, x-1>0 и т.д. Это соответствует комбинированной ОДЗ, так как в ",
+     "split_from": "G11_TB_§16_16_29",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_30.1": {
+   "parent": "G11_TB_§16_16_30",
+   "fields": {
+    "question_text": "Решите неравенство $\\log_{\\frac{1}{2}}(x+2)+\\log_{\\frac{1}{2}}(x-2)<-2$.",
+    "question_latex": "Решите неравенство $\\log_{\\frac{1}{2}}(x+2)+\\log_{\\frac{1}{2}}(x-2)<-2$.",
+    "correct_answer": "$x>2\\sqrt{2}$",
+    "correct_answer_latex": "$x>2\\sqrt{2}$",
+    "distractor_meta": [
+     {
+      "value": "$x>2$",
+      "value_latex": "$x>2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик записал только область определения.",
+      "error_logic_latex": "Ученик записал только область определения.",
+      "explanation": "Ученик записал только область определения.",
+      "explanation_latex": "Ученик записал только область определения."
+     },
+     {
+      "value": "$2<x<2\\sqrt{2}$",
+      "value_latex": "$2<x<2\\sqrt{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$.",
+      "error_logic_latex": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$.",
+      "explanation": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$.",
+      "explanation_latex": "Ученик не изменил знак неравенства: основание $\\dfrac{1}{2}<1$."
+     },
+     {
+      "value": "$x<-2\\sqrt{2}$ или $x>2\\sqrt{2}$",
+      "value_latex": "$x<-2\\sqrt{2}$ или $x>2\\sqrt{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл про область определения: $x>2$.",
+      "error_logic_latex": "Ученик забыл про область определения: $x>2$.",
+      "explanation": "Ученик забыл про область определения: $x>2$.",
+      "explanation_latex": "Ученик забыл про область определения: $x>2$."
+     }
+    ],
+    "answer_options": [
+     "$x>2\\sqrt{2}$",
+     "$x>2$",
+     "$2<x<2\\sqrt{2}$",
+     "$x<-2\\sqrt{2}$ или $x>2\\sqrt{2}$"
+    ],
+    "answer_options_latex": [
+     "$x>2\\sqrt{2}$",
+     "$x>2$",
+     "$2<x<2\\sqrt{2}$",
+     "$x<-2\\sqrt{2}$ или $x>2\\sqrt{2}$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.30",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Все четыре неравенства содержат логарифмические выражения с аргументами вида (x ± a). Для их решения необходимо сначала найти область допустимых значений (ОДЗ), которая задаётся системой линейных нера",
+     "split_from": "G11_TB_§16_16_30",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G11_TB_§16_16_30.2": {
+   "parent": "G11_TB_§16_16_30",
+   "fields": {
+    "question_text": "Решите неравенство $\\log_{0{,}5}(x+1)+\\log_{0{,}5}(x-1)\\ge-1$.",
+    "question_latex": "Решите неравенство $\\log_{0{,}5}(x+1)+\\log_{0{,}5}(x-1)\\ge-1$.",
+    "correct_answer": "$1<x\\le\\sqrt{3}$",
+    "correct_answer_latex": "$1<x\\le\\sqrt{3}$",
+    "distractor_meta": [
+     {
+      "value": "$x\\ge\\sqrt{3}$",
+      "value_latex": "$x\\ge\\sqrt{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не изменил знак неравенства: основание $0{,}5<1$.",
+      "error_logic_latex": "Ученик не изменил знак неравенства: основание $0{,}5<1$.",
+      "explanation": "Ученик не изменил знак неравенства: основание $0{,}5<1$.",
+      "explanation_latex": "Ученик не изменил знак неравенства: основание $0{,}5<1$."
+     },
+     {
+      "value": "$-\\sqrt{3}\\le x\\le\\sqrt{3}$",
+      "value_latex": "$-\\sqrt{3}\\le x\\le\\sqrt{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл про область определения: $x>1$.",
+      "error_logic_latex": "Ученик забыл про область определения: $x>1$.",
+      "explanation": "Ученик забыл про область определения: $x>1$.",
+      "explanation_latex": "Ученик забыл про область определения: $x>1$."
+     },
+     {
+      "value": "$1<x\\le3$",
+      "value_latex": "$1<x\\le3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не извлёк корень из $x^{2}\\le3$.",
+      "error_logic_latex": "Ученик не извлёк корень из $x^{2}\\le3$.",
+      "explanation": "Ученик не извлёк корень из $x^{2}\\le3$.",
+      "explanation_latex": "Ученик не извлёк корень из $x^{2}\\le3$."
+     }
+    ],
+    "answer_options": [
+     "$1<x\\le\\sqrt{3}$",
+     "$x\\ge\\sqrt{3}$",
+     "$-\\sqrt{3}\\le x\\le\\sqrt{3}$",
+     "$1<x\\le3$"
+    ],
+    "answer_options_latex": [
+     "$1<x\\le\\sqrt{3}$",
+     "$x\\ge\\sqrt{3}$",
+     "$-\\sqrt{3}\\le x\\le\\sqrt{3}$",
+     "$1<x\\le3$"
+    ],
+    "tags": {
+     "paragraph": "§ 16",
+     "exercise": "16.30",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G11_P02",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Все четыре неравенства содержат логарифмические выражения с аргументами вида (x ± a). Для их решения необходимо сначала найти область допустимых значений (ОДЗ), которая задаётся системой линейных нера",
+     "split_from": "G11_TB_§16_16_30",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.1.1": {
+   "parent": "G8_ALG_26_400.1",
+   "fields": {
+    "question_text": "Найдите сумму отрицательных корней уравнения $x^{4}-26x^{2}+25=0$.",
+    "question_latex": "Найдите сумму отрицательных корней уравнения $x^{4}-26x^{2}+25=0$.",
+    "correct_answer": "$-6$",
+    "correct_answer_latex": "$-6$",
+    "distractor_meta": [
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни.",
+      "error_logic_latex": "Ученик сложил положительные корни.",
+      "explanation": "Ученик сложил положительные корни.",
+      "explanation_latex": "Ученик сложил положительные корни."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл сумму всех корней.",
+      "error_logic_latex": "Ученик нашёл сумму всех корней.",
+      "explanation": "Ученик нашёл сумму всех корней.",
+      "explanation_latex": "Ученик нашёл сумму всех корней."
+     },
+     {
+      "value": "$-26$",
+      "value_latex": "$-26$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "error_logic_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.1",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.1.2": {
+   "parent": "G8_ALG_26_400.1",
+   "fields": {
+    "question_text": "Найдите произведение положительных корней уравнения $x^{4}-26x^{2}+25=0$.",
+    "question_latex": "Найдите произведение положительных корней уравнения $x^{4}-26x^{2}+25=0$.",
+    "correct_answer": "$5$",
+    "correct_answer_latex": "$5$",
+    "distractor_meta": [
+     {
+      "value": "$25$",
+      "value_latex": "$25$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл произведение всех корней.",
+      "error_logic_latex": "Ученик нашёл произведение всех корней.",
+      "explanation": "Ученик нашёл произведение всех корней.",
+      "explanation_latex": "Ученик нашёл произведение всех корней."
+     },
+     {
+      "value": "$-5$",
+      "value_latex": "$-5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "error_logic_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно."
+     },
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни вместо умножения.",
+      "error_logic_latex": "Ученик сложил положительные корни вместо умножения.",
+      "explanation": "Ученик сложил положительные корни вместо умножения.",
+      "explanation_latex": "Ученик сложил положительные корни вместо умножения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.1",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.2.1": {
+   "parent": "G8_ALG_26_400.2",
+   "fields": {
+    "question_text": "Найдите сумму отрицательных корней уравнения $x^{4}-13x^{2}+36=0$.",
+    "question_latex": "Найдите сумму отрицательных корней уравнения $x^{4}-13x^{2}+36=0$.",
+    "correct_answer": "$-5$",
+    "correct_answer_latex": "$-5$",
+    "distractor_meta": [
+     {
+      "value": "$5$",
+      "value_latex": "$5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни.",
+      "error_logic_latex": "Ученик сложил положительные корни.",
+      "explanation": "Ученик сложил положительные корни.",
+      "explanation_latex": "Ученик сложил положительные корни."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл сумму всех корней.",
+      "error_logic_latex": "Ученик нашёл сумму всех корней.",
+      "explanation": "Ученик нашёл сумму всех корней.",
+      "explanation_latex": "Ученик нашёл сумму всех корней."
+     },
+     {
+      "value": "$-13$",
+      "value_latex": "$-13$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "error_logic_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.2",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.2.2": {
+   "parent": "G8_ALG_26_400.2",
+   "fields": {
+    "question_text": "Найдите произведение положительных корней уравнения $x^{4}-13x^{2}+36=0$.",
+    "question_latex": "Найдите произведение положительных корней уравнения $x^{4}-13x^{2}+36=0$.",
+    "correct_answer": "$6$",
+    "correct_answer_latex": "$6$",
+    "distractor_meta": [
+     {
+      "value": "$36$",
+      "value_latex": "$36$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл произведение всех корней.",
+      "error_logic_latex": "Ученик нашёл произведение всех корней.",
+      "explanation": "Ученик нашёл произведение всех корней.",
+      "explanation_latex": "Ученик нашёл произведение всех корней."
+     },
+     {
+      "value": "$-6$",
+      "value_latex": "$-6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "error_logic_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно."
+     },
+     {
+      "value": "$5$",
+      "value_latex": "$5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни вместо умножения.",
+      "error_logic_latex": "Ученик сложил положительные корни вместо умножения.",
+      "explanation": "Ученик сложил положительные корни вместо умножения.",
+      "explanation_latex": "Ученик сложил положительные корни вместо умножения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.2",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.3.1": {
+   "parent": "G8_ALG_26_400.3",
+   "fields": {
+    "question_text": "Найдите сумму отрицательных корней уравнения $x^{4}-10x^{2}+9=0$.",
+    "question_latex": "Найдите сумму отрицательных корней уравнения $x^{4}-10x^{2}+9=0$.",
+    "correct_answer": "$-4$",
+    "correct_answer_latex": "$-4$",
+    "distractor_meta": [
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни.",
+      "error_logic_latex": "Ученик сложил положительные корни.",
+      "explanation": "Ученик сложил положительные корни.",
+      "explanation_latex": "Ученик сложил положительные корни."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл сумму всех корней.",
+      "error_logic_latex": "Ученик нашёл сумму всех корней.",
+      "explanation": "Ученик нашёл сумму всех корней.",
+      "explanation_latex": "Ученик нашёл сумму всех корней."
+     },
+     {
+      "value": "$-10$",
+      "value_latex": "$-10$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "error_logic_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.3",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.3.2": {
+   "parent": "G8_ALG_26_400.3",
+   "fields": {
+    "question_text": "Найдите произведение положительных корней уравнения $x^{4}-10x^{2}+9=0$.",
+    "question_latex": "Найдите произведение положительных корней уравнения $x^{4}-10x^{2}+9=0$.",
+    "correct_answer": "$3$",
+    "correct_answer_latex": "$3$",
+    "distractor_meta": [
+     {
+      "value": "$9$",
+      "value_latex": "$9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл произведение всех корней.",
+      "error_logic_latex": "Ученик нашёл произведение всех корней.",
+      "explanation": "Ученик нашёл произведение всех корней.",
+      "explanation_latex": "Ученик нашёл произведение всех корней."
+     },
+     {
+      "value": "$-3$",
+      "value_latex": "$-3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "error_logic_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни вместо умножения.",
+      "error_logic_latex": "Ученик сложил положительные корни вместо умножения.",
+      "explanation": "Ученик сложил положительные корни вместо умножения.",
+      "explanation_latex": "Ученик сложил положительные корни вместо умножения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.3",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.4.1": {
+   "parent": "G8_ALG_26_400.4",
+   "fields": {
+    "question_text": "Найдите сумму отрицательных корней уравнения $x^{4}-5x^{2}+6=0$.",
+    "question_latex": "Найдите сумму отрицательных корней уравнения $x^{4}-5x^{2}+6=0$.",
+    "correct_answer": "$-\\sqrt{2}-\\sqrt{3}$",
+    "correct_answer_latex": "$-\\sqrt{2}-\\sqrt{3}$",
+    "distractor_meta": [
+     {
+      "value": "$\\sqrt{2}+\\sqrt{3}$",
+      "value_latex": "$\\sqrt{2}+\\sqrt{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни.",
+      "error_logic_latex": "Ученик сложил положительные корни.",
+      "explanation": "Ученик сложил положительные корни.",
+      "explanation_latex": "Ученик сложил положительные корни."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл сумму всех корней.",
+      "error_logic_latex": "Ученик нашёл сумму всех корней.",
+      "explanation": "Ученик нашёл сумму всех корней.",
+      "explanation_latex": "Ученик нашёл сумму всех корней."
+     },
+     {
+      "value": "$-5$",
+      "value_latex": "$-5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "error_logic_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.4",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.4.2": {
+   "parent": "G8_ALG_26_400.4",
+   "fields": {
+    "question_text": "Найдите произведение положительных корней уравнения $x^{4}-5x^{2}+6=0$.",
+    "question_latex": "Найдите произведение положительных корней уравнения $x^{4}-5x^{2}+6=0$.",
+    "correct_answer": "$\\sqrt{6}$",
+    "correct_answer_latex": "$\\sqrt{6}$",
+    "distractor_meta": [
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл произведение всех корней.",
+      "error_logic_latex": "Ученик нашёл произведение всех корней.",
+      "explanation": "Ученик нашёл произведение всех корней.",
+      "explanation_latex": "Ученик нашёл произведение всех корней."
+     },
+     {
+      "value": "$-\\sqrt{6}$",
+      "value_latex": "$-\\sqrt{6}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "error_logic_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно."
+     },
+     {
+      "value": "$\\sqrt{2}+\\sqrt{3}$",
+      "value_latex": "$\\sqrt{2}+\\sqrt{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни вместо умножения.",
+      "error_logic_latex": "Ученик сложил положительные корни вместо умножения.",
+      "explanation": "Ученик сложил положительные корни вместо умножения.",
+      "explanation_latex": "Ученик сложил положительные корни вместо умножения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.4",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.5.1": {
+   "parent": "G8_ALG_26_400.5",
+   "fields": {
+    "question_text": "Найдите сумму отрицательных корней уравнения $x^{4}-19x^{2}+90=0$.",
+    "question_latex": "Найдите сумму отрицательных корней уравнения $x^{4}-19x^{2}+90=0$.",
+    "correct_answer": "$-3-\\sqrt{10}$",
+    "correct_answer_latex": "$-3-\\sqrt{10}$",
+    "distractor_meta": [
+     {
+      "value": "$3+\\sqrt{10}$",
+      "value_latex": "$3+\\sqrt{10}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни.",
+      "error_logic_latex": "Ученик сложил положительные корни.",
+      "explanation": "Ученик сложил положительные корни.",
+      "explanation_latex": "Ученик сложил положительные корни."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл сумму всех корней.",
+      "error_logic_latex": "Ученик нашёл сумму всех корней.",
+      "explanation": "Ученик нашёл сумму всех корней.",
+      "explanation_latex": "Ученик нашёл сумму всех корней."
+     },
+     {
+      "value": "$-19$",
+      "value_latex": "$-19$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "error_logic_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.5",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.5.2": {
+   "parent": "G8_ALG_26_400.5",
+   "fields": {
+    "question_text": "Найдите произведение положительных корней уравнения $x^{4}-19x^{2}+90=0$.",
+    "question_latex": "Найдите произведение положительных корней уравнения $x^{4}-19x^{2}+90=0$.",
+    "correct_answer": "$3\\sqrt{10}$",
+    "correct_answer_latex": "$3\\sqrt{10}$",
+    "distractor_meta": [
+     {
+      "value": "$90$",
+      "value_latex": "$90$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл произведение всех корней.",
+      "error_logic_latex": "Ученик нашёл произведение всех корней.",
+      "explanation": "Ученик нашёл произведение всех корней.",
+      "explanation_latex": "Ученик нашёл произведение всех корней."
+     },
+     {
+      "value": "$-3\\sqrt{10}$",
+      "value_latex": "$-3\\sqrt{10}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "error_logic_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно."
+     },
+     {
+      "value": "$3+\\sqrt{10}$",
+      "value_latex": "$3+\\sqrt{10}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни вместо умножения.",
+      "error_logic_latex": "Ученик сложил положительные корни вместо умножения.",
+      "explanation": "Ученик сложил положительные корни вместо умножения.",
+      "explanation_latex": "Ученик сложил положительные корни вместо умножения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.5",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.6.1": {
+   "parent": "G8_ALG_26_400.6",
+   "fields": {
+    "question_text": "Найдите сумму отрицательных корней уравнения $x^{4}-11x^{2}+28=0$.",
+    "question_latex": "Найдите сумму отрицательных корней уравнения $x^{4}-11x^{2}+28=0$.",
+    "correct_answer": "$-2-\\sqrt{7}$",
+    "correct_answer_latex": "$-2-\\sqrt{7}$",
+    "distractor_meta": [
+     {
+      "value": "$2+\\sqrt{7}$",
+      "value_latex": "$2+\\sqrt{7}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни.",
+      "error_logic_latex": "Ученик сложил положительные корни.",
+      "explanation": "Ученик сложил положительные корни.",
+      "explanation_latex": "Ученик сложил положительные корни."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл сумму всех корней.",
+      "error_logic_latex": "Ученик нашёл сумму всех корней.",
+      "explanation": "Ученик нашёл сумму всех корней.",
+      "explanation_latex": "Ученик нашёл сумму всех корней."
+     },
+     {
+      "value": "$-11$",
+      "value_latex": "$-11$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "error_logic_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус.",
+      "explanation_latex": "Ученик взял сумму корней уравнения относительно $t=x^{2}$ со знаком минус."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.6",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_26_400.6.2": {
+   "parent": "G8_ALG_26_400.6",
+   "fields": {
+    "question_text": "Найдите произведение положительных корней уравнения $x^{4}-11x^{2}+28=0$.",
+    "question_latex": "Найдите произведение положительных корней уравнения $x^{4}-11x^{2}+28=0$.",
+    "correct_answer": "$2\\sqrt{7}$",
+    "correct_answer_latex": "$2\\sqrt{7}$",
+    "distractor_meta": [
+     {
+      "value": "$28$",
+      "value_latex": "$28$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл произведение всех корней.",
+      "error_logic_latex": "Ученик нашёл произведение всех корней.",
+      "explanation": "Ученик нашёл произведение всех корней.",
+      "explanation_latex": "Ученик нашёл произведение всех корней."
+     },
+     {
+      "value": "$-2\\sqrt{7}$",
+      "value_latex": "$-2\\sqrt{7}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "error_logic_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation": "Ученик ошибся в знаке: произведение положительных чисел положительно.",
+      "explanation_latex": "Ученик ошибся в знаке: произведение положительных чисел положительно."
+     },
+     {
+      "value": "$2+\\sqrt{7}$",
+      "value_latex": "$2+\\sqrt{7}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил положительные корни вместо умножения.",
+      "error_logic_latex": "Ученик сложил положительные корни вместо умножения.",
+      "explanation": "Ученик сложил положительные корни вместо умножения.",
+      "explanation_latex": "Ученик сложил положительные корни вместо умножения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "26",
+     "exercise": "400",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P26",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует полного решения нескольких биквадратных уравнений (нахождения всех их корней) и последующего выполнения арифметических операций с этими корнями (нахождение суммы, произведения, разности",
+     "split_from": "G8_ALG_26_400.6",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_33_1298.1": {
+   "parent": "G5_TB_33_1298",
+   "fields": {
+    "question_text": "Найдите натуральные приближённые значения числа $21{,}609$ с недостатком и с избытком.",
+    "question_latex": "Найдите натуральные приближённые значения числа $21{,}609$ с недостатком и с избытком.",
+    "correct_answer": "$21$ и $22$",
+    "correct_answer_latex": "$21$ и $22$",
+    "distractor_meta": [
+     {
+      "value": "$22$ и $21$",
+      "value_latex": "$22$ и $21$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал значения с недостатком и с избытком.",
+      "error_logic_latex": "Ученик перепутал значения с недостатком и с избытком.",
+      "explanation": "Ученик перепутал значения с недостатком и с избытком.",
+      "explanation_latex": "Ученик перепутал значения с недостатком и с избытком."
+     },
+     {
+      "value": "$21$ и $21{,}7$",
+      "value_latex": "$21$ и $21{,}7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик округлил до десятых; нужны натуральные числа.",
+      "error_logic_latex": "Ученик округлил до десятых; нужны натуральные числа.",
+      "explanation": "Ученик округлил до десятых; нужны натуральные числа.",
+      "explanation_latex": "Ученик округлил до десятых; нужны натуральные числа."
+     },
+     {
+      "value": "$20$ и $22$",
+      "value_latex": "$20$ и $22$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял несоседние числа.",
+      "error_logic_latex": "Ученик взял несоседние числа.",
+      "explanation": "Ученик взял несоседние числа.",
+      "explanation_latex": "Ученик взял несоседние числа."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "33",
+     "exercise": "1298",
+     "category": "standard",
+     "marker": "⑨",
+     "mapping_l3": "G5_P35",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует нахождения приближённых значений чисел с недостатком и с избытком в виде натуральных чисел (округление до целых). Это относится к базовым приближённым вычислениям и оценке чисел (навык ",
+     "split_from": "G5_TB_33_1298",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_33_1298.2": {
+   "parent": "G5_TB_33_1298",
+   "fields": {
+    "question_text": "Найдите натуральные приближённые значения числа $1{,}057$ с недостатком и с избытком.",
+    "question_latex": "Найдите натуральные приближённые значения числа $1{,}057$ с недостатком и с избытком.",
+    "correct_answer": "$1$ и $2$",
+    "correct_answer_latex": "$1$ и $2$",
+    "distractor_meta": [
+     {
+      "value": "$2$ и $1$",
+      "value_latex": "$2$ и $1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал значения с недостатком и с избытком.",
+      "error_logic_latex": "Ученик перепутал значения с недостатком и с избытком.",
+      "explanation": "Ученик перепутал значения с недостатком и с избытком.",
+      "explanation_latex": "Ученик перепутал значения с недостатком и с избытком."
+     },
+     {
+      "value": "$1$ и $1{,}1$",
+      "value_latex": "$1$ и $1{,}1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик округлил до десятых; нужны натуральные числа.",
+      "error_logic_latex": "Ученик округлил до десятых; нужны натуральные числа.",
+      "explanation": "Ученик округлил до десятых; нужны натуральные числа.",
+      "explanation_latex": "Ученик округлил до десятых; нужны натуральные числа."
+     },
+     {
+      "value": "$0$ и $1$",
+      "value_latex": "$0$ и $1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сдвинулся на единицу влево.",
+      "error_logic_latex": "Ученик сдвинулся на единицу влево.",
+      "explanation": "Ученик сдвинулся на единицу влево.",
+      "explanation_latex": "Ученик сдвинулся на единицу влево."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "33",
+     "exercise": "1298",
+     "category": "standard",
+     "marker": "⑨",
+     "mapping_l3": "G5_P35",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует нахождения приближённых значений чисел с недостатком и с избытком в виде натуральных чисел (округление до целых). Это относится к базовым приближённым вычислениям и оценке чисел (навык ",
+     "split_from": "G5_TB_33_1298",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_7_273.1": {
+   "parent": "G5_TB_7_273",
+   "fields": {
+    "question_text": "Найдите значение суммы $57\\,854+789$.",
+    "question_latex": "Найдите значение суммы $57\\,854+789$.",
+    "correct_answer": "$58\\,643$",
+    "correct_answer_latex": "$58\\,643$",
+    "distractor_meta": [
+     {
+      "value": "$57\\,643$",
+      "value_latex": "$57\\,643$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не перенёс единицу в разряд тысяч.",
+      "error_logic_latex": "Ученик не перенёс единицу в разряд тысяч.",
+      "explanation": "Ученик не перенёс единицу в разряд тысяч.",
+      "explanation_latex": "Ученик не перенёс единицу в разряд тысяч."
+     },
+     {
+      "value": "$58\\,533$",
+      "value_latex": "$58\\,533$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся при переносе в разрядах десятков и сотен.",
+      "error_logic_latex": "Ученик ошибся при переносе в разрядах десятков и сотен.",
+      "explanation": "Ученик ошибся при переносе в разрядах десятков и сотен.",
+      "explanation_latex": "Ученик ошибся при переносе в разрядах десятков и сотен."
+     },
+     {
+      "value": "$58\\,653$",
+      "value_latex": "$58\\,653$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся при сложении десятков.",
+      "error_logic_latex": "Ученик ошибся при сложении десятков.",
+      "explanation": "Ученик ошибся при сложении десятков.",
+      "explanation_latex": "Ученик ошибся при сложении десятков."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "7",
+     "exercise": 273,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P06",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "The task requires calculating four sums: 1693 + 789, 57854 + 789, 131963 + 789, and 1894 + 789. All of these additions involve carrying over digits (e.g., 3 + 9 = 12, 9 + 8 + 1 = 18, etc.), which dire",
+     "split_from": "G5_TB_7_273",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_7_273.2": {
+   "parent": "G5_TB_7_273",
+   "fields": {
+    "question_text": "Найдите значение суммы $1894+789$.",
+    "question_latex": "Найдите значение суммы $1894+789$.",
+    "correct_answer": "$2683$",
+    "correct_answer_latex": "$2683$",
+    "distractor_meta": [
+     {
+      "value": "$2583$",
+      "value_latex": "$2583$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не перенёс единицу в разряд сотен.",
+      "error_logic_latex": "Ученик не перенёс единицу в разряд сотен.",
+      "explanation": "Ученик не перенёс единицу в разряд сотен.",
+      "explanation_latex": "Ученик не перенёс единицу в разряд сотен."
+     },
+     {
+      "value": "$2673$",
+      "value_latex": "$2673$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся при сложении десятков.",
+      "error_logic_latex": "Ученик ошибся при сложении десятков.",
+      "explanation": "Ученик ошибся при сложении десятков.",
+      "explanation_latex": "Ученик ошибся при сложении десятков."
+     },
+     {
+      "value": "$1683$",
+      "value_latex": "$1683$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не перенёс единицу в разряд тысяч.",
+      "error_logic_latex": "Ученик не перенёс единицу в разряд тысяч.",
+      "explanation": "Ученик не перенёс единицу в разряд тысяч.",
+      "explanation_latex": "Ученик не перенёс единицу в разряд тысяч."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "7",
+     "exercise": 273,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P06",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "The task requires calculating four sums: 1693 + 789, 57854 + 789, 131963 + 789, and 1894 + 789. All of these additions involve carrying over digits (e.g., 3 + 9 = 12, 9 + 8 + 1 = 18, etc.), which dire",
+     "split_from": "G5_TB_7_273",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_13_545.1": {
+   "parent": "G6_TB_13_545",
+   "fields": {
+    "question_text": "В первый день туристы прошли $\\dfrac{2}{9}$ всего пути, во второй — $\\dfrac{2}{3}$ всего пути. Весь путь $n$ км. Составьте и упростите выражение для пути, пройденного за два дня.",
+    "question_latex": "В первый день туристы прошли $\\dfrac{2}{9}$ всего пути, во второй — $\\dfrac{2}{3}$ всего пути. Весь путь $n$ км. Составьте и упростите выражение для пути, пройденного за два дня.",
+    "correct_answer": "$\\dfrac{8}{9}n$",
+    "correct_answer_latex": "$\\dfrac{8}{9}n$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{1}{3}n$",
+      "value_latex": "$\\dfrac{1}{3}n$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил числители и знаменатели: $\\dfrac{4}{12}$.",
+      "error_logic_latex": "Ученик сложил числители и знаменатели: $\\dfrac{4}{12}$.",
+      "explanation": "Ученик сложил числители и знаменатели: $\\dfrac{4}{12}$.",
+      "explanation_latex": "Ученик сложил числители и знаменатели: $\\dfrac{4}{12}$."
+     },
+     {
+      "value": "$\\dfrac{4}{27}n$",
+      "value_latex": "$\\dfrac{4}{27}n$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перемножил доли вместо сложения.",
+      "error_logic_latex": "Ученик перемножил доли вместо сложения.",
+      "explanation": "Ученик перемножил доли вместо сложения.",
+      "explanation_latex": "Ученик перемножил доли вместо сложения."
+     },
+     {
+      "value": "$\\dfrac{4}{9}n$",
+      "value_latex": "$\\dfrac{4}{9}n$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$.",
+      "error_logic_latex": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$.",
+      "explanation": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$.",
+      "explanation_latex": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "13",
+     "exercise": 545,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P14",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует перевода текстового условия в математическое выражение (составление выражения для суммы частей пути от переменной n), его последующего упрощения и вычисления значений при заданных n. Эт",
+     "split_from": "G6_TB_13_545",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_13_545.2": {
+   "parent": "G6_TB_13_545",
+   "fields": {
+    "question_text": "В первый день туристы прошли $\\dfrac{2}{9}$ всего пути, во второй — $\\dfrac{2}{3}$ всего пути. Весь путь $n$ км. Сколько километров пройдено за два дня при $n=33\\dfrac{3}{4}$?",
+    "question_latex": "В первый день туристы прошли $\\dfrac{2}{9}$ всего пути, во второй — $\\dfrac{2}{3}$ всего пути. Весь путь $n$ км. Сколько километров пройдено за два дня при $n=33\\dfrac{3}{4}$?",
+    "correct_answer": "$30$",
+    "correct_answer_latex": "$30$",
+    "distractor_meta": [
+     {
+      "value": "$11\\dfrac{1}{4}$",
+      "value_latex": "$11\\dfrac{1}{4}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил числители и знаменатели долей.",
+      "error_logic_latex": "Ученик сложил числители и знаменатели долей.",
+      "explanation": "Ученик сложил числители и знаменатели долей.",
+      "explanation_latex": "Ученик сложил числители и знаменатели долей."
+     },
+     {
+      "value": "$5$",
+      "value_latex": "$5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перемножил доли вместо сложения.",
+      "error_logic_latex": "Ученик перемножил доли вместо сложения.",
+      "explanation": "Ученик перемножил доли вместо сложения.",
+      "explanation_latex": "Ученик перемножил доли вместо сложения."
+     },
+     {
+      "value": "$15$",
+      "value_latex": "$15$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$.",
+      "error_logic_latex": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$.",
+      "explanation": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$.",
+      "explanation_latex": "Ученик не привёл $\\dfrac{2}{3}$ к знаменателю $9$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "13",
+     "exercise": 545,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P14",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует перевода текстового условия в математическое выражение (составление выражения для суммы частей пути от переменной n), его последующего упрощения и вычисления значений при заданных n. Эт",
+     "split_from": "G6_TB_13_545",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G7_TB_40_1044.1": {
+   "parent": "G7_TB_40_1044",
+   "fields": {
+    "question_text": "Является ли пара чисел $(3;\\,-20)$ решением уравнения $10x+y=12$?",
+    "question_latex": "Является ли пара чисел $(3;\\,-20)$ решением уравнения $10x+y=12$?",
+    "correct_answer": "нет",
+    "correct_answer_latex": "нет",
+    "distractor_meta": [
+     {
+      "value": "да",
+      "value_latex": "да",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не проверил подстановкой: $10\\cdot3+(-20)=10\\ne12$.",
+      "error_logic_latex": "Ученик не проверил подстановкой: $10\\cdot3+(-20)=10\\ne12$.",
+      "explanation": "Ученик не проверил подстановкой: $10\\cdot3+(-20)=10\\ne12$.",
+      "explanation_latex": "Ученик не проверил подстановкой: $10\\cdot3+(-20)=10\\ne12$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "40",
+     "exercise": 1044,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G7_P33",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует проверить, являются ли заданные пары чисел решениями уравнения. Хотя в задаче дано одно уравнение, а не система, навык G7_S33_01 (Определение решения системы) является наиболее близким,",
+     "split_from": "G7_TB_40_1044",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G7_TB_40_1044.2": {
+   "parent": "G7_TB_40_1044",
+   "fields": {
+    "question_text": "Является ли пара чисел $(0{,}1;\\,11)$ решением уравнения $10x+y=12$?",
+    "question_latex": "Является ли пара чисел $(0{,}1;\\,11)$ решением уравнения $10x+y=12$?",
+    "correct_answer": "да",
+    "correct_answer_latex": "да",
+    "distractor_meta": [
+     {
+      "value": "нет",
+      "value_latex": "нет",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся при подстановке: $10\\cdot0{,}1+11=12$.",
+      "error_logic_latex": "Ученик ошибся при подстановке: $10\\cdot0{,}1+11=12$.",
+      "explanation": "Ученик ошибся при подстановке: $10\\cdot0{,}1+11=12$.",
+      "explanation_latex": "Ученик ошибся при подстановке: $10\\cdot0{,}1+11=12$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "40",
+     "exercise": 1044,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G7_P33",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует проверить, являются ли заданные пары чисел решениями уравнения. Хотя в задаче дано одно уравнение, а не система, навык G7_S33_01 (Определение решения системы) является наиболее близким,",
+     "split_from": "G7_TB_40_1044",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G7_TB_40_1044.3": {
+   "parent": "G7_TB_40_1044",
+   "fields": {
+    "question_text": "Является ли пара чисел $(2;\\,1)$ решением уравнения $10x+y=12$?",
+    "question_latex": "Является ли пара чисел $(2;\\,1)$ решением уравнения $10x+y=12$?",
+    "correct_answer": "нет",
+    "correct_answer_latex": "нет",
+    "distractor_meta": [
+     {
+      "value": "да",
+      "value_latex": "да",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил числа: решением является пара $(1;\\,2)$, а $10\\cdot2+1=21$.",
+      "error_logic_latex": "Ученик переставил числа: решением является пара $(1;\\,2)$, а $10\\cdot2+1=21$.",
+      "explanation": "Ученик переставил числа: решением является пара $(1;\\,2)$, а $10\\cdot2+1=21$.",
+      "explanation_latex": "Ученик переставил числа: решением является пара $(1;\\,2)$, а $10\\cdot2+1=21$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "40",
+     "exercise": 1044,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G7_P33",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует проверить, являются ли заданные пары чисел решениями уравнения. Хотя в задаче дано одно уравнение, а не система, навык G7_S33_01 (Определение решения системы) является наиболее близким,",
+     "split_from": "G7_TB_40_1044",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_130–131_1078.1": {
+   "parent": "G6_TB_130–131_1078",
+   "fields": {
+    "question_text": "Какое наибольшее число точек пересечения могут иметь $3$ окружности?",
+    "question_latex": "Какое наибольшее число точек пересечения могут иметь $3$ окружности?",
+    "correct_answer": "$6$",
+    "correct_answer_latex": "$6$",
+    "distractor_meta": [
+     {
+      "value": "$3$",
+      "value_latex": "$3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал по одной точке на каждую пару окружностей; две окружности пересекаются в двух точках.",
+      "error_logic_latex": "Ученик посчитал по одной точке на каждую пару окружностей; две окружности пересекаются в двух точках.",
+      "explanation": "Ученик посчитал по одной точке на каждую пару окружностей; две окружности пересекаются в двух точках.",
+      "explanation_latex": "Ученик посчитал по одной точке на каждую пару окружностей; две окружности пересекаются в двух точках."
+     },
+     {
+      "value": "$9$",
+      "value_latex": "$9$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил $3$ на $3$.",
+      "error_logic_latex": "Ученик умножил $3$ на $3$.",
+      "explanation": "Ученик умножил $3$ на $3$.",
+      "explanation_latex": "Ученик умножил $3$ на $3$."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик прибавил к двум точкам ещё две.",
+      "error_logic_latex": "Ученик прибавил к двум точкам ещё две.",
+      "explanation": "Ученик прибавил к двум точкам ещё две.",
+      "explanation_latex": "Ученик прибавил к двум точкам ещё две."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "130–131",
+     "exercise": "1078",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P24",
+     "mapping_confidence": 0.1,
+     "mapping_reasoning": "Задача относится к теме 'Элементы комбинаторики' и геометрии взаимного расположения фигур (окружностей), а не к вычислению длины окружности или площади круга. Ни один из предложенных навыков (G6_S24_0",
+     "split_from": "G6_TB_130–131_1078",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_130–131_1078.2": {
+   "parent": "G6_TB_130–131_1078",
+   "fields": {
+    "question_text": "Какое наибольшее число точек пересечения могут иметь $2$ окружности?",
+    "question_latex": "Какое наибольшее число точек пересечения могут иметь $2$ окружности?",
+    "correct_answer": "$2$",
+    "correct_answer_latex": "$2$",
+    "distractor_meta": [
+     {
+      "value": "$1$",
+      "value_latex": "$1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что окружности пересекаются в одной точке.",
+      "error_logic_latex": "Ученик решил, что окружности пересекаются в одной точке.",
+      "explanation": "Ученик решил, что окружности пересекаются в одной точке.",
+      "explanation_latex": "Ученик решил, что окружности пересекаются в одной точке."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал точки дважды.",
+      "error_logic_latex": "Ученик посчитал точки дважды.",
+      "explanation": "Ученик посчитал точки дважды.",
+      "explanation_latex": "Ученик посчитал точки дважды."
+     },
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик рассмотрел непересекающиеся окружности.",
+      "error_logic_latex": "Ученик рассмотрел непересекающиеся окружности.",
+      "explanation": "Ученик рассмотрел непересекающиеся окружности.",
+      "explanation_latex": "Ученик рассмотрел непересекающиеся окружности."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "130–131",
+     "exercise": "1078",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P24",
+     "mapping_confidence": 0.1,
+     "mapping_reasoning": "Задача относится к теме 'Элементы комбинаторики' и геометрии взаимного расположения фигур (окружностей), а не к вычислению длины окружности или площади круга. Ни один из предложенных навыков (G6_S24_0",
+     "split_from": "G6_TB_130–131_1078",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_132–133_1080.1": {
+   "parent": "G6_TB_132–133_1080",
+   "fields": {
+    "question_text": "Каждая из $3$ окружностей пересекается с остальными. На сколько частей они делят плоскость?",
+    "question_latex": "Каждая из $3$ окружностей пересекается с остальными. На сколько частей они делят плоскость?",
+    "correct_answer": "$8$",
+    "correct_answer_latex": "$8$",
+    "distractor_meta": [
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал точки пересечения вместо частей.",
+      "error_logic_latex": "Ученик посчитал точки пересечения вместо частей.",
+      "explanation": "Ученик посчитал точки пересечения вместо частей.",
+      "explanation_latex": "Ученик посчитал точки пересечения вместо частей."
+     },
+     {
+      "value": "$7$",
+      "value_latex": "$7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл внешнюю часть плоскости.",
+      "error_logic_latex": "Ученик не учёл внешнюю часть плоскости.",
+      "explanation": "Ученик не учёл внешнюю часть плоскости.",
+      "explanation_latex": "Ученик не учёл внешнюю часть плоскости."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик добавил по одной части на каждую новую окружность.",
+      "error_logic_latex": "Ученик добавил по одной части на каждую новую окружность.",
+      "explanation": "Ученик добавил по одной части на каждую новую окружность.",
+      "explanation_latex": "Ученик добавил по одной части на каждую новую окружность."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "132–133",
+     "exercise": "1080",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P24",
+     "mapping_confidence": 0.1,
+     "mapping_reasoning": "Данная задача относится к комбинаторике и топологии (взаимное расположение окружностей на плоскости), а не к вычислению длины окружности или площади круга. Ни один из предложенных навыков (G6_S24_01, ",
+     "split_from": "G6_TB_132–133_1080",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_132–133_1080.2": {
+   "parent": "G6_TB_132–133_1080",
+   "fields": {
+    "question_text": "Каждая из $2$ окружностей пересекается с другой. На сколько частей они делят плоскость?",
+    "question_latex": "Каждая из $2$ окружностей пересекается с другой. На сколько частей они делят плоскость?",
+    "correct_answer": "$4$",
+    "correct_answer_latex": "$4$",
+    "distractor_meta": [
+     {
+      "value": "$3$",
+      "value_latex": "$3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл внешнюю часть плоскости.",
+      "error_logic_latex": "Ученик не учёл внешнюю часть плоскости.",
+      "explanation": "Ученик не учёл внешнюю часть плоскости.",
+      "explanation_latex": "Ученик не учёл внешнюю часть плоскости."
+     },
+     {
+      "value": "$2$",
+      "value_latex": "$2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал только внутренности кругов.",
+      "error_logic_latex": "Ученик посчитал только внутренности кругов.",
+      "explanation": "Ученик посчитал только внутренности кругов.",
+      "explanation_latex": "Ученик посчитал только внутренности кругов."
+     },
+     {
+      "value": "$5$",
+      "value_latex": "$5$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал общую часть дважды.",
+      "error_logic_latex": "Ученик посчитал общую часть дважды.",
+      "explanation": "Ученик посчитал общую часть дважды.",
+      "explanation_latex": "Ученик посчитал общую часть дважды."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "132–133",
+     "exercise": "1080",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P24",
+     "mapping_confidence": 0.1,
+     "mapping_reasoning": "Данная задача относится к комбинаторике и топологии (взаимное расположение окружностей на плоскости), а не к вычислению длины окружности или площади круга. Ни один из предложенных навыков (G6_S24_01, ",
+     "split_from": "G6_TB_132–133_1080",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_65–66_576.1": {
+   "parent": "G6_TB_65–66_576",
+   "fields": {
+    "question_text": "Расстояние между Ташкентом и Самаркандом $354$ км. Какой должна быть скорость поезда, чтобы проехать этот путь за $2$ часа?",
+    "question_latex": "Расстояние между Ташкентом и Самаркандом $354$ км. Какой должна быть скорость поезда, чтобы проехать этот путь за $2$ часа?",
+    "correct_answer": "$177$ км/ч",
+    "correct_answer_latex": "$177$ км/ч",
+    "distractor_meta": [
+     {
+      "value": "$708$ км/ч",
+      "value_latex": "$708$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил расстояние на время.",
+      "error_logic_latex": "Ученик умножил расстояние на время.",
+      "explanation": "Ученик умножил расстояние на время.",
+      "explanation_latex": "Ученик умножил расстояние на время."
+     },
+     {
+      "value": "$352$ км/ч",
+      "value_latex": "$352$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел время из расстояния.",
+      "error_logic_latex": "Ученик вычел время из расстояния.",
+      "explanation": "Ученик вычел время из расстояния.",
+      "explanation_latex": "Ученик вычел время из расстояния."
+     },
+     {
+      "value": "$88{,}5$ км/ч",
+      "value_latex": "$88{,}5$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил на $4$.",
+      "error_logic_latex": "Ученик разделил на $4$.",
+      "explanation": "Ученик разделил на $4$.",
+      "explanation_latex": "Ученик разделил на $4$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "65–66",
+     "exercise": "576",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P22",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "В задаче дано расстояние (S = 354 км) и время (t), требуется найти скорость (v). Формула для нахождения скорости выражается как v = S/t, что напрямую связано с пониманием обратной пропорциональности м",
+     "split_from": "G6_TB_65–66_576",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_65–66_576.2": {
+   "parent": "G6_TB_65–66_576",
+   "fields": {
+    "question_text": "Расстояние между Ташкентом и Самаркандом $354$ км. Какой должна быть скорость поезда, чтобы проехать этот путь за $2$ часа $10$ минут (ответ округлите до сотых)?",
+    "question_latex": "Расстояние между Ташкентом и Самаркандом $354$ км. Какой должна быть скорость поезда, чтобы проехать этот путь за $2$ часа $10$ минут (ответ округлите до сотых)?",
+    "correct_answer": "$163{,}38$ км/ч",
+    "correct_answer_latex": "$163{,}38$ км/ч",
+    "distractor_meta": [
+     {
+      "value": "$168{,}57$ км/ч",
+      "value_latex": "$168{,}57$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик принял $2$ ч $10$ мин за $2{,}1$ ч; верно $2\\dfrac{1}{6}$ ч.",
+      "error_logic_latex": "Ученик принял $2$ ч $10$ мин за $2{,}1$ ч; верно $2\\dfrac{1}{6}$ ч.",
+      "explanation": "Ученик принял $2$ ч $10$ мин за $2{,}1$ ч; верно $2\\dfrac{1}{6}$ ч.",
+      "explanation_latex": "Ученик принял $2$ ч $10$ мин за $2{,}1$ ч; верно $2\\dfrac{1}{6}$ ч."
+     },
+     {
+      "value": "$177$ км/ч",
+      "value_latex": "$177$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл $10$ минут.",
+      "error_logic_latex": "Ученик не учёл $10$ минут.",
+      "explanation": "Ученик не учёл $10$ минут.",
+      "explanation_latex": "Ученик не учёл $10$ минут."
+     },
+     {
+      "value": "$767$ км/ч",
+      "value_latex": "$767$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил расстояние на время.",
+      "error_logic_latex": "Ученик умножил расстояние на время.",
+      "explanation": "Ученик умножил расстояние на время.",
+      "explanation_latex": "Ученик умножил расстояние на время."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "65–66",
+     "exercise": "576",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P22",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "В задаче дано расстояние (S = 354 км) и время (t), требуется найти скорость (v). Формула для нахождения скорости выражается как v = S/t, что напрямую связано с пониманием обратной пропорциональности м",
+     "split_from": "G6_TB_65–66_576",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_69–74_616.1": {
+   "parent": "G6_TB_69–74_616",
+   "fields": {
+    "question_text": "Масса стали прямо пропорциональна её объёму. Сталь объёмом $12$ см$^{3}$ имеет массу $15{,}6$ г. Какому объёму соответствует сталь массой $23{,}4$ г?",
+    "question_latex": "Масса стали прямо пропорциональна её объёму. Сталь объёмом $12$ см$^{3}$ имеет массу $15{,}6$ г. Какому объёму соответствует сталь массой $23{,}4$ г?",
+    "correct_answer": "$18$ см$^{3}$",
+    "correct_answer_latex": "$18$ см$^{3}$",
+    "distractor_meta": [
+     {
+      "value": "$30{,}42$ см$^{3}$",
+      "value_latex": "$30{,}42$ см$^{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил массу на плотность $1{,}3$ вместо деления.",
+      "error_logic_latex": "Ученик умножил массу на плотность $1{,}3$ вместо деления.",
+      "explanation": "Ученик умножил массу на плотность $1{,}3$ вместо деления.",
+      "explanation_latex": "Ученик умножил массу на плотность $1{,}3$ вместо деления."
+     },
+     {
+      "value": "$19{,}8$ см$^{3}$",
+      "value_latex": "$19{,}8$ см$^{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик прибавил к объёму разность масс.",
+      "error_logic_latex": "Ученик прибавил к объёму разность масс.",
+      "explanation": "Ученик прибавил к объёму разность масс.",
+      "explanation_latex": "Ученик прибавил к объёму разность масс."
+     },
+     {
+      "value": "$8$ см$^{3}$",
+      "value_latex": "$8$ см$^{3}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перевернул пропорцию: $\\dfrac{12\\cdot15{,}6}{23{,}4}$.",
+      "error_logic_latex": "Ученик перевернул пропорцию: $\\dfrac{12\\cdot15{,}6}{23{,}4}$.",
+      "explanation": "Ученик перевернул пропорцию: $\\dfrac{12\\cdot15{,}6}{23{,}4}$.",
+      "explanation_latex": "Ученик перевернул пропорцию: $\\dfrac{12\\cdot15{,}6}{23{,}4}$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "69–74",
+     "exercise": "616",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P22",
+     "mapping_confidence": 0.9,
+     "mapping_reasoning": "Задача относится к прямой пропорциональной зависимости (зависимость массы от объема при постоянной плотности аналогична зависимости пути от времени при постоянной скорости). Из предложенных навыков на",
+     "split_from": "G6_TB_69–74_616",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_69–74_639.1": {
+   "parent": "G6_TB_69–74_639",
+   "fields": {
+    "question_text": "Цену книги снизили на $15\\%$. Сколько теперь стоит книга, если первоначально она стоила $10\\,000$ сумов?",
+    "question_latex": "Цену книги снизили на $15\\%$. Сколько теперь стоит книга, если первоначально она стоила $10\\,000$ сумов?",
+    "correct_answer": "$8500$ сумов",
+    "correct_answer_latex": "$8500$ сумов",
+    "distractor_meta": [
+     {
+      "value": "$1500$ сумов",
+      "value_latex": "$1500$ сумов",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл размер скидки, а не новую цену.",
+      "error_logic_latex": "Ученик нашёл размер скидки, а не новую цену.",
+      "explanation": "Ученик нашёл размер скидки, а не новую цену.",
+      "explanation_latex": "Ученик нашёл размер скидки, а не новую цену."
+     },
+     {
+      "value": "$11\\,500$ сумов",
+      "value_latex": "$11\\,500$ сумов",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик увеличил цену вместо снижения.",
+      "error_logic_latex": "Ученик увеличил цену вместо снижения.",
+      "explanation": "Ученик увеличил цену вместо снижения.",
+      "explanation_latex": "Ученик увеличил цену вместо снижения."
+     },
+     {
+      "value": "$9850$ сумов",
+      "value_latex": "$9850$ сумов",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик принял $15\\%$ за $150$ сумов.",
+      "error_logic_latex": "Ученик принял $15\\%$ за $150$ сумов.",
+      "explanation": "Ученик принял $15\\%$ за $150$ сумов.",
+      "explanation_latex": "Ученик принял $15\\%$ за $150$ сумов."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "69–74",
+     "exercise": "639",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P22",
+     "mapping_confidence": 0.8,
+     "mapping_reasoning": "Задача относится к теме процентов и пропорционального изменения величин (уменьшение величины на заданный процент). Из предложенных навыков наиболее близким является G6_S22_01 (Прямая пропорциональност",
+     "split_from": "G6_TB_69–74_639",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_69–74_639.2": {
+   "parent": "G6_TB_69–74_639",
+   "fields": {
+    "question_text": "Цену книги снизили на $15\\%$. Сколько теперь стоит книга, если первоначально она стоила $6000$ сумов?",
+    "question_latex": "Цену книги снизили на $15\\%$. Сколько теперь стоит книга, если первоначально она стоила $6000$ сумов?",
+    "correct_answer": "$5100$ сумов",
+    "correct_answer_latex": "$5100$ сумов",
+    "distractor_meta": [
+     {
+      "value": "$900$ сумов",
+      "value_latex": "$900$ сумов",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл размер скидки, а не новую цену.",
+      "error_logic_latex": "Ученик нашёл размер скидки, а не новую цену.",
+      "explanation": "Ученик нашёл размер скидки, а не новую цену.",
+      "explanation_latex": "Ученик нашёл размер скидки, а не новую цену."
+     },
+     {
+      "value": "$6900$ сумов",
+      "value_latex": "$6900$ сумов",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик увеличил цену вместо снижения.",
+      "error_logic_latex": "Ученик увеличил цену вместо снижения.",
+      "explanation": "Ученик увеличил цену вместо снижения.",
+      "explanation_latex": "Ученик увеличил цену вместо снижения."
+     },
+     {
+      "value": "$5985$ сумов",
+      "value_latex": "$5985$ сумов",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик принял $15\\%$ за $15$ сумов.",
+      "error_logic_latex": "Ученик принял $15\\%$ за $15$ сумов.",
+      "explanation": "Ученик принял $15\\%$ за $15$ сумов.",
+      "explanation_latex": "Ученик принял $15\\%$ за $15$ сумов."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "69–74",
+     "exercise": "639",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P22",
+     "mapping_confidence": 0.8,
+     "mapping_reasoning": "Задача относится к теме процентов и пропорционального изменения величин (уменьшение величины на заданный процент). Из предложенных навыков наиболее близким является G6_S22_01 (Прямая пропорциональност",
+     "split_from": "G6_TB_69–74_639",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_ТестX_1176.1": {
+   "parent": "G6_TB_ТестX_1176",
+   "fields": {
+    "question_text": "Сколько чисел, кратных $9$, содержится среди чисел от $1$ до $600$?",
+    "question_latex": "Сколько чисел, кратных $9$, содержится среди чисел от $1$ до $600$?",
+    "correct_answer": "$66$",
+    "correct_answer_latex": "$66$",
+    "distractor_meta": [
+     {
+      "value": "$67$",
+      "value_latex": "$67$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик округлил $600:9=66{,}(6)$ вверх; $9\\cdot67=603>600$.",
+      "error_logic_latex": "Ученик округлил $600:9=66{,}(6)$ вверх; $9\\cdot67=603>600$.",
+      "explanation": "Ученик округлил $600:9=66{,}(6)$ вверх; $9\\cdot67=603>600$.",
+      "explanation_latex": "Ученик округлил $600:9=66{,}(6)$ вверх; $9\\cdot67=603>600$."
+     },
+     {
+      "value": "$200$",
+      "value_latex": "$200$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал числа, кратные $3$.",
+      "error_logic_latex": "Ученик посчитал числа, кратные $3$.",
+      "explanation": "Ученик посчитал числа, кратные $3$.",
+      "explanation_latex": "Ученик посчитал числа, кратные $3$."
+     },
+     {
+      "value": "$60$",
+      "value_latex": "$60$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил $600$ на $10$.",
+      "error_logic_latex": "Ученик разделил $600$ на $10$.",
+      "explanation": "Ученик разделил $600$ на $10$.",
+      "explanation_latex": "Ученик разделил $600$ на $10$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "Тест X",
+     "exercise": "1176",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти количество чисел, кратных 9 и 3, в заданном диапазоне. Это напрямую относится к нахождению кратных числа и пониманию их структуры (числа вида a × n, где n — натуральное число от 1",
+     "split_from": "G6_TB_ТестX_1176",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_ТестX_1176.2": {
+   "parent": "G6_TB_ТестX_1176",
+   "fields": {
+    "question_text": "Сколько чисел, кратных $3$, содержится среди чисел от $1$ до $600$?",
+    "question_latex": "Сколько чисел, кратных $3$, содержится среди чисел от $1$ до $600$?",
+    "correct_answer": "$200$",
+    "correct_answer_latex": "$200$",
+    "distractor_meta": [
+     {
+      "value": "$199$",
+      "value_latex": "$199$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл само число $600$.",
+      "error_logic_latex": "Ученик не учёл само число $600$.",
+      "explanation": "Ученик не учёл само число $600$.",
+      "explanation_latex": "Ученик не учёл само число $600$."
+     },
+     {
+      "value": "$66$",
+      "value_latex": "$66$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал числа, кратные $9$.",
+      "error_logic_latex": "Ученик посчитал числа, кратные $9$.",
+      "explanation": "Ученик посчитал числа, кратные $9$.",
+      "explanation_latex": "Ученик посчитал числа, кратные $9$."
+     },
+     {
+      "value": "$201$",
+      "value_latex": "$201$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал и число $0$.",
+      "error_logic_latex": "Ученик посчитал и число $0$.",
+      "explanation": "Ученик посчитал и число $0$.",
+      "explanation_latex": "Ученик посчитал и число $0$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "Тест X",
+     "exercise": "1176",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P01",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти количество чисел, кратных 9 и 3, в заданном диапазоне. Это напрямую относится к нахождению кратных числа и пониманию их структуры (числа вида a × n, где n — натуральное число от 1",
+     "split_from": "G6_TB_ТестX_1176",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_31_497.1": {
+   "parent": "G8_ALG_31_497",
+   "fields": {
+    "question_text": "Сколько трёхзначных чисел можно составить из цифр $0$, $1$, $2$, …, $9$, если цифры не повторяются?",
+    "question_latex": "Сколько трёхзначных чисел можно составить из цифр $0$, $1$, $2$, …, $9$, если цифры не повторяются?",
+    "correct_answer": "$648$",
+    "correct_answer_latex": "$648$",
+    "distractor_meta": [
+     {
+      "value": "$720$",
+      "value_latex": "$720$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл, что трёхзначное число не начинается с нуля: $10\\cdot9\\cdot8$.",
+      "error_logic_latex": "Ученик не учёл, что трёхзначное число не начинается с нуля: $10\\cdot9\\cdot8$.",
+      "explanation": "Ученик не учёл, что трёхзначное число не начинается с нуля: $10\\cdot9\\cdot8$.",
+      "explanation_latex": "Ученик не учёл, что трёхзначное число не начинается с нуля: $10\\cdot9\\cdot8$."
+     },
+     {
+      "value": "$504$",
+      "value_latex": "$504$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик исключил нуль совсем: $9\\cdot8\\cdot7$.",
+      "error_logic_latex": "Ученик исключил нуль совсем: $9\\cdot8\\cdot7$.",
+      "explanation": "Ученик исключил нуль совсем: $9\\cdot8\\cdot7$.",
+      "explanation_latex": "Ученик исключил нуль совсем: $9\\cdot8\\cdot7$."
+     },
+     {
+      "value": "$900$",
+      "value_latex": "$900$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разрешил повторение цифр.",
+      "error_logic_latex": "Ученик разрешил повторение цифр.",
+      "explanation": "Ученик разрешил повторение цифр.",
+      "explanation_latex": "Ученик разрешил повторение цифр."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "31",
+     "exercise": "497",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P31",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует найти количество трехзначных чисел, составляемых из заданного набора цифр (от 0 до 9), в двух случаях: без повторений и с повторениями. Это классическое применение основного закона комб",
+     "split_from": "G8_ALG_31_497",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_31_497.2": {
+   "parent": "G8_ALG_31_497",
+   "fields": {
+    "question_text": "Сколько трёхзначных чисел можно составить из цифр $0$, $1$, $2$, …, $9$, если цифры могут повторяться?",
+    "question_latex": "Сколько трёхзначных чисел можно составить из цифр $0$, $1$, $2$, …, $9$, если цифры могут повторяться?",
+    "correct_answer": "$900$",
+    "correct_answer_latex": "$900$",
+    "distractor_meta": [
+     {
+      "value": "$1000$",
+      "value_latex": "$1000$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не учёл, что трёхзначное число не начинается с нуля.",
+      "error_logic_latex": "Ученик не учёл, что трёхзначное число не начинается с нуля.",
+      "explanation": "Ученик не учёл, что трёхзначное число не начинается с нуля.",
+      "explanation_latex": "Ученик не учёл, что трёхзначное число не начинается с нуля."
+     },
+     {
+      "value": "$729$",
+      "value_latex": "$729$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик исключил нуль совсем: $9^{3}$.",
+      "error_logic_latex": "Ученик исключил нуль совсем: $9^{3}$.",
+      "explanation": "Ученик исключил нуль совсем: $9^{3}$.",
+      "explanation_latex": "Ученик исключил нуль совсем: $9^{3}$."
+     },
+     {
+      "value": "$648$",
+      "value_latex": "$648$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик запретил повторение цифр.",
+      "error_logic_latex": "Ученик запретил повторение цифр.",
+      "explanation": "Ученик запретил повторение цифр.",
+      "explanation_latex": "Ученик запретил повторение цифр."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "31",
+     "exercise": "497",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P31",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует найти количество трехзначных чисел, составляемых из заданного набора цифр (от 0 до 9), в двух случаях: без повторений и с повторениями. Это классическое применение основного закона комб",
+     "split_from": "G8_ALG_31_497",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_31_511.1": {
+   "parent": "G8_ALG_31_511",
+   "fields": {
+    "question_text": "Сколько решений имеет равенство $\\square+\\square+\\square=10$, если на пустые места можно ставить цифры $1$–$8$ (цифры могут повторяться), а решения, отличающиеся порядком цифр, считаются разными?",
+    "question_latex": "Сколько решений имеет равенство $\\square+\\square+\\square=10$, если на пустые места можно ставить цифры $1$–$8$ (цифры могут повторяться), а решения, отличающиеся порядком цифр, считаются разными?",
+    "correct_answer": "$36$",
+    "correct_answer_latex": "$36$",
+    "distractor_meta": [
+     {
+      "value": "$8$",
+      "value_latex": "$8$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал решения без учёта порядка.",
+      "error_logic_latex": "Ученик посчитал решения без учёта порядка.",
+      "explanation": "Ученик посчитал решения без учёта порядка.",
+      "explanation_latex": "Ученик посчитал решения без учёта порядка."
+     },
+     {
+      "value": "$512$",
+      "value_latex": "$512$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал все тройки цифр: $8^{3}$.",
+      "error_logic_latex": "Ученик посчитал все тройки цифр: $8^{3}$.",
+      "explanation": "Ученик посчитал все тройки цифр: $8^{3}$.",
+      "explanation_latex": "Ученик посчитал все тройки цифр: $8^{3}$."
+     },
+     {
+      "value": "$64$",
+      "value_latex": "$64$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик выбрал две цифры по $8$ способов, считая, что третья всегда подходит; она должна быть от $1$ до $8$.",
+      "error_logic_latex": "Ученик выбрал две цифры по $8$ способов, считая, что третья всегда подходит; она должна быть от $1$ до $8$.",
+      "explanation": "Ученик выбрал две цифры по $8$ способов, считая, что третья всегда подходит; она должна быть от $1$ до $8$.",
+      "explanation_latex": "Ученик выбрал две цифры по $8$ способов, считая, что третья всегда подходит; она должна быть от $1$ до $8$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "31",
+     "exercise": "511",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P31",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача представляет собой комбинаторную задачу с ограничениями: сумма трех чисел должна быть строго равна 10, при этом каждое число ограничено диапазоном от 1 до 8. Это накладывает жесткие ограничения",
+     "split_from": "G8_ALG_31_511",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_ALG_31_511.2": {
+   "parent": "G8_ALG_31_511",
+   "fields": {
+    "question_text": "Сколько решений имеет равенство $\\square+\\square+\\square=10$, если на пустые места можно ставить цифры $1$–$8$ (цифры могут повторяться), а решения, отличающиеся порядком цифр, считаются одинаковыми?",
+    "question_latex": "Сколько решений имеет равенство $\\square+\\square+\\square=10$, если на пустые места можно ставить цифры $1$–$8$ (цифры могут повторяться), а решения, отличающиеся порядком цифр, считаются одинаковыми?",
+    "correct_answer": "$8$",
+    "correct_answer_latex": "$8$",
+    "distractor_meta": [
+     {
+      "value": "$36$",
+      "value_latex": "$36$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик учёл порядок цифр.",
+      "error_logic_latex": "Ученик учёл порядок цифр.",
+      "explanation": "Ученик учёл порядок цифр.",
+      "explanation_latex": "Ученик учёл порядок цифр."
+     },
+     {
+      "value": "$7$",
+      "value_latex": "$7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик пропустил одно разбиение: $1+1+8$, $1+2+7$, $1+3+6$, $1+4+5$, $2+2+6$, $2+3+5$, $2+4+4$, $3+3+4$.",
+      "error_logic_latex": "Ученик пропустил одно разбиение: $1+1+8$, $1+2+7$, $1+3+6$, $1+4+5$, $2+2+6$, $2+3+5$, $2+4+4$, $3+3+4$.",
+      "explanation": "Ученик пропустил одно разбиение: $1+1+8$, $1+2+7$, $1+3+6$, $1+4+5$, $2+2+6$, $2+3+5$, $2+4+4$, $3+3+4$.",
+      "explanation_latex": "Ученик пропустил одно разбиение: $1+1+8$, $1+2+7$, $1+3+6$, $1+4+5$, $2+2+6$, $2+3+5$, $2+4+4$, $3+3+4$."
+     },
+     {
+      "value": "$10$",
+      "value_latex": "$10$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял число, равное сумме.",
+      "error_logic_latex": "Ученик взял число, равное сумме.",
+      "explanation": "Ученик взял число, равное сумме.",
+      "explanation_latex": "Ученик взял число, равное сумме."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "31",
+     "exercise": "511",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P31",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача представляет собой комбинаторную задачу с ограничениями: сумма трех чисел должна быть строго равна 10, при этом каждое число ограничено диапазоном от 1 до 8. Это накладывает жесткие ограничения",
+     "split_from": "G8_ALG_31_511",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "n1",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G11_TB_§16_16_14": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G11_TB_§16_16_14.1",
+    "G11_TB_§16_16_14.2"
+   ]
+  },
+  "G11_TB_§16_16_15": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G11_TB_§16_16_15.1",
+    "G11_TB_§16_16_15.2"
+   ]
+  },
+  "G11_TB_§16_16_25": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G11_TB_§16_16_25.1",
+    "G11_TB_§16_16_25.2"
+   ]
+  },
+  "G11_TB_§16_16_26": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G11_TB_§16_16_26.1",
+    "G11_TB_§16_16_26.2"
+   ]
+  },
+  "G11_TB_§16_16_29": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G11_TB_§16_16_29.1",
+    "G11_TB_§16_16_29.2"
+   ]
+  },
+  "G11_TB_§16_16_30": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G11_TB_§16_16_30.1",
+    "G11_TB_§16_16_30.2"
+   ]
+  },
+  "G8_ALG_26_400.1": {
+   "why": "шесть величин по корням уравнения в одной задаче с выбором ответа; выделены отдельные вопросы",
+   "children": [
+    "G8_ALG_26_400.1.1",
+    "G8_ALG_26_400.1.2"
+   ]
+  },
+  "G8_ALG_26_400.2": {
+   "why": "шесть величин по корням уравнения в одной задаче с выбором ответа; выделены отдельные вопросы",
+   "children": [
+    "G8_ALG_26_400.2.1",
+    "G8_ALG_26_400.2.2"
+   ]
+  },
+  "G8_ALG_26_400.3": {
+   "why": "шесть величин по корням уравнения в одной задаче с выбором ответа; выделены отдельные вопросы",
+   "children": [
+    "G8_ALG_26_400.3.1",
+    "G8_ALG_26_400.3.2"
+   ]
+  },
+  "G8_ALG_26_400.4": {
+   "why": "шесть величин по корням уравнения в одной задаче с выбором ответа; выделены отдельные вопросы",
+   "children": [
+    "G8_ALG_26_400.4.1",
+    "G8_ALG_26_400.4.2"
+   ]
+  },
+  "G8_ALG_26_400.5": {
+   "why": "шесть величин по корням уравнения в одной задаче с выбором ответа; выделены отдельные вопросы",
+   "children": [
+    "G8_ALG_26_400.5.1",
+    "G8_ALG_26_400.5.2"
+   ]
+  },
+  "G8_ALG_26_400.6": {
+   "why": "шесть величин по корням уравнения в одной задаче с выбором ответа; выделены отдельные вопросы",
+   "children": [
+    "G8_ALG_26_400.6.1",
+    "G8_ALG_26_400.6.2"
+   ]
+  },
+  "G5_TB_33_1298": {
+   "why": "пачка из нескольких однотипных вычислений в одной задаче с выбором ответа; каждое вычисление — отдельная задача",
+   "children": [
+    "G5_TB_33_1298.1",
+    "G5_TB_33_1298.2"
+   ]
+  },
+  "G5_TB_7_273": {
+   "why": "пачка из нескольких однотипных вычислений в одной задаче с выбором ответа; каждое вычисление — отдельная задача",
+   "children": [
+    "G5_TB_7_273.1",
+    "G5_TB_7_273.2"
+   ]
+  },
+  "G6_TB_13_545": {
+   "why": "составление выражения и несколько его значений в одной задаче с выбором ответа; разделены на вопрос о выражении и вопрос о значении",
+   "children": [
+    "G6_TB_13_545.1",
+    "G6_TB_13_545.2"
+   ]
+  },
+  "G7_TB_40_1044": {
+   "why": "проверка пяти пар в одной задаче; в ключе пара $(3;\\,-20)$ названа решением — неверно: $10\\cdot3-20=10\\ne12$",
+   "children": [
+    "G7_TB_40_1044.1",
+    "G7_TB_40_1044.2",
+    "G7_TB_40_1044.3"
+   ]
+  },
+  "G6_TB_130–131_1078": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G6_TB_130–131_1078.1",
+    "G6_TB_130–131_1078.2"
+   ]
+  },
+  "G6_TB_132–133_1080": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G6_TB_132–133_1080.1",
+    "G6_TB_132–133_1080.2"
+   ]
+  },
+  "G6_TB_65–66_576": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G6_TB_65–66_576.1",
+    "G6_TB_65–66_576.2"
+   ]
+  },
+  "G6_TB_69–74_616": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача; первый пункт повторял данные условия («масса стали объёмом $12$ см$^{3}$») и не перенесён",
+   "children": [
+    "G6_TB_69–74_616.1"
+   ]
+  },
+  "G6_TB_69–74_639": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G6_TB_69–74_639.1",
+    "G6_TB_69–74_639.2"
+   ]
+  },
+  "G6_TB_ТестX_1176": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G6_TB_ТестX_1176.1",
+    "G6_TB_ТестX_1176.2"
+   ]
+  },
+  "G8_ALG_31_497": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G8_ALG_31_497.1",
+    "G8_ALG_31_497.2"
+   ]
+  },
+  "G8_ALG_31_511": {
+   "why": "несколько пунктов 1), 2), 3)… в одной задаче с выбором ответа; каждый пункт — отдельная задача",
+   "children": [
+    "G8_ALG_31_511.1",
+    "G8_ALG_31_511.2"
+   ]
+  }
+ }
+}

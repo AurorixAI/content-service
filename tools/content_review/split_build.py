@@ -44,6 +44,7 @@ for parent, e in cfg.SPLIT.items():
         q, k, ds = p["q"], p["k"], p["d"]
         vals = [v for v, _ in ds]
         if len(ds) < 3 and not p.get("yesno"): pr.append("few")
+        if p.get("yesno") and len(ds) < 2 and k.strip() not in ("да", "нет"): pr.append("few-binary")  # diag builds options only for да/нет with one distractor
         if any(nrm(v) == nrm(k) for v in vals): pr.append("d==key")
         if len({nrm(v) for v in vals}) != len(vals): pr.append("dupvals")
         for s in [q, k] + [x for pair in ds for x in pair]:
