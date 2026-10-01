@@ -1,0 +1,464 @@
+{
+ "new": {
+  "G6_TB_21–23_187.1": {
+   "parent": "G6_TB_21–23_187",
+   "fields": {
+    "question_text": "Сократите дробь $\\dfrac{28}{70}$, разделив числитель и знаменатель на их НОД.",
+    "question_latex": "Сократите дробь $\\dfrac{28}{70}$, разделив числитель и знаменатель на их НОД.",
+    "correct_answer": "$\\dfrac{2}{5}$",
+    "correct_answer_latex": "$\\dfrac{2}{5}$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{4}{10}$",
+      "value_latex": "$\\dfrac{4}{10}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил числитель и знаменатель на $7$, а не на НОД $14$: дробь не сокращена до конца.",
+      "error_logic_latex": "Ученик разделил числитель и знаменатель на $7$, а не на НОД $14$: дробь не сокращена до конца.",
+      "explanation": "Ученик разделил числитель и знаменатель на $7$, а не на НОД $14$: дробь не сокращена до конца.",
+      "explanation_latex": "Ученик разделил числитель и знаменатель на $7$, а не на НОД $14$: дробь не сокращена до конца."
+     },
+     {
+      "value": "$\\dfrac{14}{35}$",
+      "value_latex": "$\\dfrac{14}{35}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $14$.",
+      "error_logic_latex": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $14$.",
+      "explanation": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $14$.",
+      "explanation_latex": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $14$."
+     },
+     {
+      "value": "$\\dfrac{28}{35}$",
+      "value_latex": "$\\dfrac{28}{35}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил на $2$ только знаменатель, а числитель оставил без изменения.",
+      "error_logic_latex": "Ученик разделил на $2$ только знаменатель, а числитель оставил без изменения.",
+      "explanation": "Ученик разделил на $2$ только знаменатель, а числитель оставил без изменения.",
+      "explanation_latex": "Ученик разделил на $2$ только знаменатель, а числитель оставил без изменения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "21–23",
+     "exercise": "187",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P09",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует от ученика найти наибольший общий делитель (НОД) для числителя и знаменателя каждой дроби и затем разделить их на это число для полного сокращения дроби. Это в точности соответствует оп",
+     "split_from": "G6_TB_21–23_187",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_21–23_187.2": {
+   "parent": "G6_TB_21–23_187",
+   "fields": {
+    "question_text": "Сократите дробь $\\dfrac{102}{180}$, разделив числитель и знаменатель на их НОД.",
+    "question_latex": "Сократите дробь $\\dfrac{102}{180}$, разделив числитель и знаменатель на их НОД.",
+    "correct_answer": "$\\dfrac{17}{30}$",
+    "correct_answer_latex": "$\\dfrac{17}{30}$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{51}{90}$",
+      "value_latex": "$\\dfrac{51}{90}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $6$.",
+      "error_logic_latex": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $6$.",
+      "explanation": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $6$.",
+      "explanation_latex": "Ученик разделил числитель и знаменатель на $2$, а не на НОД $6$."
+     },
+     {
+      "value": "$\\dfrac{34}{60}$",
+      "value_latex": "$\\dfrac{34}{60}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил числитель и знаменатель на $3$, а не на НОД $6$.",
+      "error_logic_latex": "Ученик разделил числитель и знаменатель на $3$, а не на НОД $6$.",
+      "explanation": "Ученик разделил числитель и знаменатель на $3$, а не на НОД $6$.",
+      "explanation_latex": "Ученик разделил числитель и знаменатель на $3$, а не на НОД $6$."
+     },
+     {
+      "value": "$\\dfrac{17}{180}$",
+      "value_latex": "$\\dfrac{17}{180}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил на НОД $6$ только числитель, а знаменатель оставил без изменения.",
+      "error_logic_latex": "Ученик разделил на НОД $6$ только числитель, а знаменатель оставил без изменения.",
+      "explanation": "Ученик разделил на НОД $6$ только числитель, а знаменатель оставил без изменения.",
+      "explanation_latex": "Ученик разделил на НОД $6$ только числитель, а знаменатель оставил без изменения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "21–23",
+     "exercise": "187",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P09",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует от ученика найти наибольший общий делитель (НОД) для числителя и знаменателя каждой дроби и затем разделить их на это число для полного сокращения дроби. Это в точности соответствует оп",
+     "split_from": "G6_TB_21–23_187",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_21–23_187.3": {
+   "parent": "G6_TB_21–23_187",
+   "fields": {
+    "question_text": "Сократите дробь $\\dfrac{15}{55}$, разделив числитель и знаменатель на их НОД.",
+    "question_latex": "Сократите дробь $\\dfrac{15}{55}$, разделив числитель и знаменатель на их НОД.",
+    "correct_answer": "$\\dfrac{3}{11}$",
+    "correct_answer_latex": "$\\dfrac{3}{11}$",
+    "distractor_meta": [
+     {
+      "value": "$\\dfrac{3}{55}$",
+      "value_latex": "$\\dfrac{3}{55}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил на НОД $5$ только числитель, а знаменатель оставил без изменения.",
+      "error_logic_latex": "Ученик разделил на НОД $5$ только числитель, а знаменатель оставил без изменения.",
+      "explanation": "Ученик разделил на НОД $5$ только числитель, а знаменатель оставил без изменения.",
+      "explanation_latex": "Ученик разделил на НОД $5$ только числитель, а знаменатель оставил без изменения."
+     },
+     {
+      "value": "$\\dfrac{15}{11}$",
+      "value_latex": "$\\dfrac{15}{11}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил на НОД $5$ только знаменатель, а числитель оставил без изменения.",
+      "error_logic_latex": "Ученик разделил на НОД $5$ только знаменатель, а числитель оставил без изменения.",
+      "explanation": "Ученик разделил на НОД $5$ только знаменатель, а числитель оставил без изменения.",
+      "explanation_latex": "Ученик разделил на НОД $5$ только знаменатель, а числитель оставил без изменения."
+     },
+     {
+      "value": "$\\dfrac{5}{11}$",
+      "value_latex": "$\\dfrac{5}{11}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил числитель на $3$, а знаменатель на $5$: на разные числа сокращать нельзя.",
+      "error_logic_latex": "Ученик разделил числитель на $3$, а знаменатель на $5$: на разные числа сокращать нельзя.",
+      "explanation": "Ученик разделил числитель на $3$, а знаменатель на $5$: на разные числа сокращать нельзя.",
+      "explanation_latex": "Ученик разделил числитель на $3$, а знаменатель на $5$: на разные числа сокращать нельзя."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "21–23",
+     "exercise": "187",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P09",
+     "mapping_confidence": 0.98,
+     "mapping_reasoning": "Задача требует от ученика найти наибольший общий делитель (НОД) для числителя и знаменателя каждой дроби и затем разделить их на это число для полного сокращения дроби. Это в точности соответствует оп",
+     "split_from": "G6_TB_21–23_187",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_5_151.2.1": {
+   "parent": "G5_TB_5_151.2",
+   "fields": {
+    "question_text": "Какое натуральное число лежит между $2089$ и $2091$?",
+    "question_latex": "Какое натуральное число лежит между $2089$ и $2091$?",
+    "correct_answer": "$2090$",
+    "correct_answer_latex": "$2090$",
+    "distractor_meta": [
+     {
+      "value": "$2089$",
+      "value_latex": "$2089$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял левую границу промежутка, а она не лежит между числами.",
+      "error_logic_latex": "Ученик взял левую границу промежутка, а она не лежит между числами.",
+      "explanation": "Ученик взял левую границу промежутка, а она не лежит между числами.",
+      "explanation_latex": "Ученик взял левую границу промежутка, а она не лежит между числами."
+     },
+     {
+      "value": "$2091$",
+      "value_latex": "$2091$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял правую границу промежутка, а она не лежит между числами.",
+      "error_logic_latex": "Ученик взял правую границу промежутка, а она не лежит между числами.",
+      "explanation": "Ученик взял правую границу промежутка, а она не лежит между числами.",
+      "explanation_latex": "Ученик взял правую границу промежутка, а она не лежит между числами."
+     },
+     {
+      "value": "$2$",
+      "value_latex": "$2$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл разность $2091-2089=2$ вместо числа между ними.",
+      "error_logic_latex": "Ученик нашёл разность $2091-2089=2$ вместо числа между ними.",
+      "explanation": "Ученик нашёл разность $2091-2089=2$ вместо числа между ними.",
+      "explanation_latex": "Ученик нашёл разность $2091-2089=2$ вместо числа между ними."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "5",
+     "exercise": 151,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P04",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует нахождения натуральных чисел, находящихся строго между заданными границами (например, 11 < x < 19). Это напрямую связано с пониманием отношений «больше» и «меньше» и упорядочиванием чис",
+     "split_from": "G5_TB_5_151.2",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_5_151.2.2": {
+   "parent": "G5_TB_5_151.2",
+   "fields": {
+    "question_text": "Есть ли натуральное число между $6077$ и $6078$?",
+    "question_latex": "Есть ли натуральное число между $6077$ и $6078$?",
+    "correct_answer": "нет",
+    "correct_answer_latex": "нет",
+    "distractor_meta": [
+     {
+      "value": "да",
+      "value_latex": "да",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик указал число $6077{,}5$, но оно не натуральное; между соседними натуральными числами других натуральных нет.",
+      "error_logic_latex": "Ученик указал число $6077{,}5$, но оно не натуральное; между соседними натуральными числами других натуральных нет.",
+      "explanation": "Ученик указал число $6077{,}5$, но оно не натуральное; между соседними натуральными числами других натуральных нет.",
+      "explanation_latex": "Ученик указал число $6077{,}5$, но оно не натуральное; между соседними натуральными числами других натуральных нет."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "5",
+     "exercise": 151,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P04",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует нахождения натуральных чисел, находящихся строго между заданными границами (например, 11 < x < 19). Это напрямую связано с пониманием отношений «больше» и «меньше» и упорядочиванием чис",
+     "split_from": "G5_TB_5_151.2",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_12_297.3.1": {
+   "parent": "G8_TB_12_297.3",
+   "fields": {
+    "question_text": "Найдите значение $\\sqrt{576}$.",
+    "question_latex": "Найдите значение $\\sqrt{576}$.",
+    "correct_answer": "$24$",
+    "correct_answer_latex": "$24$",
+    "distractor_meta": [
+     {
+      "value": "$26$",
+      "value_latex": "$26$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал число $576$ с $676=26^{2}$.",
+      "error_logic_latex": "Ученик перепутал число $576$ с $676=26^{2}$.",
+      "explanation": "Ученик перепутал число $576$ с $676=26^{2}$.",
+      "explanation_latex": "Ученик перепутал число $576$ с $676=26^{2}$."
+     },
+     {
+      "value": "$288$",
+      "value_latex": "$288$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "error_logic_latex": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "explanation": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "explanation_latex": "Ученик разделил число на $2$ вместо извлечения квадратного корня."
+     },
+     {
+      "value": "$42$",
+      "value_latex": "$42$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил цифры ответа.",
+      "error_logic_latex": "Ученик переставил цифры ответа.",
+      "explanation": "Ученик переставил цифры ответа.",
+      "explanation_latex": "Ученик переставил цифры ответа."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "12",
+     "exercise": "297",
+     "category": "standard",
+     "marker": "",
+     "split_from": "G8_TB_12_297.3",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_12_297.3.2": {
+   "parent": "G8_TB_12_297.3",
+   "fields": {
+    "question_text": "Найдите значение $\\sqrt{1764}$.",
+    "question_latex": "Найдите значение $\\sqrt{1764}$.",
+    "correct_answer": "$42$",
+    "correct_answer_latex": "$42$",
+    "distractor_meta": [
+     {
+      "value": "$48$",
+      "value_latex": "$48$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что подходит любое число, оканчивающееся на $8$ (так как $8^{2}$ оканчивается на $4$): $48^{2}=2304$.",
+      "error_logic_latex": "Ученик решил, что подходит любое число, оканчивающееся на $8$ (так как $8^{2}$ оканчивается на $4$): $48^{2}=2304$.",
+      "explanation": "Ученик решил, что подходит любое число, оканчивающееся на $8$ (так как $8^{2}$ оканчивается на $4$): $48^{2}=2304$.",
+      "explanation_latex": "Ученик решил, что подходит любое число, оканчивающееся на $8$ (так как $8^{2}$ оканчивается на $4$): $48^{2}=2304$."
+     },
+     {
+      "value": "$882$",
+      "value_latex": "$882$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "error_logic_latex": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "explanation": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "explanation_latex": "Ученик разделил число на $2$ вместо извлечения квадратного корня."
+     },
+     {
+      "value": "$24$",
+      "value_latex": "$24$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил цифры ответа.",
+      "error_logic_latex": "Ученик переставил цифры ответа.",
+      "explanation": "Ученик переставил цифры ответа.",
+      "explanation_latex": "Ученик переставил цифры ответа."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "12",
+     "exercise": "297",
+     "category": "standard",
+     "marker": "",
+     "split_from": "G8_TB_12_297.3",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_12_297.3.3": {
+   "parent": "G8_TB_12_297.3",
+   "fields": {
+    "question_text": "Найдите значение $\\sqrt{7396}$.",
+    "question_latex": "Найдите значение $\\sqrt{7396}$.",
+    "correct_answer": "$86$",
+    "correct_answer_latex": "$86$",
+    "distractor_meta": [
+     {
+      "value": "$84$",
+      "value_latex": "$84$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перепутал число $7396$ с $7056=84^{2}$.",
+      "error_logic_latex": "Ученик перепутал число $7396$ с $7056=84^{2}$.",
+      "explanation": "Ученик перепутал число $7396$ с $7056=84^{2}$.",
+      "explanation_latex": "Ученик перепутал число $7396$ с $7056=84^{2}$."
+     },
+     {
+      "value": "$3698$",
+      "value_latex": "$3698$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "error_logic_latex": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "explanation": "Ученик разделил число на $2$ вместо извлечения квадратного корня.",
+      "explanation_latex": "Ученик разделил число на $2$ вместо извлечения квадратного корня."
+     },
+     {
+      "value": "$68$",
+      "value_latex": "$68$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик переставил цифры ответа.",
+      "error_logic_latex": "Ученик переставил цифры ответа.",
+      "explanation": "Ученик переставил цифры ответа.",
+      "explanation_latex": "Ученик переставил цифры ответа."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "12",
+     "exercise": "297",
+     "category": "standard",
+     "marker": "",
+     "split_from": "G8_TB_12_297.3",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "x144",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G6_TB_21–23_187": {
+   "why": "пачка из нескольких независимых заданий в одной задаче с выбором ответа; каждое задание — отдельная задача; сокращение дробей, открытые ответы заменены выбором из вариантов",
+   "children": [
+    "G6_TB_21–23_187.1",
+    "G6_TB_21–23_187.2",
+    "G6_TB_21–23_187.3"
+   ]
+  },
+  "G5_TB_5_151.2": {
+   "why": "пачка из нескольких независимых заданий в одной задаче с выбором ответа; каждое задание — отдельная задача",
+   "children": [
+    "G5_TB_5_151.2.1",
+    "G5_TB_5_151.2.2"
+   ]
+  },
+  "G8_TB_12_297.3": {
+   "why": "пачка из нескольких независимых заданий в одной задаче с выбором ответа; каждое задание — отдельная задача; корни из таблицы квадратов",
+   "children": [
+    "G8_TB_12_297.3.1",
+    "G8_TB_12_297.3.2",
+    "G8_TB_12_297.3.3"
+   ]
+  }
+ }
+}

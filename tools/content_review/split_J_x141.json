@@ -1,0 +1,129 @@
+{
+ "new": {
+  "G5_TB_66_1602.1": {
+   "parent": "G5_TB_66_1602",
+   "fields": {
+    "question_text": "В классе $40$ учеников, из них $55\\%$ — мальчики. Сколько процентов класса составляют девочки?",
+    "question_latex": "В классе $40$ учеников, из них $55\\%$ — мальчики. Сколько процентов класса составляют девочки?",
+    "correct_answer": "$45\\%$",
+    "correct_answer_latex": "$45\\%$",
+    "distractor_meta": [
+     {
+      "value": "$55\\%$",
+      "value_latex": "$55\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик назвал долю мальчиков вместо доли девочек.",
+      "error_logic_latex": "Ученик назвал долю мальчиков вместо доли девочек.",
+      "explanation": "Ученик назвал долю мальчиков вместо доли девочек.",
+      "explanation_latex": "Ученик назвал долю мальчиков вместо доли девочек."
+     },
+     {
+      "value": "$155\\%$",
+      "value_latex": "$155\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик прибавил $55$ к $100$ вместо вычитания.",
+      "error_logic_latex": "Ученик прибавил $55$ к $100$ вместо вычитания.",
+      "explanation": "Ученик прибавил $55$ к $100$ вместо вычитания.",
+      "explanation_latex": "Ученик прибавил $55$ к $100$ вместо вычитания."
+     },
+     {
+      "value": "$35\\%$",
+      "value_latex": "$35\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в вычитании: $100-55=45$, а не $35$.",
+      "error_logic_latex": "Ученик ошибся в вычитании: $100-55=45$, а не $35$.",
+      "explanation": "Ученик ошибся в вычитании: $100-55=45$, а не $35$.",
+      "explanation_latex": "Ученик ошибся в вычитании: $100-55=45$, а не $35$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "66",
+     "exercise": "1602",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P40",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти количество девочек в классе, зная общее количество учеников (40) и процентное соотношение (девочки составляют 100% - 55% = 45% класса). Это классическая задача на нахождение проце",
+     "split_from": "G5_TB_66_1602",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x141",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_66_1602.2": {
+   "parent": "G5_TB_66_1602",
+   "fields": {
+    "question_text": "В классе $40$ учеников, из них $55\\%$ — мальчики. Сколько в классе девочек?",
+    "question_latex": "В классе $40$ учеников, из них $55\\%$ — мальчики. Сколько в классе девочек?",
+    "correct_answer": "$18$",
+    "correct_answer_latex": "$18$",
+    "distractor_meta": [
+     {
+      "value": "$22$",
+      "value_latex": "$22$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик нашёл число мальчиков: $0{,}55\\cdot40=22$.",
+      "error_logic_latex": "Ученик нашёл число мальчиков: $0{,}55\\cdot40=22$.",
+      "explanation": "Ученик нашёл число мальчиков: $0{,}55\\cdot40=22$.",
+      "explanation_latex": "Ученик нашёл число мальчиков: $0{,}55\\cdot40=22$."
+     },
+     {
+      "value": "$45$",
+      "value_latex": "$45$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик принял процент девочек за их число.",
+      "error_logic_latex": "Ученик принял процент девочек за их число.",
+      "explanation": "Ученик принял процент девочек за их число.",
+      "explanation_latex": "Ученик принял процент девочек за их число."
+     },
+     {
+      "value": "$1{,}8$",
+      "value_latex": "$1{,}8$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в разряде: $0{,}45\\cdot40=18$, а не $1{,}8$.",
+      "error_logic_latex": "Ученик ошибся в разряде: $0{,}45\\cdot40=18$, а не $1{,}8$.",
+      "explanation": "Ученик ошибся в разряде: $0{,}45\\cdot40=18$, а не $1{,}8$.",
+      "explanation_latex": "Ученик ошибся в разряде: $0{,}45\\cdot40=18$, а не $1{,}8$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "66",
+     "exercise": "1602",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P40",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует найти количество девочек в классе, зная общее количество учеников (40) и процентное соотношение (девочки составляют 100% - 55% = 45% класса). Это классическая задача на нахождение проце",
+     "split_from": "G5_TB_66_1602",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x141",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G5_TB_66_1602": {
+   "why": "два независимых вопроса (процент девочек и их число) в одной задаче с выбором ответа, в условии испорчено «−40» — каждый вопрос отдельная задача с исправленным условием",
+   "children": [
+    "G5_TB_66_1602.1",
+    "G5_TB_66_1602.2"
+   ]
+  }
+ }
+}

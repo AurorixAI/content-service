@@ -1,0 +1,1143 @@
+{
+ "new": {
+  "G6_TB_1_34.1": {
+   "parent": "G6_TB_1_34",
+   "fields": {
+    "question_text": "Какие из чисел $200$, $320$, $3000$, $50\\,000$, $861$, $76\\,540$ делятся на $100$?",
+    "question_latex": "Какие из чисел $200$, $320$, $3000$, $50\\,000$, $861$, $76\\,540$ делятся на $100$?",
+    "correct_answer": "$200$, $3000$, $50\\,000$",
+    "correct_answer_latex": "$200$, $3000$, $50\\,000$",
+    "distractor_meta": [
+     {
+      "value": "$200$, $320$, $3000$, $50\\,000$, $76\\,540$",
+      "value_latex": "$200$, $320$, $3000$, $50\\,000$, $76\\,540$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что на $100$ делятся числа, оканчивающиеся хотя бы одним нулём: это признак делимости на $10$.",
+      "error_logic_latex": "Ученик решил, что на $100$ делятся числа, оканчивающиеся хотя бы одним нулём: это признак делимости на $10$.",
+      "explanation": "Ученик решил, что на $100$ делятся числа, оканчивающиеся хотя бы одним нулём: это признак делимости на $10$.",
+      "explanation_latex": "Ученик решил, что на $100$ делятся числа, оканчивающиеся хотя бы одним нулём: это признак делимости на $10$."
+     },
+     {
+      "value": "$200$, $3000$",
+      "value_latex": "$200$, $3000$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не включил число $50\\,000$, хотя оно оканчивается двумя нулями и делится на $100$.",
+      "error_logic_latex": "Ученик не включил число $50\\,000$, хотя оно оканчивается двумя нулями и делится на $100$.",
+      "explanation": "Ученик не включил число $50\\,000$, хотя оно оканчивается двумя нулями и делится на $100$.",
+      "explanation_latex": "Ученик не включил число $50\\,000$, хотя оно оканчивается двумя нулями и делится на $100$."
+     },
+     {
+      "value": "$320$, $76\\,540$",
+      "value_latex": "$320$, $76\\,540$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик выбрал числа с одним нулём на конце; для делимости на $100$ нужны два нуля.",
+      "error_logic_latex": "Ученик выбрал числа с одним нулём на конце; для делимости на $100$ нужны два нуля.",
+      "explanation": "Ученик выбрал числа с одним нулём на конце; для делимости на $100$ нужны два нуля.",
+      "explanation_latex": "Ученик выбрал числа с одним нулём на конце; для делимости на $100$ нужны два нуля."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "1",
+     "exercise": 34,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P02",
+     "mapping_confidence": 0.9,
+     "mapping_reasoning": "Задача требует сформулировать и применить признаки делимости на 100 и 1000. Эти признаки являются прямым обобщением и развитием признака делимости на 10 (оканчивается на один нуль, два нуля, три нуля ",
+     "split_from": "G6_TB_1_34",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_1_34.2": {
+   "parent": "G6_TB_1_34",
+   "fields": {
+    "question_text": "Какие из чисел $200$, $320$, $3000$, $50\\,000$, $861$, $76\\,540$ делятся на $1000$?",
+    "question_latex": "Какие из чисел $200$, $320$, $3000$, $50\\,000$, $861$, $76\\,540$ делятся на $1000$?",
+    "correct_answer": "$3000$, $50\\,000$",
+    "correct_answer_latex": "$3000$, $50\\,000$",
+    "distractor_meta": [
+     {
+      "value": "$200$, $3000$, $50\\,000$",
+      "value_latex": "$200$, $3000$, $50\\,000$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не заметил, что число $200$ оканчивается лишь двумя нулями, а для делимости на $1000$ нужны три.",
+      "error_logic_latex": "Ученик не заметил, что число $200$ оканчивается лишь двумя нулями, а для делимости на $1000$ нужны три.",
+      "explanation": "Ученик не заметил, что число $200$ оканчивается лишь двумя нулями, а для делимости на $1000$ нужны три.",
+      "explanation_latex": "Ученик не заметил, что число $200$ оканчивается лишь двумя нулями, а для делимости на $1000$ нужны три."
+     },
+     {
+      "value": "$3000$",
+      "value_latex": "$3000$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не включил число $50\\,000$, хотя оно оканчивается четырьмя нулями и делится на $1000$.",
+      "error_logic_latex": "Ученик не включил число $50\\,000$, хотя оно оканчивается четырьмя нулями и делится на $1000$.",
+      "explanation": "Ученик не включил число $50\\,000$, хотя оно оканчивается четырьмя нулями и делится на $1000$.",
+      "explanation_latex": "Ученик не включил число $50\\,000$, хотя оно оканчивается четырьмя нулями и делится на $1000$."
+     },
+     {
+      "value": "$3000$, $50\\,000$, $76\\,540$",
+      "value_latex": "$3000$, $50\\,000$, $76\\,540$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик посчитал, что один нуль на конце числа $76\\,540$ достаточен для делимости на $1000$.",
+      "error_logic_latex": "Ученик посчитал, что один нуль на конце числа $76\\,540$ достаточен для делимости на $1000$.",
+      "explanation": "Ученик посчитал, что один нуль на конце числа $76\\,540$ достаточен для делимости на $1000$.",
+      "explanation_latex": "Ученик посчитал, что один нуль на конце числа $76\\,540$ достаточен для делимости на $1000$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "1",
+     "exercise": 34,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P02",
+     "mapping_confidence": 0.9,
+     "mapping_reasoning": "Задача требует сформулировать и применить признаки делимости на 100 и 1000. Эти признаки являются прямым обобщением и развитием признака делимости на 10 (оканчивается на один нуль, два нуля, три нуля ",
+     "split_from": "G6_TB_1_34",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_1_34.3": {
+   "parent": "G6_TB_1_34",
+   "fields": {
+    "question_text": "Какой признак делимости на $100$ верен?",
+    "question_latex": "Какой признак делимости на $100$ верен?",
+    "correct_answer": "Число делится на $100$, если оно оканчивается двумя нулями",
+    "correct_answer_latex": "Число делится на $100$, если оно оканчивается двумя нулями",
+    "distractor_meta": [
+     {
+      "value": "Число делится на $100$, если сумма его цифр делится на $100$",
+      "value_latex": "Число делится на $100$, если сумма его цифр делится на $100$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перенёс признак делимости на $3$ и $9$ (через сумму цифр) на делимость на $100$.",
+      "error_logic_latex": "Ученик перенёс признак делимости на $3$ и $9$ (через сумму цифр) на делимость на $100$.",
+      "explanation": "Ученик перенёс признак делимости на $3$ и $9$ (через сумму цифр) на делимость на $100$.",
+      "explanation_latex": "Ученик перенёс признак делимости на $3$ и $9$ (через сумму цифр) на делимость на $100$."
+     },
+     {
+      "value": "Число делится на $100$, если оно чётное",
+      "value_latex": "Число делится на $100$, если оно чётное",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что любое чётное число делится на $100$; например, $320$ на $100$ не делится.",
+      "error_logic_latex": "Ученик решил, что любое чётное число делится на $100$; например, $320$ на $100$ не делится.",
+      "explanation": "Ученик решил, что любое чётное число делится на $100$; например, $320$ на $100$ не делится.",
+      "explanation_latex": "Ученик решил, что любое чётное число делится на $100$; например, $320$ на $100$ не делится."
+     },
+     {
+      "value": "Число делится на $100$, если оно оканчивается хотя бы одним нулём",
+      "value_latex": "Число делится на $100$, если оно оканчивается хотя бы одним нулём",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик спутал признак делимости на $100$ с признаком делимости на $10$.",
+      "error_logic_latex": "Ученик спутал признак делимости на $100$ с признаком делимости на $10$.",
+      "explanation": "Ученик спутал признак делимости на $100$ с признаком делимости на $10$.",
+      "explanation_latex": "Ученик спутал признак делимости на $100$ с признаком делимости на $10$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "1",
+     "exercise": 34,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P02",
+     "mapping_confidence": 0.9,
+     "mapping_reasoning": "Задача требует сформулировать и применить признаки делимости на 100 и 1000. Эти признаки являются прямым обобщением и развитием признака делимости на 10 (оканчивается на один нуль, два нуля, три нуля ",
+     "split_from": "G6_TB_1_34",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_21_846.4.1": {
+   "parent": "G5_TB_21_846.4",
+   "fields": {
+    "question_text": "С помощью формулы $V=abc$ вычислите $ab$, если $V=1088$ дм$^{3}$, $c=17$ дм.",
+    "question_latex": "С помощью формулы $V=abc$ вычислите $ab$, если $V=1088$ дм$^{3}$, $c=17$ дм.",
+    "correct_answer": "$64$ дм$^{2}$",
+    "correct_answer_latex": "$64$ дм$^{2}$",
+    "distractor_meta": [
+     {
+      "value": "$6{,}4$ дм$^{2}$",
+      "value_latex": "$6{,}4$ дм$^{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $6{,}4$.",
+      "error_logic_latex": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $6{,}4$.",
+      "explanation": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $6{,}4$.",
+      "explanation_latex": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $6{,}4$."
+     },
+     {
+      "value": "$640$ дм$^{2}$",
+      "value_latex": "$640$ дм$^{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $640$.",
+      "error_logic_latex": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $640$.",
+      "explanation": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $640$.",
+      "explanation_latex": "Ученик ошибся в разряде при делении: $1088:17=64$, а не $640$."
+     },
+     {
+      "value": "$1071$ дм$^{2}$",
+      "value_latex": "$1071$ дм$^{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел $c$ из $V$ вместо деления: $1088-17=1071$.",
+      "error_logic_latex": "Ученик вычел $c$ из $V$ вместо деления: $1088-17=1071$.",
+      "explanation": "Ученик вычел $c$ из $V$ вместо деления: $1088-17=1071$.",
+      "explanation_latex": "Ученик вычел $c$ из $V$ вместо деления: $1088-17=1071$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "21",
+     "exercise": "846",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P24",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача напрямую требует использования формулы объёма прямоугольного параллелепипеда V = abc для нахождения неизвестных величин (объёма V, ребер a и b, а также площади основания ab) при известных остал",
+     "split_from": "G5_TB_21_846.4",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_21_846.4.2": {
+   "parent": "G5_TB_21_846.4",
+   "fields": {
+    "question_text": "В формуле объёма прямоугольного параллелепипеда $V=abc$ величина $c$ — высота. Что означает произведение $ab$?",
+    "question_latex": "В формуле объёма прямоугольного параллелепипеда $V=abc$ величина $c$ — высота. Что означает произведение $ab$?",
+    "correct_answer": "площадь основания",
+    "correct_answer_latex": "площадь основания",
+    "distractor_meta": [
+     {
+      "value": "периметр основания",
+      "value_latex": "периметр основания",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик спутал площадь основания с его периметром.",
+      "error_logic_latex": "Ученик спутал площадь основания с его периметром.",
+      "explanation": "Ученик спутал площадь основания с его периметром.",
+      "explanation_latex": "Ученик спутал площадь основания с его периметром."
+     },
+     {
+      "value": "площадь боковой грани",
+      "value_latex": "площадь боковой грани",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что произведение $ab$ — площадь боковой грани; но высота $c$ входит в площадь боковой грани, а в $ab$ её нет.",
+      "error_logic_latex": "Ученик решил, что произведение $ab$ — площадь боковой грани; но высота $c$ входит в площадь боковой грани, а в $ab$ её нет.",
+      "explanation": "Ученик решил, что произведение $ab$ — площадь боковой грани; но высота $c$ входит в площадь боковой грани, а в $ab$ её нет.",
+      "explanation_latex": "Ученик решил, что произведение $ab$ — площадь боковой грани; но высота $c$ входит в площадь боковой грани, а в $ab$ её нет."
+     },
+     {
+      "value": "объём параллелепипеда",
+      "value_latex": "объём параллелепипеда",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик спутал произведение двух измерений с объёмом, в который входят три измерения.",
+      "error_logic_latex": "Ученик спутал произведение двух измерений с объёмом, в который входят три измерения.",
+      "explanation": "Ученик спутал произведение двух измерений с объёмом, в который входят три измерения.",
+      "explanation_latex": "Ученик спутал произведение двух измерений с объёмом, в который входят три измерения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "21",
+     "exercise": "846",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P24",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача напрямую требует использования формулы объёма прямоугольного параллелепипеда V = abc для нахождения неизвестных величин (объёма V, ребер a и b, а также площади основания ab) при известных остал",
+     "split_from": "G5_TB_21_846.4",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "ds_llm_6b864ad7b38b.1": {
+   "parent": "ds_llm_6b864ad7b38b",
+   "fields": {
+    "question_text": "Дано неравенство $-3<2$. Можно ли возвести обе его части в квадрат, сохранив знак неравенства?",
+    "question_latex": "Дано неравенство $-3<2$. Можно ли возвести обе его части в квадрат, сохранив знак неравенства?",
+    "correct_answer": "нет",
+    "correct_answer_latex": "нет",
+    "distractor_meta": [
+     {
+      "value": "да",
+      "value_latex": "да",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что при возведении в квадрат знак неравенства всегда сохраняется; но $(-3)^{2}=9$, $2^{2}=4$, и $9<4$ неверно.",
+      "error_logic_latex": "Ученик решил, что при возведении в квадрат знак неравенства всегда сохраняется; но $(-3)^{2}=9$, $2^{2}=4$, и $9<4$ неверно.",
+      "explanation": "Ученик решил, что при возведении в квадрат знак неравенства всегда сохраняется; но $(-3)^{2}=9$, $2^{2}=4$, и $9<4$ неверно.",
+      "explanation_latex": "Ученик решил, что при возведении в квадрат знак неравенства всегда сохраняется; но $(-3)^{2}=9$, $2^{2}=4$, и $9<4$ неверно."
+     }
+    ],
+    "answer_options": [
+     "нет",
+     "да"
+    ],
+    "answer_options_latex": [
+     "нет",
+     "да"
+    ],
+    "tags": {
+     "split_from": "ds_llm_6b864ad7b38b",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "ds_llm_6b864ad7b38b.2": {
+   "parent": "ds_llm_6b864ad7b38b",
+   "fields": {
+    "question_text": "Какой знак нужно поставить вместо $\\square$ в записи $(-3)^{2}\\ \\square\\ 2^{2}$?",
+    "question_latex": "Какой знак нужно поставить вместо $\\square$ в записи $(-3)^{2}\\ \\square\\ 2^{2}$?",
+    "correct_answer": "$>$",
+    "correct_answer_latex": "$>$",
+    "distractor_meta": [
+     {
+      "value": "$<$",
+      "value_latex": "$<$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сохранил знак исходного неравенства $-3<2$, не вычислив $(-3)^{2}=9$ и $2^{2}=4$.",
+      "error_logic_latex": "Ученик сохранил знак исходного неравенства $-3<2$, не вычислив $(-3)^{2}=9$ и $2^{2}=4$.",
+      "explanation": "Ученик сохранил знак исходного неравенства $-3<2$, не вычислив $(-3)^{2}=9$ и $2^{2}=4$.",
+      "explanation_latex": "Ученик сохранил знак исходного неравенства $-3<2$, не вычислив $(-3)^{2}=9$ и $2^{2}=4$."
+     },
+     {
+      "value": "$=$",
+      "value_latex": "$=$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что квадраты чисел $-3$ и $2$ равны; но $9\\ne4$.",
+      "error_logic_latex": "Ученик решил, что квадраты чисел $-3$ и $2$ равны; но $9\\ne4$.",
+      "explanation": "Ученик решил, что квадраты чисел $-3$ и $2$ равны; но $9\\ne4$.",
+      "explanation_latex": "Ученик решил, что квадраты чисел $-3$ и $2$ равны; но $9\\ne4$."
+     },
+     {
+      "value": "$\\le$",
+      "value_latex": "$\\le$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик выбрал знак «не больше», хотя $9\\le4$ неверно.",
+      "error_logic_latex": "Ученик выбрал знак «не больше», хотя $9\\le4$ неверно.",
+      "explanation": "Ученик выбрал знак «не больше», хотя $9\\le4$ неверно.",
+      "explanation_latex": "Ученик выбрал знак «не больше», хотя $9\\le4$ неверно."
+     }
+    ],
+    "answer_options": [
+     "$>$",
+     "$<$",
+     "$=$",
+     "$\\le$"
+    ],
+    "answer_options_latex": [
+     "$>$",
+     "$<$",
+     "$=$",
+     "$\\le$"
+    ],
+    "tags": {
+     "split_from": "ds_llm_6b864ad7b38b",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_14_343.1.1": {
+   "parent": "G8_TB_14_343.1",
+   "fields": {
+    "question_text": "Найдите значение выражения $x+|x|$ при $x=7$.",
+    "question_latex": "Найдите значение выражения $x+|x|$ при $x=7$.",
+    "correct_answer": "$14$",
+    "correct_answer_latex": "$14$",
+    "distractor_meta": [
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что $|7|=-7$, и получил $7+(-7)=0$.",
+      "error_logic_latex": "Ученик решил, что $|7|=-7$, и получил $7+(-7)=0$.",
+      "explanation": "Ученик решил, что $|7|=-7$, и получил $7+(-7)=0$.",
+      "explanation_latex": "Ученик решил, что $|7|=-7$, и получил $7+(-7)=0$."
+     },
+     {
+      "value": "$7$",
+      "value_latex": "$7$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не прибавил модуль: решил, что $|7|=0$.",
+      "error_logic_latex": "Ученик не прибавил модуль: решил, что $|7|=0$.",
+      "explanation": "Ученик не прибавил модуль: решил, что $|7|=0$.",
+      "explanation_latex": "Ученик не прибавил модуль: решил, что $|7|=0$."
+     },
+     {
+      "value": "$49$",
+      "value_latex": "$49$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перемножил $x$ и $|x|$ вместо сложения: $7\\cdot7=49$.",
+      "error_logic_latex": "Ученик перемножил $x$ и $|x|$ вместо сложения: $7\\cdot7=49$.",
+      "explanation": "Ученик перемножил $x$ и $|x|$ вместо сложения: $7\\cdot7=49$.",
+      "explanation_latex": "Ученик перемножил $x$ и $|x|$ вместо сложения: $7\\cdot7=49$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "14",
+     "exercise": "343",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует вычисления значений выражения, содержащего модуль числа (x + |x|), при заданных конкретных значениях переменной x (как положительных, так и отрицательных, а также нуля), и последующего ",
+     "split_from": "G8_TB_14_343.1",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_14_343.1.2": {
+   "parent": "G8_TB_14_343.1",
+   "fields": {
+    "question_text": "Найдите значение выражения $x+|x|$ при $x=-3$.",
+    "question_latex": "Найдите значение выражения $x+|x|$ при $x=-3$.",
+    "correct_answer": "$0$",
+    "correct_answer_latex": "$0$",
+    "distractor_meta": [
+     {
+      "value": "$-6$",
+      "value_latex": "$-6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик раскрыл модуль без смены знака: $|-3|=-3$, получил $-3+(-3)=-6$.",
+      "error_logic_latex": "Ученик раскрыл модуль без смены знака: $|-3|=-3$, получил $-3+(-3)=-6$.",
+      "explanation": "Ученик раскрыл модуль без смены знака: $|-3|=-3$, получил $-3+(-3)=-6$.",
+      "explanation_latex": "Ученик раскрыл модуль без смены знака: $|-3|=-3$, получил $-3+(-3)=-6$."
+     },
+     {
+      "value": "$6$",
+      "value_latex": "$6$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик взял оба слагаемых по модулю: $3+3=6$.",
+      "error_logic_latex": "Ученик взял оба слагаемых по модулю: $3+3=6$.",
+      "explanation": "Ученик взял оба слагаемых по модулю: $3+3=6$.",
+      "explanation_latex": "Ученик взял оба слагаемых по модулю: $3+3=6$."
+     },
+     {
+      "value": "$-3$",
+      "value_latex": "$-3$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что $|-3|=0$, и получил $-3+0=-3$.",
+      "error_logic_latex": "Ученик решил, что $|-3|=0$, и получил $-3+0=-3$.",
+      "explanation": "Ученик решил, что $|-3|=0$, и получил $-3+0=-3$.",
+      "explanation_latex": "Ученик решил, что $|-3|=0$, и получил $-3+0=-3$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "14",
+     "exercise": "343",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует вычисления значений выражения, содержащего модуль числа (x + |x|), при заданных конкретных значениях переменной x (как положительных, так и отрицательных, а также нуля), и последующего ",
+     "split_from": "G8_TB_14_343.1",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_14_343.1.3": {
+   "parent": "G8_TB_14_343.1",
+   "fields": {
+    "question_text": "Упростите выражение $x+|x|$, если $x\\ge0$.",
+    "question_latex": "Упростите выражение $x+|x|$, если $x\\ge0$.",
+    "correct_answer": "$2x$",
+    "correct_answer_latex": "$2x$",
+    "distractor_meta": [
+     {
+      "value": "$0$",
+      "value_latex": "$0$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что $|x|=-x$ при всех $x$, и получил $x-x=0$.",
+      "error_logic_latex": "Ученик решил, что $|x|=-x$ при всех $x$, и получил $x-x=0$.",
+      "explanation": "Ученик решил, что $|x|=-x$ при всех $x$, и получил $x-x=0$.",
+      "explanation_latex": "Ученик решил, что $|x|=-x$ при всех $x$, и получил $x-x=0$."
+     },
+     {
+      "value": "$x$",
+      "value_latex": "$x$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что при $x\\ge0$ модуль равен нулю: $x+0=x$.",
+      "error_logic_latex": "Ученик решил, что при $x\\ge0$ модуль равен нулю: $x+0=x$.",
+      "explanation": "Ученик решил, что при $x\\ge0$ модуль равен нулю: $x+0=x$.",
+      "explanation_latex": "Ученик решил, что при $x\\ge0$ модуль равен нулю: $x+0=x$."
+     },
+     {
+      "value": "$x^{2}$",
+      "value_latex": "$x^{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик перемножил $x$ и $|x|=x$ вместо сложения.",
+      "error_logic_latex": "Ученик перемножил $x$ и $|x|=x$ вместо сложения.",
+      "explanation": "Ученик перемножил $x$ и $|x|=x$ вместо сложения.",
+      "explanation_latex": "Ученик перемножил $x$ и $|x|=x$ вместо сложения."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "14",
+     "exercise": "343",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P17",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует вычисления значений выражения, содержащего модуль числа (x + |x|), при заданных конкретных значениях переменной x (как положительных, так и отрицательных, а также нуля), и последующего ",
+     "split_from": "G8_TB_14_343.1",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_16_300.1": {
+   "parent": "G5_TB_16_300",
+   "fields": {
+    "question_text": "Австралийский кенгуру может прыгнуть в длину на $12$ м. Какое расстояние он покроет, прыгнув $100$ раз?",
+    "question_latex": "Австралийский кенгуру может прыгнуть в длину на $12$ м. Какое расстояние он покроет, прыгнув $100$ раз?",
+    "correct_answer": "$1200$ м",
+    "correct_answer_latex": "$1200$ м",
+    "distractor_meta": [
+     {
+      "value": "$120$ м",
+      "value_latex": "$120$ м",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик потерял один ноль при умножении $12\\cdot100$.",
+      "error_logic_latex": "Ученик потерял один ноль при умножении $12\\cdot100$.",
+      "explanation": "Ученик потерял один ноль при умножении $12\\cdot100$.",
+      "explanation_latex": "Ученик потерял один ноль при умножении $12\\cdot100$."
+     },
+     {
+      "value": "$112$ м",
+      "value_latex": "$112$ м",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил числа вместо умножения: $12+100=112$.",
+      "error_logic_latex": "Ученик сложил числа вместо умножения: $12+100=112$.",
+      "explanation": "Ученик сложил числа вместо умножения: $12+100=112$.",
+      "explanation_latex": "Ученик сложил числа вместо умножения: $12+100=112$."
+     },
+     {
+      "value": "$12\\,000$ м",
+      "value_latex": "$12\\,000$ м",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик приписал лишний ноль при умножении $12\\cdot100$.",
+      "error_logic_latex": "Ученик приписал лишний ноль при умножении $12\\cdot100$.",
+      "explanation": "Ученик приписал лишний ноль при умножении $12\\cdot100$.",
+      "explanation_latex": "Ученик приписал лишний ноль при умножении $12\\cdot100$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "16",
+     "exercise": "300",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P44",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует нахождения общего пути, пройденного кенгуру за определенное количество прыжков (12 м * 100 = 1200 м), а также нахождения количества прыжков для преодоления заданной дистанции (1500 м / ",
+     "split_from": "G5_TB_16_300",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_16_300.2": {
+   "parent": "G5_TB_16_300",
+   "fields": {
+    "question_text": "Австралийский кенгуру может прыгнуть в длину на $12$ м. За сколько прыжков он покроет путь в $1500$ м?",
+    "question_latex": "Австралийский кенгуру может прыгнуть в длину на $12$ м. За сколько прыжков он покроет путь в $1500$ м?",
+    "correct_answer": "$125$ прыжков",
+    "correct_answer_latex": "$125$ прыжков",
+    "distractor_meta": [
+     {
+      "value": "$150$ прыжков",
+      "value_latex": "$150$ прыжков",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик разделил $1500$ на $10$ вместо $12$.",
+      "error_logic_latex": "Ученик разделил $1500$ на $10$ вместо $12$.",
+      "explanation": "Ученик разделил $1500$ на $10$ вместо $12$.",
+      "explanation_latex": "Ученик разделил $1500$ на $10$ вместо $12$."
+     },
+     {
+      "value": "$1488$ прыжков",
+      "value_latex": "$1488$ прыжков",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел длину прыжка из длины пути: $1500-12=1488$.",
+      "error_logic_latex": "Ученик вычел длину прыжка из длины пути: $1500-12=1488$.",
+      "explanation": "Ученик вычел длину прыжка из длины пути: $1500-12=1488$.",
+      "explanation_latex": "Ученик вычел длину прыжка из длины пути: $1500-12=1488$."
+     },
+     {
+      "value": "$18\\,000$ прыжков",
+      "value_latex": "$18\\,000$ прыжков",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил $1500$ на $12$ вместо деления.",
+      "error_logic_latex": "Ученик умножил $1500$ на $12$ вместо деления.",
+      "explanation": "Ученик умножил $1500$ на $12$ вместо деления.",
+      "explanation_latex": "Ученик умножил $1500$ на $12$ вместо деления."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "16",
+     "exercise": "300",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G5_P44",
+     "mapping_confidence": 0.97,
+     "mapping_reasoning": "Задача требует нахождения общего пути, пройденного кенгуру за определенное количество прыжков (12 м * 100 = 1200 м), а также нахождения количества прыжков для преодоления заданной дистанции (1500 м / ",
+     "split_from": "G5_TB_16_300",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_48_1183.1.1": {
+   "parent": "G8_TB_48_1183.1",
+   "fields": {
+    "question_text": "Найдите значение выражения $x^{n}$, если $x=\\dfrac{1}{2}$, $n=2$.",
+    "question_latex": "Найдите значение выражения $x^{n}$, если $x=\\dfrac{1}{2}$, $n=2$.",
+    "correct_answer": "$\\dfrac{1}{4}$",
+    "correct_answer_latex": "$\\dfrac{1}{4}$",
+    "distractor_meta": [
+     {
+      "value": "$1$",
+      "value_latex": "$1$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил основание на показатель: $\\dfrac{1}{2}\\cdot2=1$.",
+      "error_logic_latex": "Ученик умножил основание на показатель: $\\dfrac{1}{2}\\cdot2=1$.",
+      "explanation": "Ученик умножил основание на показатель: $\\dfrac{1}{2}\\cdot2=1$.",
+      "explanation_latex": "Ученик умножил основание на показатель: $\\dfrac{1}{2}\\cdot2=1$."
+     },
+     {
+      "value": "$\\dfrac{1}{2}$",
+      "value_latex": "$\\dfrac{1}{2}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик возвёл в квадрат только числитель: $\\dfrac{1^{2}}{2}=\\dfrac{1}{2}$.",
+      "error_logic_latex": "Ученик возвёл в квадрат только числитель: $\\dfrac{1^{2}}{2}=\\dfrac{1}{2}$.",
+      "explanation": "Ученик возвёл в квадрат только числитель: $\\dfrac{1^{2}}{2}=\\dfrac{1}{2}$.",
+      "explanation_latex": "Ученик возвёл в квадрат только числитель: $\\dfrac{1^{2}}{2}=\\dfrac{1}{2}$."
+     },
+     {
+      "value": "$4$",
+      "value_latex": "$4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик возвёл в квадрат перевёрнутую дробь: $2^{2}=4$.",
+      "error_logic_latex": "Ученик возвёл в квадрат перевёрнутую дробь: $2^{2}=4$.",
+      "explanation": "Ученик возвёл в квадрат перевёрнутую дробь: $2^{2}=4$.",
+      "explanation_latex": "Ученик возвёл в квадрат перевёрнутую дробь: $2^{2}=4$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "48",
+     "exercise": "1183",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P09",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует непосредственного вычисления значений степеней с целыми (в том числе отрицательными) показателями для заданных оснований x и показателей n. Из предложенных навыков наиболее близким явля",
+     "split_from": "G8_TB_48_1183.1",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G8_TB_48_1183.1.2": {
+   "parent": "G8_TB_48_1183.1",
+   "fields": {
+    "question_text": "Найдите значение выражения $x^{-n}$, если $x=\\dfrac{1}{2}$, $n=2$.",
+    "question_latex": "Найдите значение выражения $x^{-n}$, если $x=\\dfrac{1}{2}$, $n=2$.",
+    "correct_answer": "$4$",
+    "correct_answer_latex": "$4$",
+    "distractor_meta": [
+     {
+      "value": "$-4$",
+      "value_latex": "$-4$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что отрицательный показатель делает результат отрицательным: $-4$.",
+      "error_logic_latex": "Ученик решил, что отрицательный показатель делает результат отрицательным: $-4$.",
+      "explanation": "Ученик решил, что отрицательный показатель делает результат отрицательным: $-4$.",
+      "explanation_latex": "Ученик решил, что отрицательный показатель делает результат отрицательным: $-4$."
+     },
+     {
+      "value": "$-\\dfrac{1}{4}$",
+      "value_latex": "$-\\dfrac{1}{4}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик решил, что $x^{-n}=-x^{n}$.",
+      "error_logic_latex": "Ученик решил, что $x^{-n}=-x^{n}$.",
+      "explanation": "Ученик решил, что $x^{-n}=-x^{n}$.",
+      "explanation_latex": "Ученик решил, что $x^{-n}=-x^{n}$."
+     },
+     {
+      "value": "$\\dfrac{1}{4}$",
+      "value_latex": "$\\dfrac{1}{4}$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик не перевернул дробь и не учёл знак показателя: $\\left(\\dfrac{1}{2}\\right)^{2}=\\dfrac{1}{4}$.",
+      "error_logic_latex": "Ученик не перевернул дробь и не учёл знак показателя: $\\left(\\dfrac{1}{2}\\right)^{2}=\\dfrac{1}{4}$.",
+      "explanation": "Ученик не перевернул дробь и не учёл знак показателя: $\\left(\\dfrac{1}{2}\\right)^{2}=\\dfrac{1}{4}$.",
+      "explanation_latex": "Ученик не перевернул дробь и не учёл знак показателя: $\\left(\\dfrac{1}{2}\\right)^{2}=\\dfrac{1}{4}$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "48",
+     "exercise": "1183",
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G8_P09",
+     "mapping_confidence": 0.95,
+     "mapping_reasoning": "Задача требует непосредственного вычисления значений степеней с целыми (в том числе отрицательными) показателями для заданных оснований x и показателей n. Из предложенных навыков наиболее близким явля",
+     "split_from": "G8_TB_48_1183.1",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_12_480.1": {
+   "parent": "G6_TB_12_480",
+   "fields": {
+    "question_text": "Запишите в процентах десятичную дробь $0{,}23$.",
+    "question_latex": "Запишите в процентах десятичную дробь $0{,}23$.",
+    "correct_answer": "$23\\%$",
+    "correct_answer_latex": "$23\\%$",
+    "distractor_meta": [
+     {
+      "value": "$2{,}3\\%$",
+      "value_latex": "$2{,}3\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил на $10$ вместо $100$.",
+      "error_logic_latex": "Ученик умножил на $10$ вместо $100$.",
+      "explanation": "Ученик умножил на $10$ вместо $100$.",
+      "explanation_latex": "Ученик умножил на $10$ вместо $100$."
+     },
+     {
+      "value": "$0{,}23\\%$",
+      "value_latex": "$0{,}23\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик просто приписал знак процента, не умножив на $100$.",
+      "error_logic_latex": "Ученик просто приписал знак процента, не умножив на $100$.",
+      "explanation": "Ученик просто приписал знак процента, не умножив на $100$.",
+      "explanation_latex": "Ученик просто приписал знак процента, не умножив на $100$."
+     },
+     {
+      "value": "$230\\%$",
+      "value_latex": "$230\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил на $1000$ вместо $100$.",
+      "error_logic_latex": "Ученик умножил на $1000$ вместо $100$.",
+      "explanation": "Ученик умножил на $1000$ вместо $100$.",
+      "explanation_latex": "Ученик умножил на $1000$ вместо $100$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "12",
+     "exercise": 480,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P20",
+     "mapping_confidence": 0.85,
+     "mapping_reasoning": "Задача требует перевода десятичных и обыкновенных дробей в проценты. Процент — это сотая часть числа, то есть отношение величины к 100. Перевод дроби в проценты эквивалентен нахождению значения отноше",
+     "split_from": "G6_TB_12_480",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_12_480.2": {
+   "parent": "G6_TB_12_480",
+   "fields": {
+    "question_text": "Запишите в процентах десятичную дробь $0{,}07$.",
+    "question_latex": "Запишите в процентах десятичную дробь $0{,}07$.",
+    "correct_answer": "$7\\%$",
+    "correct_answer_latex": "$7\\%$",
+    "distractor_meta": [
+     {
+      "value": "$0{,}7\\%$",
+      "value_latex": "$0{,}7\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил на $10$ вместо $100$.",
+      "error_logic_latex": "Ученик умножил на $10$ вместо $100$.",
+      "explanation": "Ученик умножил на $10$ вместо $100$.",
+      "explanation_latex": "Ученик умножил на $10$ вместо $100$."
+     },
+     {
+      "value": "$0{,}07\\%$",
+      "value_latex": "$0{,}07\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик просто приписал знак процента, не умножив на $100$.",
+      "error_logic_latex": "Ученик просто приписал знак процента, не умножив на $100$.",
+      "explanation": "Ученик просто приписал знак процента, не умножив на $100$.",
+      "explanation_latex": "Ученик просто приписал знак процента, не умножив на $100$."
+     },
+     {
+      "value": "$70\\%$",
+      "value_latex": "$70\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил на $1000$ вместо $100$.",
+      "error_logic_latex": "Ученик умножил на $1000$ вместо $100$.",
+      "explanation": "Ученик умножил на $1000$ вместо $100$.",
+      "explanation_latex": "Ученик умножил на $1000$ вместо $100$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "12",
+     "exercise": 480,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P20",
+     "mapping_confidence": 0.85,
+     "mapping_reasoning": "Задача требует перевода десятичных и обыкновенных дробей в проценты. Процент — это сотая часть числа, то есть отношение величины к 100. Перевод дроби в проценты эквивалентен нахождению значения отноше",
+     "split_from": "G6_TB_12_480",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G6_TB_12_480.3": {
+   "parent": "G6_TB_12_480",
+   "fields": {
+    "question_text": "Запишите в процентах дробь $\\dfrac{7}{20}$.",
+    "question_latex": "Запишите в процентах дробь $\\dfrac{7}{20}$.",
+    "correct_answer": "$35\\%$",
+    "correct_answer_latex": "$35\\%$",
+    "distractor_meta": [
+     {
+      "value": "$3{,}5\\%$",
+      "value_latex": "$3{,}5\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик ошибся в разряде: $\\dfrac{7}{20}=0{,}35$, а не $0{,}035$.",
+      "error_logic_latex": "Ученик ошибся в разряде: $\\dfrac{7}{20}=0{,}35$, а не $0{,}035$.",
+      "explanation": "Ученик ошибся в разряде: $\\dfrac{7}{20}=0{,}35$, а не $0{,}035$.",
+      "explanation_latex": "Ученик ошибся в разряде: $\\dfrac{7}{20}=0{,}35$, а не $0{,}035$."
+     },
+     {
+      "value": "$28\\%$",
+      "value_latex": "$28\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил на $4$ только числитель, вместо того чтобы привести знаменатель к $100$ умножением обоих членов на $5$.",
+      "error_logic_latex": "Ученик умножил на $4$ только числитель, вместо того чтобы привести знаменатель к $100$ умножением обоих членов на $5$.",
+      "explanation": "Ученик умножил на $4$ только числитель, вместо того чтобы привести знаменатель к $100$ умножением обоих членов на $5$.",
+      "explanation_latex": "Ученик умножил на $4$ только числитель, вместо того чтобы привести знаменатель к $100$ умножением обоих членов на $5$."
+     },
+     {
+      "value": "$350\\%$",
+      "value_latex": "$350\\%$",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил $0{,}35$ на $1000$ вместо $100$.",
+      "error_logic_latex": "Ученик умножил $0{,}35$ на $1000$ вместо $100$.",
+      "explanation": "Ученик умножил $0{,}35$ на $1000$ вместо $100$.",
+      "explanation_latex": "Ученик умножил $0{,}35$ на $1000$ вместо $100$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "12",
+     "exercise": 480,
+     "category": "standard",
+     "marker": "",
+     "mapping_l3": "G6_P20",
+     "mapping_confidence": 0.85,
+     "mapping_reasoning": "Задача требует перевода десятичных и обыкновенных дробей в проценты. Процент — это сотая часть числа, то есть отношение величины к 100. Перевод дроби в проценты эквивалентен нахождению значения отноше",
+     "split_from": "G6_TB_12_480",
+     "compound_split_ok": true,
+     "split_part": 3,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_34_1301.1": {
+   "parent": "G5_TB_34_1301",
+   "fields": {
+    "question_text": "Собственная скорость теплохода $21{,}6$ км/ч, скорость течения $4{,}9$ км/ч. Найдите скорость теплохода по течению.",
+    "question_latex": "Собственная скорость теплохода $21{,}6$ км/ч, скорость течения $4{,}9$ км/ч. Найдите скорость теплохода по течению.",
+    "correct_answer": "$26{,}5$ км/ч",
+    "correct_answer_latex": "$26{,}5$ км/ч",
+    "distractor_meta": [
+     {
+      "value": "$16{,}7$ км/ч",
+      "value_latex": "$16{,}7$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел скорость течения вместо сложения.",
+      "error_logic_latex": "Ученик вычел скорость течения вместо сложения.",
+      "explanation": "Ученик вычел скорость течения вместо сложения.",
+      "explanation_latex": "Ученик вычел скорость течения вместо сложения."
+     },
+     {
+      "value": "$25{,}5$ км/ч",
+      "value_latex": "$25{,}5$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик забыл перенос из разряда десятых при сложении: $0{,}6+0{,}9=1{,}5$.",
+      "error_logic_latex": "Ученик забыл перенос из разряда десятых при сложении: $0{,}6+0{,}9=1{,}5$.",
+      "explanation": "Ученик забыл перенос из разряда десятых при сложении: $0{,}6+0{,}9=1{,}5$.",
+      "explanation_latex": "Ученик забыл перенос из разряда десятых при сложении: $0{,}6+0{,}9=1{,}5$."
+     },
+     {
+      "value": "$105{,}84$ км/ч",
+      "value_latex": "$105{,}84$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик умножил скорости вместо сложения: $21{,}6\\cdot4{,}9=105{,}84$.",
+      "error_logic_latex": "Ученик умножил скорости вместо сложения: $21{,}6\\cdot4{,}9=105{,}84$.",
+      "explanation": "Ученик умножил скорости вместо сложения: $21{,}6\\cdot4{,}9=105{,}84$.",
+      "explanation_latex": "Ученик умножил скорости вместо сложения: $21{,}6\\cdot4{,}9=105{,}84$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "34",
+     "exercise": "1301",
+     "category": "standard",
+     "marker": "",
+     "split_from": "G5_TB_34_1301",
+     "compound_split_ok": true,
+     "split_part": 1,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  },
+  "G5_TB_34_1301.2": {
+   "parent": "G5_TB_34_1301",
+   "fields": {
+    "question_text": "Собственная скорость теплохода $21{,}6$ км/ч, скорость течения $4{,}9$ км/ч. Найдите скорость теплохода против течения.",
+    "question_latex": "Собственная скорость теплохода $21{,}6$ км/ч, скорость течения $4{,}9$ км/ч. Найдите скорость теплохода против течения.",
+    "correct_answer": "$16{,}7$ км/ч",
+    "correct_answer_latex": "$16{,}7$ км/ч",
+    "distractor_meta": [
+     {
+      "value": "$26{,}5$ км/ч",
+      "value_latex": "$26{,}5$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик сложил скорости вместо вычитания.",
+      "error_logic_latex": "Ученик сложил скорости вместо вычитания.",
+      "explanation": "Ученик сложил скорости вместо вычитания.",
+      "explanation_latex": "Ученик сложил скорости вместо вычитания."
+     },
+     {
+      "value": "$17{,}7$ км/ч",
+      "value_latex": "$17{,}7$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик занял десяток для десятых, но забыл уменьшить разряд единиц: $21{,}6-4{,}9=17{,}7$.",
+      "error_logic_latex": "Ученик занял десяток для десятых, но забыл уменьшить разряд единиц: $21{,}6-4{,}9=17{,}7$.",
+      "explanation": "Ученик занял десяток для десятых, но забыл уменьшить разряд единиц: $21{,}6-4{,}9=17{,}7$.",
+      "explanation_latex": "Ученик занял десяток для десятых, но забыл уменьшить разряд единиц: $21{,}6-4{,}9=17{,}7$."
+     },
+     {
+      "value": "$-16{,}7$ км/ч",
+      "value_latex": "$-16{,}7$ км/ч",
+      "error_type": "manual_review",
+      "plausibility": 0.6,
+      "error_logic": "Ученик вычел из скорости течения собственную скорость теплохода: $4{,}9-21{,}6=-16{,}7$.",
+      "error_logic_latex": "Ученик вычел из скорости течения собственную скорость теплохода: $4{,}9-21{,}6=-16{,}7$.",
+      "explanation": "Ученик вычел из скорости течения собственную скорость теплохода: $4{,}9-21{,}6=-16{,}7$.",
+      "explanation_latex": "Ученик вычел из скорости течения собственную скорость теплохода: $4{,}9-21{,}6=-16{,}7$."
+     }
+    ],
+    "answer_options": null,
+    "answer_options_latex": null,
+    "tags": {
+     "paragraph": "34",
+     "exercise": "1301",
+     "category": "standard",
+     "marker": "",
+     "split_from": "G5_TB_34_1301",
+     "compound_split_ok": true,
+     "split_part": 2,
+     "split_batch": "x145",
+     "split_source": "manual-split-2026-09-30",
+     "answer_verify_mode": "manual_verified"
+    }
+   }
+  }
+ },
+ "retire": {
+  "G6_TB_1_34": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G6_TB_1_34.1",
+    "G6_TB_1_34.2",
+    "G6_TB_1_34.3"
+   ]
+  },
+  "G5_TB_21_846.4": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G5_TB_21_846.4.1",
+    "G5_TB_21_846.4.2"
+   ]
+  },
+  "ds_llm_6b864ad7b38b": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "ds_llm_6b864ad7b38b.1",
+    "ds_llm_6b864ad7b38b.2"
+   ]
+  },
+  "G8_TB_14_343.1": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G8_TB_14_343.1.1",
+    "G8_TB_14_343.1.2",
+    "G8_TB_14_343.1.3"
+   ]
+  },
+  "G5_TB_16_300": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G5_TB_16_300.1",
+    "G5_TB_16_300.2"
+   ]
+  },
+  "G8_TB_48_1183.1": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G8_TB_48_1183.1.1",
+    "G8_TB_48_1183.1.2"
+   ]
+  },
+  "G6_TB_12_480": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G6_TB_12_480.1",
+    "G6_TB_12_480.2",
+    "G6_TB_12_480.3"
+   ]
+  },
+  "G5_TB_34_1301": {
+   "why": "несколько независимых вопросов в одной задаче с выбором ответа; каждый вопрос — отдельная задача",
+   "children": [
+    "G5_TB_34_1301.1",
+    "G5_TB_34_1301.2"
+   ]
+  }
+ }
+}
