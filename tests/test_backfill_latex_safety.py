@@ -386,7 +386,9 @@ def test_invalid_field_remains_for_review_after_bounded_llm_repair_attempts(monk
 
     def llm(prompt: str) -> str:
         prompts.append(prompt)
-        rendered = r"$3/4$"
+        # A simple slash is now normalized to dfrac before validation. Use an
+        # unknown command so this still exercises exhausted invalid repairs.
+        rendered = r"$\unknowncommand{3}{4}$"
         return (
             "@@FIELD: answer\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
             f"@@REASON: NONE\n@@TEXT:\n{rendered}\n@@END_FIELD"
@@ -411,7 +413,7 @@ def test_invalid_field_remains_for_review_after_bounded_llm_repair_attempts(monk
     assert "SOURCE:\n3/4" in prompts[1]
     assert "@@FIELD:" not in prompts[1]
     assert "Верни только готовый русский display-текст" in prompts[2]
-    assert results["answer"]["canonical"] == r"$3/4$"
+    assert results["answer"]["canonical"] == r"$\unknowncommand{3}{4}$"
     assert results["answer"]["llm_self_check_used"] is False
     assert results["answer"]["llm_self_review_ok"] is False
     assert results["answer"]["final_review"]["verdict"] == "repair_attempts_exhausted"
@@ -455,7 +457,8 @@ def test_boundary_defect_remains_for_review_after_bounded_llm_repair_attempts(mo
 
     def llm(prompt: str) -> str:
         prompts.append(prompt)
-        rendered = r"Ошибка: $(6+10$ или $6+11-1)$"
+        # Avoid the supported normalization of a leading prose parenthesis.
+        rendered = r"Ошибка: $6+(10$ или $11-1+2)$"
         return (
             "@@FIELD: dmeta[0].description\n@@DECISION: REPLACE\n"
             "@@CONFIDENCE: high\n@@REASON: NONE\n@@TEXT:\n"
@@ -463,7 +466,7 @@ def test_boundary_defect_remains_for_review_after_bounded_llm_repair_attempts(mo
         )
 
     monkeypatch.setattr(backfill, "call_deepseek_task_bundle", llm)
-    raw = r"Ошибка: $(6+10$ или $6+11-1)$"
+    raw = r"Ошибка: $6+(10$ или $11-1+2)$"
     async def run_bundle():
         return await backfill.format_task_bundle(
             {"dmeta[0].description": raw},
@@ -476,11 +479,11 @@ def test_boundary_defect_remains_for_review_after_bounded_llm_repair_attempts(mo
 
     assert len(prompts) == 3
     assert "Верни только готовый русский display-текст" in prompts[1]
-    assert "SOURCE:\nОшибка: (6+10 или 6+11-1)" in prompts[1]
+    assert "SOURCE:\nОшибка: 6+(10 или 11-1+2)" in prompts[1]
     assert "@@FIELD:" not in prompts[1]
     assert "Верни только готовый русский display-текст" in prompts[2]
     assert results["dmeta[0].description"]["canonical"] == (
-        r"Ошибка: $(6+10$ или $6+11-1)$"
+        r"Ошибка: $6+(10$ или $11-1+2)$"
     )
     assert backfill.field_is_acceptable(results["dmeta[0].description"]) is False
 
@@ -952,7 +955,7 @@ def test_bare_repair_draft_requires_a_separate_explicit_final_review(monkeypatch
         if len(calls) == 1:
             return (
                 "@@FIELD: answer\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
-                "@@REASON: NONE\n@@TEXT:\n$3/4$\n@@END_FIELD"
+                "@@REASON: NONE\n@@TEXT:\n$\\unknowncommand{3}{4}$\n@@END_FIELD"
             )
         if len(calls) == 2:
             # The compact repair prompt may return a plain display draft.
@@ -977,8 +980,7 @@ def test_bare_repair_draft_requires_a_separate_explicit_final_review(monkeypatch
     result = results["answer"]
     assert len(calls) == 3
     assert "Верни только готовый русский display-текст" in calls[1]
-    assert "@@ОБЯЗАТЕЛЬНЫЙ_АЛГОРИТМ_ИСПРАВЛЕНИЯ:" in calls[1]
-    assert "professional_style_requires_dfrac" in calls[1]
+    assert "SOURCE:\n3/4" in calls[1]
     assert "@@SECOND_PASS_INDEPENDENT_REVIEW:" in calls[2]
     assert result["canonical"] == r"$\dfrac{3}{4}$"
     assert result["llm_repair_attempts"] == 1
@@ -991,7 +993,7 @@ def test_bare_repair_draft_requires_a_separate_explicit_final_review(monkeypatch
     assert backfill.field_is_acceptable(result) is True
 
 
-def test_placeholder_asterisk_repair_is_explicit_and_requires_final_model_review(monkeypatch):
+def test_placeholder_asterisk_normalization_requires_final_model_review(monkeypatch):
     calls = []
 
     def llm(prompt: str) -> str:
@@ -1002,8 +1004,6 @@ def test_placeholder_asterisk_repair_is_explicit_and_requires_final_model_review
                 "@@REASON: NONE\n@@TEXT:\n"
                 "Дано трёхзначное число $24*$.\n@@END_FIELD"
             )
-        if len(calls) == 2:
-            return r"Дано трёхзначное число $24\ast$."
         return (
             "@@FIELD: question\n@@DECISION: REPLACE\n@@CONFIDENCE: high\n"
             "@@REASON: NONE\n@@TEXT:\n"
@@ -1022,11 +1022,12 @@ def test_placeholder_asterisk_repair_is_explicit_and_requires_final_model_review
 
     results, _seconds = asyncio.run(run_bundle())
 
-    assert len(calls) == 3
-    assert "professional_style_requires_placeholder_asterisk" in calls[1]
-    assert "`24*` -> `$24\\ast$`" in calls[1]
-    assert "@@SECOND_PASS_INDEPENDENT_REVIEW:" in calls[2]
+    # Normalization is a draft, not independent approval. Even when the
+    # placeholder needs no technical repair, the model must review it again.
+    assert len(calls) == 2
+    assert "@@SECOND_PASS_INDEPENDENT_REVIEW:" in calls[1]
     assert results["question"]["canonical"] == r"Дано трёхзначное число $24\ast$."
+    assert results["question"]["llm_self_review_attempts"] == 1
     assert results["question"]["final_review"]["accepted"] is True
 
 
@@ -1067,7 +1068,7 @@ def test_single_missing_parenthesis_is_only_a_model_repair_authorization(monkeyp
     assert len(calls) == 3
     assert "@@ДОПУСК_НА_ВОССТАНОВЛЕНИЕ_СКОБКИ:" in calls[1]
     assert "ровно одну незакрытую `(`" in calls[1]
-    assert results["question"]["canonical"] == r"Пояснение ($1$)."
+    assert results["question"]["canonical"] == "Пояснение (1)."
     assert results["question"]["final_review"]["accepted"] is True
 
 
@@ -1464,7 +1465,9 @@ def test_save_result_skips_physical_update_when_keep_audit_changes_nothing():
 
 def test_save_result_cannot_verify_an_unprocessed_but_invalid_existing_field():
     source = [{
-        "value": "1", "value_latex": "1",
+        # Plain "1" is a valid display value. This must be genuinely invalid
+        # even after the supported surface normalization.
+        "value": "1", "value_latex": r"$\unknowncommand{1}$",
         "error_logic": "Ошибка", "error_logic_latex": "Ошибка",
     }]
     result = _result(source)
@@ -1660,4 +1663,3 @@ def test_task_row_full_exposes_attested_fields():
     )
     task = _task_row_full(row)
     assert task["attested_fields"] == ["question", "answer"]
-

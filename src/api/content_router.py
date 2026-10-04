@@ -277,6 +277,7 @@ def list_tasks(
     offset: int = Query(default=0, ge=0),
     exclude_ids: List[str] = Query(default=[]),
     random_order: bool = False,
+    target_b: Optional[float] = Query(default=None, ge=-4.0, le=4.0, allow_inf_nan=False),
     conn: Connection = Depends(get_db),
 ):
     """
@@ -319,7 +320,14 @@ def list_tasks(
         where += " AND tm.id != ALL(:exclude_ids)"
         params["exclude_ids"] = exclude_ids
 
-    order = "ORDER BY RANDOM()" if random_order else "ORDER BY tm.irt_difficulty"
+    # Apply ability matching before LIMIT. Returning the easiest page first
+    # prevents the diagnostic from ever seeing harder, more relevant tasks.
+    # Random ties preserve variant diversity at the same distance.
+    if target_b is not None:
+        params["target_b"] = target_b
+        order = "ORDER BY ABS(COALESCE(tm.irt_difficulty, 0.0) - :target_b), RANDOM()"
+    else:
+        order = "ORDER BY RANDOM()" if random_order else "ORDER BY tm.irt_difficulty"
 
     # For textbook queries, use a minimal column set (different shape)
     if textbook_id:
