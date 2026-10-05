@@ -10,6 +10,7 @@ Revises: l3f4a5b6c7d8
 Create Date: 2026-08-30
 """
 from alembic import op
+import sqlalchemy as sa
 
 
 revision = "m4a5b6c7d8e9"
@@ -22,6 +23,12 @@ TASK_ID = "G8_CURATED_S28_04_001"
 
 
 def upgrade() -> None:
+    # Content imports are separate from schema installation. A coverage repair
+    # cannot insert a task before its authoritative L4 skill has been imported.
+    if not op.get_bind().scalar(sa.text(
+        "SELECT EXISTS (SELECT 1 FROM knowledge_hierarchy WHERE id='G8_S28_04' AND level='L4')"
+    )):
+        return
     op.execute(
         """
         INSERT INTO tasks_master (

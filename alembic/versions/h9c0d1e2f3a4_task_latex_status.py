@@ -31,6 +31,12 @@ def upgrade() -> None:
     # normaliser, which is different from having failed it. The pipeline's own
     # states are 'verified' | 'partial' | 'failed'.
     existing = {c["name"] for c in sa.inspect(op.get_bind()).get_columns("tasks_master")}
+    # These display/evaluation columns also originated in manual bootstrap
+    # scripts. Figure repairs and curated task imports below name them, so
+    # the managed chain must provision them on a schema-only installation.
+    for name in ("question_image_url", "correct_answer_latex", "sympy_solution"):
+        if name not in existing:
+            op.add_column("tasks_master", sa.Column(name, sa.Text(), nullable=True))
     if "latex_status" not in existing:
         op.add_column("tasks_master", sa.Column("latex_status", sa.String(20), nullable=True))
     if "latex_normalized_at" not in existing:
@@ -40,3 +46,5 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_column("tasks_master", "latex_normalized_at")
     op.drop_column("tasks_master", "latex_status")
+    for name in ("sympy_solution", "correct_answer_latex", "question_image_url"):
+        op.drop_column("tasks_master", name)

@@ -5,7 +5,9 @@ pydantic>=2.7.0
 pydantic-settings>=2.3.0
 redis>=5.0.0
 arq>=0.26.0
-sqlalchemy>=2.0.0
+# 2.1 changes the default postgresql:// driver to psycopg3; this service
+# deliberately installs psycopg2-binary and uses existing psycopg2 URLs.
+sqlalchemy>=2.0.0,<2.1
 psycopg2-binary>=2.9.0
 requests>=2.31.0
 sympy>=1.12

@@ -28,6 +28,20 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      content-repair-postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: repair
+          POSTGRES_PASSWORD: repair
+          POSTGRES_DB: content_repair_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U repair -d content_repair_test"
+          --health-interval 5s --health-timeout 3s --health-retries 12
+    env:
+      CONTENT_REPAIR_TEST_DATABASE_URL: postgresql://repair:repair@127.0.0.1:5432/content_repair_test
     steps:
       - uses: actions/checkout@v4
 

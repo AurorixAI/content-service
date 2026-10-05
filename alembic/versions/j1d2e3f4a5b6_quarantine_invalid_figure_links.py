@@ -163,7 +163,7 @@ def upgrade() -> None:
         f"""
         INSERT INTO task_figures (
             figure_id, textbook_id, page, bbox, image_url, alt_text, semantic_json
-        ) VALUES
+        ) SELECT v.* FROM (VALUES
             (
                 '{FIG_131_ID}', '{NIKOLSKY_ID}'::uuid, 150,
                 '{{"x0": 0, "y0": 0, "x1": 1, "y1": 1}}'::jsonb,
@@ -185,6 +185,8 @@ def upgrade() -> None:
                 'Рис. 22.5. Набор монет достоинством 1, 25, 2, 5, 10 и 50 копеек.',
                 '{{"figure_number":"22.5","type":"math_diagram"}}'::jsonb
             )
+        ) AS v(figure_id, textbook_id, page, bbox, image_url, alt_text, semantic_json)
+        JOIN textbooks b ON b.textbook_id = v.textbook_id
         ON CONFLICT (figure_id) DO UPDATE SET
             textbook_id = EXCLUDED.textbook_id,
             page = EXCLUDED.page,
@@ -204,7 +206,8 @@ def upgrade() -> None:
             op.execute(
                 f"""
                 INSERT INTO task_figure_refs (task_id, figure_id, order_idx)
-                VALUES ('{task_id}', '{figure_id}', 0)
+                SELECT t.id, f.figure_id, 0 FROM tasks_master t CROSS JOIN task_figures f
+                WHERE t.id = '{task_id}' AND f.figure_id = '{figure_id}'
                 ON CONFLICT (task_id, figure_id) DO UPDATE
                   SET order_idx = EXCLUDED.order_idx
                 """

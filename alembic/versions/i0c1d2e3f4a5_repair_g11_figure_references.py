@@ -12,6 +12,7 @@ Create Date: 2026-08-29
 from __future__ import annotations
 
 from alembic import op
+import sqlalchemy as sa
 
 
 revision = "i0c1d2e3f4a5"
@@ -60,6 +61,11 @@ def _sql_list(items: tuple[str, ...]) -> str:
 
 
 def upgrade() -> None:
+    # A schema-only installation has no imported textbooks yet. This repair
+    # must not invent content or make a fresh install fail on the book FK.
+    if not op.get_bind().scalar(sa.text("SELECT EXISTS (SELECT 1 FROM textbooks WHERE textbook_id=:id)"),
+                               {"id": TEXTBOOK_ID}):
+        return
     # These image files already exist in the textbook's storage directory.
     # The normalized bbox deliberately describes the whole extracted PNG.
     op.execute(
@@ -105,7 +111,7 @@ def upgrade() -> None:
         op.execute(
             f"""
             INSERT INTO task_figure_refs (task_id, figure_id, order_idx)
-            VALUES ('{task_id}', '{FIG_211_ID}', 0)
+            SELECT id, '{FIG_211_ID}', 0 FROM tasks_master WHERE id = '{task_id}'
             ON CONFLICT (task_id, figure_id) DO UPDATE SET order_idx = EXCLUDED.order_idx
             """
         )
@@ -113,7 +119,7 @@ def upgrade() -> None:
         op.execute(
             f"""
             INSERT INTO task_figure_refs (task_id, figure_id, order_idx)
-            VALUES ('{task_id}', '{FIG_212_ID}', 0)
+            SELECT id, '{FIG_212_ID}', 0 FROM tasks_master WHERE id = '{task_id}'
             ON CONFLICT (task_id, figure_id) DO UPDATE SET order_idx = EXCLUDED.order_idx
             """
         )
@@ -152,7 +158,8 @@ def downgrade() -> None:
         op.execute(
             f"""
             INSERT INTO task_figure_refs (task_id, figure_id, order_idx)
-            VALUES ('{task_id}', 'fig-p30-1', 0)
+            SELECT t.id, f.figure_id, 0 FROM tasks_master t CROSS JOIN task_figures f
+            WHERE t.id = '{task_id}' AND f.figure_id = 'fig-p30-1'
             ON CONFLICT (task_id, figure_id) DO UPDATE SET order_idx = EXCLUDED.order_idx
             """
         )
