@@ -100,12 +100,12 @@ REPAIRS = {
 }
 
 
-def build(source: dict) -> dict:
+def build(source: dict, repairs: dict = REPAIRS, batch: str = BATCH) -> dict:
     tasks = {row["id"]: row for row in source["content"]["tasks"]}
-    result = {"batch": BATCH, "mode": "in_place_owner_requested",
+    result = {"batch": batch, "mode": "in_place_owner_requested",
               "source_checked_at": source["checked_at"], "student_data_included": False,
               "repairs": []}
-    for task_id, spec in REPAIRS.items():
+    for task_id, spec in repairs.items():
         row = tasks[task_id]
         changes = {k: v for k, v in spec["changes"].items() if row.get(k) != v}
         # Parallel columns travel together even if one already has its final value.
@@ -116,7 +116,7 @@ def build(source: dict) -> dict:
                 changes[raw], changes[display] = spec["changes"][raw], spec["changes"][display]
         entry = {"id": task_id, "before_sha256": fingerprint(row),
                  "reason": spec["reason"], "evidence": spec["evidence"], "changes": changes}
-        after = candidate(row, entry, BATCH)
+        after = candidate(row, entry, batch)
         entry["after_sha256"] = fingerprint(after)
         validate_entry(entry)
         validate_choices(after)

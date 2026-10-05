@@ -39,6 +39,8 @@ STALE_TAGS = {
     "sympy_verified", "sympy_confidence", "answer_verify_mode", "reverified_by",
     "answer_gemini_verified", "answer_gemini_candidate", "answer_gemini_flash",
     "distractor_gate_passed", "verification_explanation", "verify_unresolved",
+    "verified_by", "smart_verify_status", "answer_llm_prose",
+    "sympy_compatible_string", "step_by_step_solution", "answer_format_preserved",
 }
 
 

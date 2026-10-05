@@ -25,7 +25,7 @@ RUN npm ci --no-audit --no-fund
 COPY src/ ./src/
 COPY scripts/ ./scripts/
 COPY tests/ ./tests/
-COPY tools/content_review/guarded_repair.py tools/content_review/build_n01_manifest.py ./tools/content_review/
+COPY tools/content_review/guarded_repair.py tools/content_review/build_n01_manifest.py tools/content_review/build_n01_long_manifest.py ./tools/content_review/
 COPY data/content_repairs/ ./data/content_repairs/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
