@@ -1,0 +1,145 @@
+{"id": "DIFF_G5_S43_02_C_01", "part": "A", "ok": true, "why": "D35 expl vague: \"вычел модули или приравнял остаток 6/35 к 6 км\" (only 2nd branch gives 35); minor"}
+{"id": "DIFF_G6_S05_03_A_01", "part": "A", "ok": true, "why": ""}
+{"id": "DIFF_G6_S11_05_A_02", "part": "A", "ok": true, "why": "opts_latex shows 1/2 while key_latex 0{,}5: equivalent, fine"}
+{"id": "DIFF_G6_S23_01_C_01", "part": "A", "ok": false, "why": "D 1:600000 explanation self-contradictory: says student divided denominator by 3 getting 200000 \"but wrote 1:600000\" (forgot reduction). Value 600000 is right for \"forgot reduction\" but text describes 600000/3 step; D 1:180000 expl is a typo-level \"skipped a zero\", not a computation"}
+{"id": "DIFF_G6_S26_03_C_03", "part": "A", "ok": true, "why": "key X=5.5 verified; -32,-9.5,28 each recomputed"}
+{"id": "DIFF_G7_S24_02_C_02", "part": "A", "ok": true, "why": "0.9 verified; 0.68,0.46,1.42 recomputed"}
+{"id": "G10_TB_2_5_39", "part": "A", "ok": true, "why": "roots 1,2,10 verified; D3 (x=5) expl vague (\"перепутав знаки\")"}
+{"id": "G10_TB_3_2_2_17", "part": "A", "ok": true, "why": "x=1; 3, no-solution (D=-63), log3 6 recomputed"}
+{"id": "G10_TB_3_3_10", "part": "A", "ok": true, "why": "key x>-0.5 verified; D recomputed (D1 expl slightly sloppy)"}
+{"id": "G10_TB_3_6_6", "part": "A", "ok": true, "why": "x=1000 (t=3) verified; D recomputed"}
+{"id": "G10_TB_6_2_6", "part": "A", "ok": true, "why": "C(4,3)C(6,4)/C(10,7)=4*15/120=1/2; D 1/70 product recomputed=1/70, 4/35 ok"}
+{"id": "G10_TB_§10_10_10_2", "part": "A", "ok": true, "why": "49 verified; D 0.02 is rounding of 1/49"}
+{"id": "G10_TB_§13_13_3_3", "part": "A", "ok": true, "why": "no solutions verified; D3 error_logic text variant has Cyrillic prose inside one $...$ span (latex variant fine); minor"}
+{"id": "G10_TB_§19_18_22_2", "part": "A", "ok": false, "why": "D 9 expl is incoherent: says student raised only 3 to 2/3 (-> 7^{3/2}*3 ~ 55.6) then \"перепутал и записал 3^2=9\"; the described mistake does not yield 9"}
+{"id": "G10_TB_§1_1_47_2", "part": "A", "ok": true, "why": ""}
+{"id": "G10_TB_§30_30_6_9", "part": "A", "ok": true, "why": "tg x=0 or sqrt3/3 verified; all D recomputed"}
+{"id": "G10_TB_§38_38_12_2", "part": "A", "ok": true, "why": "f'=1+sin x>=0 -> increasing on R verified"}
+{"id": "G10_TB_§40_40_4_3", "part": "A", "ok": true, "why": "max 81 min 0 verified (f(-3)=64,f(2)=49,f(-2)=81); minor: key \"0, 81\" unlabeled, min-first, reads as decimal 0,81"}
+{"id": "G10_TB_§42_42_40_2", "part": "A", "ok": true, "why": "tg*ctg=1 -> 4cos^2-1 in (-1,3) open, no extrema; D recomputed"}
+{"id": "G10_TB_§42_42_42", "part": "A", "ok": true, "why": "cos(a+b)=-1 verified; 1, 0.28, -0.28 recomputed"}
+{"id": "G10_TB_§5_5_9_3", "part": "A", "ok": false, "why": "D (2;4)U(4;5): expl \"x=4 корень нечётной кратности ... неверный знак\" does not yield it (odd-multiplicity alternation gives (2,4)U(5,inf) or its complement); value is actually (x-2)(x-5)<0 minus {4}"}
+{"id": "G10_TB_§6_6_6_3", "part": "A", "ok": false, "why": "key ok (x^50 even). D \"нельзя сравнить\" explanation garbled: \"из $-$ за большого показателя\" (broken \"из-за\" rendered as math minus)"}
+{"id": "G11_TB_10_6*_10_34_2", "part": "A", "ok": true, "why": "x=8 (domain x>5) verified; D recomputed"}
+{"id": "G11_TB_10_6*_10_39_1", "part": "A", "ok": false, "why": "key 9 verified (t^2+t-6=0, t=-3 excluded). D 27 explanation is self-contradictory/rambling: finds roots t=2,t=-3 \"и взял t=3 (перепутав с t=-3)\", also first claims t=-6 then \"вспомнил\""}
+{"id": "G11_TB_14_1_2_2", "part": "A", "ok": true, "why": "x=1 verified; D0 expl hand-wavy"}
+{"id": "G11_TB_15_3*_15_18_1", "part": "A", "ok": false, "why": "key verified (x=1 isolated for a>1). D3 \"без ОДЗ\" value for a>1 is [1;a] but ignoring domain gives (-inf;1]U[a;+inf); for a=1 would be R, not [1;+inf): explanation does not yield stated value"}
+{"id": "G11_TB_15_3*_15_18_3", "part": "A", "ok": true, "why": "key {a}U[3,inf) verified; D recomputed"}
+{"id": "G11_TB_18_2*_18_5_б", "part": "A", "ok": true, "why": "1+i=sqrt2 e^{i pi/4}; D ok (D2 text value is raw TeX without $, minor)"}
+{"id": "G11_TB_18_2*_18_9_в", "part": "A", "ok": true, "why": "12e^{3pi/14} verified; D 2pi/21 expl arithmetic story weak"}
+{"id": "G11_TB_23_1_1_4", "part": "A", "ok": true, "why": ""}
+{"id": "G11_TB_27_2_23_2", "part": "A", "ok": false, "why": "key 3,-1 verified. D \"x=3\": expl says considering only case 2x+3>=0 gives root 3, but that case gives x^2-2x-3=0 -> 3 AND -1 (2*(-1)+3=1>=0), so dropping the other case still yields -1; value x=3 not produced"}
+{"id": "G11_TB_27_2_67_4", "part": "A", "ok": false, "why": "key verified. D2 (c>-4/3, c>5) expl is reversed: says student thought arguments must be positive rather than negative, but positive is the correct condition; the value corresponds to requiring them negative"}
+{"id": "G11_TB_5_2_5_10_2", "part": "A", "ok": true, "why": "min -4 max 14 verified; D recomputed"}
+{"id": "G11_TB_5_2_5_5*_3", "part": "A", "ok": false, "why": "answer 6 / 1.5 verified (y(-2)=y(2)=6,y(-0.5)=1.5), but correct_answer text field is broken decimal \"наименьшее значение: $1$.$5$\" (latex variant 1{,}5 fine)"}
+{"id": "G11_TB_5_9_5_84_а", "part": "A", "ok": true, "why": "min 3/4 max 1 verified (f=1-x/(x^2+4)); D recomputed (D0 expl weak)"}
+{"id": "G11_TB_9_1_8_35_a", "part": "A", "ok": true, "why": "x=1 verified (x^2+x-2=0, x>=0); D2/D6 expl do not derive value (weak)"}
+{"id": "G11_TB_?_17_а", "part": "A", "ok": true, "why": "3pi/10 (54deg) > arccos(4/5) (36.9deg) verified; multiple_choice with empty answer_options (pre-existing shape)"}
+{"id": "G11_TB_?_215", "part": "A", "ok": true, "why": "[2,inf) verified (domain x>1, x^2-1>=x+1); D recomputed"}
+{"id": "G11_TB_§12_5", "part": "A", "ok": true, "why": "y=-(x+2)(x-7)^2, y'=-3(x-1)(x-7): local min x=1 verified"}
+{"id": "G11_TB_§12_8", "part": "A", "ok": true, "why": "N=3x^2+(10-2a)x+9, D<=0 -> [5-3sqrt3,5+3sqrt3] verified; D recomputed"}
+{"id": "G11_TB_§13_6_3", "part": "A", "ok": true, "why": "base<1 decreasing: 0.78^-0.7>0.78^-0.6 verified; 4th option 1.19<0.86 false"}
+{"id": "G11_TB_§15_10_5", "part": "A", "ok": false, "why": "key 19 verified ((3/4+4)*4). D 15 expl: \"забыл умножить на 4 и записал сумму 26, а затем вычел 11, получив 15\" -- arbitrary \"вычел 11\"; D 10 expl: \"4+3=7 и прибавил к 3/4\" gives 7.75, not 10 (and own text says 4.75*4=19). Described mistakes do not yield 15 / 10"}
+{"id": "G11_TB_§15_3_5", "part": "A", "ok": true, "why": "x=log_{0.2}0.7 verified"}
+{"id": "G11_TB_§15_5_5", "part": "A", "ok": false, "why": "key verified. D \"14 + log3 a + 1/3 log3 b\" expl (\"9*7=63, потом логарифм как 14\") does not derive 14 nor the coefficient change 7->1"}
+{"id": "G11_TB_§18_1_3", "part": "A", "ok": true, "why": ""}
+{"id": "G11_TB_§2_2_18_в", "part": "A", "ok": true, "why": "e^{2/5} verified"}
+{"id": "G11_TB_§2_9_2", "part": "A", "ok": true, "why": "v=2t=13 verified; D 42.25 and 3.25 still have generic placeholder expl (known open item)"}
+{"id": "G11_TB_§5_5_25_r", "part": "A", "ok": true, "why": "y=-4x-sqrt3-2pi/3 verified (f'=-4,f=-sqrt3); D recomputed"}
+{"id": "G5_TB_10_377.4", "part": "A", "ok": true, "why": ""}
+{"id": "G5_TB_11_427.1", "part": "A", "ok": true, "why": "key text has odd span \"$a=15: 370$\" (latex variant fine)"}
+{"id": "G5_TB_15_627.7", "part": "A", "ok": true, "why": "33 verified; D recomputed"}
+{"id": "G5_TB_18_736.2", "part": "A", "ok": true, "why": "400 verified; D recomputed"}
+{"id": "G5_TB_19_360.6", "part": "A", "ok": true, "why": "12800 verified; D 115200 placeholder expl (known open)"}
+{"id": "G5_TB_20_789.2", "part": "A", "ok": false, "why": "key 328690 verified (2031*138=280278,352203-280278=71925). D 328790 expl says forgot to decrement the hundred-THOUSANDS digit but also \"на 100 больше\": value differs from key by 100, a hundred-thousands slip would differ by 100000 -> self-contradictory"}
+{"id": "G5_TB_35_1344", "part": "A", "ok": true, "why": "36.9*2/9=8.2 verified; D recomputed"}
+{"id": "G5_TB_3_64.1", "part": "A", "ok": false, "why": "key 459 verified; D 458 expl is vague and garbled (\"из $-$ за невнимательного вычитания\" - broken \"из-за\"), no computation yields 458"}
+{"id": "G5_TB_40_1594", "part": "A", "ok": false, "why": "key 0.48 verified (S=1.28). D 0.32 expl incoherent (\"вычел 0.8 как 0.08 или 0.80 как 0.96\") with garbled \"из $-$ за\"; D 1.28 expl rambling"}
+{"id": "G5_TB_41_728.2", "part": "A", "ok": true, "why": "6 kg verified; D recomputed"}
+{"id": "G5_TB_44_1754", "part": "A", "ok": true, "why": "28.4 verified; D 31.2 and 25.6 placeholder expl (known open), D 20.6 expl implausible but stated"}
+{"id": "G5_TB_4_74.1", "part": "A", "ok": true, "why": "< verified; D \">\" generic expl"}
+{"id": "G5_TB_62_1461.2", "part": "A", "ok": true, "why": "1585.2 verified; D recomputed"}
+{"id": "G5_TB_70_1752", "part": "A", "ok": true, "why": "h=25.2/(3.5*1.6)=4.5 verified; D recomputed"}
+{"id": "G5_TB_8_132.2", "part": "A", "ok": true, "why": "13a+13 -> 26;39;52 verified; D recomputed"}
+{"id": "G6_TB_113–114_974.2", "part": "A", "ok": false, "why": "key 1 verified. D \"-1\" expl: described mistake ((-1)^2=-1,(-1)^4=-1) gives -3 (as the text itself computes), then \"либо при частичной путанице получается -1\": does not yield -1"}
+{"id": "G6_TB_116–117_987.2", "part": "A", "ok": true, "why": "-28 verified; D recomputed"}
+{"id": "G6_TB_116–117_987.4", "part": "A", "ok": true, "why": "5 verified; D recomputed"}
+{"id": "G6_TB_11_411", "part": "A", "ok": true, "why": "1.06679->1.067 verified; D 1.1 and -1.761 (left-to-right) recomputed; D 10.67 has placeholder expl \"Типичная ошибка ученика...\" (known open)"}
+{"id": "G6_TB_21_873.1", "part": "A", "ok": true, "why": "x=2/3 verified; D 17.34, 8/3, 1/6 recomputed"}
+{"id": "G6_TB_27–28_240.1", "part": "A", "ok": true, "why": "7/9<14/13 verified"}
+{"id": "G6_TB_29_1123.4", "part": "A", "ok": true, "why": "2 verified; D recomputed"}
+{"id": "G6_TB_31–33_268.3", "part": "A", "ok": false, "why": "key 59/40=1 19/40 verified. D \"1 1/8\" expl self-contradictory: says student erred in numerators but lists correct 16,15,28 (sum 59), then \"неверно выделил целую часть как 1 1/8\" -- 59/40 cannot give 1 1/8 by any described step"}
+{"id": "G6_TB_34_1254.2", "part": "A", "ok": true, "why": "2.375 verified; D recomputed"}
+{"id": "G6_TB_34_1278.2", "part": "A", "ok": true, "why": "-2.71 verified; D recomputed (D -5.87 expl text has broken decimals \"$-4$.$29\", minor)"}
+{"id": "G6_TB_34–37_291.3", "part": "A", "ok": true, "why": "13 9/10 verified; D recomputed"}
+{"id": "G6_TB_36_1318.2", "part": "A", "ok": true, "why": "x=-5 verified; D recomputed"}
+{"id": "G6_TB_37_1369.4", "part": "A", "ok": true, "why": "-2.24 verified; D 0.16,-2.6 recomputed; D -22.4 placeholder expl (known open)"}
+{"id": "G6_TB_3_112.2", "part": "A", "ok": true, "why": "digit 0 only (15+*), verified; D recomputed"}
+{"id": "G6_TB_59–61_524.1", "part": "A", "ok": true, "why": "72 verified; D 4.5,14 recomputed, D 17 expl vague"}
+{"id": "G6_TB_69–74_605", "part": "A", "ok": false, "why": "key 30 verified (99 m2 / 3.3). D 27 expl garbled: broken \"из $-$ за\", \"$0$,$\\frac{9}{1}$,$1)$\", incoherent description"}
+{"id": "G6_TB_86–88_748", "part": "A", "ok": true, "why": "9/8*3*4/3=4.5 verified; D recomputed"}
+{"id": "G6_TB_9_368.3", "part": "A", "ok": false, "why": "key 2/15 verified. D 1/15 expl self-contradictory: described path (5/6-1/2) gives 1/3, \"арифметическая ошибка\" -> 1/15 unexplained"}
+{"id": "G6_TB_9_368.4", "part": "A", "ok": true, "why": "1/4 verified; D recomputed"}
+{"id": "G6_TB_ТестX_1198", "part": "A", "ok": true, "why": "6.25 verified; D 4.5, 2.25 recomputed; D 62.5 placeholder expl (known open)"}
+{"id": "G7_ALG_0_11.6", "part": "A", "ok": true, "why": "4/15 verified; D recomputed"}
+{"id": "G7_ALG_15_10.1", "part": "A", "ok": true, "why": "79*(59-79)=-1580 verified; D recomputed"}
+{"id": "G7_ALG_27_7.5", "part": "A", "ok": true, "why": "y=10 verified; D recomputed"}
+{"id": "G7_ALG_4_12.3", "part": "A", "ok": true, "why": "31 verified; D 49,111 recomputed; text variant of D111 expl has \"$'$\" artifacts (cosmetic)"}
+{"id": "G7_ALG_6_3.7", "part": "A", "ok": true, "why": ""}
+{"id": "G7_TB_23_512.3", "part": "A", "ok": true, "why": "10a^11 b^13 verified"}
+{"id": "G7_TB_27_659.1", "part": "A", "ok": false, "why": "key -8 verified. D -2 expl rambling: main described mistake (2x-1-3x=6) gives x=-7 as the text itself states; x=-2 only appears in a third \"другой вариант\" (forgot 1 and 6); -5 also offered"}
+{"id": "G7_TB_29_695.1.1", "part": "A", "ok": true, "why": ""}
+{"id": "G7_TB_2_18.4", "part": "A", "ok": true, "why": "-200 verified; D recomputed"}
+{"id": "G7_TB_35_913.3", "part": "A", "ok": true, "why": "7/13 verified; D recomputed"}
+{"id": "G7_TB_44_1101.2", "part": "A", "ok": true, "why": "u=3,v=-10 verified; D recomputed"}
+{"id": "G8_ALG_27_1.6", "part": "A", "ok": true, "why": "17,-1 verified; D1 3 generic expl (weak)"}
+{"id": "G8_ALG_27_410", "part": "A", "ok": true, "why": "legs 9,40 verified; D recomputed"}
+{"id": "G8_ALG_5_86.4", "part": "A", "ok": true, "why": "(a-1)(2a-1) verified; D2 recomputed; D1 expl vague"}
+{"id": "G8_ALG_8_107.3", "part": "A", "ok": true, "why": "1/8 verified"}
+{"id": "G8_ALG_9_127.4", "part": "A", "ok": true, "why": "2sqrt(b) verified numerically (a=4,b=9 ->6; two fractions = sqrt a +- sqrt b)"}
+{"id": "G8_TB_15_365.4", "part": "A", "ok": true, "why": "7/2 verified"}
+{"id": "G8_TB_21_532.4.2", "part": "A", "ok": true, "why": "y=1/5,1 verified; D recomputed"}
+{"id": "G8_TB_48_1207.4.2", "part": "A", "ok": true, "why": "2a^4b^2 verified; D recomputed"}
+{"id": "G8_TB_4_76.2", "part": "A", "ok": true, "why": "14x/105x=2/15 verified (as 3(3x+5)+5(x-3)=14x); D recomputed"}
+{"id": "G9_TB_13_218_2", "part": "A", "ok": false, "why": "roots 0,+-3,2.5 verified. D (-3;0;3) expl self-contradictory: calls (2x-5)(x^2-9)=0 a mistake though it is the correct factorization (which keeps x=2.5), says \"5 пропал\", garbled \"$x^{2}$(2x - 5)\" spans"}
+{"id": "G9_TB_16_272_в", "part": "A", "ok": true, "why": "0<4x^2+81 -> R verified; D recomputed"}
+{"id": "G9_TB_24_460", "part": "A", "ok": true, "why": "(0;-2),(1;3) verified; D recomputed"}
+{"id": "G9_TB_28_567_1", "part": "A", "ok": true, "why": "verified; D recomputed"}
+{"id": "G9_TB_29_371", "part": "A", "ok": true, "why": "a_n=17-2n<0 -> n>8 verified; D recomputed"}
+{"id": "G9_TB_2_12_5", "part": "A", "ok": true, "why": "(1;1),(-3;9) verified; D recomputed (expl of D2/D3 weak)"}
+{"id": "G9_TB_2_20_a", "part": "A", "ok": true, "why": "1-0.8=0.2 verified; D 0.6 and 0.4 placeholder expl (known open), 0.36 ok"}
+{"id": "G9_TB_31_618_4", "part": "A", "ok": false, "why": "S_n=8(2^n-1) verified (b1=8,q=2). D \"4(2^n-1)\" expl self-contradictory: \"ошибочно вычислил первый член как 2^{1+2}=8\" (8 is correct) then used b1=4; D \"8(2^{n+2}-1)\" expl does not derive the value"}
+{"id": "G9_TB_31_627_2", "part": "A", "ok": true, "why": "D<0 -> R verified; D recomputed"}
+{"id": "G9_TB_8_66_1", "part": "A", "ok": true, "why": "(-2,1/3) verified; D recomputed"}
+{"id": "G9_TB_ДГ5_639_4.1", "part": "A", "ok": true, "why": "y4=144 verified (y2=4,y3=-16); D 24,-2304 recomputed"}
+{"id": "G9_TB_ДГ5_654_3", "part": "A", "ok": false, "why": "key (a1=0.5,n=100)/(a1=0,n=101) verified (n^2-201n+10100=0). D \"a1=1,n=100\" expl is gibberish (\"вместо (a1+an)/2 использовано просто an, из $-$ за чего n увеличилось на 1\" - garbled, and n is not 101)"}
+{"id": "G9_TB_ТЗГ3_17", "part": "A", "ok": true, "why": "0.49 verified; D recomputed"}
+{"id": "G9_TB_ТЗГ4_12", "part": "A", "ok": false, "why": "key 13 verified (n>12.5). D \"18\" expl actually describes answer 12 (\"записал n=12\"); D \"12\" expl describes a_13=0.9 as value -- explanations do not yield 18 / 12 (mismatched)"}
+{"id": "G9_TB_УКГ2_197_3", "part": "A", "ok": true, "why": "(x+y)^2=9: (5;-2),(2;-5) verified; D recomputed"}
+{"id": "G9_TB_УКГ3_333_1", "part": "A", "ok": true, "why": "-2 verified; D recomputed"}
+{"id": "G9_TB_УПК_676", "part": "A", "ok": true, "why": "proof option set consistent"}
+{"id": "G9_TB_УПК_796", "part": "A", "ok": false, "why": "key P in [78.8,79.2], S in [358.93,362.88] verified. D \"79.0<=P<=79.0; 360<=S<=361\" expl says integers 14,25 -> S=350, P=78/79: does not yield 360..361; garbled \"из $-$ за\", broken \"$.$\" decimals; D \"359.93..361.88\" expl does not derive the bounds"}
+{"id": "GEN_G5_S05_02_09", "part": "A", "ok": true, "why": "980->1000, 500+500=1000, diff 0 verified; D recomputed"}
+{"id": "GEN_G6_S45_03_B_03", "part": "A", "ok": false, "why": "key 1 verified (M III, N IV, P(-20;24) II). D \"2\" expl self-contradictory: says student thought quarter I is upper-left (x<0,y>0) \"и не занята\" -- but P lies exactly there"}
+{"id": "GEN_G7_S25_02_A_02", "part": "A", "ok": true, "why": "0.4 verified"}
+{"id": "ds_llm_0d71e259ddc1", "part": "A", "ok": true, "why": "tan=sin/sqrt(1-sin^2) in IV verified; D recomputed"}
+{"id": "ds_llm_ac366b00da18", "part": "A", "ok": true, "why": "vertex (2;5) verified; D recomputed"}
+{"id": "ds_llm_bd3b5b3713c3", "part": "A", "ok": true, "why": "extremum x=0 (x=3 not), inflection 1,3 -> S=10 verified; D recomputed"}
+{"id": "G5_TB_32_1201.1", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G5_TB_32_1201.3", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G5_TB_57_1340.1", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G5_TB_57_1340.3", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G5_TB_57_1340.4", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G6_TB_20_843", "part": "B", "ok": false, "kind": "content-change", "why": "inserted \"(в метрах)\" into question_text and question_latex (beyond decimal-comma fix; meaning-clarifying, key 75 consistent)"}
+{"id": "G7_ALG_33_9.2", "part": "B", "ok": false, "kind": "whitespace", "why": "inserted space after \"\\\\\" in LaTeX system (harmless, beyond scope)"}
+{"id": "G7_ALG_33_9.3", "part": "B", "ok": false, "kind": "whitespace", "why": "inserted space after \"\\\\\" in LaTeX system (harmless, beyond scope)"}
+{"id": "G7_TB_11_256.2", "part": "B", "ok": false, "kind": "whitespace", "why": "newline replaced by space inside $(-1;\\n4)$ (harmless, beyond scope)"}
+{"id": "G9_TB_31_621_2", "part": "B", "ok": false, "kind": "content-change", "why": "also fixed subscripts $(xn)$->$(x_n)$, $x4$->$x_4$ (beyond decimal-comma fix; matches question_latex)"}
+{"id": "G9_TB_3_23", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 3 vs old $,$+{,} 4; removed $ 6 vs 2*4"}
+{"id": "G9_TB_3_27_a", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G9_TB_3_27_в", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G9_TB_3_28_a", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G9_TB_3_28_в", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G9_TB_3_28_г", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "G9_TB_3_28_д", "part": "B", "ok": false, "kind": "incomplete", "why": "question_text still contains unmerged \"$a$,$b$\" fragments (partial fix; latex variant ok): count {,} 1 vs old $,$+{,} 2; removed $ 2 vs 2*2"}
+{"id": "ds_llm_785728d703f2", "part": "B", "ok": false, "kind": "semantic", "why": "question_text: list \"k=1$,$2$,$3$\" (k=1,2,3,...,n) merged into decimal \"k=1{,}2{,}3\"; question_latex has correct \"k=1,2,3,\\dots,n\""}

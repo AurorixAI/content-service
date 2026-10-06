@@ -1,0 +1,45 @@
+{"id": "DIFF_G6_S23_01_C_01", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G10_TB_§19_18_22_2", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G10_TB_§5_5_9_3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G10_TB_§6_6_6_3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_10_6*_10_39_1", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_15_3*_15_18_1", "ok": true, "why": "key and 3 D recomputed (D3 now (x-a)(x-1)>=0: R at a=1, (-inf,1]U[a,inf) at a>1); D text value fields hold Cyrillic prose inside one $...$ (latex variant fine)"}
+{"id": "G11_TB_27_2_23_2", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_27_2_67_4", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_5_2_5_5*_3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_§15_10_5", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_§15_5_5", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G11_TB_§2_9_2", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_19_360.6", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_20_789.2", "ok": true, "why": "328690 verified; D 328790 (71825) and 328552 recomputed; D 328590 expl names \"десятков тысяч\" place but difference is 100 (minor mislabel)"}
+{"id": "G5_TB_32_1201.1", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_32_1201.3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_3_64.1", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_40_1594", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_44_1754", "ok": false, "why": "D 20.6 expl (\"31,2-2,8 без займа\") does not yield 20.6: correct 31.2-2.8=28.4 and no borrow-slip gives 20.6; 20.6 equals 23.4-2.8 (uses the 3 dm3 mass). Other D (31.2, 25.6=31.2-2*2.8) recomputed ok"}
+{"id": "G5_TB_57_1340.1", "ok": true, "why": "B only: decimal merge ok; (pre-existing, not in manifest: distractor_meta has \"$'$\" artifacts and a distractor \"10\")"}
+{"id": "G5_TB_57_1340.3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G5_TB_57_1340.4", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G6_TB_113–114_974.2", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G6_TB_11_411", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G6_TB_31–33_268.3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G6_TB_37_1369.4", "ok": true, "why": "-2.24 verified; D recomputed, placeholder gone. question_text rewritten as one span (spaces added, -0,6 -> -0{,}6) and question_latex lost redundant outer parentheses: numeric meaning identical (benign)"}
+{"id": "G6_TB_69–74_605", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G6_TB_9_368.3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G6_TB_ТестX_1198", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G7_TB_27_659.1", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_13_218_2", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_2_20_a", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_31_618_4", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_23", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_27_a", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_27_в", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_28_a", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_28_в", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_28_г", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_3_28_д", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_ДГ5_654_3", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_ТЗГ4_12", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "G9_TB_УПК_796", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "GEN_G6_S45_03_B_03", "ok": true, "why": "recomputed: key, distractors != key, each explanation yields its value, placeholders gone"}
+{"id": "ds_llm_785728d703f2", "ok": true, "why": "B: list \"k=1,2,3,\\dots,n\" kept as list (fixed). Benign extras beyond decimal merge: \\frac->\\dfrac, \"$1.$\"->\"$1$.\"; (pre-existing, out of scope: answer_options dict format does not match distractor_meta values)"}
