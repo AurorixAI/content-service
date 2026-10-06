@@ -1,0 +1,129 @@
+{
+  "batch": "n01-source-repair-2026-10-06-w6b",
+  "mode": "in_place_owner_requested",
+  "source_checked_at": "2026-10-05T10:56:23Z",
+  "student_data_included": false,
+  "repairs": [
+    {
+      "id": "G11_TB_§9_3_6",
+      "before_sha256": "fdef9287dd1ee05c779b7754aa6359de69f874c7c011989bd94dca88796b9e96",
+      "reason": "Уменьшен полный текст доказательства; разделены x>1 для производной и x=1 для непрерывного продолжения. Имеет исторические ответы: apply зависит от сохранения их контекста.",
+      "evidence": "Приx>1 u=2x/(1+x²),u′=2(1−x²)/(1+x²)²;√(1−u²)=(x²−1)/(1+x²),поэтому(asin u)′=−2/(1+x²).",
+      "changes": {
+        "correct_answer": "$-\\dfrac2{1+x^2}$",
+        "correct_answer_latex": "$-\\dfrac2{1+x^2}$",
+        "answer_options": [
+          "$-\\dfrac2{1+x^2}$",
+          "$\\dfrac2{1+x^2}$",
+          "$0$",
+          "$\\dfrac4{1+x^2}$"
+        ],
+        "answer_options_latex": [
+          "$-\\dfrac2{1+x^2}$",
+          "$\\dfrac2{1+x^2}$",
+          "$0$",
+          "$\\dfrac4{1+x^2}$"
+        ],
+        "distractor_meta": [
+          {
+            "value": "$\\dfrac2{1+x^2}$",
+            "value_latex": "$\\dfrac2{1+x^2}$",
+            "error_type": "absolute_value_branch_sign",
+            "error_logic": "При x>1 производная внутреннего аргумента отрицательна; √((1−x²)²)=|1−x²|=x²−1.",
+            "explanation": "При x>1 производная внутреннего аргумента отрицательна; √((1−x²)²)=|1−x²|=x²−1.",
+            "error_logic_latex": "При x>1 производная внутреннего аргумента отрицательна; √((1−x²)²)=|1−x²|=x²−1.",
+            "explanation_latex": "При x>1 производная внутреннего аргумента отрицательна; √((1−x²)²)=|1−x²|=x²−1."
+          },
+          {
+            "value": "$0$",
+            "value_latex": "$0$",
+            "error_type": "sum_constancy_as_term_constancy",
+            "error_logic": "Постоянна вся сумма с 2arctan x, а не одно слагаемое.",
+            "explanation": "Постоянна вся сумма с 2arctan x, а не одно слагаемое.",
+            "error_logic_latex": "Постоянна вся сумма с 2arctan x, а не одно слагаемое.",
+            "explanation_latex": "Постоянна вся сумма с 2arctan x, а не одно слагаемое."
+          },
+          {
+            "value": "$\\dfrac4{1+x^2}$",
+            "value_latex": "$\\dfrac4{1+x^2}$",
+            "error_type": "sum_derivative_as_term_derivative",
+            "error_logic": "Производная этого слагаемого должна компенсировать 2/(1+x²) от 2arctan x, а не удваивать её.",
+            "explanation": "Производная этого слагаемого должна компенсировать 2/(1+x²) от 2arctan x, а не удваивать её.",
+            "error_logic_latex": "Производная этого слагаемого должна компенсировать 2/(1+x²) от 2arctan x, а не удваивать её.",
+            "explanation_latex": "Производная этого слагаемого должна компенсировать 2/(1+x²) от 2arctan x, а не удваивать её."
+          }
+        ],
+        "answer_type": "multiple_choice",
+        "skill_id": "G11_S22_02",
+        "question_text": "В доказательстве $2\\arctan x+\\arcsin\\!\\left(2x/(1+x^2)\\right)=\\pi$ при $x\\ge1$ сначала рассматривают $x>1$. Чему на этом открытом интервале равна производная $\\arcsin\\!\\left(2x/(1+x^2)\\right)$?",
+        "question_latex": "В доказательстве $2\\arctan x+\\arcsin\\!\\left(2x/(1+x^2)\\right)=\\pi$ при $x\\ge1$ сначала рассматривают $x>1$. Чему на этом открытом интервале равна производная $\\arcsin\\!\\left(2x/(1+x^2)\\right)$?",
+        "irt_guessing": 0.2
+      },
+      "after_sha256": "efec1ee9e315ced3483db2f37a21159541e599a98106c896fb997c6c6921c298"
+    },
+    {
+      "id": "ds_llm_7c36694c8cba",
+      "before_sha256": "8ddb6850eaecd414ddb87dfa26ec5a5d9ede65ce0936e4ccd4439897f95650ee",
+      "reason": "Вопрос требовал эскиз, который выбор текста не проверяет; выпуклость описывалась спорными направлениями, отсутствовали объяснения. Проверяются точки перегиба, включая смену знака f″.",
+      "evidence": "f′=4x/(x²+1)²,f″=4(1−3x²)/(x²+1)³;нули±1/√3 со сменой знака;f=−1/2. x=0 — стационарная точка,±1 — нулиf, а не перегибы. Исторический контекст защищается отдельно.",
+      "changes": {
+        "correct_answer": "$(-1/\\sqrt3,-1/2)$ и $(1/\\sqrt3,-1/2)$",
+        "correct_answer_latex": "$(-1/\\sqrt3,-1/2)$ и $(1/\\sqrt3,-1/2)$",
+        "answer_options": [
+          "$(-1/\\sqrt3,-1/2)$ и $(1/\\sqrt3,-1/2)$",
+          "$(-1,0)$ и $(1,0)$",
+          "Только $(0,-1)$",
+          "Точек перегиба нет"
+        ],
+        "answer_options_latex": [
+          "$(-1/\\sqrt3,-1/2)$ и $(1/\\sqrt3,-1/2)$",
+          "$(-1,0)$ и $(1,0)$",
+          "Только $(0,-1)$",
+          "Точек перегиба нет"
+        ],
+        "distractor_meta": [
+          {
+            "value": "$(-1,0)$ и $(1,0)$",
+            "value_latex": "$(-1,0)$ и $(1,0)$",
+            "error_type": "zeros_as_inflections",
+            "error_logic": "Найдены нули функции, а не нули второй производной со сменой знака.",
+            "explanation": "Найдены нули функции, а не нули второй производной со сменой знака.",
+            "error_logic_latex": "Найдены нули функции, а не нули второй производной со сменой знака.",
+            "explanation_latex": "Найдены нули функции, а не нули второй производной со сменой знака."
+          },
+          {
+            "value": "Только $(0,-1)$",
+            "value_latex": "Только $(0,-1)$",
+            "error_type": "stationary_point_as_inflection",
+            "error_logic": "При x=0 первая производная равна нулю, но вторая равна 4; это минимум, а не перегиб.",
+            "explanation": "При x=0 первая производная равна нулю, но вторая равна 4; это минимум, а не перегиб.",
+            "error_logic_latex": "При x=0 первая производная равна нулю, но вторая равна 4; это минимум, а не перегиб.",
+            "explanation_latex": "При x=0 первая производная равна нулю, но вторая равна 4; это минимум, а не перегиб."
+          },
+          {
+            "value": "Точек перегиба нет",
+            "value_latex": "Точек перегиба нет",
+            "error_type": "second_derivative_sign_changes_ignored",
+            "error_logic": "Вторая производная меняет знак в двух точках x=±1/√3.",
+            "explanation": "Вторая производная меняет знак в двух точках x=±1/√3.",
+            "error_logic_latex": "Вторая производная меняет знак в двух точках x=±1/√3.",
+            "explanation_latex": "Вторая производная меняет знак в двух точках x=±1/√3."
+          }
+        ],
+        "sympy_solution": null,
+        "answer_type": "multiple_choice",
+        "skill_id": "G11_S29_02",
+        "question_text": "Найдите все точки перегиба графика $f(x)=\\dfrac{x^2-1}{x^2+1}$.",
+        "question_latex": "Найдите все точки перегиба графика $f(x)=\\dfrac{x^2-1}{x^2+1}$.",
+        "irt_guessing": 0.2
+      },
+      "after_sha256": "514bce3581f9f7c18de31d2ca3a84efaa4120382731a230f9e4cef297a062b59"
+    }
+  ],
+  "knowledge_nodes": [],
+  "historical_protection_required": [
+    "G11_TB_§9_3_6",
+    "ds_llm_7c36694c8cba"
+  ],
+  "navigation_note": "Deferred from w6: historical pupil answers exist; no taxonomy changes."
+}

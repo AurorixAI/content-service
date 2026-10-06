@@ -29,6 +29,10 @@ operation, without copying source files over the running application. Record the
 source SHA, archive SHA, before/after educational fingerprints and target identity.
 Keep secrets and original private backups out of Git. Repeating an already applied
 manifest performs no writes and creates no unnecessary duplicate backup.
+A manifest listing repair IDs in `historical_protection_required` (w6b) is refused,
+for dry-run and execute alike, unless `--ack-protected` is passed after the owner
+accepted the effect on existing pupil answers. If an execute fails after the backup
+was written, the backup file stays (O_EXCL); use a new `--backup` path for the retry.
 
 A guarded rollback is a separate explicit operation:
 

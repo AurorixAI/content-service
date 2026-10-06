@@ -192,18 +192,34 @@ def _update(conn, task_id: str, fields: dict) -> None:
                       + ", updated_at = NOW() WHERE id = :id"), parameters)
 
 
-def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None = None) -> dict:
+def protected_ids(manifest: dict) -> list[str]:
+    """Repair IDs the manifest marks as having historical pupil answers."""
+    marked = set(manifest.get("historical_protection_required") or [])
+    return sorted(e["id"] for e in manifest["repairs"] if e["id"] in marked)
+
+
+def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None = None,
+          ack_protected: bool = False) -> dict:
     batch, entries = manifest["batch"], manifest["repairs"]
     ids = [e["id"] for e in entries]
     if not ids or len(set(ids)) != len(ids):
         raise ValueError("repair IDs must be nonempty and unique")
+    protected = protected_ids(manifest)
+    if protected and not ack_protected:
+        # Checked before any connection use, for dry-run and execute alike.
+        raise ValueError("manifest repairs tasks with historical pupil answers "
+                         f"({', '.join(protected)}); nothing written. Re-run with "
+                         "--ack-protected only after the owner accepted the snapshot impact")
     for entry in entries:
         validate_entry(entry)
     if execute and backup is None:
         raise ValueError("execution requires a private rollback backup path")
     by_id = {e["id"]: e for e in entries}
     with engine.begin() as conn:
+        from tools.content_review import knowledge_repair
+        # Parent/identity drift is checked before any task or taxonomy write.
         rows = _load(conn, ids, execute)
+        added_nodes = knowledge_repair.prepare(conn, manifest.get('knowledge_nodes', []))
         pending, unchanged = [], []
         for row in rows:
             entry = by_id[row["id"]]
@@ -221,7 +237,11 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
         pending_ids = [before["id"] for before, _, _ in pending]
         report = {"batch": batch, "execute": execute,
                   "updated": pending_ids, "already_applied": unchanged}
+        if manifest.get('knowledge_nodes'):
+            report['knowledge_added'] = [n['id'] for n in added_nodes]
         if not execute or not pending:
+            if execute and added_nodes:
+                raise ValueError('applied tasks without required knowledge nodes')
             return report
         attestations = _attestations(conn, pending_ids, lock=True)
         links = [_plain(dict(r)) for r in conn.execute(text(
@@ -233,7 +253,9 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
             "after_sha256": {after["id"]: fingerprint(after) for _, after, _ in pending},
             "attestations_before": attestations, "textbook_links": links,
             "revoked_patterns": {e["id"]: attestation_patterns(e["changes"]) for _, _, e in pending},
+            "knowledge_added": added_nodes,
         })
+        knowledge_repair.insert(conn, added_nodes)
         for before, after, entry in pending:
             _update(conn, before["id"], {**entry["changes"], "tags": after["tags"]})
             patterns = attestation_patterns(entry["changes"])
@@ -252,6 +274,7 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
 def rollback(engine, saved: dict, *, execute: bool = False) -> dict:
     ids = [r["id"] for r in saved["before"]]
     with engine.begin() as conn:
+        from tools.content_review import knowledge_repair
         rows = _load(conn, ids, execute)
         before = {r["id"]: r for r in saved["before"]}
         if all(fingerprint(r) == fingerprint(before[r["id"]]) for r in rows):
@@ -272,6 +295,7 @@ def rollback(engine, saved: dict, *, execute: bool = False) -> dict:
                 a["revoked_at"] = None
         if current != expected:
             raise ValueError("rollback attestation drift; refusing to replace newer review")
+        knowledge_repair.check_rollback(conn, saved.get('knowledge_added', []))
         if execute:
             for task_id, row in before.items():
                 _update(conn, task_id, {k: row.get(k) for k in FIELDS})
@@ -281,6 +305,7 @@ def rollback(engine, saved: dict, *, execute: bool = False) -> dict:
                     revoked_at=:revoked_at, revocation_reason=:revocation_reason
                     WHERE attestation_id=:attestation_id
                 """), {k: a[k] for k in ("status", "revoked_at", "revocation_reason", "attestation_id")})
+            knowledge_repair.remove(conn, saved.get('knowledge_added', []))
         return {"batch": saved["batch"], "execute": execute, "restored": ids}
 
 
@@ -291,13 +316,16 @@ def main() -> None:
     source.add_argument("--rollback", type=Path)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--backup", type=Path)
+    parser.add_argument("--ack-protected", action="store_true",
+                        help="allow tasks listed in historical_protection_required")
     args = parser.parse_args()
     # Deliberately do not load a service .env or fall back to its live database.
     engine = create_engine(os.environ["CONTENT_REPAIR_DATABASE_URL"])
     if args.rollback:
         result = rollback(engine, json.loads(args.rollback.read_text()), execute=args.execute)
     else:
-        result = apply(engine, json.loads(args.manifest.read_text()), execute=args.execute, backup=args.backup)
+        result = apply(engine, json.loads(args.manifest.read_text()), execute=args.execute, backup=args.backup,
+                       ack_protected=args.ack_protected)
     print(json.dumps(result, ensure_ascii=False))
 
 
