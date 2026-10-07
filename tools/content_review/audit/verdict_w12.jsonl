@@ -1,0 +1,204 @@
+{"id": "G10_TB_§18_18_5", "part": "w12", "ok": false, "why": "key 1,4 correct (sin increasing only on 1 and 4, numerically checked) and complete; condition ok. Explanations of two distractors do not yield their values: \"1, 2\" says the student takes [-pi/2;3pi/2] as increasing, which gives {1,2,4}, not {1,2}; \"2, 4\" says increasing/decreasing swapped, which gives the decreasing set {3}, not {2,4}"}
+{"id": "G10_TB_§18_18_6", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G10_TB_§18_18_7", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G10_TB_§18_18_8", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G10_TB_§22_22_4_3", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G10_TB_§22_22_9_4", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G10_TB_§28_2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G10_TB_§33_33_7_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G10_TB_§36_36_14", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_11_7*_11_53_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_15_2*_15_4", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_18_1*_17_26_1", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G11_TB_22_2_19_1", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_23_1_1_1", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_23_1_1_2", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_23_1_1_4", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_23_1_1_5", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_2_2_52_6", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_3_3*_3_10", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G11_TB_5_1_15_2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_5_1_15_3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_6_10*_6_90", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G11_TB_6_1_6_2_е", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_6_2*_6_18_б", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_6_9*_6_81_a", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_6_9*_6_81_b", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_8_2_8_5", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_9_2_9_7", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G11_TB_?_19_а", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_§3_3_10", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_§4_4_3_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§4_4_3_2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§4_4_3_3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§5_5_50_8", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§5_5_52_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§5_5_52_2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§5_5_53_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G11_TB_§5_5_53_2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_362.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_362.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_362.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_368.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_368.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_368.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_19_756.2", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G5_TB_19_756.3", "part": "w12", "ok": false, "why": "key 4300, 405, 307, 51300 a correct (5 km2 = 50000 a, 13 ha = 1300 a). Distractor 3 explanation: by the stated rule (ha x 10000) 4 ha 5 a = 40005, not 40500; the value 40500 is not derived"}
+{"id": "G5_TB_21_825.1", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_21_844", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_24_955.4", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_29_1122.3", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G5_TB_29_1122.4", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_37_1454.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_37_1454.2", "part": "w12", "ok": true, "why": "deactivation justified: after w12 cleans .1 the question/numbers/key 4,8 coincide (logical duplicate); but see G5_TB_37_1454.3 still active"}
+{"id": "G5_TB_40_1591.2", "part": "w12", "ok": true, "why": "deactivation justified: steps 1)-3) are \"...\", question unsolvable as written; key \"Посчитать количество чисел\" not derivable (.1 already inactive)"}
+{"id": "G5_TB_54_1276.3", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_54_1276.4", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_54_1277.3", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_54_1277.4", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_54_1283.3", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_54_1283.5", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_56_1320.1", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_56_1320.3", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_56_1320.4", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G5_TB_57_1337.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_58_1368", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_62_1479.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_67_1640.1", "part": "w12", "ok": true, "why": "key change verified: multiply by 1000 shifts comma RIGHT, so the statement is false; new key \"неверно...\" correct; distractors differ from key, explanations consistent"}
+{"id": "G5_TB_67_1640.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G5_TB_67_1640.3", "part": "w12", "ok": true, "why": "key change verified: dividing by 1000 shifts comma LEFT, statement (right) is false; new key correct; distractors/explanations consistent"}
+{"id": "G5_TB_67_1640.4", "part": "w12", "ok": true, "why": "key change verified: dividing by 0,001 = multiplying by 1000, comma goes RIGHT, statement (left) false; new key correct; explanations consistent"}
+{"id": "G5_TB_7_272.2", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G5_TB_7_272.4", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G6_TB_105–106_907.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_105–106_907.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_105–106_907.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_105–106_907.4", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_105–106_914.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_105–106_914.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_105–106_914.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_11–12_112", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_132–133_1082", "part": "w12", "ok": true, "why": "key change verified: 5 points, C(5,3)=10 minus the collinear triple on b = 9 (3 + 6); old 6 wrong; distractors 10, 6, 3 recomputed and explanations match"}
+{"id": "G6_TB_34_1249", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_57–58_507", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_59–61_517", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_62–64_555.1", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G6_TB_65–66_569", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_86–88_729.2", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_86–88_732", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_86–88_750", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_93–94_811", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_95–97_830", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G6_TB_98–100_842.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G6_TB_ТестX_1202", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G7_ALG_28_1", "part": "w12", "ok": false, "why": "condition restoration ok: 2) 2x-7=-13 and 3) x/3=-1 both give -3, key 2 and 3 correct. But key LaTeX projection (authoritative for display) is $2{,}3$ = reads as the decimal 2,3 while text key is \"$2$, $3$\"; other multi-select keys use \"1, 4\" form"}
+{"id": "G7_ALG_32_7", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G7_ALG_33_11", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G7_ALG_39_22", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_10.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_10.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_10.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_10.4", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_10.5", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_10.6", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_11.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_4_11.3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_6_1.7", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_ALG_6_1.8", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_TB_10_193", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G7_TB_13_270.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_TB_20_466.1.1", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G7_TB_20_466.1.2", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G7_TB_20_466.1.3", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G7_TB_3_50", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_TB_3_51", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G7_TB_45_1121", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G8_ALG_8_106.2.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G8_ALG_8_106.4", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G8_ALG_8_106.5.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G8_ALG_8_107.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G8_ALG_8_107.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G8_ALG_8_108.5.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G8_ALG_8_108.6", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_12_173", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_18_226_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_18_226_2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_18_228_3", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_24_464.1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_24_464.2", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_26_312_2", "part": "w12", "ok": true, "why": "render check (site renderer): only spaces/line breaks differ"}
+{"id": "G9_TB_27_542_2", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G9_TB_27_542_3", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G9_TB_27_542_4", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G9_TB_34_460", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G9_TB_34_461", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G9_TB_4_51", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_ТЗГ3_1", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_ТЗГ3_12", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "G9_TB_ТЗГ3_6", "part": "w12", "ok": true, "why": "render check (site renderer): intended edit, recomputed vs key: layout/label/restoration consistent with key and meaning"}
+{"id": "GEN_G5_S28_03_08", "part": "w12", "ok": true, "why": "render check (site renderer): visible text identical"}
+{"id": "G11_TB_17_1*_16_51.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_17_1*_16_51.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_§18_4_1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_§18_4_1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_§18_4_1.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_§18_4_4.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_§18_4_4.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G11_TB_§18_4_4.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G5_TB_15_270.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G5_TB_15_270.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_1–2_49.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_1–2_49.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_21–23_184.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_21–23_184.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_21–23_184.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_49–50_410.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_49–50_410.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_49–50_410.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_49–50_410.4", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_6–7_76.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_6–7_76.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_6–7_77.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_6–7_77.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_6–7_77.2.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_6–7_77.2.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_ТестX_1171.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_ТестX_1171.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_ТестX_1171.2.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_ТестX_1171.2.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_15_311.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_15_311.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_15_311.2.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_15_311.2.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_15_311.2.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_388.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_388.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_389.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_389.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_398.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_398.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_400.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_400.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_400.2.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_18_400.2.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_27_650.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_27_650.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_27_650.1.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_27_650.1.4", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_675.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_675.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_678.1.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_678.1.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_678.2.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_678.2.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G7_TB_28_678.2.3", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_ТестX_1180.2.1", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G6_TB_ТестX_1180.2.2", "part": "m12", "ok": true, "why": "child re-solved (sympy/python): key correct and complete, distractors != key and explanations recomputed, condition self-contained; split_run check: 57 children, 0 problems, KaTeX 0 errors"}
+{"id": "G10_TB_§4_5", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "G10_TB_§4_6", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "G11_TB_1_3_1_27", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "G11_TB_5_7*_5_63_2", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "G11_TB_6_6_6_37_a", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "G9_TB_Повт_6", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "ds_llm_ad0640499102", "part": "w13", "ok": true, "why": "visible text identical before/after (renderer, trusted mode); prose moved out of \\text{}; KaTeX 0 errors"}
+{"id": "G5_TB_37_1454.3", "part": "extra", "ok": false, "why": "NOT in manifest: still active, same question and numbers as G5_TB_37_1454.1/.2 (2,4 ch / 7,2 km / 1,6 ch), key 4,8, only the creative tail \"в) про время работы...\" remains. After w12 cleans .1 and deactivates .2, .3 is a live logical duplicate of .1"}
