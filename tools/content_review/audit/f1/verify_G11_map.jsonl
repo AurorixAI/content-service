@@ -1,0 +1,744 @@
+{"id": "G11_TB_10_2_6_1", "stratum": "A", "final": "G11_S05_04", "verdict": "disagree", "my_target": "G10_S07_03", "reason": "многочлен 7-й степени, корни подбором и разложением на множители; монотонность не применяется"}
+{"id": "G11_TB_10_2_6_2", "stratum": "A", "final": "G11_S05_04", "verdict": "disagree", "my_target": "G10_S07_03", "reason": "то же: подбор корней и разложение"}
+{"id": "G11_TB_10_4*_17_a", "stratum": "A", "final": "G10_S07_06", "verdict": "acceptable", "my_target": "G10_S07_03", "reason": "умножение на (x+1), сведение к (x^7+1)/(x+1)=0"}
+{"id": "G11_TB_10_4*_17_б", "stratum": "A", "final": "G10_S07_03", "verdict": "agree", "my_target": "G10_S07_03", "reason": ""}
+{"id": "G11_TB_10_4*_18_г", "stratum": "A", "final": "G10_S11_03", "verdict": "acceptable", "my_target": "G10_S11_06", "reason": "иррациональное уравнение, перекрёстное умножение"}
+{"id": "G11_TB_10_4*_19_б", "stratum": "A", "final": "G10_S24_05", "verdict": "acceptable", "my_target": "G10_S24_05", "reason": "уравнение с корнем в знаменателе+отбор по ОДЗ, ок"}
+{"id": "G11_TB_10_4*_22_в", "stratum": "A", "final": "G9_S25_05", "verdict": "agree", "my_target": "G9_S25_05", "reason": ""}
+{"id": "G11_TB_10_4*_22_г", "stratum": "A", "final": "G10_S25_04", "verdict": "acceptable", "my_target": "G9_S25_05", "reason": "та же цепочка двойных углов, что и 6 (непоследовательно)"}
+{"id": "G11_TB_10_4*_4", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_10_5*_10_26*_а", "stratum": "A", "final": "G10_S14_01", "verdict": "acceptable", "my_target": "G10_S14_01", "reason": "уравнение с переменным основанием; ок"}
+{"id": "G11_TB_10_5*_10_26*_б", "stratum": "A", "final": "G10_S14_01", "verdict": "acceptable", "my_target": "G10_S14_01", "reason": "то же"}
+{"id": "G11_TB_10_5*_10_26*_в", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_10_5*_10_26*_г", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_03", "reason": "замена lg x = t"}
+{"id": "G11_TB_10_5*_10_27_в", "stratum": "A", "final": "G10_S16_03", "verdict": "agree", "my_target": "G10_S16_03", "reason": ""}
+{"id": "G11_TB_10_5*_5", "stratum": "A", "final": "G10_S18_03", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "логарифмирование, свод к квадратному"}
+{"id": "G11_TB_10_6*_10_33_2", "stratum": "A", "final": "G10_S11_04", "verdict": "agree", "my_target": "G10_S11_04", "reason": ""}
+{"id": "G11_TB_10_6*_10_42_1", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_10_6*_10_42_2", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_03", "reason": "замена lg x=t"}
+{"id": "G11_TB_10_6*_10_43_1", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "равенство степеней с одинаковым показателем: разбор случаев+ОДЗ"}
+{"id": "G11_TB_10_6*_10_43_2", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_44_1", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_44_2", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_45_1", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_45_2", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_45_3", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_45_4", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G11_S02_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_1_10_52_b", "stratum": "A", "final": "G10_S16_04", "verdict": "agree", "my_target": "G10_S16_04", "reason": ""}
+{"id": "G11_TB_11_3*_11_16_а", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "тригонометрическое неравенство с модулем; оба навыка подходят"}
+{"id": "G11_TB_11_3*_11_16_б", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_3*_11_16_в", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_3*_11_16_г", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_5*_11_29_а", "stratum": "A", "final": "G10_S26_04", "verdict": "acceptable", "my_target": "G9_S06_05", "reason": "после сокращения tg x остаётся квадратное неравенство + ОДЗ tg"}
+{"id": "G11_TB_11_5*_11_29_б", "stratum": "A", "final": "G10_S26_04", "verdict": "acceptable", "my_target": "G9_S06_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_5*_11_29_в", "stratum": "A", "final": "G10_S26_04", "verdict": "acceptable", "my_target": "G9_S06_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_5*_11_29_г", "stratum": "A", "final": "G10_S26_04", "verdict": "acceptable", "my_target": "G9_S06_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_5*_11_30_б", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G9_S06_05", "reason": "после раскрытия скобок квадратное неравенство; иррациональность отпадает"}
+{"id": "G11_TB_11_5*_11_30_г", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G9_S06_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_6*_11_43*_a", "stratum": "A", "final": "G11_S05_03", "verdict": "disagree", "my_target": "G10_S11_07", "reason": "перекрёстное умножение и a^2>b^2, оценка не нужна"}
+{"id": "G11_TB_11_6*_11_43*_б", "stratum": "A", "final": "G11_S05_03", "verdict": "disagree", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_6*_11_46*_a", "stratum": "A", "final": "G10_S20_02", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_7*_11_51_1", "stratum": "A", "final": "G10_S26_03", "verdict": "agree", "my_target": "G10_S26_03", "reason": ""}
+{"id": "G11_TB_11_7*_11_51_2", "stratum": "A", "final": "G10_S26_03", "verdict": "agree", "my_target": "G10_S26_03", "reason": ""}
+{"id": "G11_TB_11_7*_11_53_1", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "тригонометрическое под корнем; оба навыка допустимы"}
+{"id": "G11_TB_11_7*_11_53_2", "stratum": "A", "final": "G10_S26_03", "verdict": "agree", "my_target": "G10_S26_03", "reason": ""}
+{"id": "G11_TB_11_7*_11_54_1", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_7*_11_54_2", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S26_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_12_1_11_57_a", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_12_1_11_57_b", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_12_1_11_57_g", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_12_1_11_58_a", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_12_1_11_58_b", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_12_1_11_58_g", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_12_1_11_58_v", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_13_1*_12_19_a", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "смешанное неравенство метод знаков/рационализации"}
+{"id": "G11_TB_13_1*_12_19_b", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_1*_12_19_в", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_1*_12_19_г", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_1*_12_23_a", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_1*_12_23_б", "stratum": "A", "final": "G11_S02_03", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_5*_13_31_б", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_13_5*_13_34_а", "stratum": "A", "final": "G10_S07_10", "verdict": "agree", "my_target": "G10_S07_10", "reason": ""}
+{"id": "G11_TB_13_5*_13_34_б", "stratum": "A", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_14_3_14_22_б", "stratum": "A", "final": "G10_S12_02", "verdict": "agree", "my_target": "G10_S12_02", "reason": ""}
+{"id": "G11_TB_14_3_4", "stratum": "A", "final": "G10_S15_01", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "смешанное показательно-иррациональное, сестринские 64-65 отправлены на S11_07"}
+{"id": "G11_TB_14_3_4_1", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S15_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_3_4_2", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S15_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_3_4_4", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S15_03", "reason": "подстановка t=5^x, затем иррациональное"}
+{"id": "G11_TB_15_1*_14_38_b", "stratum": "A", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_15_1*_14_39_a", "stratum": "A", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_15_1*_14_40_a", "stratum": "A", "final": "G10_S12_05", "verdict": "agree", "my_target": "G10_S12_05", "reason": ""}
+{"id": "G11_TB_15_1*_14_40_b", "stratum": "A", "final": "G10_S12_05", "verdict": "agree", "my_target": "G10_S12_05", "reason": ""}
+{"id": "G11_TB_15_1*_14_40_c", "stratum": "A", "final": "G10_S12_05", "verdict": "agree", "my_target": "G10_S12_05", "reason": ""}
+{"id": "G11_TB_15_1*_14_40_d", "stratum": "A", "final": "G10_S12_05", "verdict": "agree", "my_target": "G10_S12_05", "reason": ""}
+{"id": "G11_TB_15_1*_14_41", "stratum": "A", "final": "G10_S12_05", "verdict": "acceptable", "my_target": "G10_S12_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_4*_15_28_a", "stratum": "A", "final": "G10_S08_11", "verdict": "acceptable", "my_target": "G10_S24_06", "reason": "тригонометрическая система с параметром"}
+{"id": "G11_TB_15_4*_15_28_b", "stratum": "A", "final": "G10_S08_11", "verdict": "acceptable", "my_target": "G10_S24_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_4*_15_29_a", "stratum": "A", "final": "G10_S08_11", "verdict": "acceptable", "my_target": "G10_S24_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_4*_15_29_b", "stratum": "A", "final": "G10_S08_11", "verdict": "acceptable", "my_target": "G10_S24_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_4*_15_30_a", "stratum": "A", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_4*_15_30_b", "stratum": "A", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_4*_15_34_a", "stratum": "A", "final": "G10_S09_07", "verdict": "acceptable", "my_target": "G10_S24_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_4*_15_34_b", "stratum": "A", "final": "G10_S09_07", "verdict": "acceptable", "my_target": "G10_S24_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_4*_5", "stratum": "A", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_17_1_5_1", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_17_2_4_2", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S09_02", "reason": "подстановка lg x=t, потом дробно-рациональное"}
+{"id": "G11_TB_17_2_4_3", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S18_03", "reason": "подстановка, но навыка замены в лог.неравенствах нет"}
+{"id": "G11_TB_17_2_4_4", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S18_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_1_3_1_14_2", "stratum": "A", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_1_3_1_14_3", "stratum": "A", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_1_3_1_14_4", "stratum": "A", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_1_3_1_14_6", "stratum": "A", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_21_1_1_3", "stratum": "A", "final": "G8_S31_02", "verdict": "agree", "my_target": "G8_S31_02", "reason": ""}
+{"id": "G11_TB_22_6_12", "stratum": "A", "final": "G10_S28_09", "verdict": "acceptable", "my_target": "G10_S28_03", "reason": "подсчёт путей/сочетания, не только независимость"}
+{"id": "G11_TB_22_6_13", "stratum": "A", "final": "G10_S28_09", "verdict": "acceptable", "my_target": "G10_S28_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_23_1_1_1", "stratum": "A", "final": "G8_S28_05", "verdict": "acceptable", "my_target": "G8_S28_05", "reason": "ближайший из имеющихся"}
+{"id": "G11_TB_23_1_1_2", "stratum": "A", "final": "G8_S28_05", "verdict": "acceptable", "my_target": "G8_S28_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_23_1_1_4", "stratum": "A", "final": "G8_S28_05", "verdict": "acceptable", "my_target": "G8_S28_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_23_1_1_5", "stratum": "A", "final": "G8_S28_05", "verdict": "acceptable", "my_target": "G8_S28_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_15_1", "stratum": "A", "final": "G10_S24_05", "verdict": "agree", "my_target": "G10_S24_05", "reason": ""}
+{"id": "G11_TB_27_2_24_3", "stratum": "A", "final": "G10_S24_03", "verdict": "acceptable", "my_target": "G10_S25_01", "reason": "уравнение с модулем, разбор случаев"}
+{"id": "G11_TB_27_2_26_1", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_26_2", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_26_3", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_26_4", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_28_1", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_28_2", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_29_1", "stratum": "A", "final": "G10_S24_04", "verdict": "acceptable", "my_target": "G10_S24_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_29_2", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S25_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_29_3", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_27_2_4_1", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_4_2", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_4_3", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_4_4", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_5_2", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S11_02", "reason": "корень из полного квадрата = |2x+1|, переход к модулю"}
+{"id": "G11_TB_27_2_67_3", "stratum": "A", "final": "G10_S09_07", "verdict": "acceptable", "my_target": "G10_S24_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_89", "stratum": "A", "final": "G10_S07_13", "verdict": "acceptable", "my_target": "G8_S24_03", "reason": "возрастная задача, линейные уравнения; рационального уравнения нет"}
+{"id": "G11_TB_27_2_90", "stratum": "A", "final": "G10_S07_13", "verdict": "acceptable", "my_target": "G10_S07_13", "reason": "неравенства в целых числах"}
+{"id": "G11_TB_27_2_92", "stratum": "A", "final": "G10_S07_13", "verdict": "acceptable", "my_target": "G10_S07_13", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_93", "stratum": "A", "final": "G10_S07_13", "verdict": "acceptable", "my_target": "G10_S07_13", "reason": "sibling skill also fits"}
+{"id": "G11_TB_2_2_2_2.3", "stratum": "A", "final": "G11_S09_01", "verdict": "agree", "my_target": "G11_S09_01", "reason": ""}
+{"id": "G11_TB_2_2_2_2.4", "stratum": "A", "final": "G11_S09_01", "verdict": "agree", "my_target": "G11_S09_01", "reason": ""}
+{"id": "G11_TB_2_2_2_3.1", "stratum": "A", "final": "G11_S09_01", "verdict": "agree", "my_target": "G11_S09_01", "reason": ""}
+{"id": "G11_TB_2_2_2_3.2", "stratum": "A", "final": "G11_S09_01", "verdict": "agree", "my_target": "G11_S09_01", "reason": ""}
+{"id": "G11_TB_2_2_2_3.3", "stratum": "A", "final": "G11_S09_01", "verdict": "agree", "my_target": "G11_S09_01", "reason": ""}
+{"id": "G11_TB_2_2_2_3.4", "stratum": "A", "final": "G11_S09_01", "verdict": "agree", "my_target": "G11_S09_01", "reason": ""}
+{"id": "G11_TB_2_2_2_5.3", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_2_2_2_5.4", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_3_2*_3_6_1", "stratum": "A", "final": "G11_S13_01", "verdict": "acceptable", "my_target": "G11_S13_02", "reason": "теория о взаимно обратных функциях"}
+{"id": "G11_TB_3_2*_3_6_3", "stratum": "A", "final": "G11_S13_01", "verdict": "acceptable", "my_target": "G11_S13_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_1_4_1.1", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_4_1_4_1.2", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_4_1_4_2.1", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_4_1_4_3_1", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_4_1_4_3_2", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_4_1_5", "stratum": "A", "final": "G11_S16_03", "verdict": "acceptable", "my_target": "G11_S17_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_33_г", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "производная дроби; единственный навык про частное — с тригонометрией"}
+{"id": "G11_TB_4_5_4_33_д", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_33_е", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_33_ж", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_33_з", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_33_и", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_34_а", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_34_б", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_34_в", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_34_г", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_5_4_35_а", "stratum": "A", "final": "G11_S19_02", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_7*_4_56_4", "stratum": "A", "final": "G11_S21_01", "verdict": "acceptable", "my_target": "G11_S19_01", "reason": "произведение синусов, потом цепное правило"}
+{"id": "G11_TB_5_1_119_д", "stratum": "A", "final": "G11_S23_02", "verdict": "acceptable", "my_target": "G11_S23_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_5_1_119_е", "stratum": "A", "final": "G11_S23_02", "verdict": "acceptable", "my_target": "G11_S23_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_5_2_5_16_1", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_5_2_5_16_2", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_5_2_5_16_3", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_5_2_5_5*_3", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_5_2_5_5*_4", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_6_10*_6_89.3", "stratum": "A", "final": "G11_S44_02", "verdict": "agree", "my_target": "G11_S44_02", "reason": ""}
+{"id": "G11_TB_6_3_6_3_8", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_6_4_6_26_2", "stratum": "A", "final": "G11_S38_01", "verdict": "acceptable", "my_target": "G11_S39_01", "reason": "интегральная сумма"}
+{"id": "G11_TB_6_4_6_28_1", "stratum": "A", "final": "G11_S38_01", "verdict": "acceptable", "my_target": "G11_S39_01", "reason": "левые прямоугольники"}
+{"id": "G11_TB_6_4_6_28_2", "stratum": "A", "final": "G11_S38_01", "verdict": "acceptable", "my_target": "G11_S39_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_6_4_6_29_2", "stratum": "A", "final": "G11_S38_01", "verdict": "acceptable", "my_target": "G11_S39_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_6_6_6_3", "stratum": "A", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_6_7_6_59_1", "stratum": "A", "final": "G11_S37_02", "verdict": "agree", "my_target": "G11_S37_02", "reason": ""}
+{"id": "G11_TB_6_7_6_59_2", "stratum": "A", "final": "G11_S37_02", "verdict": "agree", "my_target": "G11_S37_02", "reason": ""}
+{"id": "G11_TB_7_2_7_3_6", "stratum": "A", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_1_7_18_6", "stratum": "A", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_1_7_18_7", "stratum": "A", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_1_7_24_2", "stratum": "A", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_1_7_24_4", "stratum": "A", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_1_7_25_3", "stratum": "A", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_3_8_10_в", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S11_02", "reason": "возведение в квадрат с условием sin x>=0"}
+{"id": "G11_TB_8_3_8_10_г", "stratum": "A", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_8_3_8_10_д", "stratum": "A", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_8_3_8_10_е", "stratum": "A", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_8_4_17_а", "stratum": "A", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_8_4_17_б", "stratum": "A", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_8_4_18_б", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S14_04", "reason": "сводится к показательному квадратному"}
+{"id": "G11_TB_8_4_18_в", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S14_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_8_4_18_г", "stratum": "A", "final": "G10_S18_03", "verdict": "acceptable", "my_target": "G10_S14_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_8_4_19_а", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S24_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_8_4_19_б", "stratum": "A", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_8_4_19_в", "stratum": "A", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_8_4_19_г", "stratum": "A", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_8_4_4", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_8_5_8_28", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_8_5_8_30", "stratum": "A", "final": "G10_S25_01", "verdict": "agree", "my_target": "G10_S25_01", "reason": ""}
+{"id": "G11_TB_9_1_8_34_a", "stratum": "A", "final": "G10_S07_07", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_1_8_34_d", "stratum": "A", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_9_1_8_41_a", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_9_1_8_41_b", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_9_1_8_41_c", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_1_8_41_d", "stratum": "A", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_9_2_4", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_13_б", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_14_б", "stratum": "A", "final": "G10_S07_07", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_14_в", "stratum": "A", "final": "G10_S14_04", "verdict": "acceptable", "my_target": "G10_S14_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_14_г", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_17_a", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "произведение=0 с ОДЗ"}
+{"id": "G11_TB_9_3_9_17_б", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_18_a", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_18_б", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_18_в", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S18_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_18_г", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S18_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_19_a", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S25_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_19_б", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S25_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_19_в", "stratum": "A", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S18_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_3_9_19_г", "stratum": "A", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_4*_9_30_a", "stratum": "A", "final": "G10_S11_06", "verdict": "agree", "my_target": "G10_S11_06", "reason": ""}
+{"id": "G11_TB_9_4*_9_30_г", "stratum": "A", "final": "G10_S11_06", "verdict": "agree", "my_target": "G10_S11_06", "reason": ""}
+{"id": "G11_TB_9_4*_9_33_б", "stratum": "A", "final": "G10_S07_07", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_6_9_49_а", "stratum": "A", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_9_6_9_49_б", "stratum": "A", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_9_7*_9_53_2", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_7*_9_54_3", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_7*_9_54_4", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_7*_9_56_3", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_7*_9_56_4", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_128", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G11_S07_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_130_a", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_?_130_b", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_?_130_g", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_?_130_h", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_?_132_a", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S25_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_132_b", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S25_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_133_a", "stratum": "A", "final": "G10_S24_04", "verdict": "acceptable", "my_target": "G10_S24_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_133_b", "stratum": "A", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S25_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_134", "stratum": "A", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_?_135_a", "stratum": "A", "final": "G10_S11_06", "verdict": "acceptable", "my_target": "G10_S11_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_137_a", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S11_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_137_b", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S11_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_137_g", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S11_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_137_v", "stratum": "A", "final": "G10_S11_01", "verdict": "acceptable", "my_target": "G10_S11_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_138_e", "stratum": "A", "final": "G10_S11_03", "verdict": "acceptable", "my_target": "G10_S11_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_138_v", "stratum": "A", "final": "G10_S11_04", "verdict": "acceptable", "my_target": "G10_S11_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_15_а", "stratum": "A", "final": "G10_S17_03", "verdict": "agree", "my_target": "G10_S17_03", "reason": ""}
+{"id": "G11_TB_?_16_а", "stratum": "A", "final": "G11_S14_03", "verdict": "acceptable", "my_target": "G11_S14_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_16_б", "stratum": "A", "final": "G11_S14_03", "verdict": "acceptable", "my_target": "G11_S14_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_19_а", "stratum": "A", "final": "G10_S17_01", "verdict": "acceptable", "my_target": "G10_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_19_б", "stratum": "A", "final": "G10_S17_01", "verdict": "acceptable", "my_target": "G10_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_20", "stratum": "A", "final": "G5_S11_01", "verdict": "acceptable", "my_target": "G5_S11_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_205_1", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_205_2", "stratum": "A", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G11_S07_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_207_2", "stratum": "A", "final": "G10_S20_02", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_210_1", "stratum": "A", "final": "G10_S15_01", "verdict": "acceptable", "my_target": "G10_S15_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_212_1", "stratum": "A", "final": "G10_S20_02", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_212_2", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_214_3", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_215", "stratum": "A", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_216", "stratum": "A", "final": "G10_S20_02", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_217_2", "stratum": "A", "final": "G11_S02_03", "verdict": "agree", "my_target": "G11_S02_03", "reason": ""}
+{"id": "G11_TB_?_242_c", "stratum": "A", "final": "G10_S09_07", "verdict": "acceptable", "my_target": "G10_S09_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_253", "stratum": "A", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_?_254", "stratum": "A", "final": "G10_S08_11", "verdict": "acceptable", "my_target": "G10_S08_11", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_255_a", "stratum": "A", "final": "G7_S21_02", "verdict": "acceptable", "my_target": "G7_S21_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_255_b", "stratum": "A", "final": "G7_S21_02", "verdict": "acceptable", "my_target": "G7_S21_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_29_1", "stratum": "A", "final": "G8_S08_03", "verdict": "agree", "my_target": "G8_S08_03", "reason": ""}
+{"id": "G11_TB_?_33_1", "stratum": "A", "final": "G9_S29_04", "verdict": "agree", "my_target": "G9_S29_04", "reason": ""}
+{"id": "G11_TB_?_34_1", "stratum": "A", "final": "G9_S29_03", "verdict": "acceptable", "my_target": "G9_S29_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_34_2", "stratum": "A", "final": "G9_S29_03", "verdict": "acceptable", "my_target": "G9_S29_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_35_2", "stratum": "A", "final": "G9_S32_01", "verdict": "agree", "my_target": "G9_S32_01", "reason": ""}
+{"id": "G11_TB_?_45", "stratum": "A", "final": "G9_S25_05", "verdict": "agree", "my_target": "G9_S25_05", "reason": ""}
+{"id": "G11_TB_?_4_а", "stratum": "A", "final": "G6_S05_02", "verdict": "agree", "my_target": "G6_S05_02", "reason": ""}
+{"id": "G11_TB_?_4_б", "stratum": "A", "final": "G6_S01_03", "verdict": "acceptable", "my_target": "G6_S01_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_57_а", "stratum": "A", "final": "G11_S05_03", "verdict": "acceptable", "my_target": "G11_S05_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_57_б", "stratum": "A", "final": "G11_S05_03", "verdict": "acceptable", "my_target": "G11_S05_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_58_а", "stratum": "A", "final": "G11_S01_02", "verdict": "acceptable", "my_target": "G11_S01_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_58_б", "stratum": "A", "final": "G11_S01_02", "verdict": "acceptable", "my_target": "G11_S01_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_59_a", "stratum": "A", "final": "G9_S16_04", "verdict": "acceptable", "my_target": "G9_S16_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_59_б", "stratum": "A", "final": "G9_S16_04", "verdict": "acceptable", "my_target": "G9_S16_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_5_б", "stratum": "A", "final": "G5_S01_03", "verdict": "acceptable", "my_target": "G5_S01_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_6", "stratum": "A", "final": "G6_S01_02", "verdict": "acceptable", "my_target": "G6_S01_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_61_а", "stratum": "A", "final": "G9_S28_03", "verdict": "agree", "my_target": "G9_S28_03", "reason": ""}
+{"id": "G11_TB_?_61_б", "stratum": "A", "final": "G9_S28_03", "verdict": "agree", "my_target": "G9_S28_03", "reason": ""}
+{"id": "G11_TB_?_63", "stratum": "A", "final": "G10_S07_06", "verdict": "acceptable", "my_target": "G10_S07_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_66", "stratum": "A", "final": "G8_S24_02", "verdict": "acceptable", "my_target": "G8_S24_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_67", "stratum": "A", "final": "G8_S24_02", "verdict": "acceptable", "my_target": "G8_S24_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_7", "stratum": "A", "final": "G9_S24_05", "verdict": "acceptable", "my_target": "G9_S24_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_81_a", "stratum": "A", "final": "G10_S11_01", "verdict": "agree", "my_target": "G10_S11_01", "reason": ""}
+{"id": "G11_TB_?_81_b", "stratum": "A", "final": "G10_S11_01", "verdict": "agree", "my_target": "G10_S11_01", "reason": ""}
+{"id": "G11_TB_?_81_в", "stratum": "A", "final": "G10_S11_01", "verdict": "agree", "my_target": "G10_S11_01", "reason": ""}
+{"id": "G11_TB_?_81_г", "stratum": "A", "final": "G10_S11_01", "verdict": "agree", "my_target": "G10_S11_01", "reason": ""}
+{"id": "G11_TB_?_82_b", "stratum": "A", "final": "G10_S11_01", "verdict": "agree", "my_target": "G10_S11_01", "reason": ""}
+{"id": "G11_TB_?_87_b", "stratum": "A", "final": "G10_S11_06", "verdict": "acceptable", "my_target": "G10_S11_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_89_в", "stratum": "A", "final": "G10_S11_05", "verdict": "agree", "my_target": "G10_S11_05", "reason": ""}
+{"id": "G11_TB_?_90_b", "stratum": "A", "final": "G10_S11_05", "verdict": "agree", "my_target": "G10_S11_05", "reason": ""}
+{"id": "G11_TB_?_91_в", "stratum": "A", "final": "G10_S11_04", "verdict": "acceptable", "my_target": "G10_S11_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§15_2_10", "stratum": "A", "final": "G10_S17_03", "verdict": "acceptable", "my_target": "G10_S17_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§15_2_9", "stratum": "A", "final": "G10_S17_03", "verdict": "acceptable", "my_target": "G10_S17_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§16_3", "stratum": "A", "final": "G10_S16_04", "verdict": "acceptable", "my_target": "G10_S16_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§18_2_3", "stratum": "A", "final": "G11_S19_01", "verdict": "agree", "my_target": "G11_S19_01", "reason": ""}
+{"id": "G11_TB_§18_2_4", "stratum": "A", "final": "G11_S19_01", "verdict": "agree", "my_target": "G11_S19_01", "reason": ""}
+{"id": "G11_TB_§18_6", "stratum": "A", "final": "G11_S05_04", "verdict": "acceptable", "my_target": "G11_S05_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_1", "stratum": "A", "final": "G10_S14_01", "verdict": "acceptable", "my_target": "G10_S14_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_13_3", "stratum": "A", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_§19_15_1", "stratum": "A", "final": "G10_S14_03", "verdict": "disagree", "my_target": "G11_S05_04", "reason": "нет общего множителя; уравнение с несколькими показательными слагаемыми и тремя корнями, нужен анализ функции, как в 290/294"}
+{"id": "G11_TB_§19_15_3", "stratum": "A", "final": "G11_S05_04", "verdict": "acceptable", "my_target": "G11_S05_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_17_1", "stratum": "A", "final": "G9_S12_01", "verdict": "agree", "my_target": "G9_S12_01", "reason": ""}
+{"id": "G11_TB_§19_17_2", "stratum": "A", "final": "G9_S12_01", "verdict": "agree", "my_target": "G9_S12_01", "reason": ""}
+{"id": "G11_TB_§19_1_5a", "stratum": "A", "final": "G10_S14_01", "verdict": "acceptable", "my_target": "G10_S14_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_1_5b", "stratum": "A", "final": "G10_S14_01", "verdict": "acceptable", "my_target": "G10_S14_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_1_6", "stratum": "A", "final": "G10_S14_01", "verdict": "acceptable", "my_target": "G10_S14_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_3_1", "stratum": "A", "final": "G10_S15_01", "verdict": "acceptable", "my_target": "G10_S15_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_3_2", "stratum": "A", "final": "G10_S15_01", "verdict": "acceptable", "my_target": "G10_S15_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§19_3_3", "stratum": "A", "final": "G10_S20_02", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§1_1_14_в", "stratum": "A", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_§1_1_14_г", "stratum": "A", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_§1_6", "stratum": "A", "final": "G11_S09_02", "verdict": "acceptable", "my_target": "G11_S09_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§20_3_1", "stratum": "A", "final": "G10_S18_03", "verdict": "agree", "my_target": "G10_S18_03", "reason": ""}
+{"id": "G11_TB_§20_7_1", "stratum": "A", "final": "G10_S16_04", "verdict": "agree", "my_target": "G10_S16_04", "reason": ""}
+{"id": "G11_TB_§20_7_2", "stratum": "A", "final": "G10_S17_03", "verdict": "acceptable", "my_target": "G10_S17_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§20_8_1", "stratum": "A", "final": "G10_S17_03", "verdict": "acceptable", "my_target": "G10_S17_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§20_8_2", "stratum": "A", "final": "G10_S17_03", "verdict": "acceptable", "my_target": "G10_S17_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§20_8_3", "stratum": "A", "final": "G10_S17_03", "verdict": "acceptable", "my_target": "G10_S17_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§20_9", "stratum": "A", "final": "G10_S09_07", "verdict": "acceptable", "my_target": "G10_S09_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_15_е", "stratum": "A", "final": "G11_S11_02", "verdict": "acceptable", "my_target": "G11_S11_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_15_ж", "stratum": "A", "final": "G11_S11_02", "verdict": "acceptable", "my_target": "G11_S11_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_15_з", "stratum": "A", "final": "G11_S11_02", "verdict": "acceptable", "my_target": "G11_S11_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_2_2", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_3_2", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_3_3", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_5_3", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_5_4", "stratum": "A", "final": "G11_S09_01", "verdict": "acceptable", "my_target": "G11_S09_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_5_4", "stratum": "A", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§3_10_5", "stratum": "A", "final": "G11_S02_02", "verdict": "agree", "my_target": "G11_S02_02", "reason": ""}
+{"id": "G11_TB_§3_10_7", "stratum": "A", "final": "G11_S02_02", "verdict": "agree", "my_target": "G11_S02_02", "reason": ""}
+{"id": "G11_TB_§3_3_6_а", "stratum": "A", "final": "G11_S13_01", "verdict": "acceptable", "my_target": "G11_S13_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§3_3_6_в", "stratum": "A", "final": "G11_S13_01", "verdict": "acceptable", "my_target": "G11_S13_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§4_4_1", "stratum": "A", "final": "G11_S21_01", "verdict": "acceptable", "my_target": "G11_S21_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§4_4_15_а", "stratum": "A", "final": "G11_S17_01", "verdict": "acceptable", "my_target": "G11_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§4_4_1_1", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_§4_4_1_2", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_§4_4_3", "stratum": "A", "final": "G11_S21_01", "verdict": "acceptable", "my_target": "G11_S21_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§4_4_3_1", "stratum": "A", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_§4_4_4", "stratum": "A", "final": "G11_S21_01", "verdict": "acceptable", "my_target": "G11_S21_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§5_5_5_в", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_§5_5_5_г", "stratum": "A", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_1_3_1_10_2", "stratum": "B", "final": "G11_S02_04", "verdict": "agree", "my_target": "G11_S02_04", "reason": ""}
+{"id": "G11_TB_1_5_1_43_2", "stratum": "B", "final": "G11_S04_03", "verdict": "agree", "my_target": "G11_S04_03", "reason": ""}
+{"id": "G11_TB_1_5_1_45_4", "stratum": "B", "final": "G11_S04_03", "verdict": "agree", "my_target": "G11_S04_03", "reason": ""}
+{"id": "G11_TB_?_214_1", "stratum": "B", "final": "G10_S20_02", "verdict": "agree", "my_target": "G10_S20_02", "reason": ""}
+{"id": "G11_TB_11_4*_11_22_б", "stratum": "B", "final": "G10_S07_12", "verdict": "acceptable", "my_target": "G10_S07_12", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_4*_9_26_в", "stratum": "B", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_§1_1_16_2", "stratum": "B", "final": "G11_S03_01", "verdict": "agree", "my_target": "G11_S03_01", "reason": ""}
+{"id": "G11_TB_§1_1_24", "stratum": "B", "final": "G11_S03_01", "verdict": "acceptable", "my_target": "G11_S03_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_14_1", "stratum": "B", "final": "G10_S24_02", "verdict": "agree", "my_target": "G10_S24_02", "reason": ""}
+{"id": "G11_TB_1_5_1_43_1", "stratum": "B", "final": "G11_S04_03", "verdict": "agree", "my_target": "G11_S04_03", "reason": ""}
+{"id": "G11_TB_13_5*_13_32_а", "stratum": "B", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_15_3*_15_22_1", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_11_6*_11_35_a", "stratum": "B", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_4*_9_22_b", "stratum": "B", "final": "G10_S07_07", "verdict": "agree", "my_target": "G10_S07_07", "reason": ""}
+{"id": "G11_TB_5_2_17_1", "stratum": "B", "final": "G11_S04_03", "verdict": "acceptable", "my_target": "G11_S04_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§16_5_4", "stratum": "B", "final": "G10_S16_04", "verdict": "agree", "my_target": "G10_S16_04", "reason": ""}
+{"id": "G11_TB_12_1_11_61_b", "stratum": "B", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_3*_13_9_d", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_§20_7", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_1_5_1_45_2", "stratum": "B", "final": "G11_S04_03", "verdict": "agree", "my_target": "G11_S04_03", "reason": ""}
+{"id": "G11_TB_27_2_36_2", "stratum": "B", "final": "G10_S09_02", "verdict": "acceptable", "my_target": "G10_S09_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_6*_11_35_б", "stratum": "B", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_1_5_1_45_1", "stratum": "B", "final": "G11_S04_03", "verdict": "agree", "my_target": "G11_S04_03", "reason": ""}
+{"id": "G11_TB_§16_16_4.2", "stratum": "B", "final": "G10_S16_04", "verdict": "agree", "my_target": "G10_S16_04", "reason": ""}
+{"id": "G11_TB_13_3*_13_10_a", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_8_1_7_26_4", "stratum": "B", "final": "G10_S15_02", "verdict": "agree", "my_target": "G10_S15_02", "reason": ""}
+{"id": "G11_TB_10_2_10_3_м", "stratum": "B", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_15_4*_4", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_17_1_17_1_2", "stratum": "B", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_§13_6_1", "stratum": "B", "final": "G10_S13_01", "verdict": "agree", "my_target": "G10_S13_01", "reason": ""}
+{"id": "G11_TB_§1_1_32_8", "stratum": "B", "final": "G11_S03_03", "verdict": "acceptable", "my_target": "G11_S03_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_6*_11_44_г", "stratum": "B", "final": "G10_S20_02", "verdict": "acceptable", "my_target": "G10_S20_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§12_12", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_1*_14_42_c", "stratum": "B", "final": "G10_S19_02", "verdict": "acceptable", "my_target": "G10_S19_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_3*_15_21_1", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_11_6*_11_40_б", "stratum": "B", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_6_9_47*_г", "stratum": "B", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_1_4_1_35_8", "stratum": "B", "final": "G11_S03_03", "verdict": "acceptable", "my_target": "G11_S03_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_17_2_3_1", "stratum": "B", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_?_51_а", "stratum": "B", "final": "G11_S02_02", "verdict": "agree", "my_target": "G11_S02_02", "reason": ""}
+{"id": "G11_TB_22_3_5_1", "stratum": "B", "final": "G10_S28_01", "verdict": "agree", "my_target": "G10_S28_01", "reason": ""}
+{"id": "G11_TB_13_3*_13_13_a", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_9_7*_9_62_3", "stratum": "B", "final": "G10_S20_02", "verdict": "agree", "my_target": "G10_S20_02", "reason": ""}
+{"id": "G11_TB_8_4_14_б", "stratum": "B", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_10_2_10_3_л", "stratum": "B", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_§16_4_1", "stratum": "B", "final": "G10_S16_04", "verdict": "agree", "my_target": "G10_S16_04", "reason": ""}
+{"id": "G11_TB_?_173_a", "stratum": "B", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_9_1_8_42", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_3*_15_15_1", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_§13_4_4", "stratum": "B", "final": "G10_S13_04", "verdict": "agree", "my_target": "G10_S13_04", "reason": ""}
+{"id": "G11_TB_1_4_1_33_4", "stratum": "B", "final": "G11_S03_03", "verdict": "acceptable", "my_target": "G11_S03_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_37_1", "stratum": "B", "final": "G10_S07_12", "verdict": "acceptable", "my_target": "G10_S07_12", "reason": "sibling skill also fits"}
+{"id": "G11_TB_1_3_1_10_5", "stratum": "B", "final": "G11_S02_04", "verdict": "acceptable", "my_target": "G11_S02_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§13_1_8", "stratum": "B", "final": "G10_S13_01", "verdict": "agree", "my_target": "G10_S13_01", "reason": ""}
+{"id": "G11_TB_10_6*_10_46_2", "stratum": "B", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§13_1_6", "stratum": "B", "final": "G10_S13_01", "verdict": "agree", "my_target": "G10_S13_01", "reason": ""}
+{"id": "G11_TB_11_4*_11_4*", "stratum": "B", "final": "G10_S26_01", "verdict": "agree", "my_target": "G10_S26_01", "reason": ""}
+{"id": "G11_TB_11_5*_11_26_в", "stratum": "B", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_10_6*_10_35_1", "stratum": "B", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_10_4*_19_в", "stratum": "B", "final": "G10_S07_12", "verdict": "acceptable", "my_target": "G10_S07_12", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_5*_4", "stratum": "B", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_14_1_13_37_a", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_10_5*_10_24_в", "stratum": "B", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_§3_10_6", "stratum": "B", "final": "G11_S02_03", "verdict": "agree", "my_target": "G11_S02_03", "reason": ""}
+{"id": "G11_TB_11_6*_11_40_г", "stratum": "B", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_1_4_1_32_1", "stratum": "B", "final": "G11_S03_03", "verdict": "acceptable", "my_target": "G11_S03_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_5_2_15_1", "stratum": "B", "final": "G11_S04_03", "verdict": "acceptable", "my_target": "G11_S04_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_4*_9_26_a", "stratum": "B", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_§13_6_2", "stratum": "B", "final": "G10_S13_01", "verdict": "agree", "my_target": "G10_S13_01", "reason": ""}
+{"id": "G11_TB_9_7*_9_55_1", "stratum": "B", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_1_13_35_b", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_10_6*_10_41_2", "stratum": "B", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_6*_10_40_1", "stratum": "B", "final": "G10_S18_02", "verdict": "acceptable", "my_target": "G10_S18_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_3*_15_13_3", "stratum": "B", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_1_3_1_10_7", "stratum": "B", "final": "G11_S02_04", "verdict": "acceptable", "my_target": "G11_S02_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_17_2_1", "stratum": "B", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_1_13_36_g", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_?_55_а", "stratum": "B", "final": "G11_S02_03", "verdict": "agree", "my_target": "G11_S02_03", "reason": ""}
+{"id": "G11_TB_14_1_13_36_a", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_14_3_1_10", "stratum": "B", "final": "G10_S15_01", "verdict": "agree", "my_target": "G10_S15_01", "reason": ""}
+{"id": "G11_TB_§16_16_28.2", "stratum": "B", "final": "G10_S16_02", "verdict": "agree", "my_target": "G10_S16_02", "reason": ""}
+{"id": "G11_TB_12_1_11_61_v", "stratum": "B", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_1_3_1_8_5", "stratum": "B", "final": "G11_S02_03", "verdict": "agree", "my_target": "G11_S02_03", "reason": ""}
+{"id": "G11_TB_1_3_1_12_3", "stratum": "B", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_§1_1_12_a", "stratum": "B", "final": "G11_S02_05", "verdict": "agree", "my_target": "G11_S02_05", "reason": ""}
+{"id": "G11_TB_§16_16_26.1", "stratum": "B", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S20_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_1_13_35_g", "stratum": "B", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_12_1_11_64_g", "stratum": "B", "final": "G10_S20_02", "verdict": "agree", "my_target": "G10_S20_02", "reason": ""}
+{"id": "G11_TB_22_2_2_2", "stratum": "C", "final": "G10_S27_05", "verdict": "agree", "my_target": "G10_S27_05", "reason": ""}
+{"id": "G11_TB_?_168_a", "stratum": "C", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_6_3_6_3_12", "stratum": "C", "final": "G11_S12_03", "verdict": "acceptable", "my_target": "G11_S12_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_8_1_7_18_4", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_§4_8_1", "stratum": "C", "final": "G11_S21_01", "verdict": "agree", "my_target": "G11_S21_01", "reason": ""}
+{"id": "G11_TB_13_5*_13_29_б", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_?_218", "stratum": "C", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G11_S07_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§18_4_4.2", "stratum": "C", "final": "G11_S23_02", "verdict": "agree", "my_target": "G11_S23_02", "reason": ""}
+{"id": "G11_TB_14_4*_14_3", "stratum": "C", "final": "G9_S14_04", "verdict": "acceptable", "my_target": "G9_S14_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§3_3_15_v", "stratum": "C", "final": "G10_S23_08", "verdict": "acceptable", "my_target": "G10_S23_08", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_122_g", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_?_240_c", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_4*_15_44_a", "stratum": "C", "final": "G10_S08_11", "verdict": "agree", "my_target": "G10_S08_11", "reason": ""}
+{"id": "G11_TB_5_3_5_24_4", "stratum": "C", "final": "G11_S24_02", "verdict": "agree", "my_target": "G11_S24_02", "reason": ""}
+{"id": "G11_TB_5_9_5_81", "stratum": "C", "final": "G11_S23_03", "verdict": "agree", "my_target": "G11_S23_03", "reason": ""}
+{"id": "G11_TB_1_2_1_4_1", "stratum": "C", "final": "G10_S04_01", "verdict": "acceptable", "my_target": "G10_S04_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_162_a", "stratum": "C", "final": "G10_S09_05", "verdict": "agree", "my_target": "G10_S09_05", "reason": ""}
+{"id": "G11_TB_§3_86_в", "stratum": "C", "final": "G11_S15_01", "verdict": "agree", "my_target": "G11_S15_01", "reason": ""}
+{"id": "G11_TB_§2_3_3.2", "stratum": "C", "final": "G11_S16_04", "verdict": "agree", "my_target": "G11_S16_04", "reason": ""}
+{"id": "G11_TB_21_1_3_16°", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_4_2_4_8_2.2", "stratum": "C", "final": "G11_S17_02", "verdict": "agree", "my_target": "G11_S17_02", "reason": ""}
+{"id": "G11_TB_14_1_14_2.1", "stratum": "C", "final": "G10_S08_10", "verdict": "agree", "my_target": "G10_S08_10", "reason": ""}
+{"id": "G11_TB_22_5_3", "stratum": "C", "final": "G10_S28_09", "verdict": "agree", "my_target": "G10_S28_09", "reason": ""}
+{"id": "G11_TB_§16_4_10", "stratum": "C", "final": "G10_S16_04", "verdict": "agree", "my_target": "G10_S16_04", "reason": ""}
+{"id": "G11_TB_27_2_71", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_6_10*_6_89.4", "stratum": "C", "final": "G11_S16_04", "verdict": "agree", "my_target": "G11_S16_04", "reason": ""}
+{"id": "G11_TB_22_3_6_1", "stratum": "C", "final": "G10_S28_05", "verdict": "agree", "my_target": "G10_S28_05", "reason": ""}
+{"id": "G11_TB_27_2_91", "stratum": "C", "final": "G10_S07_13", "verdict": "acceptable", "my_target": "G10_S07_13", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_3*_13_6_b", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_?_14_б", "stratum": "C", "final": "G10_S17_01", "verdict": "acceptable", "my_target": "G10_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_1*_12_21_b", "stratum": "C", "final": "G10_S09_03", "verdict": "acceptable", "my_target": "G10_S09_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_138_g", "stratum": "C", "final": "G11_S05_04", "verdict": "acceptable", "my_target": "G11_S05_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_2_36_а", "stratum": "C", "final": "G11_S12_03", "verdict": "agree", "my_target": "G11_S12_03", "reason": ""}
+{"id": "G11_TB_11_5*_11_23_1", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_21_2_4_2", "stratum": "C", "final": "G10_S28_06", "verdict": "agree", "my_target": "G10_S28_06", "reason": ""}
+{"id": "G11_TB_13_2*_13_2_г", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_9_7*_9_62_4", "stratum": "C", "final": "G10_S20_02", "verdict": "agree", "my_target": "G10_S20_02", "reason": ""}
+{"id": "G11_TB_14_3_1_5", "stratum": "C", "final": "G10_S15_02", "verdict": "agree", "my_target": "G10_S15_02", "reason": ""}
+{"id": "G11_TB_11_1_10_48_b", "stratum": "C", "final": "G10_S24_05", "verdict": "agree", "my_target": "G10_S24_05", "reason": ""}
+{"id": "G11_TB_?_30_1", "stratum": "C", "final": "G9_S31_03", "verdict": "agree", "my_target": "G9_S31_03", "reason": ""}
+{"id": "G11_TB_14_4*_14_31_2", "stratum": "C", "final": "G10_S12_02", "verdict": "agree", "my_target": "G10_S12_02", "reason": ""}
+{"id": "G11_TB_§19_2_1", "stratum": "C", "final": "G10_S19_01", "verdict": "acceptable", "my_target": "G10_S19_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_5*_11_28_б", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_21_2_3_3", "stratum": "C", "final": "G10_S28_06", "verdict": "agree", "my_target": "G10_S28_06", "reason": ""}
+{"id": "G11_TB_12_3_12_15_a", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_§4_4_3_5", "stratum": "C", "final": "G11_S16_04", "verdict": "acceptable", "my_target": "G11_S16_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§3_3_13_б", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_6_6_5_9", "stratum": "C", "final": "G11_S11_02", "verdict": "agree", "my_target": "G11_S11_02", "reason": ""}
+{"id": "G11_TB_25_1_3_5", "stratum": "C", "final": "G11_S40_01", "verdict": "agree", "my_target": "G11_S40_01", "reason": ""}
+{"id": "G11_TB_§19_16_1", "stratum": "C", "final": "G11_S27_04", "verdict": "agree", "my_target": "G11_S27_04", "reason": ""}
+{"id": "G11_TB_23_2_23_2_4", "stratum": "C", "final": "G9_S38_03", "verdict": "agree", "my_target": "G9_S38_03", "reason": ""}
+{"id": "G11_TB_27_2_6_2", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_9_1_8_39_b", "stratum": "C", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_§3_3_15_g", "stratum": "C", "final": "G10_S23_08", "verdict": "acceptable", "my_target": "G10_S23_08", "reason": "sibling skill also fits"}
+{"id": "G11_TB_15_3*_15_11_3", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_8_1_7_17", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_8_3_8_9_г", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_11_3*_11_6_б", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_9_6_9_46_в", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_14_4*_14_34_2", "stratum": "C", "final": "G10_S08_06", "verdict": "agree", "my_target": "G10_S08_06", "reason": ""}
+{"id": "G11_TB_14_4*_14_33_1", "stratum": "C", "final": "G10_S24_06", "verdict": "acceptable", "my_target": "G10_S24_06", "reason": "sibling skill also fits"}
+{"id": "G11_TB_10_3*_10_9*_б", "stratum": "C", "final": "G10_S24_01", "verdict": "agree", "my_target": "G10_S24_01", "reason": ""}
+{"id": "G11_TB_9_6_9_45_а", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_§15_6_4", "stratum": "C", "final": "G10_S17_01", "verdict": "acceptable", "my_target": "G10_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§3_3_12_б", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_?_56_б", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_10_2_10_2_б", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_14_3_14_23_б", "stratum": "C", "final": "G10_S19_02", "verdict": "agree", "my_target": "G10_S19_02", "reason": ""}
+{"id": "G11_TB_2_3_2_14_б", "stratum": "C", "final": "G11_S09_04", "verdict": "agree", "my_target": "G11_S09_04", "reason": ""}
+{"id": "G11_TB_22_6_5_2", "stratum": "C", "final": "G10_S28_09", "verdict": "agree", "my_target": "G10_S28_09", "reason": ""}
+{"id": "G11_TB_13_3*_13_7_b", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_§4_3_19_д", "stratum": "C", "final": "G11_S15_01", "verdict": "agree", "my_target": "G11_S15_01", "reason": ""}
+{"id": "G11_TB_§4_4_41_в", "stratum": "C", "final": "G11_S17_01", "verdict": "acceptable", "my_target": "G11_S17_02", "reason": "степенная функция x^-20"}
+{"id": "G11_TB_?_141_b", "stratum": "C", "final": "G10_S18_03", "verdict": "acceptable", "my_target": "G10_S18_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_21_2_2_4", "stratum": "C", "final": "G10_S28_06", "verdict": "agree", "my_target": "G10_S28_06", "reason": ""}
+{"id": "G11_TB_6_2*_6_12_е", "stratum": "C", "final": "G11_S35_02", "verdict": "agree", "my_target": "G11_S35_02", "reason": ""}
+{"id": "G11_TB_14_2_1_5", "stratum": "C", "final": "G10_S14_04", "verdict": "agree", "my_target": "G10_S14_04", "reason": ""}
+{"id": "G11_TB_27_2_2_1", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_§2_10_1", "stratum": "C", "final": "G11_S16_04", "verdict": "agree", "my_target": "G11_S16_04", "reason": ""}
+{"id": "G11_TB_8_3_8_9_д", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_9_7*_9_56_2", "stratum": "C", "final": "G10_S15_01", "verdict": "acceptable", "my_target": "G10_S15_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_9_6_9_50_а", "stratum": "C", "final": "G10_S15_03", "verdict": "agree", "my_target": "G10_S15_03", "reason": ""}
+{"id": "G11_TB_§4_6_3", "stratum": "C", "final": "G11_S21_01", "verdict": "agree", "my_target": "G11_S21_01", "reason": ""}
+{"id": "G11_TB_21_1_2_14_1", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_15_3*_15_12_1", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_?_177_a", "stratum": "C", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_11_2_11_5_д", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_15_3*_15_14_4", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_?_12_б", "stratum": "C", "final": "G10_S17_01", "verdict": "agree", "my_target": "G10_S17_01", "reason": ""}
+{"id": "G11_TB_4_2_4_8_6.2", "stratum": "C", "final": "G11_S17_02", "verdict": "agree", "my_target": "G11_S17_02", "reason": ""}
+{"id": "G11_TB_13_4*_13_17_б", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_?_241_c", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_13_4*_13_20_a", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_§15_3_4", "stratum": "C", "final": "G10_S16_01", "verdict": "agree", "my_target": "G10_S16_01", "reason": ""}
+{"id": "G11_TB_2_2_2_1.2", "stratum": "C", "final": "G11_S09_02", "verdict": "agree", "my_target": "G11_S09_02", "reason": ""}
+{"id": "G11_TB_§20_5_3", "stratum": "C", "final": "G10_S17_03", "verdict": "agree", "my_target": "G10_S17_03", "reason": ""}
+{"id": "G11_TB_?_49_б", "stratum": "C", "final": "G10_S02_02", "verdict": "agree", "my_target": "G10_S02_02", "reason": ""}
+{"id": "G11_TB_6_2*_6_12_ж", "stratum": "C", "final": "G11_S35_02", "verdict": "agree", "my_target": "G11_S35_02", "reason": ""}
+{"id": "G11_TB_§3_6_2", "stratum": "C", "final": "G11_S17_02", "verdict": "agree", "my_target": "G11_S17_02", "reason": ""}
+{"id": "G11_TB_14_4*_14_36_1", "stratum": "C", "final": "G10_S12_02", "verdict": "agree", "my_target": "G10_S12_02", "reason": ""}
+{"id": "G11_TB_10_5*_10_30*_б", "stratum": "C", "final": "G10_S25_01", "verdict": "agree", "my_target": "G10_S25_01", "reason": ""}
+{"id": "G11_TB_?_122_f", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_27_2_31_2", "stratum": "C", "final": "G10_S11_04", "verdict": "agree", "my_target": "G10_S11_04", "reason": ""}
+{"id": "G11_TB_5_3_5_25_3", "stratum": "C", "final": "G11_S24_02", "verdict": "agree", "my_target": "G11_S24_02", "reason": ""}
+{"id": "G11_TB_14_3_14_26_б", "stratum": "C", "final": "G10_S19_02", "verdict": "agree", "my_target": "G10_S19_02", "reason": ""}
+{"id": "G11_TB_10_2_2_1", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_22_2_18_2.3", "stratum": "C", "final": "G9_S35_04", "verdict": "acceptable", "my_target": "G9_S35_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§15_9_4", "stratum": "C", "final": "G10_S17_03", "verdict": "agree", "my_target": "G10_S17_03", "reason": ""}
+{"id": "G11_TB_22_3_22_3_10", "stratum": "C", "final": "G9_S35_05", "verdict": "acceptable", "my_target": "G9_S35_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_74", "stratum": "C", "final": "G10_S07_13", "verdict": "agree", "my_target": "G10_S07_13", "reason": ""}
+{"id": "G11_TB_§20_1_7", "stratum": "C", "final": "G11_S05_04", "verdict": "acceptable", "my_target": "G11_S05_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_27_2_7_2", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_?_56_а", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_6_1_6_8_з", "stratum": "C", "final": "G11_S35_02", "verdict": "agree", "my_target": "G11_S35_02", "reason": ""}
+{"id": "G11_TB_27_2_2_7", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_13_4*_13_18_a", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_27_2_27_1", "stratum": "C", "final": "G10_S24_01", "verdict": "agree", "my_target": "G10_S24_01", "reason": ""}
+{"id": "G11_TB_7_1_5", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_14_3_3_3", "stratum": "C", "final": "G10_S15_03", "verdict": "acceptable", "my_target": "G10_S14_05", "reason": "однородное показательное"}
+{"id": "G11_TB_?_87_в", "stratum": "C", "final": "G10_S11_02", "verdict": "acceptable", "my_target": "G10_S07_07", "reason": "уравнение решается сжатием ОДЗ"}
+{"id": "G11_TB_13_1*_12_21_d", "stratum": "C", "final": "G10_S09_03", "verdict": "agree", "my_target": "G10_S09_03", "reason": ""}
+{"id": "G11_TB_21_1_3_15", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_§15_2_1", "stratum": "C", "final": "G10_S16_01", "verdict": "agree", "my_target": "G10_S16_01", "reason": ""}
+{"id": "G11_TB_9_5_9_41_a", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_§16_1_5", "stratum": "C", "final": "G10_S16_02", "verdict": "agree", "my_target": "G10_S16_02", "reason": ""}
+{"id": "G11_TB_12_2_12_3_г", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_17_1_2_3", "stratum": "C", "final": "G10_S18_01", "verdict": "agree", "my_target": "G10_S18_01", "reason": ""}
+{"id": "G11_TB_§4_4_41_б", "stratum": "C", "final": "G11_S17_01", "verdict": "acceptable", "my_target": "G11_S17_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_4_2_4_11_2.1", "stratum": "C", "final": "G11_S24_01", "verdict": "agree", "my_target": "G11_S24_01", "reason": ""}
+{"id": "G11_TB_?_171_r", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_§11_1_3", "stratum": "C", "final": "G11_S05_04", "verdict": "acceptable", "my_target": "G11_S04_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_178_a", "stratum": "C", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_8_3_8_10_а", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_?_64_б", "stratum": "C", "final": "G10_S07_10", "verdict": "agree", "my_target": "G10_S07_10", "reason": ""}
+{"id": "G11_TB_14_3_2_4", "stratum": "C", "final": "G10_S15_03", "verdict": "agree", "my_target": "G10_S15_03", "reason": ""}
+{"id": "G11_TB_9_3_9_10_a", "stratum": "C", "final": "G10_S11_03", "verdict": "agree", "my_target": "G10_S11_03", "reason": ""}
+{"id": "G11_TB_5_9_5_83_а", "stratum": "C", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_§20_5_2", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_4*_15_45_b", "stratum": "C", "final": "G10_S08_11", "verdict": "agree", "my_target": "G10_S08_11", "reason": ""}
+{"id": "G11_TB_12_1_11_55_b", "stratum": "C", "final": "G10_S11_07", "verdict": "acceptable", "my_target": "G10_S11_07", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_91_b", "stratum": "C", "final": "G10_S11_06", "verdict": "agree", "my_target": "G10_S11_06", "reason": ""}
+{"id": "G11_TB_?_36_2", "stratum": "C", "final": "G9_S28_03", "verdict": "agree", "my_target": "G9_S28_03", "reason": ""}
+{"id": "G11_TB_22_4_6", "stratum": "C", "final": "G10_S28_04", "verdict": "agree", "my_target": "G10_S28_04", "reason": ""}
+{"id": "G11_TB_10_3*_10_6_г", "stratum": "C", "final": "G10_S11_03", "verdict": "agree", "my_target": "G10_S11_03", "reason": ""}
+{"id": "G11_TB_10_3*_10_8_а", "stratum": "C", "final": "G11_S07_04", "verdict": "acceptable", "my_target": "G10_S11_01", "reason": "квадрат обеих частей"}
+{"id": "G11_TB_§20_8", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_13_5*_13_30_б", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_15_2*_15_6", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_4*_15_36_a", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_§2_5", "stratum": "C", "final": "G11_S17_01", "verdict": "agree", "my_target": "G11_S17_01", "reason": ""}
+{"id": "G11_TB_4_2_4_7_1", "stratum": "C", "final": "G11_S16_03", "verdict": "agree", "my_target": "G11_S16_03", "reason": ""}
+{"id": "G11_TB_9_3_9_16_б", "stratum": "C", "final": "G10_S11_03", "verdict": "acceptable", "my_target": "G10_S11_03", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_89_г", "stratum": "C", "final": "G10_S11_05", "verdict": "agree", "my_target": "G10_S11_05", "reason": ""}
+{"id": "G11_TB_15_4*_6", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_?_221_2", "stratum": "C", "final": "G10_S08_03", "verdict": "agree", "my_target": "G10_S08_03", "reason": ""}
+{"id": "G11_TB_14_3_14_23_г", "stratum": "C", "final": "G10_S19_02", "verdict": "agree", "my_target": "G10_S19_02", "reason": ""}
+{"id": "G11_TB_5_3_5_26_2", "stratum": "C", "final": "G11_S24_02", "verdict": "agree", "my_target": "G11_S24_02", "reason": ""}
+{"id": "G11_TB_27_2_31_1", "stratum": "C", "final": "G10_S18_01", "verdict": "acceptable", "my_target": "G10_S18_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_83_в", "stratum": "C", "final": "G10_S11_03", "verdict": "agree", "my_target": "G10_S11_03", "reason": ""}
+{"id": "G11_TB_14_2_1_1", "stratum": "C", "final": "G10_S14_04", "verdict": "agree", "my_target": "G10_S14_04", "reason": ""}
+{"id": "G11_TB_?_171_a", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_§3_3_3", "stratum": "C", "final": "G11_S17_02", "verdict": "agree", "my_target": "G11_S17_02", "reason": ""}
+{"id": "G11_TB_9_1_8_38_d", "stratum": "C", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_§3_3_7_г", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_5_2_5_17_1", "stratum": "C", "final": "G11_S23_04", "verdict": "acceptable", "my_target": "G11_S23_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_?_168_r", "stratum": "C", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_§15_10_3", "stratum": "C", "final": "G10_S17_03", "verdict": "agree", "my_target": "G10_S17_03", "reason": ""}
+{"id": "G11_TB_21_1_2_14_2", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_2_5_2_22_1", "stratum": "C", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_§26_8_2", "stratum": "C", "final": "G11_S37_02", "verdict": "agree", "my_target": "G11_S37_02", "reason": ""}
+{"id": "G11_TB_5_3_5_30_1", "stratum": "C", "final": "G11_S24_02", "verdict": "agree", "my_target": "G11_S24_02", "reason": ""}
+{"id": "G11_TB_4_2_4_12", "stratum": "C", "final": "G11_S17_02", "verdict": "agree", "my_target": "G11_S17_02", "reason": ""}
+{"id": "G11_TB_11_3*_11_10_в", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_§19_16_3", "stratum": "C", "final": "G11_S27_04", "verdict": "agree", "my_target": "G11_S27_04", "reason": ""}
+{"id": "G11_TB_§4_7_1", "stratum": "C", "final": "G11_S19_02", "verdict": "agree", "my_target": "G11_S19_02", "reason": ""}
+{"id": "G11_TB_25_1_3_8", "stratum": "C", "final": "G11_S40_01", "verdict": "agree", "my_target": "G11_S40_01", "reason": ""}
+{"id": "G11_TB_11_6*_11_41_б", "stratum": "C", "final": "G10_S20_01", "verdict": "agree", "my_target": "G10_S20_01", "reason": ""}
+{"id": "G11_TB_§5_5_62_b", "stratum": "C", "final": "G11_S28_02", "verdict": "acceptable", "my_target": "G11_S28_01", "reason": "теория о высших производных"}
+{"id": "G11_TB_21_2_6_3", "stratum": "C", "final": "G10_S28_06", "verdict": "agree", "my_target": "G10_S28_06", "reason": ""}
+{"id": "G11_TB_§4_3_2", "stratum": "C", "final": "G11_S19_02", "verdict": "agree", "my_target": "G11_S19_02", "reason": ""}
+{"id": "G11_TB_?_261_a", "stratum": "C", "final": "G10_S07_13", "verdict": "agree", "my_target": "G10_S07_13", "reason": ""}
+{"id": "G11_TB_14_3_14_3_4", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_?_263_б", "stratum": "C", "final": "G10_S07_13", "verdict": "agree", "my_target": "G10_S07_13", "reason": ""}
+{"id": "G11_TB_1_3_1_9_2", "stratum": "C", "final": "G10_S16_02", "verdict": "agree", "my_target": "G10_S16_02", "reason": ""}
+{"id": "G11_TB_14_4*_14_32_2", "stratum": "C", "final": "G10_S19_02", "verdict": "acceptable", "my_target": "G10_S19_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_2_2_7", "stratum": "C", "final": "G10_S14_04", "verdict": "agree", "my_target": "G10_S14_04", "reason": ""}
+{"id": "G11_TB_10_1_9_70_г", "stratum": "C", "final": "G11_S14_03", "verdict": "agree", "my_target": "G11_S14_03", "reason": ""}
+{"id": "G11_TB_?_131_b", "stratum": "C", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S24_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_25_1_3_6", "stratum": "C", "final": "G11_S40_01", "verdict": "agree", "my_target": "G11_S40_01", "reason": ""}
+{"id": "G11_TB_?_18_а", "stratum": "C", "final": "G11_S14_03", "verdict": "agree", "my_target": "G11_S14_03", "reason": ""}
+{"id": "G11_TB_10_3*_10_7_в", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_11_7*_11_52_2", "stratum": "C", "final": "G10_S26_03", "verdict": "agree", "my_target": "G10_S26_03", "reason": ""}
+{"id": "ds_llm_7ee42ee1cecf", "stratum": "C", "final": "G11_S29_01", "verdict": "agree", "my_target": "G11_S29_01", "reason": ""}
+{"id": "G11_TB_§2_2_2", "stratum": "C", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_27_2_3_2", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_3_2*_3_3_б", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_14_4*_14_37", "stratum": "C", "final": "G10_S12_03", "verdict": "agree", "my_target": "G10_S12_03", "reason": ""}
+{"id": "G11_TB_§13_1_2", "stratum": "C", "final": "G9_S12_01", "verdict": "agree", "my_target": "G9_S12_01", "reason": ""}
+{"id": "G11_TB_10_6*_10_40_3", "stratum": "C", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_?_64_в", "stratum": "C", "final": "G10_S07_10", "verdict": "agree", "my_target": "G10_S07_10", "reason": ""}
+{"id": "G11_TB_?_242_a", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_11_3*_11_6_а", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_8_5_8_33", "stratum": "C", "final": "G10_S11_06", "verdict": "agree", "my_target": "G10_S11_06", "reason": ""}
+{"id": "G11_TB_25_1_1_6", "stratum": "C", "final": "G11_S40_01", "verdict": "agree", "my_target": "G11_S40_01", "reason": ""}
+{"id": "G11_TB_11_7*_11_48_2", "stratum": "C", "final": "G10_S26_02", "verdict": "agree", "my_target": "G10_S26_02", "reason": ""}
+{"id": "G11_TB_§13_6_9", "stratum": "C", "final": "G9_S12_01", "verdict": "agree", "my_target": "G9_S12_01", "reason": ""}
+{"id": "G11_TB_9_7*_9_59_3", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_§3_3_17_a", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_27_2_2_2", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_22_2_4_5", "stratum": "C", "final": "G10_S27_05", "verdict": "agree", "my_target": "G10_S27_05", "reason": ""}
+{"id": "G11_TB_5_3_5_30_2", "stratum": "C", "final": "G11_S24_02", "verdict": "agree", "my_target": "G11_S24_02", "reason": ""}
+{"id": "G11_TB_§26_8_3", "stratum": "C", "final": "G11_S37_02", "verdict": "agree", "my_target": "G11_S37_02", "reason": ""}
+{"id": "G11_TB_?_270_в", "stratum": "C", "final": "G10_S28_09", "verdict": "agree", "my_target": "G10_S28_09", "reason": ""}
+{"id": "G11_TB_21_1_3_21_2", "stratum": "C", "final": "G10_S28_08", "verdict": "agree", "my_target": "G10_S28_08", "reason": ""}
+{"id": "G11_TB_4_1_3_19_а", "stratum": "C", "final": "G11_S15_01", "verdict": "agree", "my_target": "G11_S15_01", "reason": ""}
+{"id": "G11_TB_3_3*_3_12.2", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_14_2_4_2", "stratum": "C", "final": "G10_S14_05", "verdict": "agree", "my_target": "G10_S14_05", "reason": ""}
+{"id": "G11_TB_?_272_а", "stratum": "C", "final": "G10_S28_09", "verdict": "agree", "my_target": "G10_S28_09", "reason": ""}
+{"id": "G11_TB_§2_2_4", "stratum": "C", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_10_2_10_3_б", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_?_165_v", "stratum": "C", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_§2_2_17_д", "stratum": "C", "final": "G11_S11_02", "verdict": "acceptable", "my_target": "G11_S11_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_13_4*_13_16_a", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_11_1_10_50_a", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_?_9_б", "stratum": "C", "final": "G8_S08_03", "verdict": "agree", "my_target": "G8_S08_03", "reason": ""}
+{"id": "G11_TB_§15_3_5", "stratum": "C", "final": "G10_S16_01", "verdict": "agree", "my_target": "G10_S16_01", "reason": ""}
+{"id": "G11_TB_12_2_12_4_б", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_14_4*_14_32_1", "stratum": "C", "final": "G10_S19_02", "verdict": "acceptable", "my_target": "G10_S19_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§2_3_4.2", "stratum": "C", "final": "G11_S16_04", "verdict": "agree", "my_target": "G11_S16_04", "reason": ""}
+{"id": "G11_TB_22_2_3_5", "stratum": "C", "final": "G10_S27_05", "verdict": "agree", "my_target": "G10_S27_05", "reason": ""}
+{"id": "G11_TB_15_4*_15_35_a", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_13_4*_13_16_b", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_6_6_5_8", "stratum": "C", "final": "G11_S11_02", "verdict": "agree", "my_target": "G11_S11_02", "reason": ""}
+{"id": "G11_TB_?_36_1", "stratum": "C", "final": "G9_S28_03", "verdict": "agree", "my_target": "G9_S28_03", "reason": ""}
+{"id": "G11_TB_15_4*_15_26_b", "stratum": "C", "final": "G10_S08_11", "verdict": "agree", "my_target": "G10_S08_11", "reason": ""}
+{"id": "G11_TB_27_2_40_1", "stratum": "C", "final": "G10_S11_07", "verdict": "agree", "my_target": "G10_S11_07", "reason": ""}
+{"id": "G11_TB_12_2_12_1_е", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_§15_4_6", "stratum": "C", "final": "G10_S16_01", "verdict": "agree", "my_target": "G10_S16_01", "reason": ""}
+{"id": "G11_TB_?_168_b", "stratum": "C", "final": "G10_S09_02", "verdict": "agree", "my_target": "G10_S09_02", "reason": ""}
+{"id": "G11_TB_6_10*_6_89.1", "stratum": "C", "final": "G11_S16_04", "verdict": "acceptable", "my_target": "G11_S23_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_12_1_305_1", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_9_3_9_20_б", "stratum": "C", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S24_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_22_1_8", "stratum": "C", "final": "G9_S35_05", "verdict": "agree", "my_target": "G9_S35_05", "reason": ""}
+{"id": "G11_TB_?_29_2", "stratum": "C", "final": "G8_S08_03", "verdict": "agree", "my_target": "G8_S08_03", "reason": ""}
+{"id": "G11_TB_14_3_3", "stratum": "C", "final": "G10_S15_03", "verdict": "acceptable", "my_target": "G10_S14_05", "reason": "sibling skill also fits"}
+{"id": "G11_TB_2_3_2_13_г", "stratum": "C", "final": "G11_S09_04", "verdict": "agree", "my_target": "G11_S09_04", "reason": ""}
+{"id": "G11_TB_25_1_1_4", "stratum": "C", "final": "G11_S40_01", "verdict": "agree", "my_target": "G11_S40_01", "reason": ""}
+{"id": "G11_TB_5_9_5_83_б", "stratum": "C", "final": "G11_S23_04", "verdict": "agree", "my_target": "G11_S23_04", "reason": ""}
+{"id": "G11_TB_15_4*_15_39_a", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_9_3_9_20_в", "stratum": "C", "final": "G10_S25_03", "verdict": "acceptable", "my_target": "G10_S24_04", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§3_3_7_в", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_8_1_7_15_2", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_10_1_9_70_b", "stratum": "C", "final": "G11_S14_03", "verdict": "agree", "my_target": "G11_S14_03", "reason": ""}
+{"id": "G11_TB_11_6*_11_42*_б", "stratum": "C", "final": "G10_S20_01", "verdict": "acceptable", "my_target": "G10_S17_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_2_14_18.1", "stratum": "C", "final": "G10_S07_12", "verdict": "agree", "my_target": "G10_S07_12", "reason": ""}
+{"id": "G11_TB_10_1_9_67_b", "stratum": "C", "final": "G11_S14_03", "verdict": "agree", "my_target": "G11_S14_03", "reason": ""}
+{"id": "G11_TB_§16_16_18.3", "stratum": "C", "final": "G10_S16_01", "verdict": "agree", "my_target": "G10_S16_01", "reason": ""}
+{"id": "G11_TB_4_5_4_30_а", "stratum": "C", "final": "G11_S19_01", "verdict": "agree", "my_target": "G11_S19_01", "reason": ""}
+{"id": "G11_TB_4_1_3_19_е", "stratum": "C", "final": "G11_S15_01", "verdict": "agree", "my_target": "G11_S15_01", "reason": ""}
+{"id": "G11_TB_?_85_a", "stratum": "C", "final": "G10_S11_02", "verdict": "agree", "my_target": "G10_S11_02", "reason": ""}
+{"id": "G11_TB_8_1_7_19_1", "stratum": "C", "final": "G10_S07_12", "verdict": "acceptable", "my_target": "G10_S07_12", "reason": "sibling skill also fits"}
+{"id": "G11_TB_2_4_2_16_а", "stratum": "C", "final": "G11_S11_02", "verdict": "acceptable", "my_target": "G11_S11_02", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§15_9_5", "stratum": "C", "final": "G10_S17_03", "verdict": "agree", "my_target": "G10_S17_03", "reason": ""}
+{"id": "G11_TB_17_1_5_4", "stratum": "C", "final": "G10_S18_02", "verdict": "agree", "my_target": "G10_S18_02", "reason": ""}
+{"id": "G11_TB_§20_6_2", "stratum": "C", "final": "G11_S05_04", "verdict": "agree", "my_target": "G11_S05_04", "reason": ""}
+{"id": "G11_TB_21_1_3_17_3", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_5_3_5_26_4", "stratum": "C", "final": "G11_S24_02", "verdict": "agree", "my_target": "G11_S24_02", "reason": ""}
+{"id": "G11_TB_?_241_d", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_3_2*_3_7_5", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_8_1_7_19_2", "stratum": "C", "final": "G10_S07_12", "verdict": "acceptable", "my_target": "G10_S07_12", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§26_6_2", "stratum": "C", "final": "G11_S37_02", "verdict": "agree", "my_target": "G11_S37_02", "reason": ""}
+{"id": "G11_TB_14_1_13_35_v", "stratum": "C", "final": "G11_S05_03", "verdict": "agree", "my_target": "G11_S05_03", "reason": ""}
+{"id": "G11_TB_15_3*_15_20_3", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_15_3*_15_16_3", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_10_5*_10_30*_а", "stratum": "C", "final": "G10_S25_01", "verdict": "agree", "my_target": "G10_S25_01", "reason": ""}
+{"id": "G11_TB_§3_3_16_a", "stratum": "C", "final": "G11_S13_03", "verdict": "agree", "my_target": "G11_S13_03", "reason": ""}
+{"id": "G11_TB_§4_4_19_б", "stratum": "C", "final": "G11_S17_02", "verdict": "agree", "my_target": "G11_S17_02", "reason": ""}
+{"id": "G11_TB_§1_3_3", "stratum": "C", "final": "G11_S11_02", "verdict": "agree", "my_target": "G11_S11_02", "reason": ""}
+{"id": "G11_TB_6_5*_6_32_1", "stratum": "C", "final": "G11_S38_01", "verdict": "acceptable", "my_target": "G11_S37_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_21_1_3_4_2", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_?_64_а", "stratum": "C", "final": "G10_S07_10", "verdict": "agree", "my_target": "G10_S07_10", "reason": ""}
+{"id": "G11_TB_15_3*_15_16_2", "stratum": "C", "final": "G10_S09_07", "verdict": "agree", "my_target": "G10_S09_07", "reason": ""}
+{"id": "G11_TB_10_4*_14_a", "stratum": "C", "final": "G10_S07_09", "verdict": "acceptable", "my_target": "G10_S07_09", "reason": "sibling skill also fits"}
+{"id": "G11_TB_14_2_14_8", "stratum": "C", "final": "G10_S12_01", "verdict": "acceptable", "my_target": "G10_S12_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_11_6*_11_36_б", "stratum": "C", "final": "G10_S15_02", "verdict": "agree", "my_target": "G10_S15_02", "reason": ""}
+{"id": "G11_TB_18_2*_18_4_б", "stratum": "C", "final": "G10_S07_03", "verdict": "agree", "my_target": "G10_S07_03", "reason": ""}
+{"id": "G11_TB_12_1_11_59_b", "stratum": "C", "final": "G10_S15_03", "verdict": "agree", "my_target": "G10_S15_03", "reason": ""}
+{"id": "G11_TB_21_1_3_18_2", "stratum": "C", "final": "G10_S28_07", "verdict": "agree", "my_target": "G10_S28_07", "reason": ""}
+{"id": "G11_TB_8_3_8_8_г", "stratum": "C", "final": "G10_S11_03", "verdict": "agree", "my_target": "G10_S11_03", "reason": ""}
+{"id": "G11_TB_12_2_12_9*_а", "stratum": "C", "final": "G11_S07_04", "verdict": "agree", "my_target": "G11_S07_04", "reason": ""}
+{"id": "G11_TB_22_2_1_6", "stratum": "C", "final": "G10_S27_05", "verdict": "agree", "my_target": "G10_S27_05", "reason": ""}
+{"id": "G11_TB_27_2_2", "stratum": "C", "final": "G9_S14_03", "verdict": "agree", "my_target": "G9_S14_03", "reason": ""}
+{"id": "G11_TB_27_2_87", "stratum": "C", "final": "G10_S07_13", "verdict": "acceptable", "my_target": "G10_S07_13", "reason": "sibling skill also fits"}
+{"id": "G11_TB_2_5_2_32_2", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_2_3_2_11_а", "stratum": "D", "final": "G11_S10_03", "verdict": "agree", "my_target": "G11_S10_03", "reason": ""}
+{"id": "G11_TB_1_4_1_34_2", "stratum": "D", "final": "G11_S03_03", "verdict": "acceptable", "my_target": "G10_S04_10", "reason": "sibling skill also fits"}
+{"id": "G11_TB_5_4*_5_39_м", "stratum": "D", "final": "G11_S25_02", "verdict": "agree", "my_target": "G11_S25_02", "reason": ""}
+{"id": "G11_TB_6_10*_6_82_a", "stratum": "D", "final": "G11_S43_01", "verdict": "acceptable", "my_target": "G11_S43_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_§5_5_38_5", "stratum": "D", "final": "G11_S25_02", "verdict": "agree", "my_target": "G11_S25_02", "reason": ""}
+{"id": "G11_TB_§12_1_4", "stratum": "D", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_1_5_1_48_3", "stratum": "D", "final": "G11_S04_03", "verdict": "agree", "my_target": "G11_S04_03", "reason": ""}
+{"id": "G11_TB_§1_1_32_4", "stratum": "D", "final": "G11_S03_03", "verdict": "acceptable", "my_target": "G10_S04_10", "reason": "sibling skill also fits"}
+{"id": "G11_TB_2_2_2_6_3", "stratum": "D", "final": "G11_S10_03", "verdict": "acceptable", "my_target": "G11_S10_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_3_1_2_41_2", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_13_2*_13_2_б", "stratum": "D", "final": "G11_S02_03", "verdict": "agree", "my_target": "G11_S02_03", "reason": ""}
+{"id": "G11_TB_§1_1_19_1", "stratum": "D", "final": "G11_S03_01", "verdict": "agree", "my_target": "G11_S03_01", "reason": ""}
+{"id": "G11_TB_§5_5_40_1", "stratum": "D", "final": "G11_S25_01", "verdict": "agree", "my_target": "G11_S25_01", "reason": ""}
+{"id": "G11_TB_6_2*_6_17_ж", "stratum": "D", "final": "G11_S36_01", "verdict": "agree", "my_target": "G11_S36_01", "reason": ""}
+{"id": "G11_TB_6_1_6_9_д", "stratum": "D", "final": "G11_S35_01", "verdict": "acceptable", "my_target": "G11_S35_01", "reason": "sibling skill also fits"}
+{"id": "G11_TB_3_1_2_41_3", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_6_6_4_1", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_6_8*_6_73_е", "stratum": "D", "final": "G11_S36_01", "verdict": "agree", "my_target": "G11_S36_01", "reason": ""}
+{"id": "G11_TB_2_5_2_23_2", "stratum": "D", "final": "G11_S18_01", "verdict": "agree", "my_target": "G11_S18_01", "reason": ""}
+{"id": "G11_TB_3_1_2_41_1", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_§5_5_65_a", "stratum": "D", "final": "G11_S28_03", "verdict": "agree", "my_target": "G11_S28_03", "reason": ""}
+{"id": "G11_TB_§5_5_92_1", "stratum": "D", "final": "G11_S31_03", "verdict": "agree", "my_target": "G11_S31_03", "reason": ""}
+{"id": "G11_TB_2_5_2_28_1", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_2_5_2_26_3", "stratum": "D", "final": "G11_S12_01", "verdict": "agree", "my_target": "G11_S12_01", "reason": ""}
+{"id": "G11_TB_§1_1_9_е", "stratum": "D", "final": "G11_S02_03", "verdict": "agree", "my_target": "G11_S02_03", "reason": ""}
+{"id": "G11_TB_1_3_1_16_1", "stratum": "D", "final": "G11_S03_01", "verdict": "agree", "my_target": "G11_S03_01", "reason": ""}
+{"id": "G11_TB_4_2_4_4_3", "stratum": "D", "final": "G11_S16_01", "verdict": "agree", "my_target": "G11_S16_01", "reason": ""}

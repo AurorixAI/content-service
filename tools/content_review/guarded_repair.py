@@ -187,7 +187,8 @@ def _update(conn, task_id: str, fields: dict) -> None:
         if key not in FIELDS:
             raise ValueError("unsupported update column")
         clauses.append(f"{key} = CAST(:{key} AS jsonb)" if key in JSON_FIELDS else f"{key} = :{key}")
-        parameters[key] = json.dumps(value, ensure_ascii=False) if key in JSON_FIELDS else value
+        # SQL NULL must stay SQL NULL (json.dumps(None) would store a JSON null and make rollback inexact).
+        parameters[key] = (None if value is None else json.dumps(value, ensure_ascii=False)) if key in JSON_FIELDS else value
     conn.execute(text("UPDATE tasks_master SET " + ", ".join(clauses)
                       + ", updated_at = NOW() WHERE id = :id"), parameters)
 
@@ -219,7 +220,8 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
         from tools.content_review import knowledge_repair
         # Parent/identity drift is checked before any task or taxonomy write.
         rows = _load(conn, ids, execute)
-        added_nodes = knowledge_repair.prepare(conn, manifest.get('knowledge_nodes', []))
+        kplan = knowledge_repair.plan(conn, manifest)
+        added_nodes, activations, new_edges = kplan['added'], kplan['activate'], kplan['edges']
         pending, unchanged = [], []
         for row in rows:
             entry = by_id[row["id"]]
@@ -234,14 +236,20 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
             if any(k in entry["changes"] for k in ("answer_options", "correct_answer", "distractor_meta")):
                 validate_choices(after)
             pending.append((row, after, entry))
+        if pending and (kplan['already_active'] or kplan['edges_present']):
+            raise ValueError('taxonomy change already present while tasks are pending; nothing written')
         pending_ids = [before["id"] for before, _, _ in pending]
         report = {"batch": batch, "execute": execute,
                   "updated": pending_ids, "already_applied": unchanged}
         if manifest.get('knowledge_nodes'):
             report['knowledge_added'] = [n['id'] for n in added_nodes]
+        if 'knowledge_activate' in manifest:
+            report['knowledge_activated'] = [n['id'] for n in activations]
+        if 'prerequisites' in manifest:
+            report['prerequisites_added'] = [[e['skill_id'], e['prerequisite_id']] for e in new_edges]
         if not execute or not pending:
-            if execute and added_nodes:
-                raise ValueError('applied tasks without required knowledge nodes')
+            if execute and (added_nodes or activations or new_edges):
+                raise ValueError('applied tasks without required knowledge changes')
             return report
         attestations = _attestations(conn, pending_ids, lock=True)
         links = [_plain(dict(r)) for r in conn.execute(text(
@@ -254,8 +262,12 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
             "attestations_before": attestations, "textbook_links": links,
             "revoked_patterns": {e["id"]: attestation_patterns(e["changes"]) for _, _, e in pending},
             "knowledge_added": added_nodes,
+            "knowledge_activated": activations,
+            "prerequisites_added": knowledge_repair.edge_records(new_edges),
         })
         knowledge_repair.insert(conn, added_nodes)
+        knowledge_repair.activate(conn, activations)
+        knowledge_repair.insert_edges(conn, new_edges)
         for before, after, entry in pending:
             _update(conn, before["id"], {**entry["changes"], "tags": after["tags"]})
             patterns = attestation_patterns(entry["changes"])
@@ -277,34 +289,41 @@ def rollback(engine, saved: dict, *, execute: bool = False) -> dict:
         from tools.content_review import knowledge_repair
         rows = _load(conn, ids, execute)
         before = {r["id"]: r for r in saved["before"]}
-        if all(fingerprint(r) == fingerprint(before[r["id"]]) for r in rows):
+        tasks_restored = all(fingerprint(r) == fingerprint(before[r["id"]]) for r in rows)
+        if tasks_restored and knowledge_repair.state_restored(conn, saved):
             return {"batch": saved["batch"], "execute": execute, "already_restored": ids}
-        for row in rows:
-            if fingerprint(row) != saved["after_sha256"][row["id"]]:
-                raise ValueError(f"rollback source drift: {row['id']}; nothing written")
-        current = _attestations(conn, ids, lock=execute)
-        expected = copy.deepcopy(saved["attestations_before"])
-        for a in expected:
-            patterns = saved["revoked_patterns"][a["task_id"]]
-            if a["status"] == "active" and not _attested_unchanged(a["field_key"], patterns):
-                a["status"] = "revoked"
-                a["revocation_reason"] = f"content repair {saved['batch']}"
-                a["revoked_at"] = None  # transaction time is not a content identity
-        for a in current:
-            if a["revocation_reason"] == f"content repair {saved['batch']}":
-                a["revoked_at"] = None
-        if current != expected:
-            raise ValueError("rollback attestation drift; refusing to replace newer review")
+        if not tasks_restored:
+            for row in rows:
+                if fingerprint(row) != saved["after_sha256"][row["id"]]:
+                    raise ValueError(f"rollback source drift: {row['id']}; nothing written")
+            current = _attestations(conn, ids, lock=execute)
+            expected = copy.deepcopy(saved["attestations_before"])
+            for a in expected:
+                patterns = saved["revoked_patterns"][a["task_id"]]
+                if a["status"] == "active" and not _attested_unchanged(a["field_key"], patterns):
+                    a["status"] = "revoked"
+                    a["revocation_reason"] = f"content repair {saved['batch']}"
+                    a["revoked_at"] = None  # transaction time is not a content identity
+            for a in current:
+                if a["revocation_reason"] == f"content repair {saved['batch']}":
+                    a["revoked_at"] = None
+            if current != expected:
+                raise ValueError("rollback attestation drift; refusing to replace newer review")
         knowledge_repair.check_rollback(conn, saved.get('knowledge_added', []))
+        knowledge_repair.check_rollback_activation(conn, saved.get('knowledge_activated', []))
+        knowledge_repair.check_rollback_edges(conn, saved.get('prerequisites_added', []))
         if execute:
-            for task_id, row in before.items():
-                _update(conn, task_id, {k: row.get(k) for k in FIELDS})
-            for a in saved["attestations_before"]:
-                conn.execute(text("""
-                    UPDATE task_latex_display_attestations SET status=:status,
-                    revoked_at=:revoked_at, revocation_reason=:revocation_reason
-                    WHERE attestation_id=:attestation_id
-                """), {k: a[k] for k in ("status", "revoked_at", "revocation_reason", "attestation_id")})
+            if not tasks_restored:
+                for task_id, row in before.items():
+                    _update(conn, task_id, {k: row.get(k) for k in FIELDS})
+                for a in saved["attestations_before"]:
+                    conn.execute(text("""
+                        UPDATE task_latex_display_attestations SET status=:status,
+                        revoked_at=:revoked_at, revocation_reason=:revocation_reason
+                        WHERE attestation_id=:attestation_id
+                    """), {k: a[k] for k in ("status", "revoked_at", "revocation_reason", "attestation_id")})
+            knowledge_repair.remove_edges(conn, saved.get('prerequisites_added', []))
+            knowledge_repair.deactivate(conn, saved.get('knowledge_activated', []))
             knowledge_repair.remove(conn, saved.get('knowledge_added', []))
         return {"batch": saved["batch"], "execute": execute, "restored": ids}
 
