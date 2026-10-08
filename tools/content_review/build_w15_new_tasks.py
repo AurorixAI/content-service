@@ -20,7 +20,7 @@ SKILLS = ["G11_S01_01", "G11_S01_03", "G11_S02_01", "G11_S05_01", "G11_S05_02", 
 TAGS = {"content_review": {"batch": BATCH, "author": "claude-sonnet", "verified_by": "sympy"}}
 
 
-def row(t):
+def row(t, batch=BATCH):
     options = [t["key"]] + [d for d, _ in t["ds"]]
     meta = [{"value": d, "value_latex": d, "error_type": "manual_generated", "plausibility": 0.7,
              "error_logic": e, "error_logic_latex": e, "explanation": e, "explanation_latex": e}
@@ -32,10 +32,10 @@ def row(t):
          "difficulty": t["diff"], "irt_discrimination": 1.0, "irt_difficulty": IRT_DIFFICULTY[t["diff"]],
          "irt_guessing": 0.2, "distractor_meta": meta, "is_active": True, "toc_id": None,
          "cognitive_load": "apply", "verification_status": "verified", "source_type": "ai_generated",
-         "source_reference": None, "tags": json.loads(json.dumps(TAGS)), "is_star": False,
+         "source_reference": None, "tags": {"content_review": {**TAGS["content_review"], "batch": batch}}, "is_star": False,
          "task_category": "standard", "latex_status": None}
     assert set(r) == set(FIELDS) | {"id"}
-    validate_new_task(r, BATCH)
+    validate_new_task(r, batch)
     r["after_sha256"] = fingerprint(r)
     return r
 

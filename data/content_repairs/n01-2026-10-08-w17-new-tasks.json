@@ -1,0 +1,1072 @@
+{
+ "batch": "f1-authoring-2026-10-08",
+ "mode": "insert_new_tasks",
+ "source_checked_at": "2026-10-08T00:00:00Z",
+ "student_data_included": false,
+ "new_tasks": [
+  {
+   "id": "GEN_G11_S01_02_A_01",
+   "skill_id": "G11_S01_02",
+   "question_text": "Для функции $f(x)=2x^{2}-5x+1$ найдите $f(-2)$.",
+   "question_latex": "Для функции $f(x)=2x^{2}-5x+1$ найдите $f(-2)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$19$",
+   "correct_answer_latex": "$19$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$19$",
+    "$3$",
+    "$-1$",
+    "$27$"
+   ],
+   "answer_options_latex": [
+    "$19$",
+    "$3$",
+    "$-1$",
+    "$27$"
+   ],
+   "difficulty": "A",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": -1.0,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$3$",
+     "value_latex": "$3$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик возвёл в квадрат только число $2$, получив $-2^{2}=-4$, вместо $(-2)^{2}=4$.",
+     "error_logic_latex": "Ученик возвёл в квадрат только число $2$, получив $-2^{2}=-4$, вместо $(-2)^{2}=4$.",
+     "explanation": "Ученик возвёл в квадрат только число $2$, получив $-2^{2}=-4$, вместо $(-2)^{2}=4$.",
+     "explanation_latex": "Ученик возвёл в квадрат только число $2$, получив $-2^{2}=-4$, вместо $(-2)^{2}=4$."
+    },
+    {
+     "value": "$-1$",
+     "value_latex": "$-1$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик при умножении $-5\\cdot(-2)$ получил $-10$, потеряв правило знаков.",
+     "error_logic_latex": "Ученик при умножении $-5\\cdot(-2)$ получил $-10$, потеряв правило знаков.",
+     "explanation": "Ученик при умножении $-5\\cdot(-2)$ получил $-10$, потеряв правило знаков.",
+     "explanation_latex": "Ученик при умножении $-5\\cdot(-2)$ получил $-10$, потеряв правило знаков."
+    },
+    {
+     "value": "$27$",
+     "value_latex": "$27$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик возвёл в квадрат произведение: $(2\\cdot(-2))^{2}=16$ вместо $2\\cdot(-2)^{2}=8$.",
+     "error_logic_latex": "Ученик возвёл в квадрат произведение: $(2\\cdot(-2))^{2}=16$ вместо $2\\cdot(-2)^{2}=8$.",
+     "explanation": "Ученик возвёл в квадрат произведение: $(2\\cdot(-2))^{2}=16$ вместо $2\\cdot(-2)^{2}=8$.",
+     "explanation_latex": "Ученик возвёл в квадрат произведение: $(2\\cdot(-2))^{2}=16$ вместо $2\\cdot(-2)^{2}=8$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "64f65035e30fa21fe33d4d14a1f0088c64673702de6488e78c1f0d9e05f47e3d"
+  },
+  {
+   "id": "GEN_G11_S01_02_A_02",
+   "skill_id": "G11_S01_02",
+   "question_text": "Для функции $f(x)=x^{3}-2x$ найдите $f(-2)$.",
+   "question_latex": "Для функции $f(x)=x^{3}-2x$ найдите $f(-2)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$-4$",
+   "correct_answer_latex": "$-4$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$-4$",
+    "$12$",
+    "$-12$",
+    "$-2$"
+   ],
+   "answer_options_latex": [
+    "$-4$",
+    "$12$",
+    "$-12$",
+    "$-2$"
+   ],
+   "difficulty": "A",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": -1.0,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$12$",
+     "value_latex": "$12$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик принял $(-2)^{3}=8$, забыв, что нечётная степень отрицательного числа отрицательна.",
+     "error_logic_latex": "Ученик принял $(-2)^{3}=8$, забыв, что нечётная степень отрицательного числа отрицательна.",
+     "explanation": "Ученик принял $(-2)^{3}=8$, забыв, что нечётная степень отрицательного числа отрицательна.",
+     "explanation_latex": "Ученик принял $(-2)^{3}=8$, забыв, что нечётная степень отрицательного числа отрицательна."
+    },
+    {
+     "value": "$-12$",
+     "value_latex": "$-12$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик записал $-2x$ при $x=-2$ как «$-2-2$», вместо произведения $-2\\cdot(-2)=4$.",
+     "error_logic_latex": "Ученик записал $-2x$ при $x=-2$ как «$-2-2$», вместо произведения $-2\\cdot(-2)=4$.",
+     "explanation": "Ученик записал $-2x$ при $x=-2$ как «$-2-2$», вместо произведения $-2\\cdot(-2)=4$.",
+     "explanation_latex": "Ученик записал $-2x$ при $x=-2$ как «$-2-2$», вместо произведения $-2\\cdot(-2)=4$."
+    },
+    {
+     "value": "$-2$",
+     "value_latex": "$-2$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $(-2)^{3}$ как $-2\\cdot3=-6$ (умножил основание на показатель).",
+     "error_logic_latex": "Ученик вычислил $(-2)^{3}$ как $-2\\cdot3=-6$ (умножил основание на показатель).",
+     "explanation": "Ученик вычислил $(-2)^{3}$ как $-2\\cdot3=-6$ (умножил основание на показатель).",
+     "explanation_latex": "Ученик вычислил $(-2)^{3}$ как $-2\\cdot3=-6$ (умножил основание на показатель)."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "1adf235d5ba6edc5fec493311d1dfdb1fc5a30a2989e8805f62349a3cd641dbd"
+  },
+  {
+   "id": "GEN_G11_S01_02_B_01",
+   "skill_id": "G11_S01_02",
+   "question_text": "Даны функции $f(x)=2x-3$ и $g(x)=x^{2}+1$. Найдите $f(g(-2))$.",
+   "question_latex": "Даны функции $f(x)=2x-3$ и $g(x)=x^{2}+1$. Найдите $f(g(-2))$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$7$",
+   "correct_answer_latex": "$7$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$7$",
+    "$50$",
+    "$-35$",
+    "$-9$"
+   ],
+   "answer_options_latex": [
+    "$7$",
+    "$50$",
+    "$-35$",
+    "$-9$"
+   ],
+   "difficulty": "B",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 0.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$50$",
+     "value_latex": "$50$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик нарушил порядок вложения и вычислил $g(f(-2))$ вместо $f(g(-2))$.",
+     "error_logic_latex": "Ученик нарушил порядок вложения и вычислил $g(f(-2))$ вместо $f(g(-2))$.",
+     "explanation": "Ученик нарушил порядок вложения и вычислил $g(f(-2))$ вместо $f(g(-2))$.",
+     "explanation_latex": "Ученик нарушил порядок вложения и вычислил $g(f(-2))$ вместо $f(g(-2))$."
+    },
+    {
+     "value": "$-35$",
+     "value_latex": "$-35$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик перемножил значения функций $f(-2)\\cdot g(-2)$ вместо подстановки $g(-2)$ в $f$.",
+     "error_logic_latex": "Ученик перемножил значения функций $f(-2)\\cdot g(-2)$ вместо подстановки $g(-2)$ в $f$.",
+     "explanation": "Ученик перемножил значения функций $f(-2)\\cdot g(-2)$ вместо подстановки $g(-2)$ в $f$.",
+     "explanation_latex": "Ученик перемножил значения функций $f(-2)\\cdot g(-2)$ вместо подстановки $g(-2)$ в $f$."
+    },
+    {
+     "value": "$-9$",
+     "value_latex": "$-9$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $g(-2)=-2^{2}+1=-3$, неверно возведя в квадрат отрицательное число, и подставил в $f$.",
+     "error_logic_latex": "Ученик вычислил $g(-2)=-2^{2}+1=-3$, неверно возведя в квадрат отрицательное число, и подставил в $f$.",
+     "explanation": "Ученик вычислил $g(-2)=-2^{2}+1=-3$, неверно возведя в квадрат отрицательное число, и подставил в $f$.",
+     "explanation_latex": "Ученик вычислил $g(-2)=-2^{2}+1=-3$, неверно возведя в квадрат отрицательное число, и подставил в $f$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "7a522bd688f44d030f9d1508ba8c79985e1af5d9042a06efd306a38676894fda"
+  },
+  {
+   "id": "GEN_G11_S01_02_B_02",
+   "skill_id": "G11_S01_02",
+   "question_text": "Функция задана формулой $f(x)=\\begin{cases}x^{2}-1,& x<0,\\\\ 3x+2,& 0\\leqslant x<2,\\\\ 8-x,& x\\geqslant2.\\end{cases}$ Найдите $f(-3)+f(0)+f(2)$.",
+   "question_latex": "Функция задана формулой $f(x)=\\begin{cases}x^{2}-1,& x<0,\\\\ 3x+2,& 0\\leqslant x<2,\\\\ 8-x,& x\\geqslant2.\\end{cases}$ Найдите $f(-3)+f(0)+f(2)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$16$",
+   "correct_answer_latex": "$16$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$16$",
+    "$18$",
+    "$13$",
+    "$1$"
+   ],
+   "answer_options_latex": [
+    "$16$",
+    "$18$",
+    "$13$",
+    "$1$"
+   ],
+   "difficulty": "B",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 0.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$18$",
+     "value_latex": "$18$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(2)$ по второй формуле ($3\\cdot2+2=8$), не заметив, что при $x=2$ условие $x<2$ не выполнено.",
+     "error_logic_latex": "Ученик вычислил $f(2)$ по второй формуле ($3\\cdot2+2=8$), не заметив, что при $x=2$ условие $x<2$ не выполнено.",
+     "explanation": "Ученик вычислил $f(2)$ по второй формуле ($3\\cdot2+2=8$), не заметив, что при $x=2$ условие $x<2$ не выполнено.",
+     "explanation_latex": "Ученик вычислил $f(2)$ по второй формуле ($3\\cdot2+2=8$), не заметив, что при $x=2$ условие $x<2$ не выполнено."
+    },
+    {
+     "value": "$13$",
+     "value_latex": "$13$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(0)$ по первой формуле ($0^{2}-1=-1$), хотя при $x=0$ условие $x<0$ не выполнено.",
+     "error_logic_latex": "Ученик вычислил $f(0)$ по первой формуле ($0^{2}-1=-1$), хотя при $x=0$ условие $x<0$ не выполнено.",
+     "explanation": "Ученик вычислил $f(0)$ по первой формуле ($0^{2}-1=-1$), хотя при $x=0$ условие $x<0$ не выполнено.",
+     "explanation_latex": "Ученик вычислил $f(0)$ по первой формуле ($0^{2}-1=-1$), хотя при $x=0$ условие $x<0$ не выполнено."
+    },
+    {
+     "value": "$1$",
+     "value_latex": "$1$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(-3)$ по второй формуле ($3\\cdot(-3)+2=-7$), не проверив условие $x\\geqslant0$.",
+     "error_logic_latex": "Ученик вычислил $f(-3)$ по второй формуле ($3\\cdot(-3)+2=-7$), не проверив условие $x\\geqslant0$.",
+     "explanation": "Ученик вычислил $f(-3)$ по второй формуле ($3\\cdot(-3)+2=-7$), не проверив условие $x\\geqslant0$.",
+     "explanation_latex": "Ученик вычислил $f(-3)$ по второй формуле ($3\\cdot(-3)+2=-7$), не проверив условие $x\\geqslant0$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "54b9aa05bf2ee6d1a57cb4153b73c4e3d774d00bd4471eee3a299ef3e0fa6be6"
+  },
+  {
+   "id": "GEN_G11_S01_02_B_03",
+   "skill_id": "G11_S01_02",
+   "question_text": "Для функции $f(x)=3^{x-1}+\\log_{3}x$ найдите $f(3)$.",
+   "question_latex": "Для функции $f(x)=3^{x-1}+\\log_{3}x$ найдите $f(3)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$10$",
+   "correct_answer_latex": "$10$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$10$",
+    "$27$",
+    "$12$",
+    "$7$"
+   ],
+   "answer_options_latex": [
+    "$10$",
+    "$27$",
+    "$12$",
+    "$7$"
+   ],
+   "difficulty": "B",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 0.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$27$",
+     "value_latex": "$27$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $3^{x-1}$ как $3^{3}-1=26$ (вычел единицу из значения степени, а не из показателя) и прибавил $\\log_{3}3=1$.",
+     "error_logic_latex": "Ученик вычислил $3^{x-1}$ как $3^{3}-1=26$ (вычел единицу из значения степени, а не из показателя) и прибавил $\\log_{3}3=1$.",
+     "explanation": "Ученик вычислил $3^{x-1}$ как $3^{3}-1=26$ (вычел единицу из значения степени, а не из показателя) и прибавил $\\log_{3}3=1$.",
+     "explanation_latex": "Ученик вычислил $3^{x-1}$ как $3^{3}-1=26$ (вычел единицу из значения степени, а не из показателя) и прибавил $\\log_{3}3=1$."
+    },
+    {
+     "value": "$12$",
+     "value_latex": "$12$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик принял $\\log_{3}3=3$, перепутав логарифм числа по тому же основанию с самим числом.",
+     "error_logic_latex": "Ученик принял $\\log_{3}3=3$, перепутав логарифм числа по тому же основанию с самим числом.",
+     "explanation": "Ученик принял $\\log_{3}3=3$, перепутав логарифм числа по тому же основанию с самим числом.",
+     "explanation_latex": "Ученик принял $\\log_{3}3=3$, перепутав логарифм числа по тому же основанию с самим числом."
+    },
+    {
+     "value": "$7$",
+     "value_latex": "$7$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик заменил степень произведением: $3^{x-1}=3\\cdot(3-1)=6$, и прибавил $\\log_{3}3=1$.",
+     "error_logic_latex": "Ученик заменил степень произведением: $3^{x-1}=3\\cdot(3-1)=6$, и прибавил $\\log_{3}3=1$.",
+     "explanation": "Ученик заменил степень произведением: $3^{x-1}=3\\cdot(3-1)=6$, и прибавил $\\log_{3}3=1$.",
+     "explanation_latex": "Ученик заменил степень произведением: $3^{x-1}=3\\cdot(3-1)=6$, и прибавил $\\log_{3}3=1$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "187dd31414da5802b5d585b01e2ae1355c5b9c96b0494900dac082fc8b073a20"
+  },
+  {
+   "id": "GEN_G11_S01_02_C_01",
+   "skill_id": "G11_S01_02",
+   "question_text": "Дана функция $f(x)=\\dfrac{x}{x+1}$. Найдите $f(f(f(1)))$.",
+   "question_latex": "Дана функция $f(x)=\\dfrac{x}{x+1}$. Найдите $f(f(f(1)))$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$\\dfrac{1}{4}$",
+   "correct_answer_latex": "$\\dfrac{1}{4}$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$\\dfrac{1}{4}$",
+    "$\\dfrac{1}{3}$",
+    "$\\dfrac{1}{8}$",
+    "$\\dfrac{3}{2}$"
+   ],
+   "answer_options_latex": [
+    "$\\dfrac{1}{4}$",
+    "$\\dfrac{1}{3}$",
+    "$\\dfrac{1}{8}$",
+    "$\\dfrac{3}{2}$"
+   ],
+   "difficulty": "C",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 1.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$\\dfrac{1}{3}$",
+     "value_latex": "$\\dfrac{1}{3}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик применил функцию только два раза: $f(f(1))=\\dfrac{1}{3}$.",
+     "error_logic_latex": "Ученик применил функцию только два раза: $f(f(1))=\\dfrac{1}{3}$.",
+     "explanation": "Ученик применил функцию только два раза: $f(f(1))=\\dfrac{1}{3}$.",
+     "explanation_latex": "Ученик применил функцию только два раза: $f(f(1))=\\dfrac{1}{3}$."
+    },
+    {
+     "value": "$\\dfrac{1}{8}$",
+     "value_latex": "$\\dfrac{1}{8}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил, что тройное применение функции — это возведение значения в куб: $\\left(f(1)\\right)^{3}$.",
+     "error_logic_latex": "Ученик решил, что тройное применение функции — это возведение значения в куб: $\\left(f(1)\\right)^{3}$.",
+     "explanation": "Ученик решил, что тройное применение функции — это возведение значения в куб: $\\left(f(1)\\right)^{3}$.",
+     "explanation_latex": "Ученик решил, что тройное применение функции — это возведение значения в куб: $\\left(f(1)\\right)^{3}$."
+    },
+    {
+     "value": "$\\dfrac{3}{2}$",
+     "value_latex": "$\\dfrac{3}{2}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил, что тройное применение функции — это умножение значения на $3$: $3f(1)$.",
+     "error_logic_latex": "Ученик решил, что тройное применение функции — это умножение значения на $3$: $3f(1)$.",
+     "explanation": "Ученик решил, что тройное применение функции — это умножение значения на $3$: $3f(1)$.",
+     "explanation_latex": "Ученик решил, что тройное применение функции — это умножение значения на $3$: $3f(1)$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "56bfde7816d20132dd3140c335291c09e1123d97af1ec4a0a61b9fdacb870c1a"
+  },
+  {
+   "id": "GEN_G11_S01_02_C_02",
+   "skill_id": "G11_S01_02",
+   "question_text": "Функция $f$ удовлетворяет условию $f(x+1)=f(x)+2x$ для всех $x$, и $f(0)=1$. Найдите $f(4)$.",
+   "question_latex": "Функция $f$ удовлетворяет условию $f(x+1)=f(x)+2x$ для всех $x$, и $f(0)=1$. Найдите $f(4)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$13$",
+   "correct_answer_latex": "$13$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$13$",
+    "$9$",
+    "$21$",
+    "$17$"
+   ],
+   "answer_options_latex": [
+    "$13$",
+    "$9$",
+    "$21$",
+    "$17$"
+   ],
+   "difficulty": "C",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 1.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$9$",
+     "value_latex": "$9$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил, что при каждом шаге значение растёт на $2$ (потерял множитель $x$): $f(4)=1+4\\cdot2$.",
+     "error_logic_latex": "Ученик решил, что при каждом шаге значение растёт на $2$ (потерял множитель $x$): $f(4)=1+4\\cdot2$.",
+     "explanation": "Ученик решил, что при каждом шаге значение растёт на $2$ (потерял множитель $x$): $f(4)=1+4\\cdot2$.",
+     "explanation_latex": "Ученик решил, что при каждом шаге значение растёт на $2$ (потерял множитель $x$): $f(4)=1+4\\cdot2$."
+    },
+    {
+     "value": "$21$",
+     "value_latex": "$21$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик на каждом шаге прибавлял $2(x+1)$ вместо $2x$ (подставил в правую часть новый аргумент).",
+     "error_logic_latex": "Ученик на каждом шаге прибавлял $2(x+1)$ вместо $2x$ (подставил в правую часть новый аргумент).",
+     "explanation": "Ученик на каждом шаге прибавлял $2(x+1)$ вместо $2x$ (подставил в правую часть новый аргумент).",
+     "explanation_latex": "Ученик на каждом шаге прибавлял $2(x+1)$ вместо $2x$ (подставил в правую часть новый аргумент)."
+    },
+    {
+     "value": "$17$",
+     "value_latex": "$17$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик угадал формулу $f(x)=x^{2}+1$ по значению $f(0)=1$, не проверив условие, и получил $f(4)=17$.",
+     "error_logic_latex": "Ученик угадал формулу $f(x)=x^{2}+1$ по значению $f(0)=1$, не проверив условие, и получил $f(4)=17$.",
+     "explanation": "Ученик угадал формулу $f(x)=x^{2}+1$ по значению $f(0)=1$, не проверив условие, и получил $f(4)=17$.",
+     "explanation_latex": "Ученик угадал формулу $f(x)=x^{2}+1$ по значению $f(0)=1$, не проверив условие, и получил $f(4)=17$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "8e3db35d37e9d130aca838c3b3569162f8f61eae76eef480a86b357a517f237a"
+  },
+  {
+   "id": "GEN_G11_S13_01_A_01",
+   "skill_id": "G11_S13_01",
+   "question_text": "Известно, что $f(x)=2x+3$. Найдите значение обратной функции $f^{-1}(11)$.",
+   "question_latex": "Известно, что $f(x)=2x+3$. Найдите значение обратной функции $f^{-1}(11)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$4$",
+   "correct_answer_latex": "$4$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$4$",
+    "$25$",
+    "$7$",
+    "$\\dfrac{1}{25}$"
+   ],
+   "answer_options_latex": [
+    "$4$",
+    "$25$",
+    "$7$",
+    "$\\dfrac{1}{25}$"
+   ],
+   "difficulty": "A",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": -1.0,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$25$",
+     "value_latex": "$25$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(11)$, подставив $11$ в саму функцию, вместо решения уравнения $f(x)=11$.",
+     "error_logic_latex": "Ученик вычислил $f(11)$, подставив $11$ в саму функцию, вместо решения уравнения $f(x)=11$.",
+     "explanation": "Ученик вычислил $f(11)$, подставив $11$ в саму функцию, вместо решения уравнения $f(x)=11$.",
+     "explanation_latex": "Ученик вычислил $f(11)$, подставив $11$ в саму функцию, вместо решения уравнения $f(x)=11$."
+    },
+    {
+     "value": "$7$",
+     "value_latex": "$7$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил уравнение $2x+3=11$, перенеся число $3$ с неверным знаком: $2x=14$.",
+     "error_logic_latex": "Ученик решил уравнение $2x+3=11$, перенеся число $3$ с неверным знаком: $2x=14$.",
+     "explanation": "Ученик решил уравнение $2x+3=11$, перенеся число $3$ с неверным знаком: $2x=14$.",
+     "explanation_latex": "Ученик решил уравнение $2x+3=11$, перенеся число $3$ с неверным знаком: $2x=14$."
+    },
+    {
+     "value": "$\\dfrac{1}{25}$",
+     "value_latex": "$\\dfrac{1}{25}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик принял обратную функцию за обратное число: $\\dfrac{1}{f(11)}=\\dfrac{1}{25}$.",
+     "error_logic_latex": "Ученик принял обратную функцию за обратное число: $\\dfrac{1}{f(11)}=\\dfrac{1}{25}$.",
+     "explanation": "Ученик принял обратную функцию за обратное число: $\\dfrac{1}{f(11)}=\\dfrac{1}{25}$.",
+     "explanation_latex": "Ученик принял обратную функцию за обратное число: $\\dfrac{1}{f(11)}=\\dfrac{1}{25}$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "bd5ca9f46f3f7cad3a3d07c3f756d6c00c8298c10152eb0591584aa6bf544a9c"
+  },
+  {
+   "id": "GEN_G11_S13_01_A_02",
+   "skill_id": "G11_S13_01",
+   "question_text": "Известно, что $f(x)=x^{3}+1$. Найдите $f^{-1}(9)$.",
+   "question_latex": "Известно, что $f(x)=x^{3}+1$. Найдите $f^{-1}(9)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$2$",
+   "correct_answer_latex": "$2$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$2$",
+    "$730$",
+    "$\\sqrt[3]{9}$",
+    "$8$"
+   ],
+   "answer_options_latex": [
+    "$2$",
+    "$730$",
+    "$\\sqrt[3]{9}$",
+    "$8$"
+   ],
+   "difficulty": "A",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": -1.0,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$730$",
+     "value_latex": "$730$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(9)=730$ вместо решения уравнения $f(x)=9$.",
+     "error_logic_latex": "Ученик вычислил $f(9)=730$ вместо решения уравнения $f(x)=9$.",
+     "explanation": "Ученик вычислил $f(9)=730$ вместо решения уравнения $f(x)=9$.",
+     "explanation_latex": "Ученик вычислил $f(9)=730$ вместо решения уравнения $f(x)=9$."
+    },
+    {
+     "value": "$\\sqrt[3]{9}$",
+     "value_latex": "$\\sqrt[3]{9}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик забыл про слагаемое $+1$ и решил $x^{3}=9$.",
+     "error_logic_latex": "Ученик забыл про слагаемое $+1$ и решил $x^{3}=9$.",
+     "explanation": "Ученик забыл про слагаемое $+1$ и решил $x^{3}=9$.",
+     "explanation_latex": "Ученик забыл про слагаемое $+1$ и решил $x^{3}=9$."
+    },
+    {
+     "value": "$8$",
+     "value_latex": "$8$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил $x^{3}+1=9$ как $x^{3}=8$, но записал правую часть $8$ как ответ, не извлёкши кубический корень.",
+     "error_logic_latex": "Ученик решил $x^{3}+1=9$ как $x^{3}=8$, но записал правую часть $8$ как ответ, не извлёкши кубический корень.",
+     "explanation": "Ученик решил $x^{3}+1=9$ как $x^{3}=8$, но записал правую часть $8$ как ответ, не извлёкши кубический корень.",
+     "explanation_latex": "Ученик решил $x^{3}+1=9$ как $x^{3}=8$, но записал правую часть $8$ как ответ, не извлёкши кубический корень."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "6b3c94c84e6891cf86a587ee28f37362e039fa565f2528c54959c19cc8286c2a"
+  },
+  {
+   "id": "GEN_G11_S13_01_B_01",
+   "skill_id": "G11_S13_01",
+   "question_text": "Известно, что $f(x)=x^{5}+x^{3}+1$. Найдите $f^{-1}(3)$, не находя формулу обратной функции.",
+   "question_latex": "Известно, что $f(x)=x^{5}+x^{3}+1$. Найдите $f^{-1}(3)$, не находя формулу обратной функции.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$1$",
+   "correct_answer_latex": "$1$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$1$",
+    "$271$",
+    "$\\dfrac{1}{271}$",
+    "$3$"
+   ],
+   "answer_options_latex": [
+    "$1$",
+    "$271$",
+    "$\\dfrac{1}{271}$",
+    "$3$"
+   ],
+   "difficulty": "B",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 0.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$271$",
+     "value_latex": "$271$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(3)=271$ вместо решения уравнения $f(x)=3$.",
+     "error_logic_latex": "Ученик вычислил $f(3)=271$ вместо решения уравнения $f(x)=3$.",
+     "explanation": "Ученик вычислил $f(3)=271$ вместо решения уравнения $f(x)=3$.",
+     "explanation_latex": "Ученик вычислил $f(3)=271$ вместо решения уравнения $f(x)=3$."
+    },
+    {
+     "value": "$\\dfrac{1}{271}$",
+     "value_latex": "$\\dfrac{1}{271}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(3)$ и взял обратное число $\\dfrac{1}{271}$.",
+     "error_logic_latex": "Ученик вычислил $f(3)$ и взял обратное число $\\dfrac{1}{271}$.",
+     "explanation": "Ученик вычислил $f(3)$ и взял обратное число $\\dfrac{1}{271}$.",
+     "explanation_latex": "Ученик вычислил $f(3)$ и взял обратное число $\\dfrac{1}{271}$."
+    },
+    {
+     "value": "$3$",
+     "value_latex": "$3$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил, что значение обратной функции равно аргументу: $f^{-1}(3)=3$.",
+     "error_logic_latex": "Ученик решил, что значение обратной функции равно аргументу: $f^{-1}(3)=3$.",
+     "explanation": "Ученик решил, что значение обратной функции равно аргументу: $f^{-1}(3)=3$.",
+     "explanation_latex": "Ученик решил, что значение обратной функции равно аргументу: $f^{-1}(3)=3$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "4d734dc06fe57f7fa70a0264c2409bb6ae59bd23583d2a3f792ac78cc518374e"
+  },
+  {
+   "id": "GEN_G11_S13_01_B_02",
+   "skill_id": "G11_S13_01",
+   "question_text": "Известно, что $f(x)=x^{3}+2x$. Найдите $f^{-1}(12)$.",
+   "question_latex": "Известно, что $f(x)=x^{3}+2x$. Найдите $f^{-1}(12)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$2$",
+   "correct_answer_latex": "$2$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$2$",
+    "$1752$",
+    "$6$",
+    "$\\dfrac{1}{2}$"
+   ],
+   "answer_options_latex": [
+    "$2$",
+    "$1752$",
+    "$6$",
+    "$\\dfrac{1}{2}$"
+   ],
+   "difficulty": "B",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 0.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$1752$",
+     "value_latex": "$1752$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(12)=1752$ вместо решения уравнения $f(x)=12$.",
+     "error_logic_latex": "Ученик вычислил $f(12)=1752$ вместо решения уравнения $f(x)=12$.",
+     "explanation": "Ученик вычислил $f(12)=1752$ вместо решения уравнения $f(x)=12$.",
+     "explanation_latex": "Ученик вычислил $f(12)=1752$ вместо решения уравнения $f(x)=12$."
+    },
+    {
+     "value": "$6$",
+     "value_latex": "$6$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил $x^{3}+2x=12$, отбросив $x^{3}$: $2x=12$.",
+     "error_logic_latex": "Ученик решил $x^{3}+2x=12$, отбросив $x^{3}$: $2x=12$.",
+     "explanation": "Ученик решил $x^{3}+2x=12$, отбросив $x^{3}$: $2x=12$.",
+     "explanation_latex": "Ученик решил $x^{3}+2x=12$, отбросив $x^{3}$: $2x=12$."
+    },
+    {
+     "value": "$\\dfrac{1}{2}$",
+     "value_latex": "$\\dfrac{1}{2}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик нашёл $x=2$ и записал обратное число $\\dfrac{1}{2}$ как значение обратной функции.",
+     "error_logic_latex": "Ученик нашёл $x=2$ и записал обратное число $\\dfrac{1}{2}$ как значение обратной функции.",
+     "explanation": "Ученик нашёл $x=2$ и записал обратное число $\\dfrac{1}{2}$ как значение обратной функции.",
+     "explanation_latex": "Ученик нашёл $x=2$ и записал обратное число $\\dfrac{1}{2}$ как значение обратной функции."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "b87764983f197d9a816508ae71fd81bb5274827a2703136fdcfefc7feb21c6ef"
+  },
+  {
+   "id": "GEN_G11_S13_01_B_03",
+   "skill_id": "G11_S13_01",
+   "question_text": "Известно, что $f(x)=2^{x}+x+1$. Найдите $f^{-1}(12)$.",
+   "question_latex": "Известно, что $f(x)=2^{x}+x+1$. Найдите $f^{-1}(12)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$3$",
+   "correct_answer_latex": "$3$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$3$",
+    "$4109$",
+    "$\\log_{2}12$",
+    "$\\dfrac{1}{4109}$"
+   ],
+   "answer_options_latex": [
+    "$3$",
+    "$4109$",
+    "$\\log_{2}12$",
+    "$\\dfrac{1}{4109}$"
+   ],
+   "difficulty": "B",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 0.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$4109$",
+     "value_latex": "$4109$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(12)=4109$ вместо решения уравнения $f(x)=12$.",
+     "error_logic_latex": "Ученик вычислил $f(12)=4109$ вместо решения уравнения $f(x)=12$.",
+     "explanation": "Ученик вычислил $f(12)=4109$ вместо решения уравнения $f(x)=12$.",
+     "explanation_latex": "Ученик вычислил $f(12)=4109$ вместо решения уравнения $f(x)=12$."
+    },
+    {
+     "value": "$\\log_{2}12$",
+     "value_latex": "$\\log_{2}12$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик отбросил слагаемые $x+1$ и решил $2^{x}=12$.",
+     "error_logic_latex": "Ученик отбросил слагаемые $x+1$ и решил $2^{x}=12$.",
+     "explanation": "Ученик отбросил слагаемые $x+1$ и решил $2^{x}=12$.",
+     "explanation_latex": "Ученик отбросил слагаемые $x+1$ и решил $2^{x}=12$."
+    },
+    {
+     "value": "$\\dfrac{1}{4109}$",
+     "value_latex": "$\\dfrac{1}{4109}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик вычислил $f(12)$ и взял обратное число.",
+     "error_logic_latex": "Ученик вычислил $f(12)$ и взял обратное число.",
+     "explanation": "Ученик вычислил $f(12)$ и взял обратное число.",
+     "explanation_latex": "Ученик вычислил $f(12)$ и взял обратное число."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "5b0c76ac35734129c0943ab5656baf0fd74f18380a39934d57ef74d7730ff387"
+  },
+  {
+   "id": "GEN_G11_S13_01_C_01",
+   "skill_id": "G11_S13_01",
+   "question_text": "Известно, что $f(x)=x^{3}+x$. Найдите $f^{-1}\\!\\left(f^{-1}(10)\\right)$.",
+   "question_latex": "Известно, что $f(x)=x^{3}+x$. Найдите $f^{-1}\\!\\left(f^{-1}(10)\\right)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$1$",
+   "correct_answer_latex": "$1$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$1$",
+    "$2$",
+    "$10$",
+    "$3$"
+   ],
+   "answer_options_latex": [
+    "$1$",
+    "$2$",
+    "$10$",
+    "$3$"
+   ],
+   "difficulty": "C",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 1.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$2$",
+     "value_latex": "$2$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик нашёл только внутреннее значение $f^{-1}(10)=2$ и не применил обратную функцию второй раз.",
+     "error_logic_latex": "Ученик нашёл только внутреннее значение $f^{-1}(10)=2$ и не применил обратную функцию второй раз.",
+     "explanation": "Ученик нашёл только внутреннее значение $f^{-1}(10)=2$ и не применил обратную функцию второй раз.",
+     "explanation_latex": "Ученик нашёл только внутреннее значение $f^{-1}(10)=2$ и не применил обратную функцию второй раз."
+    },
+    {
+     "value": "$10$",
+     "value_latex": "$10$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик решил, что $f$ и $f^{-1}$ «сокращаются» в любой записи, и вернулся к исходному числу $10$.",
+     "error_logic_latex": "Ученик решил, что $f$ и $f^{-1}$ «сокращаются» в любой записи, и вернулся к исходному числу $10$.",
+     "explanation": "Ученик решил, что $f$ и $f^{-1}$ «сокращаются» в любой записи, и вернулся к исходному числу $10$.",
+     "explanation_latex": "Ученик решил, что $f$ и $f^{-1}$ «сокращаются» в любой записи, и вернулся к исходному числу $10$."
+    },
+    {
+     "value": "$3$",
+     "value_latex": "$3$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик сложил найденные значения $f^{-1}(10)=2$ и $f^{-1}(2)=1$.",
+     "error_logic_latex": "Ученик сложил найденные значения $f^{-1}(10)=2$ и $f^{-1}(2)=1$.",
+     "explanation": "Ученик сложил найденные значения $f^{-1}(10)=2$ и $f^{-1}(2)=1$.",
+     "explanation_latex": "Ученик сложил найденные значения $f^{-1}(10)=2$ и $f^{-1}(2)=1$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "b948719102b053fe52f1776029ebe295d45350f14ad34cc101ee21e4286c8b78"
+  },
+  {
+   "id": "GEN_G11_S13_01_C_02",
+   "skill_id": "G11_S13_01",
+   "question_text": "Функция задана формулой $f(x)=ax+3$, и известно, что $f^{-1}(7)=2$. Найдите $f(4)$.",
+   "question_latex": "Функция задана формулой $f(x)=ax+3$, и известно, что $f^{-1}(7)=2$. Найдите $f(4)$.",
+   "question_image_url": null,
+   "answer_type": "multiple_choice",
+   "correct_answer": "$11$",
+   "correct_answer_latex": "$11$",
+   "sympy_solution": null,
+   "answer_options": [
+    "$11$",
+    "$\\dfrac{17}{7}$",
+    "$17$",
+    "$23$"
+   ],
+   "answer_options_latex": [
+    "$11$",
+    "$\\dfrac{17}{7}$",
+    "$17$",
+    "$23$"
+   ],
+   "difficulty": "C",
+   "irt_discrimination": 1.0,
+   "irt_difficulty": 1.5,
+   "irt_guessing": 0.2,
+   "distractor_meta": [
+    {
+     "value": "$\\dfrac{17}{7}$",
+     "value_latex": "$\\dfrac{17}{7}$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик записал условие наоборот: $f(7)=2$, получил $a=-\\dfrac{1}{7}$.",
+     "error_logic_latex": "Ученик записал условие наоборот: $f(7)=2$, получил $a=-\\dfrac{1}{7}$.",
+     "explanation": "Ученик записал условие наоборот: $f(7)=2$, получил $a=-\\dfrac{1}{7}$.",
+     "explanation_latex": "Ученик записал условие наоборот: $f(7)=2$, получил $a=-\\dfrac{1}{7}$."
+    },
+    {
+     "value": "$17$",
+     "value_latex": "$17$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик записал $f(2)=7$ как $ax=7$, забыв слагаемое $3$, и получил $a=\\dfrac{7}{2}$.",
+     "error_logic_latex": "Ученик записал $f(2)=7$ как $ax=7$, забыв слагаемое $3$, и получил $a=\\dfrac{7}{2}$.",
+     "explanation": "Ученик записал $f(2)=7$ как $ax=7$, забыв слагаемое $3$, и получил $a=\\dfrac{7}{2}$.",
+     "explanation_latex": "Ученик записал $f(2)=7$ как $ax=7$, забыв слагаемое $3$, и получил $a=\\dfrac{7}{2}$."
+    },
+    {
+     "value": "$23$",
+     "value_latex": "$23$",
+     "error_type": "manual_generated",
+     "plausibility": 0.7,
+     "error_logic": "Ученик при решении $2a+3=7$ перенёс $3$ с неверным знаком: $2a=10$, $a=5$.",
+     "error_logic_latex": "Ученик при решении $2a+3=7$ перенёс $3$ с неверным знаком: $2a=10$, $a=5$.",
+     "explanation": "Ученик при решении $2a+3=7$ перенёс $3$ с неверным знаком: $2a=10$, $a=5$.",
+     "explanation_latex": "Ученик при решении $2a+3=7$ перенёс $3$ с неверным знаком: $2a=10$, $a=5$."
+    }
+   ],
+   "is_active": true,
+   "toc_id": null,
+   "cognitive_load": "apply",
+   "verification_status": "verified",
+   "source_type": "ai_generated",
+   "source_reference": null,
+   "tags": {
+    "content_review": {
+     "batch": "f1-authoring-2026-10-08",
+     "author": "claude-sonnet",
+     "verified_by": "sympy"
+    }
+   },
+   "is_star": false,
+   "task_category": "standard",
+   "latex_status": null,
+   "after_sha256": "8aae75d918139e3f1a1c892ed07d0ca523870e1669d2f11889c25f35fd518eef"
+  }
+ ]
+}
