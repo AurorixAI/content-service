@@ -51,12 +51,13 @@ def task(skill, diff, q, key, ds, tests=()):
         assert e.startswith('Ученик'), e
     ALL.append(dict(skill=skill, diff=diff, q=q, key=key, ds=[list(t) for t in ds]))
 
-def save(skill):
+def save(skill, start=None):
+    start = start or {}
     from collections import Counter
     c = Counter(t['diff'] for t in ALL)
     assert c == Counter({'A': 2, 'B': 3, 'C': 2}), c
     out = []
-    n = Counter()
+    n = Counter({d: start.get(d, 1) - 1 for d in 'ABC'})
     for t in ALL:
         n[t['diff']] += 1
         out.append(dict(id=f"GEN_{skill}_{t['diff']}_{n[t['diff']]:02d}", **t))
