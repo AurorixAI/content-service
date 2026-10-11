@@ -236,7 +236,8 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
             if any(k in entry["changes"] for k in ("answer_options", "correct_answer", "distractor_meta")):
                 validate_choices(after)
             pending.append((row, after, entry))
-        if pending and (kplan['already_active'] or kplan['edges_present']):
+        if pending and (kplan['already_active'] or kplan['edges_present']
+                        or kplan['already_updated'] or kplan['already_deactivated']):
             raise ValueError('taxonomy change already present while tasks are pending; nothing written')
         pending_ids = [before["id"] for before, _, _ in pending]
         report = {"batch": batch, "execute": execute,
@@ -245,10 +246,14 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
             report['knowledge_added'] = [n['id'] for n in added_nodes]
         if 'knowledge_activate' in manifest:
             report['knowledge_activated'] = [n['id'] for n in activations]
+        if 'knowledge_update' in manifest:
+            report['knowledge_updated'] = [n['id'] for n in kplan['update']]
+        if 'knowledge_deactivate' in manifest:
+            report['knowledge_deactivated'] = [n['id'] for n in kplan['deactivate']]
         if 'prerequisites' in manifest:
             report['prerequisites_added'] = [[e['skill_id'], e['prerequisite_id']] for e in new_edges]
         if not execute or not pending:
-            if execute and (added_nodes or activations or new_edges):
+            if execute and (added_nodes or activations or new_edges or kplan['update'] or kplan['deactivate']):
                 raise ValueError('applied tasks without required knowledge changes')
             return report
         attestations = _attestations(conn, pending_ids, lock=True)
@@ -263,11 +268,13 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
             "revoked_patterns": {e["id"]: attestation_patterns(e["changes"]) for _, _, e in pending},
             "knowledge_added": added_nodes,
             "knowledge_activated": activations,
+            "knowledge_updated": kplan['update'],
+            "knowledge_deactivated": kplan['deactivate'],
             "prerequisites_added": knowledge_repair.edge_records(new_edges),
         })
         knowledge_repair.insert(conn, added_nodes)
         knowledge_repair.activate(conn, activations)
-        knowledge_repair.insert_edges(conn, new_edges)
+        knowledge_repair.update(conn, kplan['update'])
         for before, after, entry in pending:
             _update(conn, before["id"], {**entry["changes"], "tags": after["tags"]})
             patterns = attestation_patterns(entry["changes"])
@@ -277,9 +284,12 @@ def apply(engine, manifest: dict, *, execute: bool = False, backup: Path | None 
                     SET status='revoked', revoked_at=NOW(), revocation_reason=:reason
                     WHERE task_id=:id AND status='active' AND field_key LIKE ANY(:patterns)
                 """), {"id": before["id"], "patterns": patterns, "reason": f"content repair {batch}"})
+        knowledge_repair.retire(conn, kplan['deactivate'])
+        knowledge_repair.insert_edges(conn, new_edges)
         for row in _load(conn, pending_ids, False):
             if fingerprint(row) != by_id[row["id"]]["after_sha256"]:
                 raise ValueError("post-write source mismatch; transaction rolled back")
+        knowledge_repair.verify_written(conn, kplan, entries)
         return report
 
 
@@ -312,6 +322,8 @@ def rollback(engine, saved: dict, *, execute: bool = False) -> dict:
         knowledge_repair.check_rollback(conn, saved.get('knowledge_added', []))
         knowledge_repair.check_rollback_activation(conn, saved.get('knowledge_activated', []))
         knowledge_repair.check_rollback_edges(conn, saved.get('prerequisites_added', []))
+        knowledge_repair.check_rollback_after_images(conn, saved.get('knowledge_updated', []), 'update')
+        knowledge_repair.check_rollback_after_images(conn, saved.get('knowledge_deactivated', []), 'deactivation')
         if execute:
             if not tasks_restored:
                 for task_id, row in before.items():
@@ -323,6 +335,8 @@ def rollback(engine, saved: dict, *, execute: bool = False) -> dict:
                         WHERE attestation_id=:attestation_id
                     """), {k: a[k] for k in ("status", "revoked_at", "revocation_reason", "attestation_id")})
             knowledge_repair.remove_edges(conn, saved.get('prerequisites_added', []))
+            knowledge_repair.unretire(conn, saved.get('knowledge_deactivated', []))
+            knowledge_repair.restore_updated(conn, saved.get('knowledge_updated', []))
             knowledge_repair.deactivate(conn, saved.get('knowledge_activated', []))
             knowledge_repair.remove(conn, saved.get('knowledge_added', []))
         return {"batch": saved["batch"], "execute": execute, "restored": ids}
